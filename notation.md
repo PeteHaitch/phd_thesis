@@ -1,0 +1,65 @@
+# Mathematical Notation
+
+## $Z_{(h, i, j)}$ 
+$Z_{(h, i, j)}$ is the methylation state in chromosome$_h$ at C$_i$ of sample$_j$.
+$Z_{(h, i, j)} = 1$ if methylated.
+$Z_{(h, i, j)} = 0$ if unmethylated.
+The $Z_{(h, i, j)}$ are hidden states.
+
+## $M_{(i, j)}$ and $U_{(i, j)}$
+$M_{(i, j)} = \sum_{h = 1}^{h = H} Z_{(h, i, j)}$ is the number of chromosomes that are methylated at C$_i$ in sample$_j$.
+$U_{(i, j)}=  \sum_{h = 1}^{h = H} Z_{(h, i, j)}$ = number of chromosomes that are unmethylated at C$_i$ in sample$_j$.
+
+## $B_{(i, j)}$
+$B_{(i, j)}= \frac{M_{(i, j)}}{M_{(i, j)} + U_{(i, j)}}$.
+There are also M-values, defined as $M_{(i, j)} = logit(B_{(i, j)})$
+
+## $h$
+$h$ is typically unknown. At best we know that $\widehat{Z_{(h, i, j)}}$ have the same $h$, i.e. they were estimated from the same read.
+
+## $i$
+$\mathcal{I}_j$, the set of all $i$ in sample $j$, vary over $h$ and $j$
+The $\{i\}$ are not equally spaced in the genome. 
+The concept of IPD
+
+## $j$
+$|J| = |\{j\}|$ is typically small, e.g.  $|J| <= 3$ for methylC-seq data. However, for microarray data might have $|J| \approx 100-1000$
+
+## m-tuples
+
+## NIC
+
+## Estimates of $M, U, Z, B$
+__Question__: Use lower cases letters, i.e. $m, u, z, \beta$, or _hatted_ versions, i.e. $\hat{M}, \hat{U}, \hat{Z}, \hat{\beta}$?
+
+## Summarisations
+Some studies summarise methylation at the promoter- or gene-level. For example, they might summarise methylation at feature $f$ by the average $= \beta_{j}^{(f)} = \frac{1}{|f|}\sum_{i \in f} \beta_{(i, j)}$, where $|f|$ is the number of methylation measurements in feature $f$. 
+
+## One-group tests of differential methylation
+The idea is we have one group of methylomes that we expect to be similar at the vast majority of positions. We are interested in identifying those positions where they differ, _epi-alleles_, in Emma Whitelaw's terminology.
+
+Consider the $i^{th}$ CpG. We want to test $H_{0}: B_{(i, 1)} = \ldots = B_{(i, n)} \equiv B_{(i, 0)}$ vs. $H_{A}:$ not all the $B_{(i, j)}$ are equal.
+
+The model for a single CpG is very simple:
+$$
+M_{(i, j)} | (B_{(i, j)}, N_{(i, j)}) = Binomial(N_{(i, j)}, B_{(i, j)})
+$$
+
+Then, the test is simply a chi-square test that the proprotions are equal, i.e. `prop.test(m, n)`.
+
+One problem is that we will be doing millions of such tests (one for each CpG). It will be therefore worthwhile using some shrinkage of improve power. E.g. might impose a prior on $B_{(i, j)}$:
+$$
+B_{(i, j)} = Beta(\mu_{i}, \theta_{i})
+$$
+
+The hyperparameters $\mu$ and $\theta$ are estimated from the data _ala_ empirical Bayes.
+
+### Questions
+1. Should there prior on $B_{(i, j)}$ be over $j$, i.e.:
+$$
+B_{(i, j)} = Beta(\mu_{(i, j)}, \theta_{(i, j)})
+$$
+
+
+## Other people's notation
+Feng _et al._ use subscript $j$ to denote groups and subscript $k$ to denote replicates within groups (Feng, H., Conneely, K. N., & Wu, H. (2014). A Bayesian hierarchical model to detect differentially methylated loci from single nucleotide resolution sequencing data. Nucleic Acids Research, gku154. doi:10.1093/nar/gku154). They also have a nice hierarchical model for estimating the level of DNA methylation at a given CpG from bisulfite-sequencing data.
