@@ -12,8 +12,8 @@
 11. Bibliography
 12. Appendices
 
-# Chapter outlines
-## 1. Preamble
+## Chapter outlines
+### Preamble
 * Abstract
 * Preface
 	* Data sets: Who made them and which chapters are they used in
@@ -38,7 +38,7 @@
 * List of Tables
 * List of Abbreviations
 
-## 2. Introduction
+### Introduction
 * Chapter Overview
 * DNA and DNA methylation
 	* DNA
@@ -67,7 +67,7 @@
 		* ES cells  
 * Thesis outline
 
-## 3. Statistical model of methylC-seq data
+### Statistical model of methylC-seq data
 * Chapter Overview
 * Notation
 	* See `notation.Rmd`
@@ -85,7 +85,7 @@
 	* Dependence/correlation over $j$ (?)
 		* Akulenko, R., _et al._ compute gene-level $\beta$ values and compute the correlations between pairs of genes across samples as a function of genomic distance.
 
-## 4. Standard analysis of methylC-seq data
+### Standard analysis of methylC-seq data
 * Chapter Overview
 * QC, mapping, post-processing
 * Methylation calling
@@ -95,7 +95,7 @@
 	* Cell-composition, age, global hypo- or hyper-methylation, SNPs, alignment artefacts
 * Univariate tests of $\beta_i$
 
-## 5. m-tuples
+### m-tuples
 * Chapter Overview
 * Previous work
 	* Amos Tanay
@@ -115,7 +115,7 @@
 	* Other?
 * Discussion
 
-## 6. Correlation of $\beta$-values
+### Correlation of $\beta$-values
 * Chapter Overview
 * Previous work
 	* _Arabidopsis_
@@ -132,7 +132,7 @@
 	* Other
 * Discussion
 
-## 7. Simulation model: Part I
+### Simulation model: Part I
 * Chapter Overview
 * Previous work
 	* Simulators for comparing aligners
@@ -142,7 +142,7 @@
 * Limitations of previous simulation models
 * First simple model
 
-## 8. Simulation model: Part II
+### Simulation model: Part II
 * Chapter Overview
 * A more complex model
 * Methods
@@ -152,7 +152,7 @@
 	* Limitations
 * Discussion
 
-## 9. Data analysis - EPISCOPE
+### Data analysis - EPISCOPE
 * Chapter overview
 * Introduction
 * Methods
@@ -164,17 +164,18 @@
 * Results
 * Discussion
 
-## 10. Concluding Remarks
-## 11. Bibliography
-## 12. Appendices
+### Concluding Remarks
+### Bibliography
+### Appendices
 
-## Others(?)
-### Differential methylation calling
-### Simulation-based inference
+### Others(?)
+#### Differential methylation calling
+#### Simulation-based inference
 * See Brian Ripley's lecture notes (email from Terry)
 	* "_The basic idea is quite simple – simulate data from one or more plausible models (or for a parametric model, at a range of plausible parameter values), apply the same (or similar) procedure to the simulated datasets as was applied to the original data, and then analyse the results._"
+#### Nick Wong's data
 
-# Proposed chapters in 2-year PhD review
+## Proposed chapters in 2-year PhD review
 1. Introduction
 2. Public datasets used in thesis
 3. Pre-processing methylC-seq data and technical biases
@@ -185,6 +186,6 @@
 8. Data analysis
 9. Conclusions
 
-# Questions
+## Questions
 * Formal literature review chapter or just intersperse lit review at beginning of relevant chapter(s)?
 * Terminology (see Comethylation GitHub issue #48)

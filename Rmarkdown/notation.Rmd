@@ -1,5 +1,8 @@
 # Mathematical Notation
 
+## $C_{i}$
+$C_{i}$ is the $i^{th}$ cytosine on a haplotype
+
 ## $Z_{(h, i, j)}$ 
 $Z_{(h, i, j)}$ is the methylation state in chromosome$_h$ at C$_i$ of sample$_j$.
 $Z_{(h, i, j)} = 1$ if methylated.
