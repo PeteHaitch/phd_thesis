@@ -1,15 +1,50 @@
 # Introduction 
 ## Chapter Overview
-The basic biology necessary for understanding this thesis, such as genomics and epigenetics, are explained. DNA methylation is introduced, some of its biological roles are described and the types of questions asked by experiments studying DNA methylation are discussed. Assays for studying DNA methylation are described, with a particular focus on the whole-genome bisulfite-sequencing assay known as _methylC-seq_. The typical bioinformatics strategies for analysing bisulfite-sequencing data are described in broad terms. Finally, the remainder of the thesis is outlined.
+In this chapter I summarise the basic biology necessary for understanding my thesis, such as DNA, genomics and epigenetics. I introduce DNA methylation, describe some of its biological roles and discuss the types of questions asked in experiments studying DNA methylation. I describe assays for studying DNA methylation, with a particular focus on the whole-genome bisulfite-sequencing assay known as _methylC-seq_. I also outline the typical bioinformatics strategies for analysing bisulfite-sequencing data. Finally, I give an overview of the layout of my thesis.
 
-
-## DNA, genetics and epigenetics 
+## Basic biology
+I describe the basic biology of DNA and the role of DNA in genetics and epigenetics.
+ 
 ### DNA
-_DNA_, a much-needed abbreviation of deoxyribonucleic acid, is the molecule that encodes the genetic instructions for all known living organisms. __INSERT DNA DEFINITION FROM TEXTBOOK__ The four nucleotides are adenine (_A_), cytosine (_C_), guanine (_G_) and thymine (_T_). These nucleotides form complementary base pairings, _A_ with _T_ and _C_ with _G_, in the DNA double helix (__FIGURE OF DNA BASE PAIRING__).
+_DNA_, a much-needed abbreviation of deoxyribonucleic acid, is the molecule that encodes the genetic instructions for all known living organisms. __INSERT DNA DEFINITION FROM TEXTBOOK__ 
 
-### Genomes
+#### The DNA double helix {-}
+The double helix is the most common, and most famous, structure of DNA (__REFERENCE__). In the double helix, the two strands of DNA run in opposite directions to each other and are therefore _anti-parallel_. One strand is called the 5' strand (pronounced "5 prime strand") - also known as the sense strand, Crick strand or top strand - and the other strand called the 3' strand (pronounced "3 prime strand") - also known as the antisense strand, Watson strand or bottom strand. Along each strand of the double helix are the four DNA nucleobases (_bases_): adenine (_A_), cytosine (_C_), guanine (_G_) and thymine (_T_). These bases form _complementary_ base pairings, _A_ with _T_ and _C_ with _G_, along the DNA double helix [__FIGURE OF DNA BASE PAIRING__](http://en.wikipedia.org/wiki/File:DNA_Structure%2BKey%2BLabelled.pn_NoBB.png).
+
+#### DNA replication {-}
+DNA _self-replicates_ to produce copies of itself. DNA replication occurs during cell division so that each daughter cell contains the same DNA as its parent. During DNA replication, the two strands are separated and each strand's _complementary_ DNA sequence is copied by an enzyme called _DNA polymerase_. It is because the two strands of DNA are complementary that ensures the daughter cell contains the same DNA sequence as the parent cell[^dna_replication].
+
+[^dna_replication]: This of course ignores errors in the replication process. Such errors are very rare events but because DNA replication happens __HOW FREQUENTLY__ these events do occur. There are error-correcting processes that reduce the chance that such an error is retained in the daughter sequence, however, these are not perfect. Hence errors in DNA replication are one source of what are known as _mutations_ in the DNA.
+
+#### Genes and DNA transcription {-}
+DNA would not be quite so interesting if all it did was self-replicate. __IT ALSO ENCODES INFO FOR NEW MOLECULES__
+* DNA is _transcribed_ to produce _RNA_ (ribonucleicacid). 
+* RNA is _translated_ to produce _proteins_. 
+
+
+
+
+#### The Central Dogma of molecular biology {-)
+Francis Crick, who along with James Watson and Rosalind Franklin discovered the double helix structure of DNA, proposed the Central Dogma of molecular biology [__REFERENCE__(http://sandwalk.blogspot.com.au/2007/01/central-dogma-of-molecular-biology.html)]:
+> ... once (sequential) information has passed into protein it cannot get out again (F.H.C. Crick, 1958)
+
+Crick re-stated this in 1970:
+> The central dogma of molecular biology deals with the detailed residue-by-residue transfer of sequential information. It states that such information cannot be transferred from protein to either protein or nucleic acid. (F.H.C. Crick, 1970)
+
+Crick further added (1970):
+> It is not the same, as is commonly assumed, as the sequence hypothesis, which was clearly distinguished from it in the same article (Crick, 1958). In particular, the sequence hypothesis was a positive statement, saying that the (overall) transfer nucleic acid → protein did exist, whereas the central dogma was a negative statement saying that transfers from protein did not exist.
+
+Lewin’s GENES VIII defines the Central Dogma of Molecular Biology as,
+> The central dogma states that information in nucleic acid can be perpetuated or transferred but the transfer of information into protein is irreversible. (B. Lewin, 2004)
+
+#### Genomes {-}
+* Most DNA in humans is non-coding
+* Much of it is junk
+* junk != non-coding
 * DNA -> chromosomes -> genomes
 * Some data are mapped to hg18 and some to hg19.
+
+### Genetics
 
 ### Epigenetics
 * Waddington and others' definitions
@@ -92,6 +127,7 @@ __TODO__: CpG shores, shelves, deserts, etc.
 ## Outline of thesis
 
 ## General TODOs
-* Nucleotide, residue, base; what's the difference and which term should I use?
+* Nucleotide, residue, (nucleo)base; what's the difference and which term should I use?
+	* A nucleotide is composed of a nucleobase (also termed a nitrogenous base), a five-carbon sugar (either ribose or 2-deoxyribose), and one or more phosphate groups \[Coghill, Anne M.; Garson, Lorrin R., ed. (2006). The ACS style guide: effective communication of scientific information (3rd ed.). Washington, D.C.: American Chemical Society. p. 244. ISBN 978-0-8412-3999-9.)\]
 * Should I give more detail on Rafa's CGI HMM?
 * Check how deep sub-sections should go and fix.
