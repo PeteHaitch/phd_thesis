@@ -16,16 +16,24 @@ DNA _self-replicates_ to produce copies of itself. DNA replication occurs during
 
 [^dna_replication]: This of course ignores errors in the replication process. Such errors are very rare events but because DNA replication happens __HOW FREQUENTLY__ these events do occur. There are error-correcting processes that reduce the chance that such an error is retained in the daughter sequence, however, these are not perfect. Hence errors in DNA replication are one source of what are known as _mutations_ in the DNA.
 
+DNA would not be quite so interesting if all it did was self-replicate. But it has an extra trick up its sleeve; it also acts as the template for the creation of new molecules that ultimately lead life as we know it. 
+
 #### Genes and DNA transcription {-}
-DNA would not be quite so interesting if all it did was self-replicate. __IT ALSO ENCODES INFO FOR NEW MOLECULES__
-* DNA is _transcribed_ to produce _RNA_ (ribonucleicacid). 
-* RNA is _translated_ to produce _proteins_. 
+A gene is a sequence of DNA that is _transcribed_ to produce a functional product called ribonucleic acid or _RNA_ (Source: [http://sandwalk.blogspot.com.au/2007/01/what-is-gene.html](http://sandwalk.blogspot.com.au/2007/01/what-is-gene.html)). 
 
+It is important to note here than not all DNA is transcribed into RNA. That is not to say that untranscribed DNA is not important. For instance, there are untranscribed _regulatory sequences_ of DNA that determine whether a nearby gene is transcribed. There is also _junk DNA_, _garbage DNA_, __etc.__ (__SOURCE__).
 
+Conversely, not all transcribed DNA is a gene. DNA transcription is "permissive" and there are many DNA sequences that are transcribed by accident or in error.
 
+#### RNA and RNA translation {-}
+RNA, like DNA, is a nucleic acid. However, unlike DNA, RNA is usually single-stranded and has uracil, rather than thymine, as one of its four nucleobases.
+
+RNA is _translated_ into proteins, which are the the molecules that "act out" the function of a cell. In eukaryotes it is  _messenger RNA_ (mRNA) that is processed and translated into proteins. Just as not all DNA is transcribed, not all mRNA is translated into protein. Furthermore, there are three other classes of RNA inside cells in addition to mRNA: transfer RNA (tRNA), ribosomal RNA (rRNA) and broad category called "small RNAs" (Source [http://sandwalk.blogspot.com.au/2013/05/scientific-authority-and-role-of-small.html](http://sandwalk.blogspot.com.au/2013/05/scientific-authority-and-role-of-small.html)).
+
+The _genetic code_ describes how triplets of mRNA, or DNA, bases encode for _amino acids_. Amino acids are in turn the building blocks of _proteins_. Each triplet of bases describes one of the $3^4 = 64$ possible  _codons_. There is redundancy in the code. For instance, `GCU`, `GCC`, `GCA` and `GCG` all code alanine. __FIGURE/TABLE__ shows the complete genetic code.
 
 #### The Central Dogma of molecular biology {-)
-Francis Crick, who along with James Watson and Rosalind Franklin discovered the double helix structure of DNA, proposed the Central Dogma of molecular biology [__REFERENCE__(http://sandwalk.blogspot.com.au/2007/01/central-dogma-of-molecular-biology.html)]:
+Francis Crick, who along with James Watson and Rosalind Franklin discovered the double helix structure of DNA, proposed the Central Dogma of molecular biology (Source: [http://sandwalk.blogspot.com.au/2007/01/central-dogma-of-molecular-biology.html](http://sandwalk.blogspot.com.au/2007/01/central-dogma-of-molecular-biology.html)):
 > ... once (sequential) information has passed into protein it cannot get out again (F.H.C. Crick, 1958)
 
 Crick re-stated this in 1970:
@@ -37,25 +45,50 @@ Crick further added (1970):
 Lewin’s GENES VIII defines the Central Dogma of Molecular Biology as,
 > The central dogma states that information in nucleic acid can be perpetuated or transferred but the transfer of information into protein is irreversible. (B. Lewin, 2004)
 
-#### Genomes {-}
-* Most DNA in humans is non-coding
-* Much of it is junk
-* junk != non-coding
-* DNA -> chromosomes -> genomes
-* Some data are mapped to hg18 and some to hg19.
-
 ### Genetics
+Within a cell, DNA is packaged into units called _chromosomes_. A chromosome is a structure made up of DNA, RNA(__?__) and proteins. The combination of DNA and proteins is called _chromatin_.  The fundamental repeating unit in eukaryotic chromatin is the _nucleosome_. A nucleosome is comprised of DNA wrapped around a core of _histones_, which are proteins that act as kind of "spool" that the DNA "thread" wrap around. The beautiful compaction of DNA into chromosomes is illustrated in __CLASSIC FIGURE OF DNA -> NUCLEOSOMES -> CHROMATIN -> CHROMOSOMES__.
+
+Chromatin is classified into two classes: _heterochromatin_ or _closed chromatin_ is tightly packed whereas as _euchromatin_ or _open chromatin_ is less tightly packed. DNA polymerase has easier access to euchromatin and therefore expressed genes are usually found in euchromatic regions of the genome. 
+
+Humans are _diploid_ organisms, meaning that we have two copies of each chromosome in a typical cell[^somatic_cell]. We inherit one chromosome of each pair from our mother and one from our father. A typical human cell has 23 pairs of chromosomes: 22 _autosomes_ and 1 pair of _sex chromosomes_. This 23 pairs of chromosomes comprise what is known as the "human genome"[^mtDNA]
+
+[^somatic_cell]: A sperm or egg cell is haploid and has a single (recombined) copy of each chromosome. 
+
+[^mtDNA]: A typical human cell also contains the the mitochondrial DNA (mtDNA), which is maternally inherited. The mitochondrial chromosome is very small but there are 100-10,000 copies of it in each cell (__SOURCE__). The mtDNA is also considered to be part of the human genome. 
+
+The length of a genome is the number of DNA base pairs (bp) in a haploid copy of that genome, that is, its length considering only a single copy of each chromosome. The human genome is over three billion base pairs long (__SOURCE__). 
+
+Every person, except genetically identical twins, has their own unique genome. However, the genomes of any two randomly selected people are identical at __WHAT PERCENTAGE__ of sites.  This enabled the definition and construction of a human _reference genome_, which was completed in __WHEN__ (__SOURCE__). The vast majority of the human genome, as well as the vast majority of the genomes of other organisms, is non-coding. Much of the non-coding DNA is junk DNA. Indeed, over __WHAT PERCENTAGE__ of the human genome is comprised of repetitive DNA. 
+
+* Each cell has the same genome but different gene expression and different protein expression
+
+Genetic variation can lead to _phenotypic_ variation. A phenotype is the composite of an organism's observable characteristics or traits, such as its morphology, development, biochemical or physiological properties, phenology, behavior, and products of behavior (such as a bird's nest) (Source: [http://en.wikipedia.org/wiki/Phenotype](http://en.wikipedia.org/wiki/Phenotype)). In medical genetics, the phenotype being studied is usually a patient's disease-status or some proxy such as blood pressure. 
+
+Genetic variation is not the only source of phenotypic variation. Environmental factors such as diet and pollution will also affect an individuals's phenotype. More recently, the role of _epigenetic_ variation has been a hot, and contentious, topic.
 
 ### Epigenetics
-* Waddington and others' definitions
-* 
+"Epigenetics" is a real Humpty Dumpty phrase: each author seems to believe that, "When I use a word, ... it means just what I choose it to mean - neither more nor less" ([@Carroll:1897uu]). I am sure to continue in this grand tradition.
+
+Conrad Waddington coined the phrase in 1942 as a portmanteau of the words "epigenesis" and "genetics" (Source: [http://en.wikipedia.org/wiki/Epigenetics](http://en.wikipedia.org/wiki/Epigenetics)). He meant epigenetics as the study of how _genotypes_ give rise to phenotypes during development ([@Waddington:1957ub]).
+
+A popular contemporary definition of epigenetics is "the study of mitotically and/or meiotically heritable changes in gene function that cannot be explained by changes in DNA sequence[^mitotic_meiotic]" (p1 [@russo1996epigeneti]). This is in line with the _epi_ prefix being derived from the Greek word for "upon, near to or in addition" (__INSERT OXFORD DICTIONARY REFERENCE__), hence the idea that epigenetics encodes information "on top of" the DNA sequence. However, it is quite different to Waddington's original definition.
+
+[^mitotic_meiotic]: Mitotically heritable means heritable during cell division and meitotically heritable means heritable during sexual reproduction.
+
+More recently, the definition of epigenetics has taken on a "more biochemical flavour" ([@Daxinger:2010bu]). It is used to desribe marks whose heritably is yet to be proven such as histone modifications (__SOURCE__). Sir Adrian Bird, an esteemed British geneticist, attempts to unite these definitions in the following ([@Bird:2007em]):
+
+> The following could be a unifying definition of epigenetic events: the structural adaptation of chromosomal regions so as to register, signal or perpetuate altered activity states. This definition is inclusive of chromosomal marks [e.g. histone marks], because transient modifications associated with both DNA repair or cell-cycle phases and stable changes maintained across multiple cell generations qualify.
+
+Regardless of which definition you subscribe to, an _epigenetic mark_ is the modification that causes this "epigenetic change". Actually, "causes" may be too strong a phrase as much of current epigenetics research is in identifying associations rather than causations.
+
+The _epigenome_ of a cell is the set of epigenetics marks present on the cell's genome. In contrast to the genome, which is identical between cells within an individual, the epigenome is highly variable between cells within an individual. Indeed, we can identify variation in a single epigenetic mark within cells of the same cell type from the same individual (__EXAMPLE__).
+
+Methylation, acetylation, ubiquination and phosphorylation of histones, which alter the chromatin structure, are examples of the "more biochemical flavour" of recent epigenetics. But the classical epigenetic modification is DNA methylation, which is described in the next section.
 
 ## DNA methylation
-DNA methylation is a chemical modification of DNA that can impart information on top of the DNA's genetic code. This notion of DNA methylation "encoding information on top of DNA" gives rise to its definition as an _epigenetic_ mark, _epi_ being derived from the Greek word for "upon, near to or in addition"__INSERT OXFORD DICTIONARY REFERENCE__. The broader role of epigenetics is discussed below in the section on [Epigenetics].
+DNA methylation is a chemical modification of DNA that can impart information on top of the DNA sequence. It is heritable during mitotic cell division, which means that it is faithfully copied across to the daughter cell during cell division[^dnam_copying]. It therefore fits into Art Riggs' definition of an epigenetic modification ([@russo1996epigeneti]).
 
-DNA methylation is heritable during mitotic cell division, which means that it is faithfully copied across to the daughter cell during cell division[^mitotic].
-
-[^mitotic]: In practice this copying is not as faithful as, say, the copying of DNA from the parent to the daughter strand. Furthermore, the faithfulness of this copying will be different in different conditions, such as in a healthy, well-differentiated liver cell compared to a cancerous liver cell. Nevertheless, the copying of DNA methylation is faithful enough for most biologists to consider it as a mitotically heritable mark, most of the time (__TODO__: Is this just true of 5mC in mammals or more generally?)
+[^dnam_copying]: In practice this copying is not as faithful as, say, the copying of DNA from the parent to the daughter strand. Furthermore, the faithfulness of this copying will be different in different conditions, such as in a healthy, well-differentiated liver cell compared to a cancerous liver cell. Nevertheless, the copying of DNA methylation is faithful enough for most biologists to consider it as a mitotically heritable mark, most of the time (__TODO__: Is this just true of 5mC in mammals or more generally?)
 
 So pervasive is DNA methylation that [@Lister:2009bo] dubbed it the "fifth base" of the DNA code. In fact, what is referred to as DNA methylation is typically referring to methylation of the cytosine nucleotide. Cytosine methylation is by far the most common form of DNA methylation in the animal and plant kingdoms, however, I will continue to use the terms _DNA methylation_ and _cytosine methylation_ interchangeably as is standard in the literature. In the next section I focus on DNA methylation in mammals, in particular humans, but include brief descriptions of DNA methylation in other organisms. 
 
@@ -71,7 +104,7 @@ CpGs are underrepresented in the human genome. The GC-content of the human genom
 
 [^cpg_frequency]: See __APPENDIX__ for the `R` code used to compute these values for the human reference genome (build hg19).
 
-One reason for this relative scarcity of CpGs is that methylated cytosines can spontaneously deaminate to thymines [@Scarano:1967ue]. Thus, over time, many mCpGs will become TpGs, leading to a genome-wide reduction in the proportion of CpGs and a genome-wide increase in the proportion of TpGs (see __FIGURE__).
+One reason for this relative scarcity of CpGs is that methylated cytosines can spontaneously deaminate to thymines ([@Scarano:1967ue]). Thus, over time, many mCpGs will become TpGs, leading to a genome-wide reduction in the proportion of CpGs and a genome-wide increase in the proportion of TpGs (see __FIGURE__).
 
 There are many other evolutionary pressures on the distribution of nucleotides in a genome. One effect of this is that the distribution of CpGs is far from uniform. I discuss this distribution in the next section.
 
@@ -131,3 +164,4 @@ __TODO__: CpG shores, shelves, deserts, etc.
 	* A nucleotide is composed of a nucleobase (also termed a nitrogenous base), a five-carbon sugar (either ribose or 2-deoxyribose), and one or more phosphate groups \[Coghill, Anne M.; Garson, Lorrin R., ed. (2006). The ACS style guide: effective communication of scientific information (3rd ed.). Washington, D.C.: American Chemical Society. p. 244. ISBN 978-0-8412-3999-9.)\]
 * Should I give more detail on Rafa's CGI HMM?
 * Check how deep sub-sections should go and fix.
+* Define eukaryotes, prokaryotes and viruses
