@@ -95,7 +95,9 @@ DNA methylation is a chemical modification of DNA that can impart information on
 
 [^dnam_copying]: In practice this copying is not as faithful as, say, the copying of DNA from the parent to the daughter strand. Furthermore, the faithfulness of this copying will be different in different conditions, such as in a healthy, well-differentiated liver cell compared to a cancerous liver cell. Nevertheless, the copying of DNA methylation is faithful enough for most biologists to consider it as a mitotically heritable mark, most of the time (__TODO__: Is this just true of 5mC in mammals or more generally?)
 
-What is referred to as DNA methylation is typically methylation of the cytosine nucleotide. Cytosine methylation is by far the most common form of DNA methylation in the animal and plant kingdoms (__ARE THERE OTHERS?__), however, I will continue to use the terms _DNA methylation_ and _cytosine methylation_ interchangeably as is standard in the literature. 
+What is referred to as DNA methylation is typically methylation of the cytosine nucleotide. Cytosine methylation is by far the most common form of DNA methylation in the animal and plant kingdoms[^other_DNAm], however, I will continue to use the terms _DNA methylation_ and _cytosine methylation_ interchangeably as is standard in the literature. 
+
+[^other_DNAm]: Two additional forms of DNA methylation, N6-Methyladenine (m6A) and N4-methylcytosine (m4C), are primarily found in prokaryotes (__SOURCE: http://en.wikipedia.org/wiki/DNA_methyltransferase#cite_note-21__) (or is it bacterial (__SOURCE: http://www.ncbi.nlm.nih.gov/pubmed/16479578__))
 
 A German chemist, W.G. Ruppel, first identified a methylated nucleic acid in 1898. Ruppel was studying _tuberculinic acid_, the poison of _Mycobacterium tuberculosis_[^tuberculosis] , and discovered that it contained a methylated nucleotide (__SOURCE__). In 1925, Johnson and Coghill isolated this methylated nucleotide as a product of hydrolysis of tuberculinic acid (@{Johnson:1925js}). However, Johnson and Coghill's results were disputed for over twenty years by other researchers who were unable to replicate the original findings (@{VISCHER:1949ty}). 
 
@@ -144,13 +146,13 @@ The "sandy/beachy" metaphors have been continued (i.e. stretched to breaking poi
 
 #### Non-CpG methylation {-}
 
-In humans, cytosine methylation in most cell types is found almost exclusively at CpGs. However, there are certain cell types with widespread non-CpG methylation. Non-CpG methylation is often classified as CHH methylation or CHG methylation, where H stands for any nucleotide except G (__SOURCE IUPAC__). The rule-of-thumb is that non-CpG methylation is rare in somatic cells but common in pluripotent cells. Of course, there are exceptions to every rule, especially in biology.
+In humans, cytosine methylation in most cell types is found almost exclusively at CpGs. There are, however, certain cell types with widespread non-CpG methylation. Non-CpG methylation is often classified as CHH methylation or CHG methylation, where H stands for any nucleotide except G (__SOURCE IUPAC__). The rule-of-thumb is that non-CpG methylation is rare in somatic cells but common in pluripotent cells. Of course, there are exceptions to every rule, especially in biology.
 
 To give a few examples, [@Lister:2009hy] found that in a somatic cell line (_fibroblasts_ or skin cells) $99.98\%$ of methylcytosines occured at CpGs whereas as in an embryonic stem cell line $24.5\%$ of methylcytosines occured in a non-CpG context. A subsequent paper from the same group ([@Lister:2011kg]) extended this result when they reported that, more generally, non-CpG methylation accounts for $20-30\%$ of methylcytosines in _pluripotent_ cell lines (which includes embryonic stem cell lines along with induced pluripotent stem cell lines, see __SECTION___). An exception to the rule is provided by [@{Lister:2013et}], where they found that neurons, a somatic and not a pluripotent type of cell, also have non-CpG methylation, albeit at a lower level ($1.3-1.5\%$ of all non-CpG cytosines were methylated).
 
 Non-CpG methylation is less well studied than CpG methylation. This is partly due to the design of popular assays for studying cytosine methylation; for example the popular Illumina 27k and 450k beadchips (see __SECTION__) only measure cytosine methylation at CpGs __CHECK__. However, recent technological advances (see __SECTION__) mean that cytosine methylation can be routinely assayed regardless of the sequence context. The biological role of non-CpG methylation is less well understood than that of CpG methylation (__SOURCE__).
 
-#### {-} 5hmC, 5acC, etc.
+#### Modifications of a modification {-}
 
 Methylation is not the only chemical modification of cytosine nucleobase, although it is by far the most common. Further modifications, listed approximately from most frequent to least frequent, are 5-hydroxymethylcytosine (5hmC), 5-formylcytosine (5fC) and 5-carboxylcytosine (5caC). 
 
@@ -158,11 +160,26 @@ The biological significance of these marks is still being determined, in part be
 
 One genome-wide study of 5hmC found that less than $ 1\%$ of all assayed cytosines in mouse fetal cortex and adult cortex cells were hydroxymethylated (@{Lister:2013et}). Most of the 5hmC was detected in the CpG context and, although the genome-wide level of 5hmC was low, the authors reported significant levels of 5hmC at particular cytosines in the genome.
 
-__Kriaucionis and Heintz, 2009; Tahiliani et al., 2009__ discovered that the TET enzymes can convert 5mC to 5hmC, 5hmC to 5fC and 5fC to hcaC. This suggested a role for 5hmC, 5fC and 5caC in the process of removing 5mC marks, as is discussed in the next section.
+@{Kriaucionis:2009bm} and @{Tahiliani:2009kl} discovered that the TET enzymes can convert 5mC to 5hmC, 5hmC to 5fC and 5fC to hcaC. This suggested a role for 5hmC, 5fC and 5caC in the process of removing 5mC marks, as is discussed in the next section.
 
-#### Readers, writers and erasers {-}
+#### Writers, readers and erasers {-}
 
-#### Function of DNA methylation {-}
+A common analogy used in describing DNA methylation is that of "writers", "readers" and "erasers" (@{Moore:2013in}). Writers catalyse the methyl group onto the DNA, readers recognise methylated DNA and erasers remove the methyl group from the DNA.
+
+In mammalian cells, the writers are the DNA _methyltransferase_ (DNMT) enzymes. These DNMTs are commonly split into two groups, namely the maintainence methyltransferase (thought to be DNMT1) and the _de novo_ methyltransferases (thought to be DNMT3a and DNMT3b)[^DNMT]. DNA methylation is not preserved by the DNA replication machinery and so it is the role of DNMT1 to restore the methylation pattern on the daughter strand of DNA following DNA replication. In contrast, DNMT3a and DNMT3b lay down new methylation marks and are particularly active during development when there are widespread changes in DNA methylation (__SOURCE__). DNMT1 and DNMT3b appear to be essential for mammalian development as mouse knockouts[^KO] for either gene is embryonically lethal (__SOURCE: http://labs.genetics.ucla.edu/fan/papers/npp2012112a.pdf__) whereas mouse knockouts for DNMT3a are runted but survive for ~4 weeks after birth (__SOURCE: http://labs.genetics.ucla.edu/fan/papers/npp2012112a.pdf__).
+
+[^DNMT]: DNMT2, now known as TRDMT1, was once thought to be a DNA methyltransferase, however, __http://www.sciencemag.org/content/311/5759/395__ showed that it in fact methylates a small RNA and not DNA. Another protein, DNMT3L, is homologous to DNMT3a and DNMT3b but does contain catalytic domain that is necessary for methyltransferase activity. Instead, DNMT3L is thought to stimulate the activity of DNMT3a and DNMT3b (__SOURCE__).
+
+[^KO]: A knockout mouse for gene $X$ is a mouse that has been genetically engineered to remove or otherwise inactivate gene $X$. Mouse knockouts can be either heterozygous knockouts (one copy still of the gene is still present/active) or homozygous knockouts (both copies of gene absent/inactive). 
+
+The readers of DNA methylation recognise methylated DNA. These readers can recruit additional proteins to the site of the methylated cytosine to perform a variety of functions related to gene expression. For example, the _MBD_ (methyl-CpG-binding domain) group of proteins bind to DNA containing a methylated CpG which then suppress gene expression by preventing transcription factor binding at that site (__SOURCE__). Another group, the _UHRF_ (ubiquitin-like, containing PHD and RING finger domain) proteins, help DNMT1 methylate _hemimethylated_ DNA, which is DNA where one strand is methylated and the other is not (e.g. the parent strand compared to the daughter strand following DNA replication).
+
+* __ERASERS__
+
+
+
+#### Function of DNA methylation: "normal", cancer and development {-}
+
 
 #### DNA methylation in other organisms and kingdoms {-}
 
