@@ -1,0 +1,53 @@
+Distribution of dinucleotides in the human and mouse reference genomes
+========================================================
+
+CpGs are underrepresented in mammalian genomes. This appendix demonstrates this result using the human reference genome (build hg19) and mouse reference genome (build mm10). All results are computed at the chromosome-level as well as being summarised genome-wide.
+
+Firstly, the frequency of each nucleotide is computed. Secondly, the expected frequency of each dinucleotide is computed under the _independence model_. Under the independence model, the frequency of each dinucleotide is simply the product of the respective observed nucleotide frequencies. Finally, these expected frequencies are compared to the observed values from the respective reference genomes. 
+
+I only use the autosomes, sex chromosomes and mitochondrial chromosome in all analyses, that is, I do not consider the "random", "unplaced" and "alternate haplotype" contigs in the reference genomes.
+
+Human genome 
+========================================================
+
+Step 1: Compute the nucleotide frequencies
+--------------------------------------------------------
+```{r}
+#### Load necessary packages ####
+library(BSgenome)
+library(BSgenome.Hsapiens.UCSC.hg19)
+
+#### A function to compute the GC-% of a BSgenome object ####
+gcPercentage <- function(seqnames, genome){
+  ## data.frame to store results
+  gc <- data.frame(seqnames = seqnames, gc_count = NA_real_, seqlength = NA_real_, gc_perc = NA_real_)
+  
+  for (i in seq_along(seqnames)){
+    subject <- genome[[seqnames[i]]]
+    cat(">>> Finding all hits in chromosome", seqnames[i], "...\n")
+    gc[i, 'gc_count'] <- letterFrequency(x = subject, letters = 'CG')
+    gc[i, 'seqlength'] <- length(subject)
+    gc[i, 'gc_perc'] <- gc[i, 'gc_count'] / gc[i, 'seqlength']
+  }
+  
+  ## Compute genome-wide summary
+  gc_gw <- data.frame(seqnames = 'genome', gc_count = sum(gc[, 'gc_count']), seqlength = sum(gc[, 'seqlength']), gc_perc = sum(gc[, 'gc_count']) / sum(gc[, 'seqlength']))
+  
+  ## Return chromosome-level and genome-wide results in a single data.frame
+  res <- rbind(gc, gc_gw)
+  return(res)
+}
+
+#### Compute GC-% ####
+seqnames <- paste0('chr', c(1:22, 'X', 'Y', 'M'))
+human_gc_perc <- gcPercentage(seqnames, Hsapiens)
+human_gc_perc
+
+nucleotide_frequencies <- do.call('rbind', lapply(seqnames, function(seqname, genome){alphabetFrequency(genome[[seqname]])}, genome = Hsapiens)) # TODO: Check (and remove?) mask
+```
+
+Step 2: Compute expected number of CpGs under an independence model
+--------------------------------------------------------
+
+Software details
+========================================================

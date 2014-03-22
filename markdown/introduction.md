@@ -112,7 +112,7 @@ DNA methylation is essential for normal development in mammals, such as human an
 
 The typical site of DNA methylation is at the C5 carbon position of a cytosine nucleotide. This modified cytosine is called _5-Methylcytosine_ or _5mC_. [__FIGURE__](http://en.wikipedia.org/wiki/File:5-Methylcytosine.svg) shows the structure of 5mC. In mammalian genomes, most cytosines are unmethylated except for those at the _CpG dinucleotide_. I explain the importance of CpG dinucleotides in the next section. 
 
-#### CpG dinucleotides {-}
+### CpG dinucleotides
 
 A _CpG dinucleotide_, or more simply a _CpG_, is a cytosine followed by a guanine in the linear DNA sequence (__FIGURE__). The "p" stands for the phosphate backbone of DNA and some authors omit it in favour of simply calling it CG methylation. Approximately 60-80% of CpGs are methylated in mammals, meaning that the cytosine in the dinculeotide is a 5-Methylcytosine (__REFERENCE__). I will use the abbreviation _mCpG_ to refer to a methylated CpG, _uCpG_ to refer to an unmethylated CpG and simply _CpG_ when the methylation state is irrelevant.
 
@@ -124,7 +124,7 @@ One reason for this relative scarcity of CpGs is that methylated cytosines can s
 
 There are many other evolutionary pressures on the distribution of nucleotides in a genome. One effect of this is that the distribution of CpGs is far from uniform. I discuss this distribution in the next section.
 
-#### CpG islands and other sandy metaphors {-}
+### CpG islands and other sandy metaphors
 
 One way to explore the distribution of CpGs in the human genome is to look at the distribution of distances from one CpG to the next. __FIGURE__ is a kernel density plot of the distances between neighbouring CpGs  and __FIGURE__ is the empirical cumulative distribution function of the distances between neighbouring CpGs for the human reference genome (hg19)[^cpg_distance].
 
@@ -142,9 +142,9 @@ Other authors have since provided alternative definitions (__REFERENCES__ Adrian
 
 [@Wu:2010do] developed a Hidden Markov Model to define CGIs. In my thesis I have used the predicted CGIs from this model. These predicted CGIs are available from [http://rafalab.jhsph.edu/CGI/](http://rafalab.jhsph.edu/CGI/).
 
-The "sandy/beachy" metaphors have been continued (i.e. stretched to breaking point) with various authors defining CGI shores, CGI shelves, CpG deserts and CpGs in the "open sea". CGI shores (@{Irizarry:2008hga}) are defined as regions within 2kb of CGIs. They regions have been demonstrated to have an increased variability of CpG methylation (@{Irizarry:2008hga}). CGI shelves (__WHO__) are defined as __WHAT__ and __WHY ARE THEY USEFUL__. CpG deserts are __WHAT__ and the "open sea" is __WHAT AND HOW DOES THIS DIFFER FROM CpG DESERTS__
+The "sandy/beachy" metaphors have been continued (i.e. stretched to breaking point) with various authors defining CGI shores, CGI shelves, CpG canyons, CpG deserts and CpGs in the "open sea". CGI shores (@{Irizarry:2008hga}) are defined as regions within 2kb of CGIs. They regions have been demonstrated to have an increased variability of CpG methylation (@{Irizarry:2008hga}). CGI shelves (__WHO__) are defined as __WHAT__ and __WHY ARE THEY USEFUL__. CpG deserts are __WHAT__, CpG canyons are __WHAT__ and the "open sea" is __WHAT AND HOW DOES THIS DIFFER FROM CpG DESERTS__. 
 
-#### Non-CpG methylation {-}
+### Non-CpG methylation
 
 In humans, cytosine methylation in most cell types is found almost exclusively at CpGs. There are, however, certain cell types with widespread non-CpG methylation. Non-CpG methylation is often classified as CHH methylation or CHG methylation, where H stands for any nucleotide except G (__SOURCE IUPAC__). The rule-of-thumb is that non-CpG methylation is rare in somatic cells but common in pluripotent cells. Of course, there are exceptions to every rule, especially in biology.
 
@@ -152,7 +152,7 @@ To give a few examples, [@Lister:2009hy] found that in a somatic cell line (_fib
 
 Non-CpG methylation is less well studied than CpG methylation. This is partly due to the design of popular assays for studying cytosine methylation; for example the popular Illumina 27k and 450k beadchips (see __SECTION__) only measure cytosine methylation at CpGs __CHECK__. However, recent technological advances (see __SECTION__) mean that cytosine methylation can be routinely assayed regardless of the sequence context. The biological role of non-CpG methylation is less well understood than that of CpG methylation (__SOURCE__).
 
-#### Modifications of a modification {-}
+### Modifications of a modification
 
 Methylation is not the only chemical modification of cytosine nucleobase, although it is by far the most common. Further modifications, listed approximately from most frequent to least frequent, are 5-hydroxymethylcytosine (5hmC), 5-formylcytosine (5fC) and 5-carboxylcytosine (5caC). 
 
@@ -162,7 +162,7 @@ One genome-wide study of 5hmC found that less than $ 1\%$ of all assayed cytosin
 
 @{Kriaucionis:2009bm} and @{Tahiliani:2009kl} discovered that the TET enzymes can convert 5mC to 5hmC, 5hmC to 5fC and 5fC to hcaC. This suggested a role for 5hmC, 5fC and 5caC in the process of removing 5mC marks, as is discussed in the next section.
 
-#### Writers, readers and erasers {-}
+### Writers, readers and erasers
 
 A common analogy used in describing DNA methylation is that of "writers", "readers" and "erasers" (@{Moore:2013in}). Writers catalyse the methyl group onto the DNA, readers recognise methylated DNA and erasers remove the methyl group from the DNA.
 
@@ -174,34 +174,75 @@ In mammalian cells, the writers are the DNA _methyltransferase_ (DNMT) enzymes. 
 
 The readers of DNA methylation recognise methylated DNA. These readers can recruit additional proteins to the site of the methylated cytosine to perform a variety of functions related to gene expression. For example, the _MBD_ (methyl-CpG-binding domain) group of proteins bind to DNA containing a methylated CpG which then suppress gene expression by preventing transcription factor binding at that site (__SOURCE__). Another group, the _UHRF_ (ubiquitin-like, containing PHD and RING finger domain) proteins, help DNMT1 methylate _hemimethylated_ DNA, which is DNA where one strand is methylated and the other is not (e.g. the parent strand compared to the daughter strand following DNA replication).
 
-* __ERASERS__
+The removal or erasure of DNA methylation, _demethylation_, is characterised as _passive_ loss or _active_ removal. Passive loss occurs when the maintainence methyltransferases do not efficiently perform their role of restoring DNA methylation following cell division. This leads to a gradual, stochastic and genome-wide loss of DNA methylation after multiple cell divisions. This form of passive demethylation, sometimes called replication-dependent demethylation, cannot explain observations of precise targeted demethylation (__EXAMPLE__) nor the two stages of rapid global demethylation that occur during development (@{Wu:2014gw}).
+
+Active demethylation is currently a hot topic in epigenetics research. Multiple mechanisms have been proposed, and it is indeed likely that there are multiple ways to achieve active demethylation. These mechanisms were recently reviewed by @{Wu:2014gw}, which I now briefly summarise: 
+
+1. The direct removal of the methyl group from 5mC is considered unlikely due to the strong carbon-carbon bond between the methyl group and the cytosine. 
+2. There is evidence that the DNA repair machinery can be co-opted to remove a methylated base or the surrounding region. The excised base or region is then repaired with unmethylated cytosines replacing 5mCs.
+3. 5mC oxidation-dependent active DNA demethylation. This follows from the observation that the TET enzymes can iteratively oxidate a 5mC -> 5hmC -> 5fC -> 5caC reaction. The removal of 5hmC, 5fC or 5caC is biochemically "easier" than the removal of 5mC and could occur via a more efficient form of replication-dependent demethylation, direct removal of the oxidized methyl group or through the DNA repair machinery (__FIGURE OF TET-CYCLE__).
+
+One question raised by point (3) is whether 5hmC, 5fC and 5caC are simply intermediate products in an active demethylation cycle or if they themselves are bona fide epigenetic marks.
+
+### Function of DNA methylation: "normal", cancer and development
 
 
+### DNA methylation in other organisms and kingdoms
 
-#### Function of DNA methylation: "normal", cancer and development {-}
-
-
-#### DNA methylation in other organisms and kingdoms {-}
-
-##### Insects {-}
+#### Insects {-}
 
 * Honeybees
 * Fruit fly? DNA methylation's existance in other organisms, such as the common fruit fly (_Drosophila Melanogaster_), is an area of contention although recent studies suggest it is present albeit at very small quantities and only in very limited contexts [@Takayama:2014jp].
 * General
 
-##### Plants {-}
+#### Plants {-}
 
 * Arabadopsis
 * Non-CG methylation
 
-##### Fungi {-}
+#### Fungi {-}
 
-##### Bacteria {-}
+#### Bacteria {-}
 
-##### Archaea {-}
+#### Archaea {-}
 
 
 ## Assays for studying DNA methylation
+There are many assays available for studying DNA methylation. These vary in their _resolution_ and _throughput_. 
+
+The resolution of an assay is the scale on which DNA methylation can be measured[^resolution]. For example, a high resolution assay allows a researcher to quantify the level of DNA methylation at a single base whereas a low resolution assay might only allow for qualitative assessment (i.e. presence or absence) of DNA methylation at larger regions, such as CpG islands.
+
+[^resolution]: Depending on the experiment and its aims, the resolution of an assay might instead be defined as the scale on which DNA methylation can be quantified or that which allows inference to address a specific hypothesis.
+
+The throughput of an assay can be quantified in two ways. The first is per-sample throughput, which is how many measurements of DNA methylation are made per-sample[^throughput1]. This is typically what people mean when they describe an assay as being "high-throughput" or "low-throughput" and is the definition I use in the title of my thesis. Depending on your definition of "high", a high-througput assay will produce on the order of tens of thousands to billions of measurements per sample. The second definition of throughput is per-dollar, that is, "how many samples can I process within my budget?". To avoid confusion, __I should refer to the latter definition as something else__.
+
+[^throughput1]: This might reasonably be argued as being a definition of resolution.
+
+The choice of which assay to use for an experiment is a trade-off between resolution, per-sample throughput and per-dollar throughput. Experiments that use an assay with high-resolution and high per-sample throughput generally have fewer samples than experiments using a lower resolution assay or an assay with lower per-sample throughput. 
+
+Underlying each assay for studying DNA methylation is one or more of the following four principles:
+
+1. _Enzyme digestion_ (__?__)
+2. _Affinity enrichment_
+3. _Sodium bisulfite conversion_
+4. _DNA kinetics_ (__i.e. PacBio, etc. "Direct measurement", something else?__)
+
+In this section I will describe each of these basic principles but will focus on the bisulfite-conversion assays. In particular, I will describe in detail the "gold standard" assay of DNA methylation, _whole-genome bisulfite-sequencing_ (WGBS), that produces whole-genome maps of DNA methylation at base pair resolution.
+
+### Enzyme digestion assays
+
+### Affinity enrichment assays
+
+### Sodium bisulfite conversion assays
+
+### DNA kinetics assays
+
+### Whole-genome bisulfite-sequencing
+
+## Whole-genome bisulfite-sequencing
+
+### Targeted BS-seq, e.g. RRBS, NimbleGen and Agilent's capture kits
+
 
 ## Bioinformatics analysis of bisulfite-sequencing data
 
@@ -213,3 +254,5 @@ The readers of DNA methylation recognise methylated DNA. These readers can recru
 * Should I give more detail on Rafa's CGI HMM?
 * Check how deep sub-sections should go and fix.
 * Define eukaryotes, prokaryotes and viruses
+* Hyphenation or not of "bisulfite-sequencing"?
+* General term for methylC-seq, BS-seq, etc. "whole-genome bisulfite sequencing (WGBS)?"
