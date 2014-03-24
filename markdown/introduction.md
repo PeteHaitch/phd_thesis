@@ -110,7 +110,11 @@ In the next section I focus on DNA methylation in mammals, in particular humans,
 ### DNA methylation in mammals
 DNA methylation is essential for normal development in mammals, such as human and mouse (__REFERENCE__). My thesis focuses on DNA methylation in humans (_Homo sapiens_) but much of the material in this section is true for other mammals.
 
-The typical site of DNA methylation is at the C5 carbon position of a cytosine nucleotide. This modified cytosine is called _5-Methylcytosine_ or _5mC_. [__FIGURE__](http://en.wikipedia.org/wiki/File:5-Methylcytosine.svg) shows the structure of 5mC. In mammalian genomes, most cytosines are unmethylated except for those at the _CpG dinucleotide_. I explain the importance of CpG dinucleotides in the next section. 
+The typical site of DNA methylation is at the C5 carbon position of a cytosine nucleotide. This modified cytosine is called _5-Methylcytosine_ or _5mC_. [__FIGURE__](http://en.wikipedia.org/wiki/File:5-Methylcytosine.svg) shows the structure of 5mC.
+
+At the level of single-stranded DNA, methylation is a binary event: a cytosine is either methylated or unmethylated. For double-stranded DNA, methylation is usually symmetric across the two strands (_strand symmetric_) although _hemimethylation_ does occur. Within a diploid cell a particular cytosine may be unmethylated or methylated on both homologous chromosomes or methylated on one chromosome and unmethylated on the other. While the former that is more common, examples of the latter case, such as _allele-specific methylation_ and _genomic imprinting_, are of considerable biological interest (__SOURCE/EXAMPLES__).
+
+In mammalian genomes, most cytosines are unmethylated except for those at the _CpG dinucleotide_, which is usually strand-symmetric. I explain the importance of CpG dinucleotides in the next section. 
 
 ### CpG dinucleotides
 
@@ -208,9 +212,24 @@ One question raised by point (3) is whether 5hmC, 5fC and 5caC are simply interm
 
 
 ## Assays for studying DNA methylation
-There are many assays available for studying DNA methylation. These vary in their _resolution_ and _throughput_. 
+A challenge to measuring DNA methylation is that it is erased by standard molecular biology techniques, such as _polymerase chain reaction_ (PCR) and bacterial cloning, and it is not revealed by DNA hybridization assays (@{Laird:2010iv}). Therefore, almost all assays of DNA methylation require one of the following _pre-treatments_ of the DNA:
 
-The resolution of an assay is the scale on which DNA methylation can be measured[^resolution]. For example, a high resolution assay allows a researcher to quantify the level of DNA methylation at a single base whereas a low resolution assay might only allow for qualitative assessment (i.e. presence or absence) of DNA methylation at larger regions, such as CpG islands.
+1. _Enzyme digestion_
+2. _Affinity enrichment_
+3. _Sodium bisulfite conversion_
+
+Each of these pre-treatments can then be combined with a second step of amplification or hybridisation. For example, 
+
+1. Gel-based analysis
+2. Sanger sequencing
+3. Microarray hybridisation
+4. Massively parallel sequencing
+
+An exception to this classification scheme are a new class of assay that seek to directly "read" whether a position is methylated or unmethylated without requiring a pre-treatment of the DNA. For example, both @{Laszlo:2013kf, Schreiber:2013in} measure the change in current as a DNA molecule passes through a nanopore to infer whether a cytosine was methylated while __PACBIO AND ONT DO WHAT?__.
+
+Almost all assays of DNA methylation measure a "population average" from a pool of hundreds or thousands of cells. For a diploid organism, this is an average over several different levels: the two DNA strands, the two homologous chromosomes within a diploid cell and the hundreds or thousand of cells used in the assay (see __FIGURE__). Hundreds or thousands of cells are required in order to have sufficient material as input for the assay. Assays that require only a single cell as input do exist but are still in development and not in widespread use (__SOURCE/EXAMPLES__).
+
+The _resolution_ and _throughput_ are two key variables when choosing which assay to use for an experiment. The resolution of an assay is the scale on which DNA methylation can be measured[^resolution]. For example, a high resolution assay allows a researcher to quantify the level of DNA methylation at a single base whereas a low resolution assay might only allow for qualitative assessment (i.e. presence or absence) of DNA methylation at larger regions, such as CpG islands.
 
 [^resolution]: Depending on the experiment and its aims, the resolution of an assay might instead be defined as the scale on which DNA methylation can be quantified or that which allows inference to address a specific hypothesis.
 
@@ -220,18 +239,23 @@ The throughput of an assay can be quantified in two ways. The first is per-sampl
 
 The choice of which assay to use for an experiment is a trade-off between resolution, per-sample throughput and per-dollar throughput. Experiments that use an assay with high-resolution and high per-sample throughput generally have fewer samples than experiments using a lower resolution assay or an assay with lower per-sample throughput. 
 
-Underlying each assay for studying DNA methylation is one or more of the following four principles:
+In this section I will describe each of the pre-treatments but will focus on the bisulfite-conversion assays. In particular, I will describe in detail the "gold standard" assay of DNA methylation, _whole-genome bisulfite-sequencing_ (WGBS), that combines the sodium bisulfite conversion pre-treatment with massively parallel sequencing to produce whole-genome maps of DNA methylation at base pair resolution.
 
-1. _Enzyme digestion_ (__?__)
-2. _Affinity enrichment_
-3. _Sodium bisulfite conversion_
-4. _DNA kinetics_ (__i.e. PacBio, etc. "Direct measurement", something else?__)
 
-In this section I will describe each of these basic principles but will focus on the bisulfite-conversion assays. In particular, I will describe in detail the "gold standard" assay of DNA methylation, _whole-genome bisulfite-sequencing_ (WGBS), that produces whole-genome maps of DNA methylation at base pair resolution.
 
 ### Enzyme digestion assays
+_Restriction endonucleases_ are an important technique in molecular biology. These enzymes can preferrentially "cut/cleave/digest" DNA at particular sequence motifs. The motif at which a restriction enzyme cleaves DNA is called the _recognition motif_ or _restriction sequence_. The methylation of a position in the recognication motif can inhibit a restriction enzyme from cleaving the DNA. This can be used to design an assay to infer the methylation state of a DNA fragment.
+
+For example, the recognition site of the restriction enzyme _HpaII_ is `CCGC`. However, _HpaII_ will only digest DNA when the second cytosine in the motif is unmethylated. The _HELP_ (_HpaII_ tiny fragment enrichment by ligation-mediated PCR) assay compares DNA digested by _HpaII_ to one digested with another restriction enzyme that has the same recognition motif but is methylation-insensitive (_MspI_) to identify _hypomethylated_ regions of a genome (__SOURCE__). 
+
+Another popular restriction enzyme for studying DNA methylation is _McrBC_, "an enzyme with the unusual and desirable property of cutting methylated DNA promiscuously (recognition sequence $R^{m} C(N)_{55– 103} R^{m} C$)" (@{Irizarry:2008hg}). 
+
+Assays based on restriction enzyme were some of the first developed for studying DNA methylation. They were initially developed for studying particular loci although they have been extended to genome-scale analysis approaches (@{Laird:2010iv}). Restriction enzyme assays have a relatively low resolution (__REASONS/SOURCE__) but may also be used as a first-pass to enrich a sample for methylated or unmethylated regions which are then assayed using a higher resolution technique.
 
 ### Affinity enrichment assays
+Affinity enrichment assays compare measurements between an "enriched" version and an "input" (control) version of the same sample to infer the presence or absence of DNA methylation. This is very similar to the idea behind chromatin immunoprecipitation followed by microarray hybridisation (ChIP-chip) or sequencing (ChIP-seq). Enrichment may be done using a methylation-specific antibody, such as __EXAMPLE__, or a __unmethylation-specific(?)__ antibody, such as __EXAMPLE__.
+
+Some examples of affinity enrichment assays for DNA methylation are the microarray-based MeDIP, mDIP and mCIP (all based on methylated DNA immunoprecipitation) and their sequencing-based relatives, MeDIP-seq and mDIP-seq. These are all low resolution assays since they are based on the enrichment of regional differences between the enriched and input samples. Furthermore, the bioinformatic analysis of data from these assays is complicated by the varying CpG density along the genome, which leads to different enrichment affinities for different regions of the genome. However, these assays are can provide a relatively cheap and efficient genome-wide assessment of DNA methylation (@{Laird:2010iv}).
 
 ### Sodium bisulfite conversion assays
 
@@ -256,3 +280,5 @@ In this section I will describe each of these basic principles but will focus on
 * Define eukaryotes, prokaryotes and viruses
 * Hyphenation or not of "bisulfite-sequencing"?
 * General term for methylC-seq, BS-seq, etc. "whole-genome bisulfite sequencing (WGBS)?"
+* Is it most accurate to say that restriction enzymes "cleave", "cut" or "digest" DNA?
+* When to define/describe DNA sequencing?
