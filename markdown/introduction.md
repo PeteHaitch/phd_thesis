@@ -258,6 +258,34 @@ Affinity enrichment assays compare measurements between an "enriched" version an
 Some examples of affinity enrichment assays for DNA methylation are the microarray-based MeDIP, mDIP and mCIP (all based on methylated DNA immunoprecipitation) and their sequencing-based relatives, MeDIP-seq and mDIP-seq. These are all low resolution assays since they are based on the enrichment of regional differences between the enriched and input samples. Furthermore, the bioinformatic analysis of data from these assays is complicated by the varying CpG density along the genome, which leads to different enrichment affinities for different regions of the genome. However, these assays are can provide a relatively cheap and efficient genome-wide assessment of DNA methylation (@{Laird:2010iv}).
 
 ### Sodium bisulfite conversion assays
+In the 1980s, __Hayatsu OR Wang et al.__ discovered that when _denatured_ (__DEFINE?__) DNA is treated with sodium bisulfite (__CHEMICAL SYMBOL__), unmethylated cytosines deaminate to uracils much faster than do methylated cytosines (__SOURCE__). The methylated cytosines are said to be "protected" from conversion to uracils. When the bisulfite treated is amplified by PCR the uracils are subsequently converted to thymines.
+
+This discovery led to the development of assays for studying studying cytosine methylation based on the pre-treatment of DNA with sodium bisulfite, which are sometimes referred to as bisulfite-conversion assays (__FROMMER; CLARK__). These assays are all based on the idea of comparing the sequence of the untreated DNA to the sequence of the bisulfite treated DNA to infer the methylation state of all cytosines in the sequence by whether or not they were converted to uracil (thymine) following the bisulfite treatment (__see FIGURE__). 
+
+Initial experiments based on the sodium bisulfite pre-treatment of DNA used Sanger sequencing of cloned PCR products, a very laborious task, which restricted experiments to studying a limited number of short segments of DNA (__HOW MANY & LONG?__). Although subsequent enhancements in the automation of Sanger sequencing improved the throughput of these assays, it was never going to be able to deliver a cost-effective, genome-scale assay of DNA methylation. The development of hybridisation microarrays provided an alternative way of analysing bisulfite-treated DNA that could provide cheap, genome-wide measurements of DNA methylation(__SOURCE__). 
+
+Microarrays contain thousands, even millions, of short _oligonucleotide_ probes. Each probe is is designed to hybridise to a particular DNA sequence and emits a signal, such as flurousence, that can be measured to infer the strength of the hybridisation. Therefore, an (idealised) way to analyse DNA methylation with a microarray is to hybridise bisulfite-converted DNA to a microarray that contains probes for both the methylated and unmethylated versions of all sequences of interest. The relative methylation of each sequence can be inferred from the relative intensities of the "methylated probe" to the "unmethylated probe". Such an idealised experiment brushes over many complications including (@{Laird:2010iv}): 
+
+* The reduced complexity of bisulfite-converted DNA (from a 4-base alphabet to a largely 3-base alphabet) leads to decreased hybridisation specificity
+* Sequences containing multiple cytosines require multiple probe versions in order to assay all possible methylation patterns
+* This approach requires the design of organism-specific microarrays
+
+The Illumina 450k (__INSERT FULL NAME__) provides a modern implementation of the idea of bisulfite pre-treatment of DNA followed by microarray hybridisation for studying human samples. This array assays __HOW MANY__ CpGs (__IN WHAT TYPE OF REGIONS__) and uses two different probe designs (__WHY?__). There are still substantial bioinformatics challenges in analysing data from these assays (__CITE: SNPs in probes, normalisation, etc.__).
+
+* BISULFITE + NGS
+ 	* Cokus
+	* Lister
+	
+* Others
+	* Mass-spec
+
+__PROS AND CONS OF BISULFITE ASSAYS__
+A key advantage of bisulfite-conversion assays over enzyme digest and affinity enrichment assays is that it provide base pair resolution of DNA methylation. In contrast, one disadvantage of bisulfite-conversion assays is that they require knowledge of the underyling DNA sequence in order to infer the methylation states of cytosines. This requires either a parallel experiment to sequence the target region(s) or reliance on a reference genome.
+
+* Multiple cells are still required as input
+* 5hmC confounding
+* More
+
 
 ### DNA kinetics assays
 
