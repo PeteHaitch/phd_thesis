@@ -16,6 +16,10 @@ introduction.pdf: bibtex/phd_thesis.bib markdown/introduction.md markdown/biblio
 	mkdir -p pdf
 	pandoc -s --table-of-contents --number-sections --bibliography=bibtex/phd_thesis.bib -o pdf/introduction.pdf markdown/introduction.md markdown/bibliography.md
 
+statmodel.pdf: bibtex/phd_thesis.bib markdown/a_statistical_model_of_methlyC-seq.md markdown/bibliography.md
+	mkdir -p pdf
+	pandoc -s --table-of-contents --number-sections --bibliography=bibtex/phd_thesis.bib -o pdf/a_statistical_model_of_methlyC-seq.pdf markdown/a_statistical_model_of_methlyC-seq.md markdown/bibliography.md markdown/bibliography.md
+
 phd_thesis.pdf: bibtex/phd_thesis.bib markdown/preamble.md notation.md markdown/introduction.md markdown/bibliography.md
 	mkdir -p pdf
 	pandoc --table-of-contents --number-sections --bibliography=bibtex/phd_thesis.bib -o pdf/phd_thesis.pdf markdown/preamble.md markdown/notation.md markdown/introduction.md markdown/bibliography.md
