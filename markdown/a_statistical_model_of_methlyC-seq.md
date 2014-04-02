@@ -31,10 +31,10 @@ Even with only a single sample, this experiment has a hierarchical structure. I 
 
 Once I have described the framework for a single sample, I extend it to allow for multiple samples. Complications and limitations of this framework are addressed after the general description.
 
-### Prior to sequencing
+### Pre-sequencing
 There are $N$ methylation loci in our sample's genome. A methylation locus is a single cytosine, that is, a CpG, CHG or CHH. Generally, $N$ is not known exactly, although estimates can be made based on a reference genome, but this is no great concern. 
 
-The set of these loci is labelled $\mathcal{I} = \{pos_{i}: i = 1, \ldots, N, \text{ where } pos_{i} \text{ is the genomic co-ordinates of the } i^{th} \text{ locus with respect to the forward strand, e.g. chr1:723461-723461}\}. I frequently refer to loci by the subscript $i$ rather than by $pos_{i}$. This means that the distance between the $i^{th}$ and $(i + 1)^{th}$ methylation loci varies along the genome and, for a small number of instances, that the $i^{th}$ and $(i + 1)^{th}$ methylation loci are on separate chromosomes.
+The set of these loci is labelled $\mathcal{I} = \{pos_{i}: i = 1, \ldots, N \}$, where $pos_{i}$ is the genomic co-ordinates of the $i^{th}$ locus with respect to the forward strand, e.g. chr1:723461-723461. I frequently refer to loci by the subscript $i$ rather than by $pos_{i}$. This means that the distance between the $i^{th}$ and $(i + 1)^{th}$ methylation loci varies along the genome and, for a small number of instances, that the $i^{th}$ and $(i + 1)^{th}$ methylation loci are on separate chromosomes.
 
 The methylation state of a locus can vary within a sample due to the fact that DNA for each sample is extracted from hundreds or thousands of cells and each cell can have a slightly different methylation profile. Furthermore, within a diploid cell there are two copies of each chromosome, and therefore two copies of each methylation locus, and these two copies can have different methylation states. Therefore, it is also necessary to consider the next level down in the hierarchy; the DNA fragments within the sample.
 
@@ -66,7 +66,7 @@ Related to these is the proportion of fragments that methylated at the $i^{th}$ 
 
 Again, I emphasise that $H_{i, j}, Z_{h, i, j}, M_{i, j}, U_{i, j} \text{ and } $B_{i, j}$ are unobservable. However, by sequencing the pools of DNA fragments we aim to estimate these variables.
 
-### Following sequencing
+### Post-sequencing
 We do not sequence every fragment in the pool. Rather, sequencing can be thought of as sampling without replacement from the pool of DNA fragments. We have a large number(~$10^10$) of fragments in the pool and each methylation locus is only present on a small number of those fragments. Therefore, we can approximate this sampling by Poisson sampling (__CITE__), where the rate parameter for locus $i$ is proportional to the number of fragments in the pool and inversely proportional to $H_{i}$.
 
 At this point I make three simplifying assumptions:
@@ -80,7 +80,7 @@ I also ignore reads containing no methylation loci as these are not salient to t
 The effect of the first assumption is minor. When using single-end sequencing, the methylation loci from a single read will always form a positively ordered sequence without "gaps", i.e., $(i, i + 1, i + 2)$ and not $(i, i - 1, i - 2)$ nor $(i, i + 1, i + 3)$. However, when using paired-end sequencing the methylation loci from a paired-end read will still be an ordered sequence but one of the following may occur (__FIGURE__):
 
 1. There may be gaps due to the insert size being longer than the sum of the read lengths, e.g. $(i, i + 1, i + 3, i + 4))$. In effect, we have missing data for any intervening methylation loci; the $(i + 2)^{th}$ loci in this example.
-2. Loci may be measured twice if the insert size is less than the sum of the read lengths, e.g. read_1 gives us $(i, i + 1)$ and read_2 gives us $(i + 1, i + 2, i + 3). In this example we must use only one of read_1 or read_2 as the measurement of the $(i + 1)^{th}$ locus because we are "double-counting" (__SOURCE__)
+2. Loci may be measured twice if the insert size is less than the sum of the read lengths, e.g. read_1 gives us $(i, i + 1)$ and read_2 gives us $(i + 1, i + 2, i + 3)$. In this example we must use only one of read_1 or read_2 as the measurement of the $(i + 1)^{th}$ locus because we are "double-counting" (__SOURCE__)
 
 I discuss the implications of the latter two assumptions in __SECTION__. 
 
@@ -115,11 +115,17 @@ I now discuss some complications and how this framework might accommodate this i
 
 #### What is $\mathcal{I}$? {-}
 
+As mentioned in __SECTION__, studies using bisulfite-conversion assays rely on either a reference genome or, less commonly, separate DNA sequencing of the sample that is assayed. Different analysis strategies lead to different definitions of $\mathcal{I}$, which are approximations to the "true" set of methylation loci in the sample, $\mathcal{I}^{truth}$. Listed here are definitions of $\mathcal{I}$ from least closely matching to most closely matching $\mathcal{I}^{truth}$:
 
+1. $\mathcal{I}^{ref}$: Defined by the set of methylation loci in the reference genome. Ignores all genetic variation between the sample and the reference.
+2. $\mathcal{I}^{refFilter}$: Defined by filtering out problematic loci from $\mathcal{I}^{ref}$. A conservative approach that removes many sites of genetic variation between the sample and the reference as well as sites that do not display genetic variation between the sample and the reference. Misses sample-specific methylation loci.
+3. $\mathcal{I}^{BisSNP}$: Defined by calling genetic variants from the bisulfite-sequencing data using `Bis-SNP` ([@Liu:2012ge]). Identifies sample-specific methylation loci and removes reference-specific methylation loci. The best that can be done if only bisulfite-sequencing data is available. Genetic variation detection is not as good as that from DNA-seq data.
+4. $\mathcal{I}^{WGS}$: Defined by identifying all methylation loci from _whole-genome sequencing_ (WGS) of the sample's genome. The gold standard. All methylation loci are defined with respect to the sample's genome. The only differences between $\mathcal{I}^{WGS}$ and the "truth" are due to sequencing errors and variant calling errors of the WGS data.
 
 #### A sample can be heterozygous for a methylation locus  {-}
 
-In a diploid cell there are are sites where, for example, the maternal chromosome is a CpG whereas the paternal chromosome is an ApG. In effect, the maternal and paternal chromosomes within the sample have different $\mathcal{I}$. The number of loci that differ between $\mathcal{I}_{\text{maternal}}$ and $\mathcal{I}_{\text{paternal}}$ is often small enough not to worry about (__I THINK__). However, in some studies, such as those of allele-specific methylation, these loci can be very important. 
+In a diploid cell there are are sites where, for example, the maternal chromosome is a CpG whereas the paternal chromosome is an ApG. In effect, the maternal and paternal chromosomes within the sample have different $\mathcal{I}^{truth}$. The number of loci that differ between $\mathcal{I}^{maternal}$ and $\mathcal{I}^{paternal}$ is often small enough not to worry about (__I THINK__). However, in some studies, such as those of allele-specific methylation, these loci can be very important. 
+
 
 * How do I deal with these in practice?
 * How might you detect these loci? 
@@ -135,17 +141,14 @@ __Expand on each of these points:__
 * Sequencing error
 * More?
 
-
-
-
-### $n$ samples
+## $n$ samples
 To move from a single sample for $n$ samples simply requires an additional subscript, $j = 1, \ldots, n$. For example, $\mathcal{I}_{j}$ is the set of methylation loci in the $j^{th}$ sample and $\beta_{i, j}$ is the beta value for the $i^{th}$ locus in the $j^{th}$ sample.
 
 This defines the three levels in the hierarchy of a typical experiment -- individual molecules ($h$), individual methylation loci ($j$) and individual samples ($j$).
 
 #### Some complications for $n$ samples {-}
 
-* Each individual has their own set of methylation loci
+* Each individual has their own set of methylation loci, i.e. $\mathcal{I}_{j}$ differs for all $j$
 * The $i^{th}$ individual has covariates $X_{i}$, which may be a matrix.
 
 [^chimeric_reads]: Might need to note the possibility of chimeric reads.
