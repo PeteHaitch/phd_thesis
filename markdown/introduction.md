@@ -36,7 +36,7 @@ RNA is _translated_ into proteins, which are the the molecules that "act out" th
 
 The _genetic code_ describes how triplets of mRNA, or DNA, bases encode for _amino acids_. Amino acids are in turn the building blocks of _proteins_. Each triplet of bases describes one of the $3^4 = 64$ possible  _codons_. There is redundancy in the code. For instance, `GCU`, `GCC`, `GCA` and `GCG` all code alanine. __FIGURE/TABLE__ shows the complete genetic code.
 
-#### The Central Dogma of molecular biology {-)
+#### The Central Dogma of molecular biology {-}
 __KILL?__
 Francis Crick, who along with James Watson and Rosalind Franklin discovered the double helix structure of DNA, proposed the Central Dogma of molecular biology (Source: [http://sandwalk.blogspot.com.au/2007/01/central-dogma-of-molecular-biology.html](http://sandwalk.blogspot.com.au/2007/01/central-dogma-of-molecular-biology.html)):
 > ... once (sequential) information has passed into protein it cannot get out again (F.H.C. Crick, 1958)
@@ -242,7 +242,6 @@ The choice of which assay to use for an experiment is a trade-off between resolu
 In this section I will describe each of the pre-treatments but will focus on the bisulfite-conversion assays. In particular, I will describe in detail the "gold standard" assay of DNA methylation, _whole-genome bisulfite-sequencing_ (WGBS), that combines the sodium bisulfite conversion pre-treatment with massively parallel sequencing to produce whole-genome maps of DNA methylation at base pair resolution.
 
 
-
 ### Enzyme digestion assays
 _Restriction endonucleases_ are an important technique in molecular biology. These enzymes can preferrentially "cut/cleave/digest" DNA at particular sequence motifs. The motif at which a restriction enzyme cleaves DNA is called the _recognition motif_ or _restriction sequence_. The methylation of a position in the recognication motif can inhibit a restriction enzyme from cleaving the DNA. This can be used to design an assay to infer the methylation state of a DNA fragment.
 
@@ -304,6 +303,57 @@ The bisulfite-treatment of DNA can introduce biases and other problems. Three ex
 
 
 ## Bioinformatics analysis of bisulfite-sequencing data
+While there are many tools and methods for analysing bisulfite-sequencing data, there are four fundamental steps:
+
+1. Data quality checking
+2. Read mapping and post-processing of mapped reads
+3. Methylation calling
+4. Inference
+
+These ideas will be familiar to anyone who analyses high-thoughput sequencing data, but each requires a "twist" to work with bisulfite-sequencing data. In this section I describe each step in broad terms. Most of my thesis is focused on step 4 of this process, with some work on step 3. A more detailed study, including comparisons of different software, is give in [@]Krueger:2012ks].
+
+I only describe an analysis pipeline for data from the directional bisulfite-sequencing protocol, which is the standard and simpler protocol.
+
+### Data quality checking
+The first step in any analysis of high-throughput sequencing data is to perform a quality check of the data. Much of this is done visually by comparing summary graphs of the current sample(s) to previous "good" samples. As such, data quality checking relies on the judgement of, hopefully, experienced analyst.
+
+The `FastQC` software (__CITE__) is a very useful tool for performing this first step. It produces summary graphs of many key measures such as base quality scores, read length distribution and sequence contamination. As `FastQC` is a general purpose tool, some of its output is not so useful, or at least must be cautiously interpreted, for bisulfite-sequencing data. For example, `FastQC` will report a __warning/error__ if the GC-percentage, the percentage of read bases that are guanine or cytosine, is __less than what value__. Due to the bisulfite-treatment, bisulfite-sequencing data will naturally have a very low percentage of cytosine bases (__around what%__) and therefore a low GC-percentage. So, a low GC-percentage is no cause for concern.
+
+More important is the identification and removal of contaminating sequences. FastQC will screen a subset of the reads against a list of known, common contaminants. Examples of such contaminants include the sequencing adapters, PCR primers and __another example__.
+
+Illumina adapter sequences are ligated to each DNA molecule in the library in order to perform Illumina sequencing. The sequencer can "read into" the adapter sequence, particularly when using paired-end sequencing of short DNA fragments such as those created in WGBS libraries. This means that some reads are a chimera containing sequence of interest (from the sample) and junk (from the adapters). This junk needs to be removed for two reasons:
+
+1. Reads containing adapter contamination will generally not map to the reference genome, meaning these reads go to waste.
+2. If they do map, then this will result incorrect inferences - the garbage in, garbage out maxim.
+
+Using a tool such as `Trim Galore!` (__CITE__) or `trimmomatic` (__CITE__), the reads can be _trimmed_ to remove these contaminants. Reads might also be trimmed to remove low quality positions, which are common at the 3' end of reads, although this isn't as essential as trimming to remove contaminants.
+
+### Read mapping and post-processing of mapped reads
+Read mapping is complicated by the bisulfite-treatment of the DNA. Following bisulfite-treatment, the DNA fragments are now mostly composed of three bases rather than four, which means there are many more sequence mismatches between a read and its true mapping location. Simply using standard read mapping software and allowing for more mismatches would result in many reads mapping to multiple locations in the reference genome. Instead, a field of read mapping software dedicated to bisulfite-sequencing data has developed.
+
+These bisulfite-sequencing read mappers take one of two approaches:
+
+1. "Methylation-aware" mismatch penalties. 
+2. _In silico_ bisulfite-conversion of reads and reference genomes.
+
+While "methylation-aware" mappers provide the highest efficiency, these suffer from a bias whereby methylated reads are preferentially mapped over unmethylated reads (__CITE FELIX__). This biases downstream inference and means that these mappers are generally less popular. I will instead focus on the _in silico_ bisulfite-conversion mappers, called as such because of a key step taken by these in the mapping process. 
+
+_In silico_ bisulfite-conversion mappers convert all cytosines to thymines (resp. guanines to adenines) of the forward (resp. reverse) strand from the reference genome. They then take each read and create two _in silico_ bisulfite-converted versions of it[^2_reads]: the CT-read replaces all residual thymines with cytosines and the GA-read replaces all residual guanines with adenines. The CT-read is mapped against the CT-genome and the GA-read is mapped against the GA-genome using a standard mapping tools such as Bowtie2 (__CITE__) or BWA (__CITE__). This process is illustrated in __FIGURE__.
+
+[^2_reads]: Two versions are made because we don't know _a priori_ from which of the two strands the read originated.
+
+Depending on the exact settings used, the mapper reports the "best" location of each read with respect to the two reference genomes. It reports the original sequence of the read in the output file so that the methylation status of each position can be inferred by comparing it to the corresponding reference sequence.
+
+_In silico_ bisulfite-conversion mappers avoid the bias inherent in the "methylation-aware" mappers because all reads, regardless of methylation status, "look the same" to the mapper. However, they do suffer from a slight loss in mapping efficiency (__CITE FELIX__).
+
+__TABLE__ lists some popular bisulfite-sequencing read mappers with the underlying mapping software listed in brackets:
+
+* Bismark (Bowtie1 or Bowtie2, __CITE__)
+* BWA-meth (BWA, __CITE__)
+* BSMAP (SOAP, __CITE__)
+* __OTHERS__
+
+Each of these aligners can report the output in the standard `SAM` format (__CITE__), although each mapper does so in a slightly different way, which makes difficult the development of downstream analysis tools.
 
 ### Methylation calling
 __TODO: Re-write.__
@@ -313,7 +363,7 @@ __TODO: Re-write.__
 3. __Describe post-hoc filtering approaches.__
 
 
-If using a reference-based methylation caller, such as `Bismark`, then we are implicitly defining $\mathcal{I} :=\mathcal{I}_{ref}$, where $\mathcal{I}_{ref}$ is the set of methylation loci in the reference genome. Due to DNA variation between the sample and the reference genome, this assumption is not true. As mentioned in __SECTION__, these results can be _post-hoc_ filtered to remove problematic sites to produce $\mathcal{I} \subset \mathcal{I}_{ref}.
+If using a reference-based methylation caller, such as `Bismark`, then we are implicitly defining $\mathcal{I} :=\mathcal{I}_{ref}$, where $\mathcal{I}_{ref}$ is the set of methylation loci in the reference genome. Due to DNA variation between the sample and the reference genome, this assumption is not true. As mentioned in __SECTION__, these results can be _post-hoc_ filtered to remove problematic sites to produce $\mathcal{I} \subset \mathcal{I}_{ref}$.
 
 Alternatively, we might use a more sophisticated methylation caller, such as `Bis-SNP` to define $\mathcal{I}$. 
 
@@ -366,4 +416,5 @@ To remove those reference-specific loci that are not found in databases we might
 * General term for methylC-seq, BS-seq, etc. "whole-genome bisulfite sequencing (WGBS)?"
 * Is it most accurate to say that restriction enzymes "cleave", "cut" or "digest" DNA?
 * Define/describe DNA sequencing and the genomics revolution in the section describing DNA (or reference genome section?)
+	* Define "library"
 * Fix up reference formating
