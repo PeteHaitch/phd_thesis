@@ -9,8 +9,8 @@
 	* See `notation.Rmd`
 	* Marginal distributions
 	* Dependence/correlation over $i$ (see also __Chapter X__)
-		* Li _et al._ compute $\beta$ values and compute correlations within a sample as a funciton of genomic distance.
-		* Arabidopsis compute $\beta$ values and compute correlations within a sample as a funciton of genomic distance.
+		* Li _et al._ compute $\beta$ values and compute correlations within a sample as a function of genomic distance.
+		* Arabidopsis compute $\beta$ values and compute correlations within a sample as a function of genomic distance.
 		* Lister _et al._ compute both within-read and across-read correlations or dependencies of DNA methylation.
 		* Akulenko, R., _et al._ compute gene-level $\beta$ values and compute the correlations between pairs of genes across samples as a function of genomic distance.
 	* Dependence/correlation over $j$ (?)
@@ -26,10 +26,12 @@ I also use this framework to formulate in statistical terminology the key variab
 To begin, I consider the simple experiment of performing methylC-seq on a single sample.
 Even with only a single sample, this experiment has a hierarchical structure. I separate this description into two stages, as illustrated in __CARTOON FIGURE OF METHYLC-SEQ EXPERIMENT__:
 
-1. Pre-sequencing.
-2. Post-sequencing.
+1. Pre-sequencing
+2. Post-sequencing
 
-Once I have described the framework for a single sample, I extend it to allow for multiple samples. Complications and limitations of this framework are addressed after the general description.
+As described in __SECTION__, most analyses to date of WGBS data have focused on the "sample-average" level methylation at individual loci. For this reason, I initially describe the framework in terms of single loci. However, bisulfite sequencing data contain much more information than provided by these univariate, marginal summaries of the data. I introduce _m-tuples_ that can summarise some of this extra information and which I use extensively in __CHAPTERS__.
+
+Once I have described the framework for a single sample, I extend it to allow for multiple samples. I address omplications and limitations of this framework at the end of this sub-section. 
 
 ### Pre-sequencing
 There are $N$ methylation loci in our sample's genome. A methylation locus is a single cytosine, that is, a CpG, CHG or CHH. Generally, $N$ is not known exactly, although estimates can be made based on a reference genome, but this is no great concern. 
@@ -108,7 +110,27 @@ Similiarly, we obtain the proportion of reads that are methylated at the $i^{th}
 	\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}
 \end{equation}
 
-These are the so-called $\beta$-values, which are commonly interpreted as an estimate of the proportion of cells in the sample that are methylated at the $i^{th}$ locus. We will discuss this interpretation, and other estimators of the "sample-average" methylation, in __SECTION__.
+These are the so-called $\beta$-values, which are commonly interpreted as an estimate of the proportion of cells in the sample that are methylated at the $i^{th}$ locus. We will discuss this interpretation, and other estimators of the "sample-average" methylation, in __SECTION__. I now move from single locus summaries to multi-loci summaries using m-tuples.
+
+### m-tuples
+I define an m-tuple to be a tuple of methylation loci, where $m = 1, 2, \ldots$ is the size of the tuple. For example, a CpG 3-tuple is 3 CpGs. A CHH 1-tuple is a single CHH; 1-tuples are the basis of single locus analyses of bisulfite sequencing data. We can learn more from bilsufite sequencing data by using m-tuples with $m > 1$.
+
+Each observation on an m-tuple must be from a single read. This ensures that each observation ultimately comes from a single cell[^chimeric_reads]. For example, suppose we have a read containing 3 CpGs -- the first two CpGs are methylated while the last one is unmethylated. From this read we can observe 3 $\times$ CpG 1-tuples, 2 $\times$ CpG 2-tuples and 1 $\times$ CpG 3-tuple. We can have multiple observations on an m-tuple by observing multiple reads, each containing the m-tuple. __FIGURE__ illustrates this example.
+
+[^chimeric_reads]: Might need to note the possibility of chimeric reads. 
+
+Note that in __FIGURE__ I haven't constructed a 2-tuple using the first CpG and the last CpG. In general, I focus on m-tuples where the $m$ methylation loci are neighbours. That is, I focus on m-tuples where the _number of intervening loci_ is zero ($NIL = 0$). There are 3 reasons for this:
+
+1. Quantity: From a sequence containing $M$ methylation loci there are $M - m + 1$ m-tuples when we restrict ourselves to those m-tuples with $NIL = 0$. In contrast, if we allow $NIL \geq 0$ then there are $\binom{M}{m} ~ $ m-tuples. (__TODO__: Describe how these terms grow asymptotically).
+2. Interpretability: Discussed in __SECTION__
+3. Measurability: We cannot observe m-tuples where the methylation loci are far apart due to the read length limitations of the Illumina sequencing technology. This is true even when $NIL = 0$ but is especially the case if we allow $NIL \geq 0$.
+
+When I refer to m-tuples I implicitly mean $NIL = 0$; I will explicitly use the notation $NIL \geq 0$ when I wish to make clear that there may be intervening methylation loci in the m-tuple.
+
+__TODO__: Mathematically define: reads containing multiple methylation loci; m-tuples; `counts` of methylation patterns.
+
+
+* Extend $z: z \in \mathcal{G}_{i}$ to $z: z \in \mathcal{G}_{(i, i + 1)}$. And not that we do not know which $h$ each read came from, only that they came from the same DNA fragment.
 
 ### Some complications for a single sample
 I now discuss some complications and how this framework might accommodate this issues. I also discuss how these issues are dealt with in practice.
@@ -169,15 +191,17 @@ The second type of experiment is one that aims to cluster individuals based on m
 
 ### Some complications for $n$ samples
 
-In addition to the complications of the previous section, we now have sample-to-sample variation. For example, each individual has their own set of methylation loci, that is, $\mathcal{I}_{j}$ differs for all $j$. Therefore, we might choose to study $\mathcal{I}^{common} = \cap_{j} \mathcal{I}_{j}$ or some other combination of the $\mathcal{I}_{j}$, such as all methylation loci present in at least some fraction of the $n$ samples.
+In addition to the complications of the previous section, we now have sample-to-sample variation. For example, each individual has their own set of methylation loci, that is, $\mathcal{I}_{j}$ differs for all $j$. Furthermore, sequencing coverage varies from sample-to-sample. This means that even if the samples have exactly the same $\mathcal{I}_{j}$, e.g. the samples are genetically identical, each sample will have a different set of loci with "sufficient" sequencing coverage. Loci without sufficient coverage are effectively missing data.
+
+In practice, we might choose to study $\mathcal{I}^{common} = \cap_{j} \mathcal{I}_{j}$ or some other combination of the $\mathcal{I}_{j}$, such as all methylation loci present in at least some fraction of the $n$ samples. 
+
+A conservative analysis might only analyse those loci where at least some fraction of the $n$ samples have sufficient sequencing coverage. A less conservative analysis might try to impute the missing values based on methylation levels at neighbouring loci (__bsseq__).
 
 
-## m-tuples
-* Extend $z: z \in \mathcal{G}_{i}$ to $z: z \in \mathcal{G}_{(i, i + 1)}$. And not that we do not know which $h$ each read came from, only that they came from the same DNA fragment[^chimeric_reads].
 
-[^chimeric_reads]: Might need to note the possibility of chimeric reads.
 
 ## Other people's models defined in my framework
 
 # General
 * "methylC-seq" or "WGBS" or ???
+* "bisulfite-sequencing" or "bisulfite sequencing"
