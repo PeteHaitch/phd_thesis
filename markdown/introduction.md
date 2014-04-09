@@ -418,3 +418,4 @@ To remove those reference-specific loci that are not found in databases we might
 * Define/describe DNA sequencing and the genomics revolution in the section describing DNA (or reference genome section?)
 	* Define "library"
 * Fix up reference formating
+* Note that when I refer to a read I mean either a single-end read or a paired-end read. I will use to read_1 and read_2 if I want to refer a particular read that makes up a paired-end read.

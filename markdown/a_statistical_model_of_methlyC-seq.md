@@ -1,4 +1,6 @@
-# Notes from outline.md
+# A statistical framework for analysing bisulfite sequencing data
+
+## Notes from outline.md
 * Chapter Overview
 * Notation
 	* See `notation.Rmd`
@@ -15,60 +17,60 @@
 		* Akulenko, R., _et al._ compute gene-level $\beta$ values and compute the correlations between pairs of genes across samples as a function of genomic distance.
 	* Dependence/correlation over $j$ (?)
 		* Akulenko, R., _et al._ compute gene-level $\beta$ values and compute the correlations between pairs of genes across samples as a function of genomic distance.
-		
-# A statistical framework for analysing bisulfite sequencing data
+
 ## Chapter overview
 In this chapter I set out a statistical framework for analysing bisulfite sequencing data. I begin by explaining the various levels of stochasticity in a methylC-seq experiment. Following this, I set out the mathematical notation that I use throughout my thesis and, using this notation, formalise some of the concepts introduced in the previous section. 
 
 I also use this framework to formulate in statistical terminology the key variables and common questions in studies of DNA methylation and compare previous estimators of these key variables.
 
 ## One sample
+As described in __SECTION__, most analyses to date of WGBS data have focused on the "sample-average" level methylation at individual loci. For this reason, I initially describe the framework in terms of single loci. However, bisulfite sequencing data contain much more information than provided by these univariate, marginal summaries of the data. I introduce _m-tuples_ that can summarise some of this extra information and which I use extensively in __CHAPTERS__.
+
 To begin, I consider the simple experiment of performing methylC-seq on a single sample.
-Even with only a single sample, this experiment has a hierarchical structure. I separate this description into two stages, as illustrated in __CARTOON FIGURE OF METHYLC-SEQ EXPERIMENT__:
+Even with only a single sample, this experiment has a hierarchical structure. I separate this structure into two stages, as illustrated in __CARTOON FIGURE OF METHYLC-SEQ EXPERIMENT__:
 
 1. Pre-sequencing
 2. Post-sequencing
 
-As described in __SECTION__, most analyses to date of WGBS data have focused on the "sample-average" level methylation at individual loci. For this reason, I initially describe the framework in terms of single loci. However, bisulfite sequencing data contain much more information than provided by these univariate, marginal summaries of the data. I introduce _m-tuples_ that can summarise some of this extra information and which I use extensively in __CHAPTERS__.
+Once I have described the framework for a single sample, I extend it to allow for multiple samples. The ideas here are simple, although when extended to their full generality the notation becomes messy. I address complications and limitations of this framework at the end of this sub-section. 
 
-Once I have described the framework for a single sample, I extend it to allow for multiple samples. I address omplications and limitations of this framework at the end of this sub-section. 
+### Single locus analysis
 
-### Pre-sequencing
-There are $N$ methylation loci in our sample's genome. A methylation locus is a single cytosine, that is, a CpG, CHG or CHH. Generally, $N$ is not known exactly, although estimates can be made based on a reference genome, but this is no great concern. 
-
-The set of these loci is labelled $\mathcal{I} = \{pos_{i}: i = 1, \ldots, N \}$, where $pos_{i}$ is the genomic co-ordinates of the $i^{th}$ locus with respect to the forward strand, e.g. chr1:723461-723461. I frequently refer to loci by the subscript $i$ rather than by $pos_{i}$. This means that the distance between the $i^{th}$ and $(i + 1)^{th}$ methylation loci varies along the genome and, for a small number of instances, that the $i^{th}$ and $(i + 1)^{th}$ methylation loci are on separate chromosomes.
+#### Pre-sequencing {-}
+A methylation locus is a single cytosine, that is, a CpG, CHG or CHH. The set of these loci is labelled $\mathcal{I} = \{pos_{i}: i = 1, \ldots, N_{loci} \}$, where $pos_{i}$ is the genomic co-ordinates of the $i^{th}$ locus with respect to the forward strand, e.g. chr1:723,461-723,461. I frequently refer to loci by the subscript $i$ rather than by $pos_{i}$. This means that the distance between the $i^{th}$ and $(i + 1)^{th}$ methylation loci varies along the genome and, for a small number of instances, that the $i^{th}$ and $(i + 1)^{th}$ methylation loci are on separate chromosomes. Generally, $N_{loci}$ is not known exactly, although estimates can be made based on a reference genome, but this is no great concern. 
 
 The methylation state of a locus can vary within a sample due to the fact that DNA for each sample is extracted from hundreds or thousands of cells and each cell can have a slightly different methylation profile. Furthermore, within a diploid cell there are two copies of each chromosome, and therefore two copies of each methylation locus, and these two copies can have different methylation states. Therefore, it is also necessary to consider the next level down in the hierarchy; the DNA fragments within the sample.
 
-I suppose that in the pool of DNA fragments for the sample that there are $H_{i}$ fragments containing the $i^{th}$ methylation locus. In general, $H_{i}$ is unknown and will vary from locus to locus within a sample[^H_i]. __$H_{i}$ is post-PCR; therefore, it can give a grossly distorted picture of the true representation of the cells__
+I suppose that in the pool of DNA fragments for the sample that there are $H_{i}$ fragments containing the $i^{th}$ methylation locus. In general, $H_{i}$ is unknown and will vary from locus to locus within a sample[^H_i]. __$H_{i}$ is post-PCR; therefore, it can give a grossly distorted picture of the true representation of the cells__. I denote by $\mathcal{H}_{i}$ the set of all fragments containing the $i^{th}$ locus.
 
 [^H_i]: Knowing $H_{i}$ would require knowing: (1) the number of cells used as input (which is generally only known to within an order of magnitude), (2) the ploidy of each cell (easy) and (3) the number of PCR cycles (easy). But the real problem is that none of the steps in creating the pool of DNA fragments is perfect, in particular, PCR introduces biases -- some molecules are preferrentially amplified while others "drop out". So even if we knew (1), (2) and (3) we cannot simply multiply these together to compute $H_{i}$, although this might at least give us a rough estimate.
 
 Although we do not know the number of fragments in the pool, we can define (and measure) the methylation state of a locus on a single DNA fragment. I denote by the indicator random variable, $Z_{h, i}$, the methylation state of $i^{th}$ methylation locus on the $h^{th}$ DNA fragment containing the $i^{th}$ methylation locus:
 
-\begin{equation}
-Z_{h, i, j} = \left\{ 
+\begin{equation*}
+Z_{h, i} = \left\{ 
   \begin{array}{l l}
-    1 & \quad \text{if methylated}\\
-    0 & \quad \text{if unmethylated}
+    1 & \quad \text{if methylated on the } h^{th} \text{ fragment}\\
+    0 & \quad \text{if unmethylated on the } h^{th} \text{ fragment}
   \end{array} \right.
-\end{equation}
+\end{equation*}
 
 By summing over the number of fragments containing the $i^{th}$ locus, we obtain the number of fragments that are methylated at the $i^{th}$ locus ($M_{i}$) and unmethylated at the $i^{th}$ locus ($U_{i}$):
 
-\begin{align}
-	M_{i} &= \sum_{h = 1}^{H = H_{i}} Z_{h, i} \\
-	U_{i} &= \sum_{h = 1}^{H = H_{i}} ()1 - Z_{h, i})
-\end{align}
+\begin{align*}
+	M_{i} &= \sum_{h = 1}^{H = H_{i}} Z_{h, i} = |\{Z: Z \in \mathcal{H}_{i}, Z = 1 \}| \\
+	U_{i} &= \sum_{h = 1}^{H = H_{i}} (1 - Z_{h, i}) = |\{Z: Z \in \mathcal{H}_{i}, Z = 0 \}|
+\end{align*}
 
 Related to these is the proportion of fragments that methylated at the $i^{th}$ locus:
-\begin{equation}
+\begin{equation*}
 	B_{i} = \frac{M_{i}}{M_{i} + U_{i}}
-\end{equation}
+\end{equation*}
 
-Again, I emphasise that $H_{i, j}, Z_{h, i, j}, M_{i, j}, U_{i, j} \text{ and } $B_{i, j}$ are unobservable. However, by sequencing the pools of DNA fragments we aim to estimate these variables.
+Again, I emphasise that $H_{i, j}, Z_{h, i, j}, M_{i, j}, U_{i, j} \text{ and } B_{i, j}$ are unobservable. However, by sequencing the pools of DNA fragments we aim to estimate these variables.
 
-### Post-sequencing
+#### Post-sequencing {-}
+
 We do not sequence every fragment in the pool. Rather, sequencing can be thought of as sampling without replacement from the pool of DNA fragments. We have a large number(~$10^10$) of fragments in the pool and each methylation locus is only present on a small number of those fragments. Therefore, we can approximate this sampling by Poisson sampling (__CITE__), where the rate parameter for locus $i$ is proportional to the number of fragments in the pool and inversely proportional to $H_{i}$.
 
 At this point I make three simplifying assumptions:
@@ -90,47 +92,125 @@ Each read measures the methylation state of one or more loci from a single DNA f
 
 A single read containing the $i^{th}$ locus is denoted by $z: z \in \mathcal{R}_{i}$; the observed methylation state is given by:
 
-\begin{equation}
+\begin{equation*}
 z: z \in \mathcal{R}_{i} = \left\{ 
   \begin{array}{l l}
     1 & \quad \text{if methylated at the } i^{th} \text{ locus}\\
     0 & \quad \text{if unmethylated at the } i^{th} \text{ locus}
   \end{array} \right.
-\end{equation}
+\end{equation*}
 
 By summing over the number of reads containing the $i^{th}$ locus we obtain the number of reads that are methylated at the $i^{th}$ locus ($m_{i}$) and unmethylated at the $i^{th}$ locus ($u_{i}$):
 
-\begin{equation}
-	m_{i} = \sum_{z: z \in \mathcal{R}_{i}} z
-	u_{i} = \sum_{z: z \in \mathcal{R}_{i}} (1 - z)
-\end{equation}
+\begin{align*}
+	m_{i} &= \sum_{z: z \in \mathcal{R}_{i}} z \\
+	      &= |\{z: z \in \mathcal{R}_{i}, z = 1 \}| \\
+	u_{i} &= \sum_{z: z \in \mathcal{R}_{i}} (1 - z) \\
+		  &= |\{z: z \in \mathcal{R}_{i}, z = 0 \}
+\end{align*}
 
 Similiarly, we obtain the proportion of reads that are methylated at the $i^{th}$ locus as:
-\begin{equation}
+\begin{equation*}
 	\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}
-\end{equation}
+\end{equation*}
 
 These are the so-called $\beta$-values, which are commonly interpreted as an estimate of the proportion of cells in the sample that are methylated at the $i^{th}$ locus. We will discuss this interpretation, and other estimators of the "sample-average" methylation, in __SECTION__. I now move from single locus summaries to multi-loci summaries using m-tuples.
 
-### m-tuples
-I define an m-tuple to be a tuple of methylation loci, where $m = 1, 2, \ldots$ is the size of the tuple. For example, a CpG 3-tuple is 3 CpGs. A CHH 1-tuple is a single CHH; 1-tuples are the basis of single locus analyses of bisulfite sequencing data. We can learn more from bilsufite sequencing data by using m-tuples with $m > 1$.
+### m-tuples: Multiple loci analysis
 
-Each observation on an m-tuple must be from a single read. This ensures that each observation ultimately comes from a single cell[^chimeric_reads]. For example, suppose we have a read containing 3 CpGs -- the first two CpGs are methylated while the last one is unmethylated. From this read we can observe 3 $\times$ CpG 1-tuples, 2 $\times$ CpG 2-tuples and 1 $\times$ CpG 3-tuple. We can have multiple observations on an m-tuple by observing multiple reads, each containing the m-tuple. __FIGURE__ illustrates this example.
+I define an m-tuple to be a tuple of methylation loci, where m = $1, 2, \ldots$ is the size of the tuple. For example, a CpG 3-tuple is 3 CpGs. A CHH 1-tuple is a single CHH; 1-tuples are the basis of single locus analyses of bisulfite sequencing data. We can learn more from bilsufite sequencing data by using m-tuples with m $> 1$.
+
+An observation on an m-tuple is the methylation pattern from a single read that overlaps the m-tuple. I require that the observation is from a single read as this ensures that each observation ultimately comes from a single cell[^chimeric_reads]. For example, suppose we have a read containing 3 CpGs -- the first two CpGs are methylated while the last one is unmethylated. From this read we can observe 3 $\times$ CpG 1-tuples, 2 $\times$ CpG 2-tuples and 1 $\times$ CpG 3-tuple. We can have multiple observations on an m-tuple by observing multiple reads, each containing the m-tuple. __FIGURE__ illustrates this example.
 
 [^chimeric_reads]: Might need to note the possibility of chimeric reads. 
 
-Note that in __FIGURE__ I haven't constructed a 2-tuple using the first CpG and the last CpG. In general, I focus on m-tuples where the $m$ methylation loci are neighbours. That is, I focus on m-tuples where the _number of intervening loci_ is zero ($NIL = 0$). There are 3 reasons for this:
+Note that in __FIGURE__ I haven't constructed a 2-tuple using the first CpG and the last CpG. In general, I focus on m-tuples where the m methylation loci are neighbours. That is, I focus on m-tuples where the _number of intervening loci_ is zero ($NIL = 0$). There are 3 reasons for this:
 
-1. Quantity: From a sequence containing $M$ methylation loci there are $M - m + 1$ m-tuples when we restrict ourselves to those m-tuples with $NIL = 0$. In contrast, if we allow $NIL \geq 0$ then there are $\binom{M}{m} ~ $ m-tuples. (__TODO__: Describe how these terms grow asymptotically).
+1. Quantity: From a sequence containing $M$ methylation loci there are $M - \text{m} + 1$ m-tuples when we restrict ourselves to those m-tuples with $NIL = 0$. In contrast, if we allow $NIL \geq 0$ then there are $\binom{M}{\text{m}} ~ $ m-tuples. (__TODO__: Describe how these terms grow asymptotically).
 2. Interpretability: Discussed in __SECTION__
 3. Measurability: We cannot observe m-tuples where the methylation loci are far apart due to the read length limitations of the Illumina sequencing technology. This is true even when $NIL = 0$ but is especially the case if we allow $NIL \geq 0$.
 
 When I refer to m-tuples I implicitly mean $NIL = 0$; I will explicitly use the notation $NIL \geq 0$ when I wish to make clear that there may be intervening methylation loci in the m-tuple.
 
+#### Pre-sequencing {-}
+
+Mathemtically, an m-tuple is denoted by a sequence of methylation loci, $(i, i + 1, \ldots, i + m - 1)$. The remaining definitions are analogous to those for single methylation loci, that is, when m $= 1$.
+
+I denote by the vector of indicator random variable, $Z_{h, (i, i + 1, \ldots, i + \text{m} - 1)}$, the methylation pattern of the m-tuple $(i, i + 1, \ldots, i + m - 1)$ on the $h^{th}$ DNA fragment containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$:
+
+\begin{equation*}
+Z_{h, i} = \left\{ 
+  \begin{array}{l l}
+    (0, 0, \ldots, 0) & \quad \text{if unmethylated at the } i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 1)^{th}) \text{ locus on the } h^{th} \text{ fragment}\\
+    (0, 0, \ldots, 1) & \quad \text{if unmethylated at the } i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 2)^{th}) \text{ locus and methlyated at the } (i + \text{m} - 1)^{th} \text{ locus on the } h^{th} \text{ fragment} \\
+    \vdots \\
+    (1, 1, \ldots, 1) & \quad \text{if methylated at the } i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 1)^{th}) \text{ locus on the } h^{th} \text{ fragment}
+   \end{array} \right.
+\end{equation*}
+
+$\mathcal{H}_{(i, i + 1, i + m - 1)}$ denotes the set of all fragments containing the m-tuple $(i, i + 1, i + m - 1)$ and $\mathcal{R}_{(i, i + 1, i + m - 1)}$ denotes the set of all reads containing the m-tuple $(i, i + 1, i + m - 1)$.
+
+There are $2^{\text{m}}$ possible methylation patterns at an m-tuple. I also write these using $U$ and $M$ instead of $0$ and $1$; for example, the possible methylation patterns at a 2-tuple are $MM, MU, UM$ and $UU$. 
+
+Analogously to the definition of $M_{i}$ and $U_{i}$ and $m_{i}$ and $u_{i}$ for the case where $\text{m} = 1$, we have when $\text{m} = 2$:
+
+\begin{align*}
+	MM_{(i, i + 1)} &= |\{Z: Z \in \mathcal{H}_{(i, i + 1)}, Z = (1, 1)\}| \\
+	MU_{(i, i + 1)} &= |\{Z: Z \in \mathcal{H}_{(i, i + 1)}, Z = (1, 0)\}| \\
+	UM_{(i, i + 1)} &= |\{Z: Z \in \mathcal{H}_{(i, i + 1)}, Z = (0, 1)\}| \\
+	UU_{(i, i + 1)} &= |\{Z: Z \in \mathcal{H}_{(i, i + 1)}, Z = (0, 0)\}| \\
+\end{align*}
+
+We can extend the $B_{i}$ values to m-tuples, although the intuitive interpretation is somewhat lost. Here are the definitions for $\text{m} = 2$:
+\begin{align*}
+	B_{(i, i + 1)}^{MM} &= \frac{MM_{(i, i + 1)}}{MM_{(i, i + 1)} + MU_{(i, i + 1)} + UM_{(i, i + 1)} + UU_{(i, i + 1)}} \\
+	B_{(i, i + 1)}^{MU} &= \frac{MU_{(i, i + 1)}}{MM_{(i, i + 1)} + MU_{(i, i + 1)} + UM_{(i, i + 1)} + UU_{(i, i + 1)}}  \\
+	B_{(i, i + 1)}^{UM} &= \frac{UM_{(i, i + 1)}}{MM_{(i, i + 1)} + MU_{(i, i + 1)} + UM_{(i, i + 1)} + UU_{(i, i + 1)}}  \\
+	B_{(i, i + 1)}^{UU} &= \frac{UU_{(i, i + 1)}}{MM_{(i, i + 1)} + MU_{(i, i + 1)} + UM_{(i, i + 1)} + UU_{(i, i + 1)}} 
+\end{align*}
+The definitions for $\text{m} > 3$ follow in the obvious manner.
+
+Again, I emphasise that $H_{(i, i + 1, i + \text{m} - 1), j}, Z_{h, (i, i + 1, i + \text{m} - 1), j}, B_{(i, i + 1, i + \text{m} - 1), j}$ and the set of methylation patterns are unobservable. However, by sequencing the pools of DNA fragments we aim to estimate these variables.
+
+#### Post-sequencing {-}
+
+The the set of all reads containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$ is denoted by $\mathcal{R}_i$. A single read containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$ is denoted by $z: z \in \mathcal{R}_{(i, i + 1, \ldots, i + \text{m} - 1)}$; the observed methylation state is given by:
+
+\begin{equation*}
+z: z \in \mathcal{R}_{(i, i + 1, \ldots, i + \text{m} - 1)} = \left\{ 
+  \begin{array}{l l}
+    (0, 0, \ldots, 0) & \quad \text{if unmethylated at the } i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 1)^{th}) \text{ locus}\\
+    (0, 0, \ldots, 1) & \quad \text{if unmethylated at the } i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 2)^{th}) \text{ locus and methlyated at the } (i + \text{m} - 1)^{th} \text{ locus} \\
+    \vdots \\
+    (1, 1, \ldots, 1) & \quad \text{if methylated at the } i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 1)^{th}) \text{ locus}
+      \end{array} \right.
+\end{equation*}
+
+By "summing" over the number of reads containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$ we obtain the number of reads contain each methylation pattern. Here are the definitions for $\text{m} = 2$:
+
+\begin{align*}
+	mm_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (1, 1)\}| \\
+	mu_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (1, 0)\}| \\ 
+	um_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (0, 1)\}| \\ 
+	uu_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (0, 0)\}| 
+\end{align*}
+
+The definitions for $\text{m} > 2$ follow in the obvious manner.
+
+We can extend the $\beta_{i}$ values to m-tuples, although the intuitive interpretation is somewhat lost. Here are the definitions for $\text{m} = 2$:
+\begin{align*}
+	\beta_{(i, i + 1)}^{mm} &= \frac{mm_{(i, i + 1)}}{mm_{(i, i + 1)} + mu_{(i, i + 1)} + um_{(i, i + 1)} + uu_{(i, i + 1)}} \\
+	\beta_{(i, i + 1)}^{mu} &= \frac{MU_{(i, i + 1)}}{mm_{(i, i + 1)} + mu_{(i, i + 1)} + um_{(i, i + 1)} + uu_{(i, i + 1)}} \\
+	\beta_{(i, i + 1)}^{um} &= \frac{UM_{(i, i + 1)}}{mm_{(i, i + 1)} + mu_{(i, i + 1)} + um_{(i, i + 1)} + uu_{(i, i + 1)}} \\
+	\beta_{(i, i + 1)}^{uu} &= \frac{UU_{(i, i + 1)}}{mm_{(i, i + 1)} + mu_{(i, i + 1)} + um_{(i, i + 1)} + uu_{(i, i + 1)}}
+\end{align*}
+The definitions for $\text{m} > 3$ follow in the obvious manner.
+
+__TODO__: Change definition of $M$, $m$, etc. when $m = 1$
 __TODO__: Mathematically define: reads containing multiple methylation loci; m-tuples; `counts` of methylation patterns.
 
 
-* Extend $z: z \in \mathcal{G}_{i}$ to $z: z \in \mathcal{G}_{(i, i + 1)}$. And not that we do not know which $h$ each read came from, only that they came from the same DNA fragment.
+* Extend $z: z \in \mathcal{G}_{i}$ to $z: z \in \mathcal{R}_{(i, i + 1)}$. And note that we do not know which $h$ each read came from, only that they came from the same DNA fragment.
 
 ### Some complications for a single sample
 I now discuss some complications and how this framework might accommodate this issues. I also discuss how these issues are dealt with in practice.
@@ -197,6 +277,9 @@ In practice, we might choose to study $\mathcal{I}^{common} = \cap_{j} \mathcal{
 
 A conservative analysis might only analyse those loci where at least some fraction of the $n$ samples have sufficient sequencing coverage. A less conservative analysis might try to impute the missing values based on methylation levels at neighbouring loci (__bsseq__).
 
+#### Complications that aren't merely notational {-}
+
+* $n$ is typically small while $N_{loci}$ is typically large
 
 
 
@@ -205,3 +288,4 @@ A conservative analysis might only analyse those loci where at least some fracti
 # General
 * "methylC-seq" or "WGBS" or ???
 * "bisulfite-sequencing" or "bisulfite sequencing"
+* Notation abuse: e.g. $m$ is defined with respect to m-tuples but also in terms of $m_{i}$. Similarly, $M$ is used to represent methylation patterns but also in terms of $M_{i}$. Perhaps use different typefaces to distinguish them?
