@@ -2,3 +2,4 @@
 *.html
 markdown/notation.md # This file is created by make from Rmarkdown/notation.Rmd
 Rmarkdown/.Rhistory
+markdown/notation.md

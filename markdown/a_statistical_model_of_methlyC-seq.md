@@ -1,6 +1,6 @@
 # A statistical framework for analysing bisulfite sequencing data
 
-## Notes from outline.md
+## Notes from outline.md (plus other notes added along the way)
 * Chapter Overview
 * Notation
 	* See `notation.Rmd`
@@ -13,6 +13,7 @@
 	* Dependence/correlation over $i$ (see also __Chapter X__)
 		* Li _et al._ compute $\beta$ values and compute correlations within a sample as a function of genomic distance.
 		* Arabidopsis compute $\beta$ values and compute correlations within a sample as a function of genomic distance.
+		* Lister (2009) Fig. 3 and Sup. Fig. 9
 		* Lister _et al._ compute both within-read and across-read correlations or dependencies of DNA methylation.
 		* Akulenko, R., _et al._ compute gene-level $\beta$ values and compute the correlations between pairs of genes across samples as a function of genomic distance.
 	* Dependence/correlation over $j$ (?)
@@ -282,8 +283,58 @@ A conservative analysis might only analyse those loci where at least some fracti
 * $n$ is typically small while $N_{loci}$ is typically large
 
 
+## Parameter estimation and inference
+Most analyses have focused on estimating $M_{i}$ and $U_{i}$. I have already introduced the simplest and most common estimators of these parameters, namely $m_{i}$ and $u_{i}$. These estimators simply count the number of reads with the observed methylation state and treat all observations equally. An obvious extension is to weight an observation by its base quality of `mapQ` value. However, as previously noted, these qualities are often not well calibrated for bisulfite sequencing data, which reduces their utility. Inferences are commonly based on estimators of $B_{i}$, namely $\beta_{i}$.
 
-## Other people's models defined in my framework
+In this section I summarise current techniques for parameter estimation and inference from WGBS data. I do not describe the processing of the raw data. When necessary, I have "translated" the original work into my notation to make these methods more readily comparable.
+
+### \cite{Lister:2009hy}
+
+\cite{Lister:2009hy} was a landmark paper in the study of DNA methylation from WGBS data. The authors used the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering of the reads. The statistical analyses were quite simple and used a three stage analysis:
+
+1. Identify methylcytosines
+2. Identify differential methylation
+	* Differentially methylated cytosines
+	* Differentially methylated regions
+3. Identify partially methylated domains
+	
+The authors were studying 4 samples: 2 cell types (IMR90 and H1) and 2 biological replicates per cell type. However, most of the results reported in \cite{Lister:2009hy} were from analyses of data pooled across biological replicates. This completely ignores all biologicaly variability and in general isn't a good idea. In the following description of their statistical analyses, all references to "samples" means "pooled samples".	
+ 
+#### Identifying methylcytosines {-}
+
+The authors used a simple Binomial model, $Bin(m_{i, j} + u_{i, j}, B_{i, j})$ to identify methylcytosines in each sample. They defined $\epsilon_{j}$ as the "error rate" for the $j^{th}$ sample, which is the sequencing error rate + the bisulfite non-conversion rate and is constant across all loci. The authors estimated the bisulfite non-conversion rate based on a spike-in control that was included with each sample for sequencing. It is not clear how they estimated the sequencing error rate. They reported that $\epsilon_{\text{IMR90}} = 0.005$ and $\epsilon_{\text{IMR90}} = 0.0024$.
+
+For each locus and sample the authors tested the hypothesis $H_{0}: B_{i, j} = \epsilon{j}$ vs. $H_{1}: B_{i, j} > \epsilon{j}$. This can be thought of as testing the hypothesis "what is the minimum $m_{i, j}$ I would have to observe to conclude that these weren't all due to "errors"" (__CHECK WITH TERRY, in particular is the alternative one- or two-sided?__). For each sample, all loci were ranked by the false discovery rate-adjusted (FDR-adjusted) P-value from this test (__Not clear from text which FDR procedure was used__). All loci with an FDR < 0.01 were called as methylcytosines.
+
+#### Identifying differential methylation {-}
+
+The authors first step was to identify differentially methylated cytosines, that is, cytosines that are differentially methylated in the IMR90 data compared to the H1 data. Again, using a binomial model for each sample -- $Bin(m_{i, \text{IMR90}} + u_{i, \text{IMR90}}, B_{i, \text{IMR90}})$ and $Bin(m_{i, \text{H1}} + u_{i, \text{H1}}, B_{i, \text{H1}})$ -- the authors used a two-tailed Fisher's exact test of the hypothesis $B_{i, \text{IMR90}} = B_{i, \text{H1}}$ vs. $B_{i, \text{IMR90}} \neq B_{i, \text{H1}}$. They performed this test at all loci that were called as methylcytosines in at least one of the cell types and that had at least 3 reads in at least one of the samples. Cytosines were called as differentially methylated if the FDR-adjusted P-value was less than 0.05.
+
+The second step was to identify differentially methylated regions (DMRs), that is, regions containing multiple cytosines that display differential methylation between the IMR90 and H1 samples. In fact, \cite{Lister:2009hy} only sought to "find regions of the genome enriched for sites of higher levels of DNA methylation in IMR90 relative to H1, as identified by Fisher's Exact Test" \cite[Supplementary Material, pp. 26]{Lister:2009hy}. This was only performed for CpG methlylation loci.
+
+The authors used a heuristic approach based on a 1kb sliding window approach and 100bp step size. If the window contained at least 4 differentially methylated cytosines then it was extended in 1kb increments until a 1kb increment was reached that contained less than 4 differentially methylated cytosines. Once the extension had terminated, a region was declared to be a DMR if it contained at least 10 differentially methylated cytosines and was at least 2kb in length. The authors did not report a sensitivity analysis of any of these parameters.
+
+#### Partially methylated domains {-}
+
+A sliding window approach was also used to identify partially methylated domains (PMDs). This was only performed for CpG methlylation loci. A larger window size of 10kb and step size of 10kb were used. If the window contained 10 mCpGs, each covered by at least 5 reads, and the __average__ $\beta$-value in the region was less than 0.7 then the region was incremented by 10kb. The extension was terminated once the next increment had an average $\beta$-value greater than 0.7 or less than 10 mCpGs and the region was called a PMD.
+
+### Others to review
+
+* Lister Arabidopsis paper, in particular $\beta$ correlations
+* Lister 2011 and 2013; how do these differ from 2009?
+* \cite{Hansen:2011gu}
+* \cite{Berman:2012ga}
+* \cite{Feng:2014iq}
+* \cite{Sun:2014fk}
+* BiSeq
+* Michelle Lacey
+* DMAP
+* \cite{Lacey:2013iy}
+
+
+### Transformation of $\beta$-values
+\cite{Du:2010dc} show improved inferences when using Logit transformed $\beta$-values, which they call M-values, to reduce the heteroscedasticity of $\beta$-values near 0 and 1.
+
 
 # General
 * "methylC-seq" or "WGBS" or ???
