@@ -288,40 +288,62 @@ Most analyses have focused on estimating $M_{i}$ and $U_{i}$. I have already int
 
 In this section I summarise current techniques for parameter estimation and inference from WGBS data. I do not describe the processing of the raw data. When necessary, I have "translated" the original work into my notation to make these methods more readily comparable.
 
+
+### \cite{Cokus:2008fc}
+\cite{Cokus:2008fc} published the BS-seq protocol for performing WGBS. Most of the results in this paper used BS-seq of wild-type _Arabidopsis Thaliana_ and DNMT mutants. They also report limited results from low-coverage BS-seq of mouse germ cells but these are not relevant to my discussion.
+
+The authors used the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering and other post-processing of the reads. Most analyses were restricted to loci with at least 5x sequencing coverage. 
+
+They visualised the levels of DNA methylation across a variety of genomic elements such as protein coding genes, pseudogenes and repeats. They did not perform an analysis of differential methylation. The authors were also interested in the dependence structure of DNA methylation. For the most part they did this by studying the $\beta$-values but they also performed a "within-read" analysis. 
+
+To look at the correlation of "average" methylation, they performed an autocorrelation analysis of the $\beta$-values. It is not clear from the paper whether they restricted these analyses to pairs of methylation loci with $NIL = 0$ or whether they allowed $NIL \geq 0$. They did separate autocorrelation analyses for CpG, CHG and CHH methylation.
+
+To look at the dependence of methylation events from the same DNA fragment, they estimated the "within-read probability of additional methylation of CHH sites within a given distance from a methylated CHH site". They only report the "within-read" results for CHH methylation. This amounts to estimating the conditional probability $Pr(Z_{h, i + s} | Z_{h, i})$ and plotting it as a function of genomic distance between the two loci, $pos_{i + 1} - pos{i}$. It is not clear from the methods whether $s = 1$, i.e. the conditional probability that the __next__ CHH is methylated (which amounts to using pairs of CHH loci with $NIL = 0$), or whether $s \geq 1$, i.e. the conditional probability that __any__ upstream CHH is methylated (which amounts to using pairs of CHH loci with $NIL \geq 0$). Furthermore, these results are limited by the short read lengths (31nt) available at the time of the study.
+
+The authors reported a 10nt periodicity of CHH methylation, which could be detected in both the $\beta$-value and "within-read" analyses. They noted that this periodicity is consistent with one helical DNA turn and that the mammalian Dnmt3a, which is the homologue to the main enzyme controlling asymmetric (e.g. CHH) methylation in _Arabidopsis_, _DRM2_, had recently been shown to methylate CpG cites $~8-10$ nucleotides apart. 
+
+Autocorrelation analyses of the $\beta$-values also identified a periodicity of $~167$nt for CpG, CHG and CHH methylation, although it was strongest for CHG methylation. The authors noted that this "is similar to, but slightly shorter than, estimates of the average spacing of nucleosomes in plant chromatin". From this they postulated that nucleosomes or histone modifications might dictate access to the DNA by DNMTs and that methylated DNA might be more "compact" than unmethylated DNA.
+
+Both the $~10$nt and $~167$nt periodicities can be seen by eye and were confirmed by Fourier analysis of the $\beta$-autocorrelation function. 
+
+
+### \cite{Lister:2008bh}
+
+\cite{Lister:2008bh} published the methylC-seq protocol for performing WGBS. Like~\cite{Cokus:2008fc}, \cite{Lister:2008bh} studied wild-type and DNMT-defective mutant _Arabidopsis Thaliana_ strains. Also like~\cite{Cokus:2008fc}, much of the analysis is by visual comparison of summarised data.
+
+The authors used the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering and other post-processing of the reads. To identify methylcytosines in each sample, the authors used a simple Binomial model, $Bin(m_{i, j} + u_{i, j}, B_{i, j})$ . They defined $\epsilon_{j}$ as the "error rate" for the $j^{th}$ sample, which is the sequencing error rate + the bisulfite non-conversion rate and is assumed constant across all loci. They estimated $\epsilon_{j}$ from reads aligned to the unmethylated chloroplast genome of each sample and obtained values between $1.3-3.2\%$ per sample. 
+
+For each locus and sample the authors tested the hypothesis $H_{0}: B_{i, j} = \epsilon{j}$ vs. $H_{1}: B_{i, j} > \epsilon{j}$. This can be thought of as testing the hypothesis "what is the minimum $m_{i, j}$ I would have to observe to conclude that these weren't all due to "errors"" (__CHECK WITH TERRY, in particular is the alternative one- or two-sided?__). For each sample, all loci were ranked by the false discovery rate-adjusted (FDR-adjusted) P-value from this test (__Not clear from text which FDR procedure was used__). All loci with an FDR < 0.05 were called as methylcytosines.
+
+The authors did not perform any statistical tests of differential methylation nor did they report any results on the dependence structure of DNA methylation.
+
 ### \cite{Lister:2009hy}
 
-\cite{Lister:2009hy} was a landmark paper in the study of DNA methylation from WGBS data. The authors used the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering of the reads. The statistical analyses were quite simple and used a three stage analysis:
+\cite{Lister:2009hy} was a landmark paper in the study of DNA methylation in humans from WGBS data. The authors studied 4 samples: 2 cell types (IMR90 and H1) and 2 biological replicates per cell type. However, most of the results reported in \cite{Lister:2009hy} were from analyses of data pooled across biological replicates. This completely ignores all biologicaly variability and in general isn't a good idea. In the following description of their statistical analyses, all references to "samples" means "pooled samples".
 
-1. Identify methylcytosines
-2. Identify differential methylation
-	* Differentially methylated cytosines
-	* Differentially methylated regions
-3. Identify partially methylated domains
-	
-The authors were studying 4 samples: 2 cell types (IMR90 and H1) and 2 biological replicates per cell type. However, most of the results reported in \cite{Lister:2009hy} were from analyses of data pooled across biological replicates. This completely ignores all biologicaly variability and in general isn't a good idea. In the following description of their statistical analyses, all references to "samples" means "pooled samples".	
- 
-#### Identifying methylcytosines {-}
+The authors used the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering of the reads. The authors used the Binomial model from~\cite{Lister:2008bh} to identify methylcytosines.  The bisulfite non-conversion rate was estimated from a spike-in control that was included with each sample for sequencing[^spike_in]. It is not clear how they estimated the sequencing error rate. They reported that $\epsilon_{\text{IMR90}} = 0.005$ and $\epsilon_{\text{IMR90}} = 0.0024$. All loci with an FDR < 0.01 were called as methylcytosines.
 
-The authors used a simple Binomial model, $Bin(m_{i, j} + u_{i, j}, B_{i, j})$ to identify methylcytosines in each sample. They defined $\epsilon_{j}$ as the "error rate" for the $j^{th}$ sample, which is the sequencing error rate + the bisulfite non-conversion rate and is constant across all loci. The authors estimated the bisulfite non-conversion rate based on a spike-in control that was included with each sample for sequencing. It is not clear how they estimated the sequencing error rate. They reported that $\epsilon_{\text{IMR90}} = 0.005$ and $\epsilon_{\text{IMR90}} = 0.0024$.
+[^spike_in]: The spike-in control was unmethylated cl857 Sam7 Lambda DNA. This "lambda phage" is a common choice of spike-in control in bisulfite-conversion assays.
 
-For each locus and sample the authors tested the hypothesis $H_{0}: B_{i, j} = \epsilon{j}$ vs. $H_{1}: B_{i, j} > \epsilon{j}$. This can be thought of as testing the hypothesis "what is the minimum $m_{i, j}$ I would have to observe to conclude that these weren't all due to "errors"" (__CHECK WITH TERRY, in particular is the alternative one- or two-sided?__). For each sample, all loci were ranked by the false discovery rate-adjusted (FDR-adjusted) P-value from this test (__Not clear from text which FDR procedure was used__). All loci with an FDR < 0.01 were called as methylcytosines.
+With this set of methylcytosines they sought to identify differential methylation and partially methylated domains (PMDs). They used a two-stage analysis to identify differential methylation:
 
-#### Identifying differential methylation {-}
+1. Identify differentially methylated cytosines (DMCs)
+2. Identify differentially methylated regions (DMRs)
 
-The authors first step was to identify differentially methylated cytosines, that is, cytosines that are differentially methylated in the IMR90 data compared to the H1 data. Again, using a binomial model for each sample -- $Bin(m_{i, \text{IMR90}} + u_{i, \text{IMR90}}, B_{i, \text{IMR90}})$ and $Bin(m_{i, \text{H1}} + u_{i, \text{H1}}, B_{i, \text{H1}})$ -- the authors used a two-tailed Fisher's exact test of the hypothesis $B_{i, \text{IMR90}} = B_{i, \text{H1}}$ vs. $B_{i, \text{IMR90}} \neq B_{i, \text{H1}}$. They performed this test at all loci that were called as methylcytosines in at least one of the cell types and that had at least 3 reads in at least one of the samples. Cytosines were called as differentially methylated if the FDR-adjusted P-value was less than 0.05.
+The first step used a Binomial model for each sample, namely $Bin(m_{i, \text{IMR90}} + u_{i, \text{IMR90}}, B_{i, \text{IMR90}})$ and $Bin(m_{i, \text{H1}} + u_{i, \text{H1}}, B_{i, \text{H1}})$. The authors then used a two-tailed Fisher's exact test of the hypothesis $B_{i, \text{IMR90}} = B_{i, \text{H1}}$ vs. $B_{i, \text{IMR90}} \neq B_{i, \text{H1}}$. They performed this test at all loci that were called as methylcytosines in at least one of the cell types and that had at least 3 reads in at least one of the samples. Cytosines were called as differentially methylated if the FDR-adjusted P-value was less than 0.05.
 
-The second step was to identify differentially methylated regions (DMRs), that is, regions containing multiple cytosines that display differential methylation between the IMR90 and H1 samples. In fact, \cite{Lister:2009hy} only sought to "find regions of the genome enriched for sites of higher levels of DNA methylation in IMR90 relative to H1, as identified by Fisher's Exact Test" \cite[Supplementary Material, pp. 26]{Lister:2009hy}. This was only performed for CpG methlylation loci.
+The second step was to identify DMRs, that is, regions containing multiple cytosines that display differential methylation between the IMR90 and H1 samples. In fact, \cite{Lister:2009hy} only sought to "find regions of the genome enriched for sites of higher levels of DNA methylation in IMR90 relative to H1, as identified by Fisher's Exact Test" \cite[Supplementary Material, pp. 26]{Lister:2009hy}. This was only performed for CpG methlylation loci.
 
 The authors used a heuristic approach based on a 1kb sliding window approach and 100bp step size. If the window contained at least 4 differentially methylated cytosines then it was extended in 1kb increments until a 1kb increment was reached that contained less than 4 differentially methylated cytosines. Once the extension had terminated, a region was declared to be a DMR if it contained at least 10 differentially methylated cytosines and was at least 2kb in length. The authors did not report a sensitivity analysis of any of these parameters.
-
-#### Partially methylated domains {-}
 
 A sliding window approach was also used to identify partially methylated domains (PMDs). This was only performed for CpG methlylation loci. A larger window size of 10kb and step size of 10kb were used. If the window contained 10 mCpGs, each covered by at least 5 reads, and the __average__ $\beta$-value in the region was less than 0.7 then the region was incremented by 10kb. The extension was terminated once the next increment had an average $\beta$-value greater than 0.7 or less than 10 mCpGs and the region was called a PMD.
 
 ### Others to review
 
-* Lister Arabidopsis paper, in particular $\beta$ correlations
+* The 2006 Nature Genetics paper
+* Lister 2009 $\beta$ or $Z_{h, i}$ correlations
 * Lister 2011 and 2013; how do these differ from 2009?
+* PMBC paper
 * \cite{Hansen:2011gu}
 * \cite{Berman:2012ga}
 * \cite{Feng:2014iq}
