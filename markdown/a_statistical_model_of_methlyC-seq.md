@@ -133,6 +133,8 @@ Note that in __FIGURE__ I haven't constructed a 2-tuple using the first CpG and 
 
 When I refer to m-tuples I implicitly mean $NIL = 0$; I will explicitly use the notation $NIL \geq 0$ when I wish to make clear that there may be intervening methylation loci in the m-tuple.
 
+__TODO: Define IPD__
+
 #### Pre-sequencing {-}
 
 Mathemtically, an m-tuple is denoted by a sequence of methylation loci, $(i, i + 1, \ldots, i + m - 1)$. The remaining definitions are analogous to those for single methylation loci, that is, when m $= 1$.
@@ -288,6 +290,23 @@ Most analyses have focused on estimating $M_{i}$ and $U_{i}$. I have already int
 
 In this section I summarise current techniques for parameter estimation and inference from WGBS data. I do not describe the processing of the raw data. When necessary, I have "translated" the original work into my notation to make these methods more readily comparable.
 
+### \cite{Eckhardt:2006gh}
+
+__MOVE TO SECTION ON CO-METHYLATION__
+
+\cite{Eckhardt:2006gh} studied DNA methylation patterns on chromosome 6, 20 and 22 in 43 human samples from 12 different tissues. Each of the 43 samples was made up from a pool of up to 3 sex- and age-matched samples. 
+
+This study was very labour-intensive work and low-throughput by contemporary standards because it predated the era of cheap, "high-throughput" sequencing (e.g. Illumina sequencing). Instead, the authors used Sanger sequencing of bisulfite-converted PCR amplicons. Briefly, they designed primers for bisulfite-treated DNA from chromosomes 6, 20 and 22. Some of these PCR amplicons were then subcloned into a vector. The non-cloned PCR amplicons and the cloned PCR-amplicons (up to 20 clones per amplicon) were Sanger sequenced using ABI 3730 capillary sequencers. All this results in a fairly sparse sample by modern standards from each chromosome and sample. 
+
+Nonetheless, they were perhaps the first to study co-methylation, which they defined as "the relationship between the degree of methylation over distance". The method by which they did this isn't clearly stated in the paper and what follows is my interpretation of what is reported. For a variety of distances between 0 and 20,000nt they sampled 25,000 pairs of sequenced fragments (e.g. $z_{h, i}$ and $z_{h', i'}$) where two CpGs were separated by the given IPD (i.e. $pos_{i'} - pos_{i}$ = IPD). For each pair at that distance they recorded whether the methylation measurements were identical, that is, both methylated or both unmethylated (i.e. $\mathbf{1}_{z_{i, h} = z_{i', h'}}$). Then, for each distance, they computed the percentage of pairs that were in agreement, i.e. $\frac{1}{25000}\sum_{25,000 pairs}\mathbf{1}_{z_{i, h} = z_{i', h'}}$.
+
+__TODO: Discuss interpetation with Terry__
+__TODO: What are the grey and blue dots in Fig. 3c?__
+
+Based on this analysis they concluded that there was "a significant correlation for comethylation over short distances ($\leq$ 1,000 bp), [but] it deteriorated rapidly for distances $>$ 2,000 bp".
+
+__TODO: Fix indicator function__
+
 
 ### \cite{Cokus:2008fc}
 \cite{Cokus:2008fc} published the BS-seq protocol for performing WGBS. Most of the results in this paper used BS-seq of wild-type _Arabidopsis Thaliana_ and DNMT mutants. They also report limited results from low-coverage BS-seq of mouse germ cells but these are not relevant to my discussion.
@@ -338,10 +357,20 @@ The authors used a heuristic approach based on a 1kb sliding window approach and
 
 A sliding window approach was also used to identify partially methylated domains (PMDs). This was only performed for CpG methlylation loci. A larger window size of 10kb and step size of 10kb were used. If the window contained 10 mCpGs, each covered by at least 5 reads, and the __average__ $\beta$-value in the region was less than 0.7 then the region was incremented by 10kb. The extension was terminated once the next increment had an average $\beta$-value greater than 0.7 or less than 10 mCpGs and the region was called a PMD.
 
+\cite{Lister:2009hy} also investigated what at first appears to be a "within-read" measure of co-methylation. However, on a closer reading I do not think it is a truly "within-read" measure. Specifically, they tabulated the number of mCG (resp. mCHG or mCHH) sites 1-50nt downstream of a mCG (resp. mCHG or mCHH). I believe that they define methylcytosines based on their binomial test, which means these tabulations are "across-reads" rather than "within-reads". To truly do this as a "within-read" analysis you would tabulate $z_{i, j} = (1, 1)$ for a variety of IPD. The fact that they used 50nt reads and measured over a 1-50nt window makes it easy to misinterpret their results as being "within-read".
+
+With that in mind, these results suggest a 8-10nt periodicity in the co-occurence of methylcytosines. This co-occurence is clearest for CHG and CHH loci in intronic sequences. Other loci and contexts do not show this behaviour or not to the same extend. For example, the graph of mCG co-occurence in exonic sequences is dominated by a 3nt cycle, presumably due to codon structure and selective pressures on coding sequences (Sup. Fig. 9).
+
+To summarise, I take the "co-methylation" results of~\cite{Lister:2009hy} with a grain of salt for several reasons:
+
+1. The details of the method are not very clear from the paper. Aside from the "within-read" vs. "across-read" issue, it is not clear whether they use pairs of cytosines with $NIL = 0$ or with $NIL \geq 0$ in their analysis.
+2. Estimates of periodicity are based on visual inference from a cubic spline smoothing of the co-occurence patterns. They did not perform the more meaningful Fourier analysis.
+3. They only look at the co-occurence of methylcytosines and not the co-occurence of unmethylated cytosines.
+4. The number of observations per distance is very small in some contexts. For example, less than 100 observations per IPD are used in the graph of mCHH co-occurence in the "random" context (Sup. Fig. 9).
+
+
 ### Others to review
 
-* The 2006 Nature Genetics paper
-* Lister 2009 $\beta$ or $Z_{h, i}$ correlations
 * Lister 2011 and 2013; how do these differ from 2009?
 * PMBC paper
 * \cite{Hansen:2011gu}
@@ -352,6 +381,7 @@ A sliding window approach was also used to identify partially methylated domains
 * Michelle Lacey
 * DMAP
 * \cite{Lacey:2013iy}
+* Akulenko, R., _et al._
 
 
 ### Transformation of $\beta$-values
