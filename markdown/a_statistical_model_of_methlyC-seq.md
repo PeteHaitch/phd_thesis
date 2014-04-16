@@ -286,13 +286,11 @@ A conservative analysis might only analyse those loci where at least some fracti
 
 
 ## Parameter estimation and inference
-Most analyses have focused on estimating $M_{i}$ and $U_{i}$. I have already introduced the simplest and most common estimators of these parameters, namely $m_{i}$ and $u_{i}$. These estimators simply count the number of reads with the observed methylation state and treat all observations equally. An obvious extension is to weight an observation by its base quality of `mapQ` value. However, as previously noted, these qualities are often not well calibrated for bisulfite sequencing data, which reduces their utility. Inferences are commonly based on estimators of $B_{i}$, namely $\beta_{i}$.
-
-In this section I summarise current techniques for parameter estimation and inference from WGBS data. I do not describe the processing of the raw data. When necessary, I have "translated" the original work into my notation to make these methods more readily comparable.
+In this section I summarise current techniques for parameter estimation and inference from WGBS data. I do not describe the processing of the raw data. When necessary, I have "translated" the original work into my notation to make these methods more readily comparable. These papers are not in chronological order but rather are grouped by "similar" analysis methods.
 
 ### \cite{Eckhardt:2006gh}
 
-__MOVE TO SECTION ON CO-METHYLATION__
+__MOVE TO SECTION ON CO-METHYLATION?__
 
 \cite{Eckhardt:2006gh} studied DNA methylation patterns on chromosome 6, 20 and 22 in 43 human samples from 12 different tissues. Each of the 43 samples was made up from a pool of up to 3 sex- and age-matched samples. 
 
@@ -368,17 +366,38 @@ To summarise, I take the "co-methylation" results of~\cite{Lister:2009hy} with a
 3. They only look at the co-occurence of methylcytosines and not the co-occurence of unmethylated cytosines.
 4. The number of observations per distance is very small in some contexts. For example, less than 100 observations per IPD are used in the graph of mCHH co-occurence in the "random" context (Sup. Fig. 9).
 
+### \cite{Lister:2011kg}
+\cite{Lister:2011kg} is an extension of~\cite{Lister:2009hy}. Here the authors studied 15 methylC-seq datas, 4 of which were from previous publications. These samples came a variety of tissues but can be classified as being either from a cell line that is embryonic stem cell (ESC), induced pluripotent stem cell (iPSC), differentiated cell or _in vitro_ differentiated from pluripotent cell (IVD). 
+
+\cite{Lister:2011kg} used the same analysis methods as they did in~\cite{Lister:2009hy}. Namely, methylcytosines were identified using the Binomial test and DMRs were identified using a sliding window approach. The details of the DMR finder are more complicated due to the larger sample size and multiple comparisons made between the 4 classes of cell type. For two-group comparisons, the average (smoothed) $\beta$-values in each window were tested for a mean difference using a Wilcoxon test. For multi-group comparisons, the Wilcoxon test was replaced by a Kruskall-Wallis one-way analysis of variance. The authors corrected the resulting P-values using the Benjamini-Hochberg method (__CITE__). Putative DMRs were those with an adjusted P-value < 0.01 and were also required to have a mean-difference greater than some threshold. 
+
+A sliding window approach was also used to identify partially methylated domains. The authors did not investigate the dependence structure of DNA methylation.
+
+### \cite{Lister:2013et}
+\cite{Lister:2013et} used methylC-seq to study 5mc and TAB-seq to study 5hmC in neurons and glial cells from the frontal cortex of human and mouse samples. The authors reported that non-CpG methylation was the dominant form of 5mC in neurons but not in glial cells.
+
+The analysis of 5mC used a similar strategy to that in both~\cite{Lister:2009hy} and ~\cite{Lister:2011kg}. Firstly, methylcytosines were identifed, however, it appears that rather than identifying these on a per-sample basis with a binomial test, they now did this by testing all samples with a $\chi^2$ goodness-of-fit test (__ASK TERRY: they actually reference a stats paper that descibes a root-mean test rather than reference their papers that use the binomial test; are the two equivalent?__). DMRs were again constructed using a sliding window approach and were subjected to _post-hoc_ filters.
+
+### \cite{Li:2010fb}
+\cite{Li:2010fb} report the methylome of a single sample. They used WGBS to study 5mC from peripheral blood mononuclear cells (PBMCs) from an Asian man whose genome had also been used to create the Han Chinese reference genome.
+
+The authors used the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering of the reads. The authors used the Binomial model from~\cite{Lister:2008bh} to identify methylcytosines. As they only had the one sample, many of the analyses were descriptive. For example, they looked at the distribution of $\beta$-values 20 different genomic elements such as CGIs, UTRs and repetive sequences.
+
+The authors looked at the autocorrelation of $\beta$-values across a range of genomic elements. They reported a $~170$nt periodicity in the autocorrelation plot of CpG methylation, similar to that found by~\cite{Cokus:2008fc} in _Arabidopsis_. They did not find evidence of any smaller periodicities such as the 8-10nt periodicity reported by~\cite{Cokus:2008fc} and~\cite{Lister:2009hy}. 
+
+The $~170$nt periodicity can be seen in the autocorrelation plots and was confirmed by Fourier analysis. They found that the autocorrelation of $\beta$-values is stronger when considering pairs of $\beta$-values from the same DNA strand than those from opposite strands. Furthermore, they found this autocorrelation was stronger in some genomic elements than others.
+
+The authors compared the PBMC methylome to the IMR90 methylome from~\cite{Lister:2009hy} to identify tissue-specific DMRs (tDMRs). DMR testing was done by forming regions containing 5 CpGs and comparing methylation levels between PBMC and IMR90 using Fisher's exact test, presumably by aggregating read counts across all CpGs in the window. Regions with a P-value $< 10^{-20}$, at least a two-fold difference in methylation between PBMC and IMR90 were declared  tDMRs. Neighbouring tDMRs were joined if they were 'consistent'.
+
+Because the genome of the individual had already been sequenced, this allowed them to study allele-specific methylation (ASM). They extracted all reads overlapping a heterozygous SNP and then looked at methylation levels from reads containing each allele. 
 
 ### Others to review
 
-* Lister 2011 and 2013; how do these differ from 2009?
-* PMBC paper
 * \cite{Hansen:2011gu}
 * \cite{Berman:2012ga}
 * \cite{Feng:2014iq}
 * \cite{Sun:2014fk}
 * BiSeq
-* Michelle Lacey
 * DMAP
 * \cite{Lacey:2013iy}
 * Akulenko, R., _et al._
@@ -387,8 +406,15 @@ To summarise, I take the "co-methylation" results of~\cite{Lister:2009hy} with a
 ### Transformation of $\beta$-values
 \cite{Du:2010dc} show improved inferences when using Logit transformed $\beta$-values, which they call M-values, to reduce the heteroscedasticity of $\beta$-values near 0 and 1.
 
+### Summary of papers
+Most analyses have focused on estimating $M_{i}$ and $U_{i}$. The simplest and most commonly used estimators of these parameters are $m_{i}$ and $u_{i}$. These estimators simply count the number of reads with the observed methylation state (subject to some filtering) and treat all observations equally. An obvious extension is to weight a methylation call by its base quality or `mapQ` value of the read. However, as previously noted, these qualities are often not well calibrated for bisulfite sequencing data, which reduces their utility. 
+
+Inferences have focused on the on the "average" level of methylation at individual methylation loci, $B_{i}$, and typically use the estimator, $\beta_{i}$.
+
+Method descriptions are often ambiguous or missing in details. The majority explanations favour words over mathematics and only __WHICH PAPERS__ provide software that implements their analysis methods.
 
 # General
 * "methylC-seq" or "WGBS" or ???
 * "bisulfite-sequencing" or "bisulfite sequencing"
 * Notation abuse: e.g. $m$ is defined with respect to m-tuples but also in terms of $m_{i}$. Similarly, $M$ is used to represent methylation patterns but also in terms of $M_{i}$. Perhaps use different typefaces to distinguish them?
+* Autocorrelation or correlation?
