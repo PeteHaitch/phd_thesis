@@ -1,31 +1,50 @@
-outline.pdf: bibtex/phd_thesis.bib markdown/outline.md markdown/bibliography.md
+outline.pdf: latex/phd_thesis.bib markdown/outline.md markdown/bibliography.md
 	mkdir -p pdf
-	pandoc -s --number-sections --bibliography=bibtex/phd_thesis.bib -o pdf/outline.pdf markdown/outline.md markdown/bibliography.md
+	pandoc -s --number-sections --bibliography=latex/phd_thesis.bib -o pdf/outline.pdf markdown/outline.md markdown/bibliography.md
 
-preamble.pdf: bibtex/phd_thesis.bib markdown/preamble.md markdown/bibliography.md
+notation.pdf: Rmarkdown/notation.Rmd
 	mkdir -p pdf
-	pandoc -s --table-of-contents --number-sections --bibliography=bibtex/phd_thesis.bib -o pdf/preamble.pdf markdown/preamble.md markdown/bibliography.md
+	Rscript -e "rmarkdown::render(input = 'Rmarkdown/notation.Rmd', output_file = '../pdf/notation.pdf')"
 
-notation.md: Rmarkdown/notation.Rmd
-	cd Rmarkdown; Rscript -e "knitr::knit(input = 'notation.Rmd', output = '../markdown/notation.md')"
+introduction.latex: markdown/introduction.md
+	mkdir -p latex
+	pandoc --chapters -o latex/introduction.tex markdown/introduction.md
 
-notation.pdf: notation.md
-	pandoc -s --number-sections -o pdf/notation.pdf markdown/notation.md
-
-introduction.pdf: bibtex/phd_thesis.bib markdown/introduction.md markdown/bibliography.md
+introduction.pdf: latex/phd_thesis.bib markdown/introduction.md markdown/bibliography.md
 	mkdir -p pdf
-	pandoc -s --table-of-contents --number-sections --bibliography=bibtex/phd_thesis.bib -o pdf/introduction.pdf markdown/introduction.md markdown/bibliography.md
+	pandoc --natbib -s --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o latex/introduction_sc.tex markdown/introduction.md markdown/bibliography.md
+	pdflatex -output-directory latex latex/introduction_sc
+	bibtex latex/introduction_sc
+	pdflatex -output-directory latex latex/introduction_sc
+	pdflatex -output-directory latex latex/introduction_sc
+	mv latex/introduction_sc.pdf pdf/introduction.pdf
+	rm latex/introduction_sc*
 
-statmodel.pdf: bibtex/phd_thesis.bib markdown/a_statistical_model_of_methlyC-seq.md markdown/bibliography.md
+statmodel.latex: latex/phd_thesis.bib markdown/a_statistical_model_of_methlyC-seq.md
+	mkdir -p latex
+	pandoc --chapters -o latex/a_statistical_model_of_methlyC-seq.tex markdown/a_statistical_model_of_methlyC-seq.md
+
+statmodel.pdf: latex/phd_thesis.bib markdown/a_statistical_model_of_methlyC-seq.md markdown/bibliography.md
 	mkdir -p pdf
-	pandoc -s --table-of-contents --number-sections --bibliography=bibtex/phd_thesis.bib -o pdf/a_statistical_model_of_methlyC-seq.pdf markdown/a_statistical_model_of_methlyC-seq.md markdown/bibliography.md markdown/bibliography.md
+	pandoc --natbib -s --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o latex/a_statistical_model_of_methlyC-seq_sc.tex markdown/a_statistical_model_of_methlyC-seq.md markdown/bibliography.md
+	pdflatex -output-directory latex latex/a_statistical_model_of_methlyC-seq_sc
+	bibtex latex/a_statistical_model_of_methlyC-seq_sc
+	pdflatex -output-directory latex latex/a_statistical_model_of_methlyC-seq_sc
+	pdflatex -output-directory latex latex/a_statistical_model_of_methlyC-seq_sc
+	mv latex/a_statistical_model_of_methlyC-seq_sc.pdf pdf/a_statistical_model_of_methlyC-seq.pdf
+	rm latex/a_statistical_model_of_methlyC-seq_sc*
 
-phd_thesis.pdf: bibtex/phd_thesis.bib markdown/preamble.md markdown/introduction.md markdown/a_statistical_model_of_methlyC-seq.md markdown/bibliography.md
+phd_thesis.pdf: introduction.latex statmodel.latex
 	mkdir -p pdf
-	pandoc --table-of-contents --number-sections --bibliography=bibtex/phd_thesis.bib -o pdf/phd_thesis.pdf markdown/preamble.md markdown/introduction.md markdown/a_statistical_model_of_methlyC-seq.md markdown/bibliography.md
+	cd latex; pdflatex phd_thesis; \
+	bibtex phd_thesis; \
+	pdflatex phd_thesis; \
+	pdflatex phd_thesis; \
+	mv phd_thesis.pdf ../pdf/
 
-phd_thesis.html: bibtex/phd_thesis.bib markdown/preamble.md markdown/introduction.md markdown/a_statistical_model_of_methlyC-seq.md markdown/bibliography.md
-	mkdir -p html
-	pandoc -s --mathjax --table-of-contents --number-sections --bibliography=bibtex/phd_thesis.bib -o html/phd_thesis.html markdown/preamble.md markdown/introduction.md markdown/a_statistical_model_of_methlyC-seq.md markdown/bibliography.md
+phd_thesis.html:
+	echo "Citations aren't yet supported!"
+	mkdir html
+	pandoc -s --mathjax --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o html/phd_thesis.html markdown/preamble.md markdown/introduction.md markdown/a_statistical_model_of_methlyC-seq.md markdown/bibliography.md
 
 all: phd_thesis.pdf phd_thesis.html
