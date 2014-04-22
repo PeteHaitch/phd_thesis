@@ -391,6 +391,106 @@ The authors compared the PBMC methylome to the IMR90 methylome from~\cite{Lister
 
 Because the genome of the individual had already been sequenced, this allowed them to study allele-specific methylation (ASM). They extracted all reads overlapping a heterozygous SNP and then looked at methylation levels from reads containing each allele. 
 
+### \cite{Hansen:2011gu} and~\cite{Hansen:2012gr}
+
+~\cite{Hansen:2012gr} describes a method for identifying DMRs between two groups of samples. This method was first used in~\cite{Hansen:2011gu} to identify DMRs in colon cancer tumours. As part of their study,~\cite{Hansen:2011gu} performed WGBS on 3 colon cancer samples and their matched normal mucosa, as well as of 2 colon adenomas[^adenoma]. The statistical method they developed, which they call `BSmooth`, are implemented in the R/Bioconductor package `bsseq`. I will describe `BSmooth` and then explain how it was used, in a modified form, in~\cite{Hansen:2011gu}.
+
+[^adenoma]: An adenoma is a benign tumour formed from glandular structures in epithelial tissue (__SOURCE: google.com__)
+
+`BSmooth` proposes the following general framework for performing a two-group differential methylation analysis:
+
+1. Smooth raw $\beta$-values.
+2. Compute at each methylation locus a test statistic that quantifies the difference between the two groups (in the case of `Bsmooth`, the mean difference in methylation level between the two groups).
+3. Find contiguous runs of extreme test statistics; call these putative DMRs.
+4. Filter the list of putative DMRs to produce the final list of candidate DMRs. These filters might be biologically-motivated or be designed to remove known false-positive calls from the DMR-calling algorithm.
+
+#### Step 1 {-}
+
+The analysis begins with a table for each sample of the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering of the reads, for each CpG. For each sample, the resulting "raw" $\beta$-values are smoothed in order to remove noise due to low sequencing coverage.
+
+* Is smoothing of the raw $\beta$-values still useful when you have high-coverage sequencing data (__DISCUSS WITH TERRY__)?
+
+A binomial likelihood smoother was chosen because they model $M_{i, j}$ as $Binom(M_{i, j} + U_{i, j}, B_{i})$ and it is "local" because "methylation levels are strongly correlated across the genome" (\cite{Hansen:2012gr}, which cites~\cite{Eckhardt:2006gh} as evidence that DNA methylation levels are similar at proximal CpGs). 
+
+Under the binomial model for $M_{i, j}$, $\beta_{i, j} = \frac{m_{i, j}}{m_{i, j} + u_{i, j}}$ is an unbiased estiamtor of $B_{i, j}$ with standard error $se(\beta_{i, j}) = \sqrt(\frac{\beta_{i, j}(1 - \beta_{i, j})}{M_{i, j} + U_{i, j}})$ (__CHECK WITH TERRY: the standard error should be defined in terms of estimates not parameters, i.e. $\beta$ instead of $B$, correct?__). `BSmooth` assumes that for each sample that the underlying methylation level, $f_{j}(i)$, is a smoothly varying function of the position in the genome, $i$. 
+
+A window size, $w_{i}$, is defined for each $i$. The default window size is defined as one that contains at least 70 CpGs and is at least 2000kb wide, that is, $w_{i} = (pos_{i}, pos_{i'})$, where:
+\begin{equation*}
+pos_{i'} = \left\{
+  \begin{array}{l l}
+    pos_{i} + 2000 & \quad \text{if } NIL(pos_{i}, \ldots, pos_{i} + 2000) \geq 70 \\
+    pos_{i} + min(\omega: NIL(pos_{i}, \ldots, pos_{i} + \omega) = 70 - 1 = 69) & \quad \text{otherwise}
+  \end{array} \right.
+\end{equation*}
+Note that the end of the window may not be a CpG if $w_{i} = 2000$ but will be if $w_{i} > 2000$.
+
+Within each window, $\log(\frac{f_{j}(i)}{1 - f_{j}(i)})$ is approximated by a second degree polynomial and $\beta_{i, j}$ weighted according to the binomial likelihood and a tricube kernel. The binomial likelihood weights points inversely to their standard error, $se(\beta_{i, j})$ and the tricube kernal gives greater weight to those $\beta_{i, j}$ near the centre of the window. 
+
+#### Step 2 {-}
+
+~\cite{Hansen:2012gr} describe `BSmooth` in the context of a simple two-group linear model where $X_{j} = 1$ if the $j^{th}$ sample is a case and $X_{j} = 0$ if a control. There are $n_{0}$ controls and $n_{1}$ cases ($N = n_{0} + n_{1}$). `BSmooth` assumes that the samples within each group are biological replicates and fits the model $f_{j}(i) = \alpha_{i} + \beta_{i} X_{i} + \epsilon_{i, j}$. The model allows for locus-dependent variation, $\sigma_{i}^{2}$, which, like $f_{j}(i)$, is also assumed to be a a smoothly varying function of the position in the genome, $i$.
+
+In this model, $\alpha_{i}$ represents the base level of methylation at the $i^{th}$ locus and $\beta_{i}$ is the true difference between the two groups. The $\epsilon_{i, j}$ represent biological variability within the locus-dependent variance, $\sigma_{j}^{2}$.
+
+`BSmooth` fits this model to the __smoothed $\beta$-values__. The parameters are estimated as empirical averages:
+\begin{align*}
+	\hat{\alpha}_{i} &= \frac{1}{N} \sum_{j = 1}^{N} f_{j}(i) \\
+	\hat{\beta}_{i}  &= \frac{1}{n_{1}} \sum_{j: X_j = 1} f_{j}(i) - \frac{1}{n_{0}} \sum_{j: X_j = 0} f_{j}(i).
+\end{align*}
+
+To estimate $\sigma_{i}$, firstly the within-group standard deviations are computed. Secondly, in an attempt to "improve precision", these standard deviations are truncated at the $75^{th}$ percentile and then smoothed using a running mean (window size of 101 observations). I denote the resulting estimate of $\sigma_{i}$ by $\hat{\sigma}_{i}$.
+
+__TODO: it's not clear from the text whether smoothing+flooring are done on the within-group sds or the grand sd__.
+
+Finally, a t-statistic is computed at each locus as $t_{i} = \frac{\beta_{i}}{\hat{\sigma}_{i} \sqrt(1 / n_{0} + 1 / n_{1})}$. This tests the hypothesis that the average methylation level at this locus is the equal in both groups, or, __TODO: What is this formally?__
+
+__TODO: Don't use $\beta$ in model definition as this gets confused with $\beta$-values__
+
+
+
+#### Step 3 {-}
+
+#### Step 4 {-}
+
+#### `BSmooth` use in ~\cite{Hansen:2011gu} {-}
+
+All WGBS samples were sequenced at very low coverage ($~5 \times$), which initially motivated the use of smoothing.
+
+~\cite{Hansen:2011gu} used two different window sizes for two different analyses -- a large window size of to detect low frequency changes and a small window size of to detect high frequency changes. The large window size required 500 CpGs per window and a minimum window of 2,000nt and the small window size required 70 CpGs per window and a minimum window size of 1,000nt.
+
+
+##### ------------ OLD WORK BELOW THIS LINE ------------
+
+__TODO: Incorporate the below in the above, as appropriate__
+
+ `BSmooth`, as the name suggests, uses statistical smoothing of the resulting raw $\beta$-values prior to inferring differential methylation. The authors note that smoothing the raw data was desirable because the of the low sequencing coverage ($~5 \times$) and justify its use on the assumption that the methylation level is a smooth function of $i$. The authors cited~\cite{Eckhardt:2006gh} as evidence that DNA methylation levels are similar at proximal CpGs and hence that the methylation level at CpGs is a smooth function of $i$. `BSmooth` uses a local binomial likelihood with a tricube kernel to smooth the raw $\beta$-values. The binomial likelihood ensures that loci with higher sequencing coverage receive greater weight.
+
+
+\cite{Hansen:2011gu} reported that tumours have increased methylation variability, with a particular focus on colon cancer. As part of their study they performed WGBS on 3 colon cancer samples and their matched normal mucosa, as well as of 2 colon adenomas (__DEFINE__). The methods they developed, which they call BSmooth and are implemented in the R/Bioconductor package `bsseq`, were described in greater detail in~\cite{Hansen:2012gr}. I will refer to the latter paper when describing the `BSmooth` method.
+
+The analysis begins with a table for each sample of the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering of the reads, for each CpG. BSmooth, as the name suggests, uses statistical smoothing of the resulting raw $\beta$-values prior to inferring differential methylation. The authors note that smoothing the raw data was desirable because the of the low sequencing coverage ($~5 \times$) and justify its use on the assumption that the methylation level is a smooth function of $i$. The authors cited~\cite{Eckhardt:2006gh} as evidence that DNA methylation levels are similar at proximal CpGs and hence that the methylation level at CpGs is a smooth function of $i$. `BSmooth` uses a local binomial likelihood with a tricube kernel to smooth the raw $\beta$-values. The binomial likelihood ensures that loci with higher sequencing coverage receive greater weight.
+
+~\cite{Hansen:2011gu} used two different window sizes for two different analyses -- a large window size of to detect low frequency changes and a small window size of to detect high frequency changes. The large window size required 500 CpGs per window and a minimum window of 2,000nt and the small window size required 70 CpGs per window and a minimum window size of 1,000nt.
+
+~\cite{Hansen:2011gu} performed a differential methylation analysis between the paired normal-cancer samples using the smoothed values. Only loci with __HOW MUCH COVERAGE ETC__ were used for finding DMRs. For each loci $i$, they computed a t-statistic, $t_{i}$ based on the average difference between the tumour and normal samples, $d_{i}$, and an estimate of its standard deviation, $se(d_{i})$. $d_{i}$ properly accounts for the fact that the tumour and normal samples are paired. These standard errors were estimated using only the normal samples. The reason for this is that cancer samples are prone to increased variability, which would distort the values of $t_{i}$. They argue that estimating the standard deviations from the normal samples is equivalent to assuming that the tumour samples are not biological replicates (__DISCUSS WITH TERRY__). The estimated standard deviations were further refined by smoothing these using a running mean with a window size of 101 observations and then thresholding these by the 75th percentile of these smoothed estimates. DMRs were identified as regions with $|t_{i}| > q_{t}^{0.95}$, where $q_{t}^{0.95}$ is the 95th percentile of the empirical distribution of $t_i$, and where all differences were in the same direction. This algorithm was done for both the low- and high-frequency analyses.
+
+\cite{Hansen:2011gu} also performed _post-hoc_ filtering of these putative DMRs. These filters included a correction factor to allow for high-frequency DMRs within low-frequency DMRs; an algorithm to filter out very small DRMs and those that did not display a large mean-difference ($> 0.1$) across the DMR; an algorithm to merge neighbouring DMRs if they were within a pre-defined distance of another DMR and displayed a consistent methylation-difference pattern; and an algorithm to clasify the final list of DMRs according to biological significance.
+
+To summarise, `BSmooth` proposes the following general framework for performing a two-group differential methylation analysis:
+
+1. Smooth raw $\beta$-values.
+2. Compute at each methylation locus a test statistic that quantifies the difference between the two groups (in the case of `Bsmooth`, the mean difference in methylation level between the two groups).
+3. Find contiguous runs of extreme test statistics; call these putative DMRs.
+4. Filter the list of putative DMRs to produce the final list of candidate DMRs. These filters might be biologically-motivated or to remove known false-positive calls from the DMR-calling algorithm.
+
+
+
+~\cite{Hansen:2012gr} showed that because `BSmooth` explicitly accounts for biological variability it outperforms an analysis using Fisher's exact test of data that has been pooled by group. `Bsmooth` also makes use of the paired design of the experiment described in~\cite{Hansen:2011gu}. 
+
+##### ------------ OLD WORK ABOVE THIS LINE ------------
+
+
+
 ### Others to review
 
 * \cite{Hansen:2011gu}
@@ -413,7 +513,7 @@ Inferences have focused on the on the "average" level of methylation at individu
 
 Method descriptions are often ambiguous or missing in details. The majority explanations favour words over mathematics and only __WHICH PAPERS__ provide software that implements their analysis methods.
 
-# General
+## General TODOs
 * "methylC-seq" or "WGBS" or ???
 * "bisulfite-sequencing" or "bisulfite sequencing"
 * Notation abuse: e.g. $m$ is defined with respect to m-tuples but also in terms of $m_{i}$. Similarly, $M$ is used to represent methylation patterns but also in terms of $M_{i}$. Perhaps use different typefaces to distinguish them?
