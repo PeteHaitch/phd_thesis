@@ -1,0 +1,359 @@
+\documentclass[11pt,a4paper,oneside]{book}	%fleqn,
+
+\usepackage{longtable,rotating,amsmath,epic, graphics}
+
+\usepackage{multirow, setspace, fullpage, graphicx, amssymb}
+
+\usepackage{epsfig, moreverb}
+
+\usepackage{natbib, color}
+
+\usepackage{tocbibind}
+
+\usepackage{easymat}
+
+\usepackage[pdftex,
+            pdfauthor={Your Name},
+            pdftitle={Thesis},
+            pdfsubject={Dissertation},
+            pdfkeywords={microarray gene expression statistical models regression},
+            pdfproducer={Latex with hyperref, or other system},
+            pdfcreator={pdflatex, or other tool}]{hyperref}
+
+\settocname{Table of Contents}
+
+
+\bibliographystyle{natbib} % natbib
+
+\bibpunct{[}{]},a{},
+
+\renewcommand\baselinestretch{1.5} %line spacing is 1.5
+
+% convenient macros for lists
+
+\newcommand\BI{\begin{itemize}}
+
+\newcommand\EI{\end{itemize}}
+
+\newcommand\BE{\begin{enumerate}}
+
+\newcommand\EE{\end{enumerate}}
+
+\newcommand\BD{\begin{description}}
+
+\newcommand\ED{\end{description}}
+
+\newcommand\BF{\begin{figure}}
+
+\newcommand\EF{\end{figure}}
+
+\newcommand\BT{\begin{table}}
+
+\newcommand\ET{\end{table}}
+
+
+\newcommand\I\item
+
+\newcommand\h[1]{\Large\textbf{#1}\vspace{12pt}}
+
+\newcommand\N\newpage
+
+\newcommand\BC{\begin{quotation}\small\noindent}
+
+\newcommand\EC{\end{quotation}}
+
+\newcommand\beq{\begin{equation}}
+
+\newcommand\eeq{\end{equation}}
+
+\newcommand{\ba}{{\bf a}}
+
+\newcommand{\bb}{{\bf b}}
+
+\newcommand{\bc}{{\bf c}}
+
+\newcommand{\bd}{{\bf d}}
+
+\newcommand{\be}{{\bf e}}
+
+\newcommand{\bg}{{\bf g}}
+
+\newcommand{\bh}{{\bf h}}
+
+\newcommand{\bm}{{\bf m}}
+
+\newcommand{\bn}{{\bf n}}
+
+\newcommand{\bp}{{\bf p}}
+
+\newcommand{\bq}{{\bf q}}
+
+\newcommand{\br}{{\bf r}}
+
+\newcommand{\bs}{{\bf s}}
+
+\newcommand{\bt}{{\bf t}}
+
+\newcommand{\bu}{{\bf u}}
+
+\newcommand{\bv}{{\bf v}}
+
+\newcommand{\bw}{{\bf w}}
+
+\newcommand{\bx}{{\bf x}}
+
+\newcommand{\by}{{\bf y}}
+
+\newcommand{\bz}{{\bf z}}
+
+\newcommand{\bC}{{\bf C}}
+
+\newcommand{\bD}{{\bf D}}
+
+\newcommand{\bH}{{\bf H}}
+
+\newcommand{\bI}{{\bf I}}
+
+\newcommand{\bM}{{\bf M}}
+
+\newcommand{\bP}{{\bf P}}
+
+\newcommand{\bT}{{\bf T}}
+
+\newcommand{\bU}{{\bf U}}
+
+\newcommand{\bV}{{\bf V}}
+
+\newcommand{\bW}{{\bf W}}
+
+\newcommand{\bX}{{\bf X}}
+
+\newcommand{\bY}{{\bf Y}}
+
+\newcommand{\bZ}{{\bf Z}}
+
+\newcommand{\bone}{\mbox{\boldmath $1$}}
+
+\newcommand{\balpha}{\mbox{\boldmath $\alpha$}}
+
+\newcommand{\bbeta}{\mbox{\boldmath $\beta$}}
+
+\newcommand{\bdelta}{\mbox{\boldmath $\delta$}}
+
+\newcommand{\bepsilon}{\mbox{\boldmath $\epsilon$}}
+
+\newcommand{\bgamma}{\mbox{\boldmath $\gamma$}}
+
+\newcommand{\blambda}{\mbox{\boldmath $\lambda$}}
+
+\newcommand{\bmu}{\mbox{\boldmath $\mu$}}
+
+\newcommand{\bomea}{\mbox{\boldmath $\omega$}}
+
+\newcommand{\bpi}{\mbox{\boldmath $\pi$}}
+
+\newcommand{\bphi}{\mbox{\boldmath $\phi$}}
+
+\newcommand{\brho}{\mbox{\boldmath $\rho$}}
+
+\newcommand{\bsigma}{\mbox{\boldmath $\sigma$}}
+
+\newcommand{\bSigma}{\mbox{\boldmath $\Sigma$}}
+
+\newcommand{\btau}{\mbox{\boldmath $\tau$}}
+
+\newcommand{\btheta}{\mbox{\boldmath $\theta$}}
+
+\newcommand{\bpsi}{\mbox{\boldmath $\psi$}}
+
+\newcommand{\bxi}{\mbox{\boldmath $\xi$}}
+
+\newcommand{\bzeta}{\mbox{\boldmath $\zeta$}}
+
+\newcommand{\bfeta}{\mbox{\boldmath $\eta$}}
+
+\newcommand{\n}{\frac{1}{n}}
+
+\newcommand{\E}{{\rm I\!E}}
+
+\newcommand{\D}{{\rm I\!D}}
+
+\newcommand{\R}{{\rm I\!R}}
+
+\newcommand{\ls}{{\cal R}}
+
+\newcommand{\var}{{\rm var}}
+
+\newcommand{\cov}{{\rm cov}}
+
+
+\setlength{\oddsidemargin}{5mm}
+
+\setlength{\evensidemargin}{5mm}
+
+\setlength{\textwidth}{150mm}
+
+\setlength{\marginparsep}{0pt}
+
+\setlength{\marginparwidth}{0pt}
+
+
+\setlength{\topmargin}{0pt}
+
+\setlength{\headsep}{0pt}
+
+\setlength{\textheight}{225mm}
+
+\setlength{\footskip}{1.5cm}
+
+\setlength{\parskip}{4pt}
+
+
+%\definecolor{sapgreen}{rgb}{.1,.4,.1}
+
+\definecolor{brick}{rgb}{.5,.0,.0}
+
+\definecolor{darkblue}{rgb}{.0,.0,.5}
+
+%\definecolor{black}{rgb}{0,1,0}
+
+\definecolor{gray}{gray}{.5}
+
+
+\pagestyle{plain}   
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Starting 
+
+\title{\huge \bf Thesis title\\}
+
+\author{{\bf \Large Peter Francis Hickey}\\\\
+Submitted in total fulfilment of the requirements\\
+of the degree of Doctor of Philosophy\\\\
+November 2014\\\\
+Department of Mathematics and Statistics\\
+The University of Melbourne\\\\}
+
+\date{The Walter and Eliza Hall Institute of Medical Research}
+
+\maketitle
+
+\frontmatter
+
+\chapter{Abstract}
+
+% should be between 300 - 500 words
+
+Microarrays are a popular tool for measuring relative gene expression between RNA populations for thousands of genes simultaneously...  
+
+
+\chapter{Declaration}
+
+{\bf This is to certify that}
+
+\BI
+
+\I[(i)] the thesis comprises only my original work towards
+
+the PhD except where indicated in the Preface,
+
+\I[(ii)] due acknowledgement has been made in
+
+the text to all other material used,
+
+\I[(iii)] the thesis is less than 100,000 words in length,
+
+exclusive of tables, maps, bibliographies and appendices.
+
+\EI
+
+
+
+\vspace{2cm}
+
+
+{\large\bf Signed,\\\\\\\\}
+
+
+
+\chapter{Preface}
+
+* Some data in my thesis are mapped to hg18 and some to hg19.
+* Include summary of notation?
+
+
+The data sets used in this thesis were provided by the investigators listed below.\\\\
+
+\chapter{Acknowledgments}
+
+I am grateful to the following people for their support during my PhD...  
+
+
+\tableofcontents
+
+\listoffigures
+
+\listoftables
+
+
+\chapter{List of Abbreviations}
+
+\begin{tabular}{ll}
+
+bp & base pair \\
+kb & kilobase = $1000$ bp \\
+Mb & megabase = $1,000,000$ bp \\
+Gb & gigabase = $1,000,000,000$ bp \\
+WGBS & whole genome bisulfite sequencing \\
+RRBS & reduced representation bisulfite sequencing \\
+FDR & false discovery rate \\
+DMR & differentially methylated region \\
+DMC & differentially methylated cytosine \\
+
+\end{tabular}
+
+\chapter{List of Symbols}
+
+\begin{tabular}{ll}
+
+i.e. & that is\\
+
+\end{tabular}
+
+\mainmatter
+
+% each chapter is in a separate .tex file
+
+\include{introduction} % introduction.tex
+
+\include{a_statistical_model_of_methlyC-seq} % a_statistical_model_of_methlyC-seq.tex
+
+%\include{backgroundcorrect} % backgroundcorrect.tex
+
+% etc.
+
+\backmatter
+
+\chapter{Concluding Comments} 
+
+\label{chapter:Conclusions}
+
+
+% 2 - 4 pages
+
+In this thesis, several fundamental low-level analysis issues for microarrays have been considered.  
+
+\bibliography{phd_thesis}
+
+\chapter{Appendix A}
+
+\label{chapter:AppendixCode}
+
+Insert supplementary figures/R code here.
+
+\end{document}
+
