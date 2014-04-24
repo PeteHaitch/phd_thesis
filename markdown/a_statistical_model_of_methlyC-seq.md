@@ -546,10 +546,48 @@ The result of steps 1-4 are significantly differentially methylated CpGs. While 
 
 __NOTE TO SELF: I like the FDR procedure but I'm not convince beta regression is necessary. Perhaps we can get away with the cheaper linear/logistic regression but make use of the cluster + FDR approach?__
 
+### \citet{Akalin:2012cm}
+\citet{Akalin:2012cm} developed `methylKit`, an `R` package for processing bisulfite-sequencing data (__LINK TO SOFTWARE__). The methods describedin the paper are applicable to WGBS, although all examples in the paper use RRBS data and the accompanying website for the software suggests that WGBS data might be too large for the software to handle [`v0.9.2` https://code.google.com/p/methylkit/](https://code.google.com/p/methylkit/). `methylKit` contains many useful utility functions for processing and visualising bisulfite-sequencing data.
+
+\citet{Akalin:2012cm} does not describe a method for _identifying_ DMRs, rather it describes two methods for _testing_ pre-defined regions 
+
+\citet{Akalin:2012cm} describe two methods implemented in `methylKit` for testing for differential methylation at either individual cytosines or at __pre-defined__ regions (using some aggregated/average measure of methylation in the region). It does not describe a method for _identifying_ DMRs, such as post-hoc combining DMCs into regions.
+
+The tests of differential methylation are logistic regression of the raw $\beta$-values or Fisher's exact test of a table of $m$ and $u$ counts. The default in `methylKit` is to use logistic regression if there are multiple samples per group and Fisher's exact test otherwise. \citet{Akalin:2012cm}  
+
+Once DMC/DMR testing has been performed, P-values are corrected for multiple hypothesis testing. `methylKit` implements both the sliding linear model (SLIM), which adjusts for correlations amongst nearby P-values \citep{Wang:2011cw}, and the Benjamini-Hochberg (__CITE__) method for P-value correction.
+
+### \citet{Feng:2014iq}
+\citet{Feng:2014iq} describe an empirical Bayes hierarchical model to identify DMCs from bisulfite sequencing data. The method is implemented in the R/Bioconductor package, `DSS` (__CITE__). 
+
+Let $k = 1, \ldots, K$ denote which group the $j^{th}$ sample belongs to. \citep{Feng:2014iq} describe a case-control experiment (i.e. $K = 2$), and only consider CpGs. `DSS` uses the following beta-binomial model[^dss_notation]:
+
+[^dss_notation]: Note that in order to make the notation in this section consistent with the general framework described in this chapter, there are subtle differences to the index parameters used in \citet{Feng:2014iq}.
+
+\begin{align*}
+M_{i, j, k} | B_{i, k}, M_{i, j, k} + U_{i, j, k} &= Binomial(M_{i, j, k} + U_{i, j, k}, B_{i, k}) \\
+B_{i, k} &= Beta(\mu_{i, k}, \theta_{i, k}) \\
+\theta_{i, k} &= log-Normal(m_{0, k}, r_{0, k}^{2})
+\end{align*}
+
+In words, for each CpG the true level of methylation, the prior parameters and the hyperparameters are assumed to be identical within each group. 
+
+Parameter estimates are obtained by the following algorithm:
+
+1. For each CpG, estimate the dispersion parameter, $\theta_{i, k}$, using a method  of moments estimator.
+2. Estimate the hyperparameters, $m_{0, k}$ and $r_{0, k}^{2}$, as the mean and variance, respectively, of the empirical distribution of the logirithm of the $\theta_{i, k}$.
+3. Estimate the group-wise mean level of methylation, $\mu_{i, k}$, by $\hat{\mu}_{i, k} = \sum_{j: j \in group_{k}} \frac{m_{i, j, k}}{m_{i, j, k} + u_{i, j, k}}$.
+4. For each CpG, compute relevant quantities, such as the mean and standard deviation, of the conditional posterior distribution of the dispersion parameters, $Pr(\theta_{i, k} | m_{i, j, k}, m_{i, j, k} + u_{i, j, k}, \mu_{i, k})$. In practice, these quantities are computed using the Newton-Raphson method after plugging in estimates of $m_{0, k}, r_{0, k}^{2}$ and $\mu_{i, k}$.
+
+The effect of the this procedure is to shrink the CpG-, group-wise dispersion estimates, $\theta_{i, k}$, towards the group-wise prior mean, $m_{0, k}$. In this form, each CpG site is allowed to have its own group-wise dispersion although `DSS` also allows the user to select a common dispersion across groups. \citet{Feng:2014iq} do not describe any further moderating of the $\theta_{i, k}$, such as the abundance-dependent trended dispersion estimates available in the differential gene expression analysis software, `edgeR` (__CITE__).
+
+Now that all parameters have been estimated, each CpG is tested for differential methylation. Namely, for a two-group experiment, at each CpG `DSS` uses a Wald test of the hypothesis $H_{0}: \mu_{i, 1} = \mu_{i, 2}$ vs. $H_{0}: \mu_{i, 1} \neq \mu_{i, 2}$. Due to the hierarchical structure of the model, it is not straightforward to derive the null distribution of the resulting test statistics. Instead, \citet{Feng:2014iq} use simulation studies to argue that the test statistics can be safely approximated by the standard Normal distribution.
+
+__TODO: Defining DMRs__
+
+
 ### Others to review
-* \cite{Feng:2014iq}
 * \cite{Sun:2014fk}
-* methylKit
 * DMAP
 * \cite{Lacey:2013iy}
 * Akulenko, R., _et al._
@@ -571,4 +609,5 @@ Method descriptions are often ambiguous or missing in details. The majority expl
 * "bisulfite-sequencing" or "bisulfite sequencing"
 * Notation abuse: e.g. $m$ is defined with respect to m-tuples but also in terms of $m_{i}$. Similarly, $M$ is used to represent methylation patterns but also in terms of $M_{i}$. Perhaps use different typefaces to distinguish them?
 * Autocorrelation or correlation?
+* Link to all software and corresponding publications
 

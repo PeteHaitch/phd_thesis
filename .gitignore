@@ -5,3 +5,4 @@ latex/
 !latex/phd_thesis.tex # This doesn't seem to work so I force-added it with git add -f latex/phd_thesis.tex
 !latex/natbib.bst # This doesn't seem to work so I force-added it with git add -f latex/natbib.bst
 !latex/phd_thesis.bib # This doesn't seem to work so I force-added it with git add -f latex/phd_thesis.bib
+.Rproj.user
