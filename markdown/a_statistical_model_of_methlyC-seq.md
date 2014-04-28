@@ -264,6 +264,9 @@ __Other issues?__
 
 
 ## $n$ samples
+
+__DISCUSS WITH TERRY: Is it better to use $j$ to denote samples and encode group information in $X_j$, or to use $j$ to denote replicates and $k$ to denote groups? I think the former will be more general, e.g. a sample belonging to multiple groups.__
+
 To move from a single sample to $n$ samples simply requires an additional subscript, $j = 1, \ldots, n$. For example, $\mathcal{I}_{j}$ is the set of methylation loci in the $j^{th}$ sample and $\beta_{i, j}$ is the beta value for the $i^{th}$ locus in the $j^{th}$ sample. This defines the three levels in the hierarchy of a typical experiment -- individual molecules ($h$), individual methylation loci ($j$) and individual samples ($j$). A fourth level is how the samples relate in terms of an outcome of interest, such as phenotype. This fourth level might be defined up-front, such as in a designed experiment looking for differences in methylation between pre-defined groups of samples, or the aim of the experiment might be to discover this level.
 
 A common experiment of the first type is the two-group design in which $n_{1}$ samples are from group $1$ and $n_{2}$ samples are from group $2$ ($n_{1} + n_{2} = n$). This can be represented by a design matrix $X = [X_{j}]$, where $X_{j} = 1$ if the sample is from group $1$ and $X_{j} = 0$ if the sample is from group $2$. 
@@ -583,15 +586,116 @@ The effect of the this procedure is to shrink the CpG-, group-wise dispersion es
 
 Now that all parameters have been estimated, each CpG is tested for differential methylation. Namely, for a two-group experiment, at each CpG `DSS` uses a Wald test of the hypothesis $H_{0}: \mu_{i, 1} = \mu_{i, 2}$ vs. $H_{0}: \mu_{i, 1} \neq \mu_{i, 2}$. Due to the hierarchical structure of the model, it is not straightforward to derive the null distribution of the resulting test statistics. Instead, \citet{Feng:2014iq} use simulation studies to argue that the test statistics can be safely approximated by the standard Normal distribution.
 
-__TODO: Defining DMRs__
+While \citet{Feng:2014iq} focuses an empirical Bayes model for detecting differential methylation at individual CpGs, the authors propose a simple thresholding algorithm to identify DMRs. This algorithm calls DMRs as regions greater than a specified minimum size (100bp), containing a specified minimal number of CpGs (3) and containing multiple DMCs that satisfy a P-value threshold (at least 80% of DMCs with P-values < a user-specific minimal P-value). As the authors note, there is no accounting for the spatial correlation amongst P-values and say that improved DMR calling is left for future work. 
 
+### \cite{Sun:2014fk}
+The `MOABS` software, published in \citet{Sun:2014fk}, uses a Beta-Binomial empirical Bayes hierarchical model of methylation at individual CpGs. The model is therefore similar in spirit to that proposed in \citet{Feng:2014iq}, although the model is not as well described[^moabs_errors1]. For example, it is not made explicit how the hyperparameters of the Beta distribution are estimated.
+
+[^moabs_errors1]: The EB description is poorly written and I think is wrong in several places, which makes it confusing. (__DISCUSS WITH TERRY__)
+
+For a two-group experiment, `MOABS` does not perform hypothesis testing to identify DMCs. Rather, for each methylation loci, `MOABS` estimates a $95\%$ posterior probability interval, $PI(a, b)$ (__TODO__ Is this a credible interval in Bayesian parlance?) of the difference in mean methylation levels between group 1 and 2[^moabs_errors2]. 
+
+[moabs_errors2]: The paper calls this a confidence interval rather than a posterior probability interval. This seems to mix up the hypothesis-testing and Bayesian frameworks.
+
+They then define a _credible methylation difference_ ($CDIF$) as: 
+
+\begin{equation*}
+PI{a, b} = \left\{ 
+  \begin{array}{l l}
+    a & \quad \text{if } a \geq 0 \\
+    0 & \quad \text{if } a < 0 < b \\
+    b & \quad \text{if } b \leq 0 \\
+  \end{array} \right.
+\end{equation*}
+
+The CDIF effectively converts all posterior intervals to a single number. \cite{Sun:2014fk} write, "In practice, $CDIF$ represents the conservative estimation of the true methylation difference, i.e. for $97.5\%$ of chance the absolute value of true methylation difference is greater than or equal to that of $CDIF$." They interpret $CDIF = 0$ to mean that there is no significant difference in methylation betweent the two groups[^moabs_errors3]. 
+
+[^moabs_errors3]: Again, this seems to mix up the hypothesis-testing and Bayesian frameworks.
+
+DMCs are those cytosines with a $CDIF > cutoff$, where $cutoff$ is chosen so as to control the FDR. The FDR-based $cutoff$ is estimated by permutating sample labels and re-running the analysis (__CHECK WITH TERRY: Necessary to do this permutation multiple times?__). 
+
+The procedure could also be used to identify methylation changes at pre-defined regions, rather than individual methylation loci, by aggregating/averaging methylation levels across each region. 
+
+For a two-group experiment, `MOABS` uses a hidden Markov model (HMM) to group cytosines into DMRs. Note that all cytosines, not just DMCs, are used by the DMR-detection HMM. To do this, `MOABS` uses a first-order HMM where the observed values are the group-wise difference in mean methylation at each locus, $B_{i}^{2} - B_{i}^{1}$. There are 3 hidden states -- hypomethylation ($B_{i}^{2} - B_{i}^{1} < $-cutoff$), no difference (|$B_{i}^{2} - B_{i}^{1}| < $cutoff$) and hypermethylation ($B_{i}^{2} - B_{i}^{1} > $cutoff$). The $cutoff$ is the same at that used for identifying DMCs (__DISCUSS WITH TERRY: I think this is true. Is this a good idea?__).
+
+`MOABS` is written in `C++` (__TODO: Is it a command line program or is there an R interface?__) and also provides several other useful functions including:
+
+* A first-order, 2-state HMM to detect hypomethylated and hypermethylated regions from a single sample
+* A script to downsample BAM files in regions containing predicted copy number variants (CNVs). \cite{Sun:2014fk} claim that "this will result in CNV bias free `BAM` files for downstream analysis".
+
+### \citet{Stockwell:2014fq}
+
+`DMAP`, published in \citet{Stockwell:2014fq}, does not allow detection of DMCs, rather it focuses solely on identifying DMRs. `DMAP` provides a function to test for differential methylation in sliding windows, _a la_ \cite{Lister:2009hy}, which the authors recommend for analysing WGBS data. For analysing RRBS data, `DMAP` proposes the use of the MspI fragments as the natural unit for calling DMRs. MspI fragments are 40-220 bp long and are identified by scanning the reference genome for the recognition motif, _C'CGG_. `DMAP` includes an algorithm for resolving methylation calls from reads that overlap adjacent MspI fragments.
+
+Within each window, whether it be a fixed-width sliding window or based on MspI fragments, a Fisher's exact test is performed between two samples[^dmap]. If there are more than two samples then the minimum P-value from all pair-wise comparisons is reported as evidence of differential methylation. `DMAP` also provides a $\chi^2$-test for inter-individual variablity of DNA methylation in multiple samples. 
+
+[^dmap]: It is not clear whether `DMAP` only uses the Fisher's exact test for two __samples__ or also for two __groups__, e.g., by first aggregating all read counts within each group and then doing a Fisher's exact test.
+
+`DMAP` can also perform an F-test to compare DNA methylation between two groups, for example, cases and controls. This test is implemented outside of a regression framework and so does not allow for additional covariates to be included in the model.
+
+Regardless of which test is used, DMRs are called as those regions with a P-values below a given threshold and satisfying other criteria such as a minimum number of CpGs in the window.
+
+### \citet{Lacey:2013iy}
+
+\cite{Lacey:2013iy} details a modeling and inference framework for RRBS data, as well as a method for simulating RRBS data. Here I only describe the modelin framework and reserve the description and discussion of the simulation framework for __CHAPTER__.
+
+The modeling framework is based on a two-group experiment. At each methylation loci the authors fit a logistic regression model of $\beta_i$ against a indicator variable denoting from which group the sample comes. The raw P-values from the $\chi^2$ test of the residuals of this model are then transformed by a procedure dubbed `QUASASS` (quantile adjustment for score and sample size). The authors claim that `QUASASS` adjusts for the differences in read coverage and sample size that would otherwise reduce the sensitivity in low-coverage regions and reduce the specificity in high-coverage regions. __DISCUSS WITH TERRY: What is `QUASASS` actually doing?__. The authors recommend that `QUASASS`-adjusted P-values, rather than the raw P-values, are used in all downstream analyses.
+
+To identify DMRs, \citeauthor{Lacey:2013iy} seek to model the distribution of P-values at neighbouring methylation loci. They use a Uniform Product distribution to model the P-values under the null hypothesis of no differential methylation at each loci. This model assumes that P-values at neighbouring loci are independent, which seems unlikely given the spatial correlation of $\beta$ values. 
+
+DMRs are regions where the first methylation loci has a P-value $\leq 0.05$ and are then built up using an iterative procedure. This iterative algorithm continues to add neighbouring methylation loci (up to a user specific threshold with default value of $50$) and computes the P-value of the region under the Uniform Product model. The maximum number of additional loci that retains a region-wise P-value $\leq 0.05$ is defined as the end of the region provided the following conditions are also met:
+
+* That the end site by itself has a P-value $< 0.05$
+* All differences in methylation are 'in the same direction'
+* All methylation loci in the region are in "sufficiently close proximity"
+
+The final list of putative DMRs is then pruned to remove regions containing only a single loci and overlapping DMRs are merged.
+
+\citet{Lacey:2013iy} state that an advantage of this iterative procedure is that, "DMRs can include internal sites that are not significantly differentially methylated" as well as sites that are missing data.
+
+#### Simulation model {-}
+
+__This section to move to chapter on simulating WGBS data.__
+
+It is important to note that \citet{Lacey:2013iy} seek to simulate RRBS data and not WGBS data. This has several implications. Firstly, the RRBS assay enriches for small, CpG-dense regions of the genome such as CGIs. As such the distribution of IPDs is skewed towards zero and is less bimodal than that from WGBS data (__CHECK__), although it still has a long right-tail. Secondly, these CpG-dense regions are enriched for methylation loci with methylation levels near zero. Finally, the sequencing coverage of loci is right-skewed, even bimodal, in RRBS data. 
+
+All parameters used in the simulation model were estimated from a single normal myotube cell line (MTCTL2; __CITE Tsumagari et al., 2013__). \citeauthor{Lacey:2013iy} state that this sample is representative of the methylation profiles that they are typically intereted in as part of their research emphasis. It is therefore unclear how generalisable these parameters estimates are.
+
+Rather than simulate data at methylation loci from a reference genome, the authors model the distribution of IPDs for CpGs. Specifically, they model IPDs in human RRBS data. For this they use a two-component Normal mixture distribution, where one component models CpG-dense regions of the genome and the second component models CpG-sparse regions of the genome. They further impose a hidden Markov model on the distribution of IPDs so that a small IPD is more likely to be followed by another small IPD, in an attempt to model the clusters of CpG sites observed in RRBS data. It is unclear to me what advantage, if any, modelling the distribution of IPDs has over simply taking the empirical distribution of IPDs from a reference genome.
+
+Unlike `methsim`, \citeauthor{Lacey:2013iy} simulate $\beta$-values and sequencing coverage rather than simulating the reads themselves. They use a mixture of two gamma distributions to model the distribution of log-transformed sequencing coverage. This model is applied independently to bins of methylation loci (bin width = $50$ bp) and thus all loci within each bin have the same sequencing coverage for a given sample.  As this model is independently applied to each bin, it does not quite account for the fact that sequencing coverage is highly correlated at loci separated by short distances ($< 50-200$ bp) due to each read potentially containing multiple methylation loci/covering multiple bins (__TODO: show correlation of sequencing coverage elsewhere in thesis and reference here__). They did, however, model the correlation of sequencing depth at each site across samples (median correlation $= 0.8$) via a Normal copula. The simulated values are then exponentiated (as the model is of logarithmic coverage) and rounded to the nearest integer (as the model produces non-integer variables).
+
+The simulation procedure aims to capture the spatial correlation of $\beta$-values. This correlation was estimated by fitting a Guassian model to the empirical variogram for sites randomly selected from chromosome 11 of the MTCTL2 data. \citet{Lacey:2013iy} report that the variogram shows "a strong correlation for sites in close proximity, decaying to near independence at distances beyong 3000 bp"[^lacey]. The spatially correlated $\beta$-values were then simulated via a two-step process. Firstly, a sample of independent $\beta$-values were sampled from a Beta distribution, with parameters estimated from chr11 of the MTCTL2 data assuming independence of loci. Secondly, correlations were induced via the model proposed by __CITE Zaykin et al. and describe the model__, which uses the correlations estimated from the fitted variogram to induce correlations in the Beta random variates. The parameters of the underlying Beta distribution are then re-estimated to better approximate the distribution of $\beta$-values from the MTCTL2 chromosome 11 data. This algorithm was run several times to arrive at the final parameter values.
+
+[^lacey]: My results show a non-zero correlation beyond 3 kb, which is hardly independence.
+
+They also argue, however, that the correlations of differences in $\beta$-values between two groups will be less than correlations of the $\beta$-values themselves, and provide some evidence for this. To do this they fit expontential variogram models to the raw and `QUASASS`-adjusted P-values from non-differentially methylated loci and report $r \leq 0.4$ for sites with $IPD > 50$ bp and $r < 0.2$ for sites with $IPD > 1000$ bp. It is not clear whether only pairs of sites with $NIL = 0$ where used in this analysis.
+
+\citet{Lacey:2013iy} also propose an algorithm for inducing DMRs in a two-group experiment, where the first $\frac{n}{2}$ samples are cases and the second $\frac{n}{2}$ samples are controls. The DMR-construction algorithm is as follows:
+
+1. Specify the proportion of the methylation loci that are in DMRs, the expected difference in methylation levels for loci in these DMRs ($\delta_{B}$) and the length of these DMRs. 
+2. Regions satisfying the minimum lenth requirement are identified from the data and a subset are sampled so that the constraint on the proportion of methylation loci in DMRs is satisfied. 
+3. Compute the median $B_{i, j}$ for control samples in each region.
+	* If the median $B_{i, j}$ in the controls is less than $\delta_{B}$ then the region is assigned as hypermethylated relative to the controls.
+	* If the median $B_{i, j}$ in the controls is greater than $1 - \delta_{B}$ then the region is assigned as hypomethylated relative to the controls.
+	* Otherwise the region is randomly assigned as hypomethylated or hypermethylated in controls.
+4. If the region is assigned as hypomethylated, then the methylation levels of the cases in that region are replaced with $min(B_{i, j} - \delta_{B}, 0.01)$. If the region is hypermethylated, then the methylation levels of the cases in that region are replaced with $max(B_{i, j} + \delta_{B}, 0.99)$. 
+
+Under this model all DMRs are of the same length, although they may contain a different number of methylation loci, and all DMRs have the same expected difference in methylation levels between cases and controls.
+
+To summarise, \citeauthor{Lacey:2013iy} propose the following algorithm to simulate RRBS data, including DMRs, for $n_{loci}$ loci and $n$ samples:
+
+1. Simulate $n_{loci} - 1$ IPDs. All samples are assumed to have the same set of resulting methylation loci, i.e. $\mathcal{I}_{1} = \ldots = \mathcal{I}_{n}$.
+2. Bin the $n_loci$ loci in 50 bp bins. For each bin, simulate sequencing coverage across the $n$ samples using the Normal copula model of sequencing coverage. Let $n_{i, j} = m_{i, j} + u_{i, j}$ by the simulated sequencing coverage at the $i^{th}$ locus for the $j^{th}$ sample.
+3. Simulate spatially correlated methylation levels, $B_{i}$. __The same $B$-values are used for all samples, i.e. $B_{i, j} = B_{i}$.__
+4. Construct DMRs by modifying the methylation levels $B_{i, j}$ of cases within these regions.
+5. Generate observed $\beta$-values, $\beta_{i, j} = \frac{m_{i, j}}{n_{i, j}}$ using the binomial model, $m_{i, j} = Bin(n_{i, j}, B_{i, j})$, where outside of DMRs $B_{i, j} = B_{i}$ and inside DMRs $B_{i} = B_{i, case}$ or $B_{i} = B_{i, control}$, as appropriate.
 
 ### Others to review
-* \cite{Sun:2014fk}
-* DMAP
-* \cite{Lacey:2013iy}
 * Akulenko, R., _et al._
 * A-star
+* \citet{Su:2012hl}
+* \citep{Liu:dy}
 
 
 ### Transformation of $\beta$-values
@@ -610,4 +714,6 @@ Method descriptions are often ambiguous or missing in details. The majority expl
 * Notation abuse: e.g. $m$ is defined with respect to m-tuples but also in terms of $m_{i}$. Similarly, $M$ is used to represent methylation patterns but also in terms of $M_{i}$. Perhaps use different typefaces to distinguish them?
 * Autocorrelation or correlation?
 * Link to all software and corresponding publications
+* Decide how to give the total number of a loci and samples in a consistent way. Currently usign $n_{loci}$ for loci and $n$ for samples, which is inconsistent.
+* Decide how to denote coverage. Currently using $U + M$ rather than $N$ because $N$ and $n$ are already being used to represent multiple variables.
 
