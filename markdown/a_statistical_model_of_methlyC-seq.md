@@ -288,10 +288,9 @@ A conservative analysis might only analyse those loci where at least some fracti
 * $n$ is typically small while $N_{loci}$ is typically large
 
 
-## Parameter estimation and inference
-In this section I summarise current techniques for parameter estimation and inference from WGBS data. I do not describe the processing of the raw data. When necessary, I have "translated" the original work into my notation to make these methods more readily comparable. These papers are not in chronological order but rather are grouped by "similar" analysis methods. This is not an exhaustive list of studies using WGBS but rather focuses on papers that introduced new methodology for analysing WGBS data.
+## Paper reviews
 
-__TODO: Do I write this section by summarising each paper in-turn or by summarising each parameter in-turn? Do I try to cast all methods in the "`BSmooth` 4-step framework"?__
+These are my reviews of important papers in the field. I do not want to reproduce these verbatim in my thesis but rather summarise these down to key points of similarity and difference between the methods.
 
 ### \cite{Eckhardt:2006gh}
 
@@ -691,11 +690,78 @@ To summarise, \citeauthor{Lacey:2013iy} propose the following algorithm to simul
 4. Construct DMRs by modifying the methylation levels $B_{i, j}$ of cases within these regions.
 5. Generate observed $\beta$-values, $\beta_{i, j} = \frac{m_{i, j}}{n_{i, j}}$ using the binomial model, $m_{i, j} = Bin(n_{i, j}, B_{i, j})$, where outside of DMRs $B_{i, j} = B_{i}$ and inside DMRs $B_{i} = B_{i, case}$ or $B_{i} = B_{i, control}$, as appropriate.
 
+### \citet{Akulenko:2013fl}
+
+\citet{Akulenko:2013fl} investigated the co-methylation of genes between samples in a study of $344$ samples from The Cancer Genome Atlas (TCGA). Most of these samples ($317/344$) were breast cancer samples while the remainder ($27/344$) were from matched normal tissue. This study used data from the Illumina Infinium HumanMethylation27k BeadChip (__CITE__), which contains approximately $27,578$ probes that measure single-CpG DNA methylation at CpGs in $14,475$ (__CITE: Original paper not Akulenko__). Most (__HOW MANY__) of these probes are in gene promoters.
+
+After pre-processing of the raw data, each gene was assigned the average $\beta$-value of all $\beta$-values within that gene for each sample. This reduced the number of $\beta$-values from 25,578 to 13,313. After some further filtering to remove probes that were known to be prone to technical artefacts, they computed the Pearson correlation ($r$) of all pairs of gene-level $\beta$-values ($88,611,328$ pairs) using all 344 samples.
+
+This analysis identified $13,643$ pairs of $\beta$-values with $|r| > 0.9$ and $377,547$ pairs of $\beta$-values with $|r| > 0.75$. The overwhelming majority ($377360/377547$, 99.95\%$) of pairs with $|r| > 0.75$ were driven by outlier observations, whereby a small number of samples had $\beta$-values greatly different to the rest of the samples.
+
+\citeauthor{Akulenko:2013fl} also investigated how these pair-wise correlations vary as a function of the genomic distance between the two probes in each pair. They reported that "co-methylation level only weakly anti-correlated with genomic distance ($r = -0.29$)", however, this analysis only used a tiny subset of the dataset. Namely, they only performed this analysis for the 74 of the 187 "significant" pairs of $\beta$-values where both genes in the pair were on the same chromosome.
+
+There are several limitations to this study:
+
+1. The low resolution of the 27k array, which leads to summarising a gene's methylation level from measurements of one or two CpGs.
+2. They only used a tiny subset of the available data to explore the relationship between co-methylation and genomic distance.
+3. Once the "outliers" were removed, almost all the 'co-methylation' disappears. I think these outlier samples need closer investigation rather than just removal.
+
+
+### \citep{Sofer:2013bk}
+
+The [`Aclust`](http://www.hsph.harvard.edu/tamar-sofer/packages/) software, published in \citet{Sofer:2013bk}, uses generalised estimating equations to detect differential methylation. `Aclust` first clusters sites and then tests for exposure effects on clusters (e.g. case/control status). This in contrast to most other DMR methods, which test for exposure effects at individual methylation loci and then cluster loci. While `Aclust` was designed for analysing methylation array data, in principle it should also work for bisulfite-sequencing data.
+
+`Aclust` uses the following model, where $E_{j}$ denotes the exposure of the $j^{th}$ sample and $X_{j}$, a $p \times n$ matrix, denotes $p$ additional covariates such as the batch or age of the sample[^aclust_notation]: 
+[^aclust_notation]: Note that this differs from the original notation, particularly in the use of index variables.
+
+\begin{equation*}
+\beta_{i, j} = \alpha_{i} + E_{j}\alpha_{E_{i}} + X_{j}^{T} \alpha_{X_{i, j}} + \epsilon_{i, j}.
+\end{equation*)
+
+This model allows each of the $i = 1, \ldots, n_{loci}$ methylation loci to have a unique baseline methylation value ($\alpha_{i}$), an exposure effect ($\alpha_{E_{i}}$) and covariate effects ($\alpha_{X_{i}}$). Note that the covariates themselves can vary across loci. The errors, $\epsilon_{i, j}$, are assumed to follow a zero-mean distribution. The test of interest is generally of $H_{0}: \alpha_{E_{i}} = 0$ vs. $H_{1}: \alpha_{E_{i}} \neq 0$. 
+
+Rather than test every loci, however, `Aclust` first clusters the loci and instead fits a related model to the clusters themselves. Suppose that loci $i = 1, 2, 3$ are determined to be in a cluster, $c$. Then, the model for cluster $c$ is:
+
+\begin{equation*}
+\beta_{i, j} = \alpha_{i} + E_{j}\alpha_{E_{c}} + X_{j}^{T} \alpha_{X_{i, j}} + \epsilon_{i, j}.
+\end{equation*)
+
+This model allows for each of the $i = 1, 2, 3$ loci in the $c^{th}$ cluster to have a unique baseline methylation value ($\alpha_{i}$) and covariate effects ($\alpha_{X_{i}}$). However, the exposure effect, $E_{c}$, is assumed to be constant for all loci in the cluster. The errors, $\epsilon_{i, j}$, are assumed to follow a zero-mean distribution with a covariance matrix. The covariance matrix could include covariances between errors $\epsilon_{i, j}$ and $\epsilon_{i, j'}$. The test of interest is generally of $H_{0}: \alpha_{E_{c}} = 0$ vs. $H_{1}: \alpha_{E_{c}} \neq 0$.
+
+`Aclust` performs a form of agglomorative nested clustering (__CITE Izenman, 2008__) of adjacent methylation loci. Initially, each cluster, $c_{l}$, is comprised of a single methylation loci. Then, clusters are iteratively merged if the _distance metric_ of the two clusters is less than a minimum value, $\bar{\mathcal{D}}$, (default 0.25) and the $IPD$ of the last site of the first cluster and the first site of the second cluster is less than a minimum distance (default 1 kb). The algorithm terminates when no more clusters can be merged.
+
+The distance metric for two methylation loci, $(i, i')$, is $dist(i, i') = 1 - cor(\{(\beta_{i, j}, \beta_{i', j)\}_{j = 1}^{n})$, with the Spearman correlation as the default. The distance metric between two clsuters may use _single_, _average_ or _complete_ distance of the all $dist(i, i')$, where $i$ is from the first cluster and $i'$ is from the second cluster. The _single_ distance requires that only at least one pair of methylation loci have $dist(i, i') < \bar{\mathcal{D}}$, the _average_ distance requires that the mean distance between all pairs of loci is $< \bar{\mathcal{D}}$, and the _complete_ distance requires that the distance between all pairs of loci is $< \bar{\mathcal{D}}$. For a fixed $\bar{\mathcal{D}}$, the _complete_ distance produces smaller clusters than the _average_ distance, than in turn produces smaller clusters than the _single_ distance. The authors recommend _average_ or _complete_ linkage for identifying DMRs, based on their simulation study. 
+
+The authors also recommend an initial merging step prior to clustering, which merges all loci within a given $IPD$ (default 99 bp). This step is recommended in order to avoid `Aclust` breaking larger clusters of generally highly correlated loci into multiple smaller clusters due to an intervening methylation loci that is not as correlated with the rest of the loci in the larger cluster. Clusters may be filtered out if they do not contain a minimum number of methylation loci.
+
+Once the final set of clusters is formed, the effect of the exposure variable on each cluster is tested within the GEE framework. `Aclust` uses a robust sandwich variance estimator and requires the user to supply a (possibly mis-specified) working covariance matrix. __WHAT IS THE ACTUAL TEST USED? t-test?__. Finally, P-values are corrected for multiple testing via the Benjamini-Hochberg procedure (__CITE__). 
+
+#### Simulation methodology {-}
+__TODO: Describe simulation methodology__.
+
 ### Others to review
-* Akulenko, R., _et al._
-* A-star
 * \citet{Su:2012hl}
 * \citep{Liu:dy}
+* \citep{He:2013cj}
+* \citep{Li:2013gn}
+* \citep{Lyko:2010dr} (co-methylation)
+* \citep{Peng:2012dh} (allele specific methylation)
+* \citep{Qu:2013ji}
+* \citep{TricheJr:2013tj}
+* \citep{Xie:2011cy}
+* \citep{Xu:2013eg}
+* \citep{Zhang:2012id}
+* \citep{Zhang:2011dp}
+* 
+
+
+
+
+## Parameter estimation and inference
+In this section I summarise current techniques for parameter estimation and inference from WGBS data. I do not describe the processing of the raw data. When necessary, I have "translated" the original work into my notation to make these methods more readily comparable. These papers are not in chronological order but rather are grouped by "similar" analysis methods. This is not an exhaustive list of studies using WGBS but rather focuses on papers that introduced new methodology for analysing WGBS data.
+
+__TODO: Summarise the complete paper reviews down to points of similarity and difference between the methods__
+
 
 
 ### Transformation of $\beta$-values
