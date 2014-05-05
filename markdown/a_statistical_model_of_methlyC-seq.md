@@ -734,26 +734,67 @@ The distance metric for two methylation loci, $(i, i')$, is $dist(i, i') = 1 - c
 
 The authors also recommend an initial merging step prior to clustering, which merges all loci within a given $IPD$ (default 99 bp). This step is recommended in order to avoid `Aclust` breaking larger clusters of generally highly correlated loci into multiple smaller clusters due to an intervening methylation loci that is not as correlated with the rest of the loci in the larger cluster. Clusters may be filtered out if they do not contain a minimum number of methylation loci.
 
-Once the final set of clusters is formed, the effect of the exposure variable on each cluster is tested within the GEE framework. `Aclust` uses a robust sandwich variance estimator and requires the user to supply a (possibly mis-specified) working covariance matrix. __WHAT IS THE ACTUAL TEST USED? t-test?__. Finally, P-values are corrected for multiple testing via the Benjamini-Hochberg procedure (__CITE__). 
+Once the final set of clusters is formed, the effect of the exposure variable on each cluster is tested within the GEE framework. `Aclust` uses a robust sandwich variance estimator and requires the user to supply a (possibly mis-specified) working covariance matrix. A Wald test is used to test for the effect of the exposure. Finally, the resulting P-values are corrected for multiple testing via the Benjamini-Hochberg procedure (__CITE__). 
 
 #### Simulation methodology {-}
-__TODO: Describe simulation methodology__.
+
+\citeauthor{Sofer:2013bk} adapt the methodology of __CITE: Gaile et al.__ to simulate correlated $\beta$-values in a two-group experiment. They simulate Illumina 450k beadchip data with $n_{1} = 40$ cases and $n_{2} = 40$ controls. The simulated data are based on a block re-sampling of data from 539 breast invasive adenocarcinoma samples assayed on the Illumina 450k beandchip obtained from The Cancer Genome Atlas (TCGA). By sampling blocks of CpGs from the same sample rather than sampling individual CpGs, the correlations of the $\beta$-values are preserved.
+
+Firstly, they segment the genome into blocks ($n_{blocks} = 2861$) based on the distance between assayed CpGs, where a new block is formed if the next CpG is more than 10 kb from the previous CpG. Singleton CpGs were added to the nearest block. This segmentation means that methylation levels at CpGs in the same block are correlated, although this is imposed somewhat indirectly by segmenting on $IPD$ rather than the correlations themselves.
+
+Based on the 539 TCGA samples, they then selected a small number of CpGs (10), called targets, that displayed substantial variability across the 539 samples, had "substantial correlation with neighbouring sites" and were not in the same block. They then simulated sample-specific blocks of $\beta$-values by sampling these from the 539 TCGA samples. If a block contained one of the targets, then sampling was done in such a way that one group had that block preferentially sampled from those samples' blocks with a high $\beta$-value at that target and the other group had that block preferentially sampled from those samples' blocks with a low $\beta$-value at that target. This induces differential methylation between the two-groups at that target and, more generally, across several CpGs in the block due to the correlation amongst $\beta$-values. Blocks did not contain targets were sampled from the 539 TCGA samples without any sampling weights.
+
+Due to the correlation structure of the $\beta$-values, it is likely, though not guaranteed, that other CpGs in the blocks containing targets also display differential methylation.
+
+### \citet{Su:2012hl}
+
+\citet{Su:2012hl} describes the `CpG_MPs` software (http://bioinfo.hrbmu.edu.cn/CpG_MPs) for identifying differential methylation patterns from bisulfite sequencing data. `CpG_MPs` scans the genome for contiguous runs of $\beta$-values $leq 0.3$ ($\geq $0.7$) and calls these as unmethylated (methylated) "hotspots" (regions)). It then extends these regions by adding neighbouring CpGs, provided that there is no more than 1 Cpg with a $\beta$-values $> 0.3$ ($< 0.7$) in the extension. Finally, `CpG_MPs` computes summary statistics, such as the mean and standard deviation, of the $\beta$-values in these hotspots (__I don't know when these values are even used by `CpG_Mps`__).
+
+`CpG_MPs` also assigns methylated hotspots a value of $1$ and unmethylated hotspots a value of $-1$. Hotspots that overlap across samples are called an overlapping region (OR) and are assigned a score, $-1 \leq u \leq 1$, based on an aggregation of the hotspot scores. Overlapping regions are labelled as "conservatively unmethylated regions" if $u = -1$, DMRs if $ -1 < u < 1$ and "conservatively methylated regions" if $u = 1$. __Then there's a whole bunch of other weird arbitrary cutoffs, definitions and use of Shannon Entropy to further refine these regions__.
+
+### \citet{Liu:dy}
+
+\citet{Liu:dy} identified clusters of CpGs that had correlated $\beta$-values and where the level of methylation in the cluster was influenced by genetic variation (SNPs), which they called these _GeMes_. They used from three studies ($n = 247$, n = 91$ and $n= 305$, respectively), where DNA methylation was measured using the Illumina 450k beadchip and each sample was also genotyped using a SNP array. I only describe what they discovered about $\beta$-value correlations and do not discuss the algorithm for finding GeMes or the GeMes themselves.
+
+Spatial correlations of $\beta$-values along the genome across multiple samples are similar to linkage disequilibrium (LD) between SNPs. \citeauthor{Liu:dy} explicitly compared the strength of these correlations in the same individuals. They reported that the $\beta$-value correlations, which started at around $0.5$, were reduced to less than $0.25$ when $IPD > 500$ bp and were more-or-less zero when $IPD > 2000$ bp. In contrast, SNP LD correlations in the same individuals, which also started at around $0.5$, were reduced by half when $IPD > 3000$ bp. Spatial correlations of $\beta$-values used only the top $25\%$ most variably methylated CpGs and were smoothed using a cubic spline. They also drew heat maps, like LD block maps, of $\beta$-value correlations to display their results.
+
+### \citet{Xie:2011cy} and \citet{He:2013cj}
+
+\citet{Xie:2011cy} define _methylation entropy_ (ME) to quantify the heterogeneity of methylation patterns at m-tuples within a single sample. `DMEAS`, published in \citet{He:2013cj} and available from [http://sourceforge.net/projects/dmeas/files/](http://sourceforge.net/projects/dmeas/files/), is software that implements an algorithm to compute ME.
+
+m-tuples can have identical $ME$ but very different average levels of methylation ($\beta$-values) at each of the $m$ loci. For example, an m-tuple that has only fully methylated reads and an m-tuple that has only fully unmethylated reads both have an $ME = 0$ because there is no heterogeneity at either m-tuple. Similarly, m-tuples can have different $\beta$-values but identical $ME$.
+
+ME is a modified version of Shannon entropy and is defined as:
+
+\begin{equation*}
+ME = \frac{e}{m} \sum_{p = 1}^{2^{m}} -\frac{n_{p}}{N} \log_{10}(frac{n_{p}}{N}),
+\end{equation*}
+
+where $m$ is the size of the m-tuple, $N$ is the number of reads covering the m-tuple and $n_{p}$ is the number of reads with the $p^{th}$ methylation pattern[^dmeas_problem]. $e$ is never properly defined in the paper but is described as the "entropy for code bit". In a supplementary file available on the `DMEAS` website, it is stated that $e = \frac{\ln(10)}{\ln(2)}}$ (__CITE http://ufpr.dl.sourceforge.net/project/dmeas/DMEAS%20user%20guide.pdf__). 
+
+[^dmeas_problem]: The description of the `DMEAS` software in \citet{He:2013cj} allows for methylation loci with an unknown methylation state. Under this model there are now $3^{m}$ possible methylation patterns per m-tuple and the summatation index should be updated accordingly.
+
+I think that this means it is the entropy value of the $p^{th}$ methylation pattern, where an unmethylated CpG is 0 and methylated CpG is $1$[^dmeas_problem]. This amounts to $e$ being equal to the number of methylated CpGs in the m-tuple. For example, $e = 4$ if the pattern contains 4 methylated CpGs and $e = 2$ if the pattern contains 2 methylated CpGs. This is then normalised to account for the size of the m-tuple, $0 \leq \frac{e}{m} \leq 1$. 
+
+[^dmeas_problem]: The `DMEAS` software further defines a CpG of unknown methylation state as 2. This seems to me like it would screw things up because $ME > 1$ is possible if an m-tuple contains a CpG with unknown methylation state.   
+
+ME is minimal ($ME = 0$) when all reads mapping to an m-tuple have the same methylation pattern and is maximal ($ME = 1$) when all $2^{m}$ methylation patterns are observed at equal frequency.
+
+The statistical significance of an observed $ME$ is assessed using a permutation test. The null hypothesis is that the observed methylation patterns are purely stochastic. Specifically, for each m-tuple they simulate $10,000$ datasets with the same $N$ and average $\beta$-value as the observed data and compute the $ME$. The observed $ME$ is compared to this permutation distribution to compute a P-value. They also devise a test of "allele-specific methylation", although strictly speaking this is a test of whether there are two or more methylation subpopulations in the sample because it does not make use of genetic data.
+
+As described  in \citet{He:2013cj}, `DMEAS` has very limited functionality because it can only examine 4-tuples of CpGs with $\geq 16$x sequencing coverage. Furthermore, `DMEAS` is only available as compiled software for Windows or as a Perl script that is provided in a `PDF` document.
+
 
 ### Others to review
-* \citet{Su:2012hl}
-* \citep{Liu:dy}
-* \citep{He:2013cj}
 * \citep{Li:2013gn}
 * \citep{Lyko:2010dr} (co-methylation)
 * \citep{Peng:2012dh} (allele specific methylation)
 * \citep{Qu:2013ji}
 * \citep{TricheJr:2013tj}
-* \citep{Xie:2011cy}
 * \citep{Xu:2013eg}
 * \citep{Zhang:2012id}
 * \citep{Zhang:2011dp}
-* 
-
+* \citep{Landan:2012kp}
 
 
 
