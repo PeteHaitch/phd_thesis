@@ -784,17 +784,101 @@ The statistical significance of an observed $ME$ is assessed using a permutation
 
 As described  in \citet{He:2013cj}, `DMEAS` has very limited functionality because it can only examine 4-tuples of CpGs with $\geq 16$x sequencing coverage. Furthermore, `DMEAS` is only available as compiled software for Windows or as a Perl script that is provided in a `PDF` document.
 
+### \citet{Li:2013gn}
+
+[`eDMR`](https://github.com/ShengLi/edmr), published in \citet{Li:2013gn}, is software to identify DMRs from two-group experiments using bisulfite sequencing data. The publication focuses on CpG methylation from enrichment assays, such as RRBS, and it is unclear whether the software scales to WGBS data. The example in the dataset is an RRBS experiment of ten accute myeloid leukemia (AML) samples and five normal bone marrow (NBM) samples.
+
+`DMR` is provided as an `R` package and is intended to be compatible with the `methylKit` R package. Indeed, it first uses `methylKit` to identify DMCs using Fisher's exact test at CpGs with at least $10\times$ coverage in at least 3 NBM samples. By using Fisher's exact test they are ignoring all within-group variability of methylation levels.
+
+`eDMR` "aims to optimize the threshold for determining DNA methylation regions and to perform statistical significance testing". The first step is to define clusters of CpGs. They do this using this somewhat convoluted algorithm:
+
+1. Compute the empirical distribution of $IPD$s for all CpGs with $\geq 10\times$ coverage[^edmr_problem1]
+2. Fit a mixture of Normal distributions to this empirical distribution.
+3. Determine the best separation point between the two components of the mixture distribution. This step incorporates a cost function, the role of which I don't really understand. This separation point, $D$, is used to define the boundaries of regions. $D = 183.5$ in the AML vs. NBM example.
+4. Scan the genome for CpGs with $IPD > D$[^edmr_problem2]. The first CpGs of such a pair is the end of the previous region and the second CpG of such a pair is the start of the next region. The average level of methylation within each region in each group is the average of the $\beta$-values within that region in each group.
+5. eDMRs are then defined as those regions with satisfying the following default criteria: contains at least 1 DMC, contains at least 3 CpGs, and the absolute mean methylation difference is greater than $20\%$. The exact cut-offs can be specified by the user.
+
+[^edmr_problem1]: It is not clear for how many samples these sites must have $\geq 10\times$ coverage.
+[^edmr_problem2]: It's not clear if all CpGs are used or just those with sequencing coverage $\geq 10 \times$.
+
+Each eDMR is then assigned a P-value by combining the P-values from the Fisher's test used to identify DMCs in that eDMR. P-values are combined using the Stouffer-Liptak method (__CITE__). These final P-values are then adjusted using, I believe, the Benjamini-Hochberg FDR procedure.
+
+### \citet{Lyko:2010dr}
+
+__This should go in the co-methylation section.__
+
+\citet{Lyko:2010dr} performed WGBS of honey bee (_Apis mellifera_) brains. It was known that young bees fed large amounts of royal jelly developed into queens (fertile females) whereas those fed smaller amounts develop into drones (males) or workers (infertile females). Furthermore, \citet{Kucharski:2008gu} had shown that a similar effect could be achieved by silencing expression of the DNA methyltransferase, DNMT3. Therefore,\citet{Lyko:2010dr} investigated the hypothesis that honey bees fed large amounts of royal jelly (queens) have different brain methylomes to those bees fed smaller amounts of royal jelly (workers).
+
+As a part of their study, \citeauthor{Lyko:2010dr} investigated autocorrelation of $\beta$-values at CpGs in honey bees. It is not clear whether they only considered pairs with $NIL=0$ or whethey they used all pairs ($NIL \geq 0$). 
+
+They found that
+
+> As in the human and Arabidopsis genomes, methylation in Apis shows evidence of periodicity, although due to a much lower density of modified CpGs in this species the periodicity of 10 nucleotides (one helical DNA turn) is not obvious. However, a 3-base periodic pattern is clearly detectable, reflecting a preferential methylation of CpGs occupying the first and second position of the arginine codons.
+
+However, the absolute value of these correlations are __tiny__, with the maximum being less than $0.015$. I suspect there is an error in these plots (Supplementary Figure 7, __DISCUSS WITH TERRY__).
+
+They did not stratifiy their analysis by genomic elements, such as CGIs.
+
+### \citet{Peng:2012dh}
+
+\citet{Peng:2012dh} descibe an algorithm for identifying allele specific methylation (ASM). Their method assigns each read to one of $N_{h}$ "epigenomes" based on the pattern of methylation along the read. Each "epigenome" corresponds to what I call a haplotype, and the model assumes that the number of haplotypes in the sample is equal to the ploidy of the sample, e.g., $N_{h} = 2$ for a human sample. 
+
+Basically, \citeauthor{Peng:2012dh} assume a $H$-component mixture model and assign reads to each component, i.e. haplotype, using an EM algorithm. The output is a $N_{loci} \times N_{H}$ matrix, $A$, where $A[i, h]$ is the EM-estimate of methylation at the $i^{th}$ loci in the $h^{th}$ haplotype.
+
+Unlike other methods for detecting ASM, this algorithm does not rely on methylation loci being close to heterozygous SNPs and therefore, at least, theoretically, can detect ASM in any region of the genome.
+
+In practice, this method will only work well in regions with a high density of methylation loci and where the $N_{h}$ epigenomes are quite distinct from one another. The example described in the paper focuses on PMDs, regions where we know there are multiple methylation patterns, in _Arabidopsis_, an organism with a "reasonably high" density of methylation loci. 
+Furthermore, the example dataset is rather artificial because it is a synthetic dataset made by combining reads from two _Arabidopsis_ methylomes.
+
+__There is no software available that implements the proposed algorithm.__ 
+
+### \citet{Qu:2013ji}
+
+`MLML`, published in \citet{Qu:2013ji}, is software to jointly estimate 5mC and 5hmC levels from samples sequenced with any two of BS-seq, oxBS-seq and TAB-seq. Depending on the exact combination of technologies, the estimation of either 5mC or 5hmC levels is based on a "subtraction" of read counts between the two experiments. A naive "subtraction" can result in estimates that are $< 0$ or $> 1$. 
+
+`MLML` implements an EM algorithm to estimate both 5mC and 5hmC levels under a Binomial-mixture likelihood. The resulting estimates are guaranteed to be "non-negative, and never sum over one". __It's not immediately clear why `MLML` does not guarantee that the estimates sum to exactly one.__
+
+### \citet{TricheJr:2013tj}
+
+\citet{TricheJr:2013tj} investigated different regression models for identifying DMCs and DMRs from Illumina methylation beadchip data. They report that a Beta-regression model[^beta_regression] "yielded more validated hits" than models that used Wilcoxon-Mann-Whitney tests, Student's t-tests or Welch's t-tests.
+
+[^beta_regression]: A "Beta regression model" means explicitly modelling the $\beta$-values as Beta random variables. This is distinct from a "regression of the $\beta$-values$, where other distributional assumptions or transformations of the $\beta$-values might be used in a standard linear model framework.
+
+Beta regression (__CITE Ferrari and Cribari-Neto__) does not fit into the generalise linear model framework (__CHECK WITH TERRY__) because the mean and variance terms are coupled to both depend on covariates.  A software implementation of the proposed Beta regression model is __AVAILABLE WHERE__.
+
+\citeauthor{TricheJr:2013tj} caution that when the number of samples per group is small ($< 25$) or when the design is unbalanced that control of the Type-I error rate may be lost.
+
+### \citet{Xu:2013eg}
+
+\citet{Xu:2013eg} propose a test to identify DMCs from bisulfite-sequencing data in two-group experiments. Their model is based on a method for the analysis of clustered binary data, published in __CITE Rao and Scott, 1992__.
+
+For the $i^{th}$ individual, the methylation level at the $j^{th}$ locus is modelled as a binomial random variable, $M_{i, j}$ = Bin(M_{i, j} + M_{i, j}, B_{i, j}$. Within each group, the observed $\beta$-values are adjusted by a group-specific "design effect". The design effect for the $i^{th}$ locus in the $l^{th}$ group, $d_{i, l}$, is the ratio of the estimated $\beta$-value variability while accounting for within-group variability to without accounting for within-group variability (__I THINK__). The design effect is used to correct both the average withing-group count of methylated reads and the average within-group sequencing coverage.
+
+The test statistic for the $i^{th}$ locus is then a $\chi^2$ statistic on 1 degree of freedom comparing the each group's design-adjusted average $\beta$-value to the design-adjusted grand average $\beta$-value. __This model seems convoluted and I wonder whether it fits into a simpler GLM analaysis of deviance framework__.
+
+__There is no software available that implements the proposed algorithm.__ 
+
+#### Simulation study {-}
+
+\citet{Xu:2013eg} includes a simple simulation study. The "true" group-wise methylation levels at each methylation loci, $B_{i, l}$, are simulated from a beta, a (truncated) Normal or a (truncated) Normal-mixture distribution. Thus all samples within each group have the same "true" methylation level and the methylation level at each locus is independent. Sequencing coverage for each individuals was sampled from a (rounded) Normal distribution.
+
+### \citet{Zhang:2012id}
+
+\citet{Zhang:2012id} propose a Dirichlet process beta mixture model (DPBMM) to cluster methylation profiles. The Dirichlet process effectively means there is an 'infinite' number of components to the mixture distribution. The resulting model is analytically intractable and so they propose a Gibbs sampler to compute the relevant posterior distributions. DPBMM does not require that the number of clusters be pre-specified as this is estimated as part of the Gibbs sampler.
+
+MATLAB code implementing the algorithm is available from [https://sites.google.com/ site/bdpmmmethy/home](https://sites.google.com/ site/bdpmmmethy/home).
+
+### \citet{Zhang:2011dp}
+
+`QDMR`, published in \citet{Zhang:2011dp}, is another method for identifying DMRs based on a modified form of Shannon Entropy. `QDMR` uses $\beta$-values and is so applicable to both microarray- and sequencing-based bisulfite-treatment assays. The publication uses MeDIP-chip and RRBS data.
+
+The methylation entropy of a locus is computed using all samples, without regard to an 'group' variable. The methylation entropy of a region, rather than a single methylation locus, can be computed by using the sample-wise 'averages' of $\beta$-value across the region.
+
+The `QDMR` software is available from [http://bioinfo.hrbmu.edu.cn/qdmr](http://bioinfo.hrbmu.edu.cn/qdmr).
 
 ### Others to review
-* \citep{Li:2013gn}
-* \citep{Lyko:2010dr} (co-methylation)
-* \citep{Peng:2012dh} (allele specific methylation)
-* \citep{Qu:2013ji}
-* \citep{TricheJr:2013tj}
-* \citep{Xu:2013eg}
-* \citep{Zhang:2012id}
-* \citep{Zhang:2011dp}
-* \citep{Landan:2012kp}
+* \citet{Landan:2012kp}
+* \citet{Zhang:2013uu}
 
 
 
