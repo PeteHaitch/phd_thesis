@@ -876,8 +876,38 @@ The methylation entropy of a locus is computed using all samples, without regard
 
 The `QDMR` software is available from [http://bioinfo.hrbmu.edu.cn/qdmr](http://bioinfo.hrbmu.edu.cn/qdmr).
 
+### \citet{Landan:2012kp}
+
+\citet{Landan:2012kp} investigated the stochastic variability of methylation patterns at CpG 4-tuples. Borrowing concepts from population genetics, they call a group of adjacent methylation loci an _allele_ and each possible methylation patterns at the allele an _epiallele_. In my framework, an allele is an m-tuple and an epiallele is a (section) of a haplotype.
+
+To begin, \citeauthor{Landan:2012kp} used RRBS data from the ENCODE (__CITE__) consortium to compute the average methylation and _epipolymorphism_ of CpG 4-tuples. For each sample, a number of statistics were computed at each 4-tuple with "sufficient" coverage. Firstly, for each read, $z \in \mathcal{R}_{(i, i + 1, i + 2, i + 3)$, $\zeta_{z} = \frac{\sum z}{4}$ is the proportion of CpGs in the read that are methylated. Secondly, $\frac{1}{|z \in \mathcal{R}_{(i, i + 1, i + 2, i + 3)|} \sum_{z \in \mathcal{R}_{(i, i + 1, i + 2, i + 3)} \zeta_{z} = \frac{1}{4} \sum_{i' = i}^{i = i' + 3} \beta_{i}$ is the average level of methylation from all reads mapped to that 4-tuple, which is equivalent to the average $\beta$-value across the 4-tuple. 
+
+\citeauthor{Landan:2012kp} also defined the _epipolymorphism_ of an allele as "the probability that two epialleles randomly sampled from the [allele] differ from each other". Mathematically, the epipolymorphism of a 4-tuple is defined as $p_{poly} = 1 - \sum_{l = 1}^{l = 2^{4}} p_{l}$, where $p_{l}$ is the relative frequency of the $l^{th}$ epiallele in the sample.
+
+They then plotted the level of epipolymorphism against the average level of methylation for all 4-tuples and compared the resulting curves to two theoretical model of methylation variability. These two models were 'bimodal epipolymorphism' and 'maximum epipolymorphism'. The 'bimodal epipolymorphism' model assumes that each read, $z$, has $\zeta_{z} = 0$ or $\zeta{z} = 1$, that is, each read is either fully unmethylated or fully methylated. Mathematically, 'bimodal epipolymorphism' can be written as $2m (1 - m)$, where $m$ is the average methylation level of the 4-tuple. The 'maximum epipolymorphism' model was modelled as $1 - (1 - 2(m(1 - m)))^4$ (__TODO: Figure out what the maximum model corresponds to__).
+
+In the ENCODE data they found that differentiated, somatic tissues had a higher frequency of epipolymorphism than did embryonic cells. From this they concluded that germline and pluropotent cells are able to establish or maintain a more coherent methylation state and that somatic cells accumulate substantial stochastic variation during somatic development.
+
+\citeauthor {Landan:2012kp} also found that DMRs identified between the H1 embryonic stem cell line and somatic cell lines had a higher degree of epipolymorphism than non-DMRs[^landan_dmrs]. They found a similar pattern in the bisulfite tumour vs. normal padlock probe bisulfite sequencing data from \cite{Hansen:2011gu}.
+
+[^landan_dmrs]: Sample-specific DMRs were simply defined as regions with $\geq 20\%$ difference in average methylation between the (duplicate-averaged) H1 methylome and the sample of interest. No details are provided on how large the regions had to be to qualify as DMRs.
+
+\citeauthor{Landan:2012kp} then studied the evolution of DNA methylation patterns in an _in vitro_ model system tracking immortalised fibroblasts over 300 generation Two lines, A and B, were tracked and sampled at several time points for profiling with MeDIP-seq. Unfortunately, at least fromy my perspective, MeDIP-seq does not provide single-base-resolution of DNA methylation and so I do not discuss these result any further. 
+
+They did, however, also profile 45 cancer-related CGIs in the the model system at multiple time points with "ultra-deep" ($> 10,000 \times$ coverage) bisulfite-sequencing. By sampling the over time they were able to investigate the evolution of stochastic epipolymorphism. Using this data they also analysed the correlation of DNA methylation at pairs of CpGs in these 45 regions. They visualised these using plots analogous to linkdage-disequilibrium plots. They did not look at how these correlations vary as a function of distance.
+
+From the analysis of this small set of regions they concluded that: 
+
+> [the] correlation between the methylation states of pairs of CpGs was generally very low. This lack of correlation suggests that methylation dynamics are typically independent for different CpGs, making the methylation state of one CpG (whether high or low) uninformative on the methylation state of nearby CpGs.
+
+__My co-methylation results and extensive $\beta$-value correlations suggest otherwise.__
+
+
+The correlation of methylation at a pair of CpGs was computed from the $2 \times 2$ contigency table, shown __BELOW__.
+
+__TODO: Represent as contingency table.__ Let $n_{11}$ be the number of reads that are methylated at both CpGs, $n_{00}$ be the number of reads that are unmethylated at both CpGs and $n_{01}$ and $n_{10}$ be the number of reads that have different methylation states at each CpG ($N = n_{00} + n{01} + n{10} + n_{11}). The average methylation level of each CpG is $m_{1} = \frac{n_{11} + n_{10}}{N}$ and $m_{2} = \frac{n_{11} + n_{01}}{N}$, respectively. The variance of methylation at each CpG is $v_{1} = m_{1} \times (1 - m_{1})$ and $v_{2} = m_{2} \times (1 - m_{2})$, respectively. The correlation of methylation at the pair of CpGs is then $\frac{n_{11} / N - m_{1} * m_{2}}{\sqrt(v_{1} + v_{2})}. __TODO: Is this the same as correlation of $beta$-values using only those reads that overlap both CpGs?__
+
 ### Others to review
-* \citet{Landan:2012kp}
 * \citet{Zhang:2013uu}
 
 
