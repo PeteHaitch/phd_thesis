@@ -299,7 +299,11 @@ The bisulfite-treatment of DNA can introduce biases and other problems. Three ex
 
 ## Whole-genome bisulfite-sequencing
 
-### Targeted BS-seq, e.g. RRBS, NimbleGen and Agilent's capture kits
+### Targeted BS-seq, e.g. RRBS, NimbleGen and Agilent's capture kits, MRE-seq
+
+* "RRBS’s ability to interrogate a locus is dependent on its MspI-cut-site (CCGG) density and consequently measures 10%–15% of the CpGs in the human genome (Bock et al. 2010; Harris et al. 2010)" \citep{Stevens:2013hv}
+* See \citep{Stevens:2013hv} for MRE-seq details and a good summary of DNA methylation assays
+
 
 
 ## Bioinformatics analysis of bisulfite-sequencing data
@@ -419,3 +423,4 @@ To remove those reference-specific loci that are not found in databases we might
 	* Define "library"
 * Fix up reference formating
 * Note that when I refer to a read I mean either a single-end read or a paired-end read. I will use to read_1 and read_2 if I want to refer a particular read that makes up a paired-end read.
+* \citet{Zhang:2013uu} credit Laurent et al. (2010) with BS-seq and Cokus with WGBS.
