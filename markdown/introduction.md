@@ -359,6 +359,10 @@ __TABLE__ lists some popular bisulfite-sequencing read mappers with the underlyi
 
 Each of these aligners can report the output in the standard `SAM` format (__CITE__), although each mapper does so in a slightly different way, which makes difficult the development of downstream analysis tools.
 
+
+__TODO: Note problems with marking PCR duplicates, particularly for RRBS.__
+
+
 ### Methylation calling
 __TODO: Re-write.__
 
@@ -407,6 +411,9 @@ To remove those reference-specific loci that are not found in databases we might
 
 * What if the downstream base is mutated
 
+### M-bias
+
+* M-bias plots assume the first base of the mapped read is the first base of the sequenced read. __This isn't true if the read had 5' trimming__. This means, e.g., `--ignore_r1 5` might be ignoring cycles 1-5, 2-6, 3-7, etc., depending on whether the read had 5' trimming.	
 
 ## Outline of thesis
 

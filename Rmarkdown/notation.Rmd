@@ -11,7 +11,7 @@ __These are incomplete notes. The chapter "a statistical model of methylC-seq da
 ## $C_{i}$
 $C_{i}$ is the $i^{th}$ cytosine on a haplotype
 
-## $Z_{(h, i, j)}$ 
+## $Z_{(h, i, j)}$
 $Z_{(h, i, j)}$ is the methylation state in chromosome$_h$ at C$_i$ of sample$_j$.
 $Z_{(h, i, j)} = 1$ if methylated.
 $Z_{(h, i, j)} = 0$ if unmethylated.
@@ -30,7 +30,7 @@ $h$ is typically unknown. At best we know that $\widehat{Z_{(h, i, j)}}$ have th
 
 ## $i$
 $\mathcal{I}_j$, the set of all $i$ in sample $j$, vary over $h$ and $j$
-The $\{i\}$ are not equally spaced in the genome. 
+The $\{i\}$ are not equally spaced in the genome.
 The concept of IPD
 
 ## $j$
@@ -44,7 +44,7 @@ $|J| = |\{j\}|$ is typically small, e.g.  $|J| <= 3$ for methylC-seq data. Howev
 __Question__: Use lower cases letters, i.e. $m, u, z, \beta$, or _hatted_ versions, i.e. $\hat{M}, \hat{U}, \hat{Z}, \hat{\beta}$?
 
 ## Summarisations
-Some studies summarise methylation at the promoter- or gene-level. For example, they might summarise methylation at feature $f$ by the average $= \beta_{j}^{(f)} = \frac{1}{|f|}\sum_{i \in f} \beta_{(i, j)}$, where $|f|$ is the number of methylation measurements in feature $f$. 
+Some studies summarise methylation at the promoter- or gene-level. For example, they might summarise methylation at feature $f$ by the average $= \beta_{j}^{(f)} = \frac{1}{|f|}\sum_{i \in f} \beta_{(i, j)}$, where $|f|$ is the number of methylation measurements in feature $f$.
 
 ## One-group tests of differential methylation
 The idea is we have one group of methylomes that we expect to be similar at the vast majority of positions. We are interested in identifying those positions where they differ, _epi-alleles_, in Emma Whitelaw's terminology.
