@@ -124,7 +124,7 @@ The analysis begins with a table for each sample of the simple $m$ and $u$ read-
 
 * Is smoothing of the raw $\beta$-values still useful when you have high-coverage sequencing data (__DISCUSS WITH TERRY__)?
 
-A binomial likelihood smoother was chosen because they model $M_{i, j}$ as $Binom(M_{i, j} + U_{i, j}, B_{i})$ and it is "local" because "methylation levels are strongly correlated across the genome" \citep{Hansen:2012gr}. The authors cite \citet{Eckhardt:2006gh} as evidence that DNA methylation levels are similar at proximal CpGs). 
+A binomial local likelihood smoother was chosen because they model $M_{i, j}$ as $Binom(M_{i, j} + U_{i, j}, B_{i})$ and it is "local" because "methylation levels are strongly correlated across the genome" \citep{Hansen:2012gr}. The authors cite \citet{Eckhardt:2006gh} as evidence that DNA methylation levels are similar at proximal CpGs). 
 
 Under the binomial model for $M_{i, j}$, $\beta_{i, j} = \frac{m_{i, j}}{m_{i, j} + u_{i, j}}$ is an unbiased estiamtor of $B_{i, j}$ with standard error $se(\beta_{i, j}) = \sqrt(\frac{\beta_{i, j}(1 - \beta_{i, j})}{M_{i, j} + U_{i, j}})$ (__CHECK WITH TERRY: the standard error should be defined in terms of estimates not parameters, i.e. $\beta$ instead of $B$, correct?__). `BSmooth` assumes that for each sample that the underlying methylation level, $f_{j}(i)$, is a smoothly varying function of the position in the genome, $i$. 
 
@@ -142,7 +142,7 @@ The raw $\beta$-values are weighted according to the binomial likelihood and a t
 
 ### Step 2 {-}
 
- \citet{Hansen:2012gr} describe `BSmooth` in the context of a simple two-group linear model. The model could be extended to deal with multiple groups but this has not been done. 
+\citet{Hansen:2012gr} describe `BSmooth` in the context of a simple two-group linear model. The model could be extended to deal with multiple groups but this has not been done. 
 
 Let $X_{j} = 1$ if the $j^{th}$ sample is a case and $X_{j} = 0$ if a control. There are $n_{0}$ controls and $n_{1}$ cases ($N = n_{0} + n_{1}$). `BSmooth` assumes that the samples within each group are biological replicates. Within each window, $\log(\frac{f_{j}(i)}{1 - f_{j}(i)})$ is approximated by a second degree polynomial. `BSmooth` transforms the resulting model parameters(__?__) to fit the model $f_{j}(i) = \alpha_{i} + \beta_{i} X_{i} + \epsilon_{i, j}$. The model allows for locus-dependent variation, $\sigma_{i}^{2}$, that, like $f_{j}(i)$, is assumed to be a a smoothly varying function of the position in the genome, $i$. 
 
@@ -199,7 +199,7 @@ __TODO__
 2. Smooth methylation data within CpG clusters
 3. Model and test group effect within CpG clusters
 4. Apply hierarchical testing procedure:
-	* Test CpG clusters for differential methylation and con- trol weighted FDR on clusters
+	* Test CpG clusters for differential methylation and control weighted FDR on clusters
 	* Trim rejected CpG clusters and control FDR on single CpG sites
 5. Define DMR boundaries
 
@@ -304,12 +304,12 @@ The `MOABS` software, published in \citet{Sun:2014fk}, uses a Beta-Binomial empi
 
 For a two-group experiment, `MOABS` does not perform hypothesis testing to identify DMCs. Rather, for each methylation loci, `MOABS` estimates a $95\%$ posterior probability interval, $PI(a, b)$ (__TODO__ Is this a credible interval in Bayesian parlance?) of the difference in mean methylation levels between group 1 and 2[^moabs_errors2]. 
 
-[moabs_errors2]: The paper calls this a confidence interval rather than a posterior probability interval. This seems to mix up the hypothesis-testing and Bayesian frameworks.
+[^moabs_errors2]: The paper calls this a confidence interval rather than a posterior probability interval. This seems to mix up the hypothesis-testing and Bayesian frameworks.
 
 They then define a _credible methylation difference_ ($CDIF$) as: 
 
 \begin{equation*}
-PI{a, b} = \left\{ 
+PI(a, b) = \left\{ 
   \begin{array}{l l}
     a & \quad \text{if } a \geq 0 \\
     0 & \quad \text{if } a < 0 < b \\
@@ -321,11 +321,11 @@ The CDIF effectively converts all posterior intervals to a single number. \cite{
 
 [^moabs_errors3]: Again, this seems to mix up the hypothesis-testing and Bayesian frameworks.
 
-DMCs are those cytosines with a $CDIF > cutoff$, where $cutoff$ is chosen so as to control the FDR. The FDR-based $cutoff$ is estimated by permutating sample labels and re-running the analysis (__CHECK WITH TERRY: Necessary to do this permutation multiple times?__). 
+DMCs are those cytosines with a $CDIF > \text{cutoff}$, where $\text{cutoff}$ is chosen so as to control the FDR. The FDR-based $\text{cutoff}$ is estimated by permutating sample labels and re-running the analysis (__CHECK WITH TERRY: Necessary to do this permutation multiple times?__). 
 
 The procedure could also be used to identify methylation changes at pre-defined regions, rather than individual methylation loci, by aggregating/averaging methylation levels across each region. 
 
-For a two-group experiment, `MOABS` uses a hidden Markov model (HMM) to group cytosines into DMRs. Note that all cytosines, not just DMCs, are used by the DMR-detection HMM. To do this, `MOABS` uses a first-order HMM where the observed values are the group-wise difference in mean methylation at each locus, $B_{i}^{2} - B_{i}^{1}$. There are 3 hidden states -- hypomethylation ($B_{i}^{2} - B_{i}^{1} < $-cutoff$), no difference (|$B_{i}^{2} - B_{i}^{1}| < $cutoff$) and hypermethylation ($B_{i}^{2} - B_{i}^{1} > $cutoff$). The $cutoff$ is the same at that used for identifying DMCs (__DISCUSS WITH TERRY: I think this is true. Is this a good idea?__).
+For a two-group experiment, `MOABS` uses a hidden Markov model (HMM) to group cytosines into DMRs. Note that all cytosines, not just DMCs, are used by the DMR-detection HMM. To do this, `MOABS` uses a first-order HMM where the observed values are the group-wise difference in mean methylation at each locus, $B_{i}^{2} - B_{i}^{1}$. There are 3 hidden states -- hypomethylation ($B_{i}^{2} - B_{i}^{1} < -\text{cutoff}$), no difference (|$B_{i}^{2} - B_{i}^{1}| < \text{cutoff}$) and hypermethylation ($B_{i}^{2} - B_{i}^{1} > \text{cutoff}$). The $\text{cutoff}$ is the same at that used for identifying DMCs (__DISCUSS WITH TERRY: I think this is true. Is this a good idea?__).
 
 `MOABS` is written in `C++` (__TODO: Is it a command line program or is there an R interface?__) and also provides several other useful functions including:
 
@@ -361,6 +361,8 @@ DMRs are regions where the first methylation loci has a P-value $\leq 0.05$ and 
 The final list of putative DMRs is then pruned to remove regions containing only a single loci and overlapping DMRs are merged.
 
 \citet{Lacey:2013iy} state that an advantage of this iterative procedure is that, "DMRs can include internal sites that are not significantly differentially methylated" as well as sites that are missing data.
+
+An R package implementing the algorithm is available from [http://rrbs-sim.r-forge.r-project.org/](http://rrbs-sim.r-forge.r-project.org/).
 
 ### Simulation model {-}
 
@@ -406,7 +408,7 @@ To summarise, \citeauthor{Lacey:2013iy} propose the following algorithm to simul
 
 After pre-processing of the raw data, each gene was assigned the average $\beta$-value of all $\beta$-values within that gene for each sample. This reduced the number of $\beta$-values from 25,578 to 13,313. After some further filtering to remove probes that were known to be prone to technical artefacts, they computed the Pearson correlation ($r$) of all pairs of gene-level $\beta$-values ($88,611,328$ pairs) using all 344 samples.
 
-This analysis identified $13,643$ pairs of $\beta$-values with $|r| > 0.9$ and $377,547$ pairs of $\beta$-values with $|r| > 0.75$. The overwhelming majority ($377360/377547$, 99.95\%$) of pairs with $|r| > 0.75$ were driven by outlier observations, whereby a small number of samples had $\beta$-values greatly different to the rest of the samples.
+This analysis identified $13,643$ pairs of $\beta$-values with $|r| > 0.9$ and $377,547$ pairs of $\beta$-values with $|r| > 0.75$. The overwhelming majority ($377360/377547, 99.95\%$) of pairs with $|r| > 0.75$ were driven by outlier observations, whereby a small number of samples had $\beta$-values greatly different to the rest of the samples.
 
 \citeauthor{Akulenko:2013fl} also investigated how these pair-wise correlations vary as a function of the genomic distance between the two probes in each pair. They reported that "co-methylation level only weakly anti-correlated with genomic distance ($r = -0.29$)", however, this analysis only used a tiny subset of the dataset. Namely, they only performed this analysis for the 74 of the 187 "significant" pairs of $\beta$-values where both genes in the pair were on the same chromosome.
 
@@ -421,26 +423,27 @@ There are several limitations to this study:
 
 The [`Aclust`](http://www.hsph.harvard.edu/tamar-sofer/packages/) software, published in \citet{Sofer:2013bk}, uses generalised estimating equations to detect differential methylation. `Aclust` first clusters sites and then tests for exposure effects on clusters (e.g. case/control status). This in contrast to most other DMR methods, which test for exposure effects at individual methylation loci and then cluster loci. While `Aclust` was designed for analysing methylation array data, in principle it should also work for bisulfite-sequencing data.
 
-`Aclust` uses the following model, where $E_{j}$ denotes the exposure of the $j^{th}$ sample and $X_{j}$, a $p \times n$ matrix, denotes $p$ additional covariates such as the batch or age of the sample[^aclust_notation]: 
+`Aclust` uses the following model, where $E_{j}$ denotes the exposure of the $j^{th}$ sample and $X_{j}$, a $p \times n$ matrix, denotes $p$ additional covariates for each of the $n$ samples, such as the batch or age of the sample[^aclust_notation]:
+ 
 [^aclust_notation]: Note that this differs from the original notation, particularly in the use of index variables.
 
 \begin{equation*}
-\beta_{i, j} = \alpha_{i} + E_{j}\alpha_{E_{i}} + X_{j}^{T} \alpha_{X_{i, j}} + \epsilon_{i, j}.
-\end{equation*)
+\beta_{i, j} = \alpha_{i} + E_{j} \alpha_{E_{i}} + X_{j}^{T} \alpha_{X_{i, j}} + \epsilon_{i, j}.
+\end{equation*}
 
 This model allows each of the $i = 1, \ldots, n_{loci}$ methylation loci to have a unique baseline methylation value ($\alpha_{i}$), an exposure effect ($\alpha_{E_{i}}$) and covariate effects ($\alpha_{X_{i}}$). Note that the covariates themselves can vary across loci. The errors, $\epsilon_{i, j}$, are assumed to follow a zero-mean distribution. The test of interest is generally of $H_{0}: \alpha_{E_{i}} = 0$ vs. $H_{1}: \alpha_{E_{i}} \neq 0$. 
 
 Rather than test every loci, however, `Aclust` first clusters the loci and instead fits a related model to the clusters themselves. Suppose that loci $i = 1, 2, 3$ are determined to be in a cluster, $c$. Then, the model for cluster $c$ is:
 
 \begin{equation*}
-\beta_{i, j} = \alpha_{i} + E_{j}\alpha_{E_{c}} + X_{j}^{T} \alpha_{X_{i, j}} + \epsilon_{i, j}.
-\end{equation*)
+\beta_{i, j} = \alpha_{i} + E_{j} \alpha_{E_{c}} + X_{j}^{T} \alpha_{X_{i, j}} + \epsilon_{i, j}.
+\end{equation*}
 
 This model allows for each of the $i = 1, 2, 3$ loci in the $c^{th}$ cluster to have a unique baseline methylation value ($\alpha_{i}$) and covariate effects ($\alpha_{X_{i}}$). However, the exposure effect, $E_{c}$, is assumed to be constant for all loci in the cluster. The errors, $\epsilon_{i, j}$, are assumed to follow a zero-mean distribution with a covariance matrix. The covariance matrix could include covariances between errors $\epsilon_{i, j}$ and $\epsilon_{i, j'}$. The test of interest is generally of $H_{0}: \alpha_{E_{c}} = 0$ vs. $H_{1}: \alpha_{E_{c}} \neq 0$.
 
 `Aclust` performs a form of agglomorative nested clustering (__CITE Izenman, 2008__) of adjacent methylation loci. Initially, each cluster, $c_{l}$, is comprised of a single methylation loci. Then, clusters are iteratively merged if the _distance metric_ of the two clusters is less than a minimum value, $\bar{\mathcal{D}}$, (default 0.25) and the $IPD$ of the last site of the first cluster and the first site of the second cluster is less than a minimum distance (default 1 kb). The algorithm terminates when no more clusters can be merged.
 
-The distance metric for two methylation loci, $(i, i')$, is $dist(i, i') = 1 - cor(\{(\beta_{i, j}, \beta_{i', j)\}_{j = 1}^{n})$, with the Spearman correlation as the default. The distance metric between two clsuters may use _single_, _average_ or _complete_ distance of the all $dist(i, i')$, where $i$ is from the first cluster and $i'$ is from the second cluster. The _single_ distance requires that only at least one pair of methylation loci have $dist(i, i') < \bar{\mathcal{D}}$, the _average_ distance requires that the mean distance between all pairs of loci is $< \bar{\mathcal{D}}$, and the _complete_ distance requires that the distance between all pairs of loci is $< \bar{\mathcal{D}}$. For a fixed $\bar{\mathcal{D}}$, the _complete_ distance produces smaller clusters than the _average_ distance, than in turn produces smaller clusters than the _single_ distance. The authors recommend _average_ or _complete_ linkage for identifying DMRs, based on their simulation study. 
+The distance metric for two methylation loci, $(i, i')$, is $dist(i, i') = 1 - cor(\{(\beta_{i, j}, \beta_{i', j})\}_{j = 1}^{n})$, with the Spearman correlation as the default. The distance metric between two clsuters may use _single_, _average_ or _complete_ distance of the all $dist(i, i')$, where $i$ is from the first cluster and $i'$ is from the second cluster. The _single_ distance requires that only at least one pair of methylation loci have $dist(i, i') < \bar{\mathcal{D}}$, the _average_ distance requires that the mean distance between all pairs of loci is $< \bar{\mathcal{D}}$, and the _complete_ distance requires that the distance between all pairs of loci is $< \bar{\mathcal{D}}$. For a fixed $\bar{\mathcal{D}}$, the _complete_ distance produces smaller clusters than the _average_ distance, than in turn produces smaller clusters than the _single_ distance. The authors recommend _average_ or _complete_ linkage for identifying DMRs, based on their simulation study. 
 
 The authors also recommend an initial merging step prior to clustering, which merges all loci within a given $IPD$ (default 99 bp). This step is recommended in order to avoid `Aclust` breaking larger clusters of generally highly correlated loci into multiple smaller clusters due to an intervening methylation loci that is not as correlated with the rest of the loci in the larger cluster. Clusters may be filtered out if they do not contain a minimum number of methylation loci.
 
@@ -458,13 +461,13 @@ Due to the correlation structure of the $\beta$-values, it is likely, though not
 
 ## \citet{Su:2012hl}
 
-\citet{Su:2012hl} describes the `CpG_MPs` software (http://bioinfo.hrbmu.edu.cn/CpG_MPs) for identifying differential methylation patterns from bisulfite sequencing data. `CpG_MPs` scans the genome for contiguous runs of $\beta$-values $leq 0.3$ ($\geq $0.7$) and calls these as unmethylated (methylated) "hotspots" (regions)). It then extends these regions by adding neighbouring CpGs, provided that there is no more than 1 Cpg with a $\beta$-values $> 0.3$ ($< 0.7$) in the extension. Finally, `CpG_MPs` computes summary statistics, such as the mean and standard deviation, of the $\beta$-values in these hotspots (__I don't know when these values are even used by `CpG_Mps`__).
+\citet{Su:2012hl} describes the `CpG_MPs` software (http://bioinfo.hrbmu.edu.cn/CpG\_MPs) for identifying differential methylation patterns from bisulfite sequencing data. `CpG_MPs` scans the genome for contiguous runs of $\beta$-values $\leq 0.3$ ($\geq 0.7$) and calls these as unmethylated (methylated) "hotspots" (regions)). It then extends these regions by adding neighbouring CpGs, provided that there is no more than 1 Cpg with a $\beta$-values $> 0.3$ ($< 0.7$) in the extension. Finally, `CpG_MPs` computes summary statistics, such as the mean and standard deviation, of the $\beta$-values in these hotspots (__I don't know when these values are even used by `CpG_Mps`__).
 
 `CpG_MPs` also assigns methylated hotspots a value of $1$ and unmethylated hotspots a value of $-1$. Hotspots that overlap across samples are called an overlapping region (OR) and are assigned a score, $-1 \leq u \leq 1$, based on an aggregation of the hotspot scores. Overlapping regions are labelled as "conservatively unmethylated regions" if $u = -1$, DMRs if $ -1 < u < 1$ and "conservatively methylated regions" if $u = 1$. __Then there's a whole bunch of other weird arbitrary cutoffs, definitions and use of Shannon Entropy to further refine these regions__.
 
 ## \citet{Liu:dy}
 
-\citet{Liu:dy} identified clusters of CpGs that had correlated $\beta$-values and where the level of methylation in the cluster was influenced by genetic variation (SNPs), which they called these _GeMes_. They used from three studies ($n = 247$, n = 91$ and $n= 305$, respectively), where DNA methylation was measured using the Illumina 450k beadchip and each sample was also genotyped using a SNP array. I only describe what they discovered about $\beta$-value correlations and do not discuss the algorithm for finding GeMes or the GeMes themselves.
+\citet{Liu:dy} identified clusters of CpGs that had correlated $\beta$-values and where the level of methylation in the cluster was influenced by genetic variation (SNPs), which they called these _GeMes_. They used from three studies ($n = 247, n = 91$ and $n= 305$, respectively), where DNA methylation was measured using the Illumina 450k beadchip and each sample was also genotyped using a SNP array. I only describe what they discovered about $\beta$-value correlations and do not discuss the algorithm for finding GeMes or the GeMes themselves.
 
 Spatial correlations of $\beta$-values along the genome across multiple samples are similar to linkage disequilibrium (LD) between SNPs. \citeauthor{Liu:dy} explicitly compared the strength of these correlations in the same individuals. They reported that the $\beta$-value correlations, which started at around $0.5$, were reduced to less than $0.25$ when $IPD > 500$ bp and were more-or-less zero when $IPD > 2000$ bp. In contrast, SNP LD correlations in the same individuals, which also started at around $0.5$, were reduced by half when $IPD > 3000$ bp. Spatial correlations of $\beta$-values used only the top $25\%$ most variably methylated CpGs and were smoothed using a cubic spline. They also drew heat maps, like LD block maps, of $\beta$-value correlations to display their results.
 
@@ -480,7 +483,7 @@ ME is a modified version of Shannon entropy and is defined as:
 ME = \frac{e}{m} \sum_{p = 1}^{2^{m}} -\frac{n_{p}}{N} \log_{10}(frac{n_{p}}{N}),
 \end{equation*}
 
-where $m$ is the size of the m-tuple, $N$ is the number of reads covering the m-tuple and $n_{p}$ is the number of reads with the $p^{th}$ methylation pattern[^dmeas_problem]. $e$ is never properly defined in the paper but is described as the "entropy for code bit". In a supplementary file available on the `DMEAS` website, it is stated that $e = \frac{\ln(10)}{\ln(2)}}$ (__CITE http://ufpr.dl.sourceforge.net/project/dmeas/DMEAS%20user%20guide.pdf__). 
+where $m$ is the size of the m-tuple, $N$ is the number of reads covering the m-tuple and $n_{p}$ is the number of reads with the $p^{th}$ methylation pattern[^dmeas_problem]. $e$ is never properly defined in the paper but is described as the "entropy for code bit". In a supplementary file available on the `DMEAS` website, it is stated that $e = \frac{\ln(10)}{\ln(2)}$ (__CITE http://ufpr.dl.sourceforge.net/project/dmeas/DMEAS%20user%20guide.pdf__). 
 
 [^dmeas_problem]: The description of the `DMEAS` software in \citet{He:2013cj} allows for methylation loci with an unknown methylation state. Under this model there are now $3^{m}$ possible methylation patterns per m-tuple and the summatation index should be updated accordingly.
 
@@ -552,7 +555,7 @@ __There is no software available that implements the proposed algorithm.__
 
 \citet{TricheJr:2013tj} investigated different regression models for identifying DMCs and DMRs from Illumina methylation beadchip data. They report that a Beta-regression model[^beta_regression] "yielded more validated hits" than models that used Wilcoxon-Mann-Whitney tests, Student's t-tests or Welch's t-tests.
 
-[^beta_regression]: A "Beta regression model" means explicitly modelling the $\beta$-values as Beta random variables. This is distinct from a "regression of the $\beta$-values$, where other distributional assumptions or transformations of the $\beta$-values might be used in a standard linear model framework.
+[^beta_regression]: A "Beta regression model" means explicitly modelling the $\beta$-values as Beta random variables. This is distinct from a "regression of the $\beta$-values, where other distributional assumptions or transformations of the $\beta$-values might be used in a standard linear model framework.
 
 Beta regression (__CITE Ferrari and Cribari-Neto__) does not fit into the generalise linear model framework (__CHECK WITH TERRY__) because the mean and variance terms are coupled to both depend on covariates.  A software implementation of the proposed Beta regression model is __AVAILABLE WHERE__.
 
@@ -562,7 +565,7 @@ Beta regression (__CITE Ferrari and Cribari-Neto__) does not fit into the genera
 
 \citet{Xu:2013eg} propose a test to identify DMCs from bisulfite-sequencing data in two-group experiments. Their model is based on a method for the analysis of clustered binary data, published in __CITE Rao and Scott, 1992__.
 
-For the $i^{th}$ individual, the methylation level at the $j^{th}$ locus is modelled as a binomial random variable, $M_{i, j}$ = Bin(M_{i, j} + M_{i, j}, B_{i, j}$. Within each group, the observed $\beta$-values are adjusted by a group-specific "design effect". The design effect for the $i^{th}$ locus in the $l^{th}$ group, $d_{i, l}$, is the ratio of the estimated $\beta$-value variability while accounting for within-group variability to without accounting for within-group variability (__I THINK__). The design effect is used to correct both the average withing-group count of methylated reads and the average within-group sequencing coverage.
+For the $i^{th}$ individual, the methylation level at the $j^{th}$ locus is modelled as a binomial random variable, $M_{i, j} = Bin(M_{i, j} + M_{i, j}, B_{i, j}$. Within each group, the observed $\beta$-values are adjusted by a group-specific "design effect". The design effect for the $i^{th}$ locus in the $l^{th}$ group, $d_{i, l}$, is the ratio of the estimated $\beta$-value variability while accounting for within-group variability to without accounting for within-group variability (__I THINK__). The design effect is used to correct both the average withing-group count of methylated reads and the average within-group sequencing coverage.
 
 The test statistic for the $i^{th}$ locus is then a $\chi^2$ statistic on 1 degree of freedom comparing the each group's design-adjusted average $\beta$-value to the design-adjusted grand average $\beta$-value. __This model seems convoluted and I wonder whether it fits into a simpler GLM analaysis of deviance framework__.
 
@@ -590,7 +593,7 @@ The `QDMR` software is available from [http://bioinfo.hrbmu.edu.cn/qdmr](http://
 
 \citet{Landan:2012kp} investigated the stochastic variability of methylation patterns at CpG 4-tuples. Borrowing concepts from population genetics, they call a group of adjacent methylation loci an _allele_ and each possible methylation patterns at the allele an _epiallele_. In my framework, an allele is an m-tuple and an epiallele is a (section) of a haplotype.
 
-To begin, \citeauthor{Landan:2012kp} used RRBS data from the ENCODE (__CITE__) consortium to compute the average methylation and _epipolymorphism_ of CpG 4-tuples. For each sample, a number of statistics were computed at each 4-tuple with "sufficient" coverage. Firstly, for each read, $z \in \mathcal{R}_{(i, i + 1, i + 2, i + 3)$, $\zeta_{z} = \frac{\sum z}{4}$ is the proportion of CpGs in the read that are methylated. Secondly, $\frac{1}{|z \in \mathcal{R}_{(i, i + 1, i + 2, i + 3)|} \sum_{z \in \mathcal{R}_{(i, i + 1, i + 2, i + 3)} \zeta_{z} = \frac{1}{4} \sum_{i' = i}^{i = i' + 3} \beta_{i}$ is the average level of methylation from all reads mapped to that 4-tuple, which is equivalent to the average $\beta$-value across the 4-tuple. 
+To begin, \citeauthor{Landan:2012kp} used RRBS data from the ENCODE (__CITE__) consortium to compute the average methylation and _epipolymorphism_ of CpG 4-tuples. For each sample, a number of statistics were computed at each 4-tuple with "sufficient" coverage. Firstly, for each read, $z \in \mathcal{R}_{(i, i + 1, i + 2, i + 3)}$, $\zeta_{z} = \frac{1}{4} \sum_{z \in \mathcal{R}_{(i, i + 1, i + 2, i + 3)}} z$ is the proportion of CpGs in the read that are methylated. Secondly, $\frac{1}{|\{z \in \mathcal{R}_{(i, i + 1, i + 2, i + 3)} \}|} \sum_{z \in \mathcal{R}_{(i, i + 1, i + 2, i + 3)}} \zeta_{z} = \frac{1}{4} \sum_{i' = i}^{i = i' + 3} \beta_{i}$ is the average level of methylation from all reads mapped to that 4-tuple, which is equivalent to the average $\beta$-value across the 4-tuple. 
 
 \citeauthor{Landan:2012kp} also defined the _epipolymorphism_ of an allele as "the probability that two epialleles randomly sampled from the [allele] differ from each other". Mathematically, the epipolymorphism of a 4-tuple is defined as $p_{poly} = 1 - \sum_{l = 1}^{l = 2^{4}} p_{l}$, where $p_{l}$ is the relative frequency of the $l^{th}$ epiallele in the sample.
 
@@ -615,7 +618,7 @@ __My co-methylation results and extensive $\beta$-value correlations suggest oth
 
 The correlation of methylation at a pair of CpGs was computed from the $2 \times 2$ contigency table, shown __BELOW__.
 
-__TODO: Represent as contingency table.__ Let $n_{11}$ be the number of reads that are methylated at both CpGs, $n_{00}$ be the number of reads that are unmethylated at both CpGs and $n_{01}$ and $n_{10}$ be the number of reads that have different methylation states at each CpG ($N = n_{00} + n{01} + n{10} + n_{11}). The average methylation level of each CpG is $m_{1} = \frac{n_{11} + n_{10}}{N}$ and $m_{2} = \frac{n_{11} + n_{01}}{N}$, respectively. The variance of methylation at each CpG is $v_{1} = m_{1} \times (1 - m_{1})$ and $v_{2} = m_{2} \times (1 - m_{2})$, respectively. The correlation of methylation at the pair of CpGs is then $\frac{n_{11} / N - m_{1} * m_{2}}{\sqrt(v_{1} + v_{2})}. __TODO: Is this the same as correlation of $beta$-values using only those reads that overlap both CpGs?__
+__TODO: Represent as contingency table.__ Let $n_{11}$ be the number of reads that are methylated at both CpGs, $n_{00}$ be the number of reads that are unmethylated at both CpGs and $n_{01}$ and $n_{10}$ be the number of reads that have different methylation states at each CpG ($N = n_{00} + n{01} + n{10} + n_{11}$). The average methylation level of each CpG is $m_{1} = \frac{n_{11} + n_{10}}{N}$ and $m_{2} = \frac{n_{11} + n_{01}}{N}$, respectively. The variance of methylation at each CpG is $v_{1} = m_{1} \times (1 - m_{1})$ and $v_{2} = m_{2} \times (1 - m_{2})$, respectively. The correlation of methylation at the pair of CpGs is then $\frac{n_{11} / N - m_{1} \times m_{2}}{\sqrt(v_{1} + v_{2})}$. __TODO: Is this the same as correlation of $beta$-values using only those reads that overlap both CpGs?__
 
 ## \citet{Zhang:2013uu} and \citet{Stevens:2013hv}
 `M&M`, published in \citet{Zhang:2013uu}, is a statistical framework for jointly analysing MeDIP-seq and MRE-seq to detect DMRs in a two-group experiment. MeDIP-seq is an enrichment-assay and MRE-seq is a restriction enzyme assay. `M&M` is a window-based algorithm (default = 500 bp non-overlapping windows). `M&M` was compared to `MEDIP`, which only uses MeDIP-seq data, and WGBS of the same samples. Each method was run on biological duplicates to estimate the corresponding false positive rate.

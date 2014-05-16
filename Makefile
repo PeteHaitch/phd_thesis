@@ -42,6 +42,16 @@ phd_thesis.pdf: introduction.latex statmodel.latex
 	pdflatex phd_thesis; \
 	mv phd_thesis.pdf ../pdf/
 
+paper_reviews.pdf: latex/phd_thesis.bib markdown/paper_reviews.md markdown/bibliography.md
+	mkdir -p pdf
+	pandoc --natbib -s --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o latex/paper_reviews_sc.tex markdown/paper_reviews.md markdown/bibliography.md
+	pdflatex -output-directory latex latex/paper_reviews_sc
+	bibtex latex/paper_reviews_sc
+	pdflatex -output-directory latex latex/paper_reviews_sc
+	pdflatex -output-directory latex latex/paper_reviews_sc
+	mv latex/paper_reviews_sc.pdf pdf/paper_reviews.pdf
+	rm latex/paper_reviews_sc*
+
 phd_thesis.html:
 	echo "Citations aren't yet supported!"
 	mkdir html

@@ -74,7 +74,7 @@ Again, I emphasise that $H_{i, j}, Z_{h, i, j}, M_{i, j}, U_{i, j} \text{ and } 
 
 #### Post-sequencing {-}
 
-We do not sequence every fragment in the pool. Rather, sequencing can be thought of as sampling without replacement from the pool of DNA fragments. We have a large number(~$10^10$) of fragments in the pool and each methylation locus is only present on a small number of those fragments. Therefore, we can approximate this sampling by Poisson sampling (__CITE__), where the rate parameter for locus $i$ is proportional to the number of fragments in the pool and inversely proportional to $H_{i}$.
+We do not sequence every fragment in the pool. Rather, sequencing can be thought of as sampling without replacement from the pool of DNA fragments. We have a large number(~$10^{10}$) of fragments in the pool and each methylation locus is only present on a small number of those fragments. Therefore, we can approximate this sampling by Poisson sampling (__CITE__), where the rate parameter for locus $i$ is proportional to the number of fragments in the pool and inversely proportional to $H_{i}$.
 
 At this point I make three simplifying assumptions:
 
@@ -352,19 +352,42 @@ An obvious extension is to weight a methylation call by its base quality or `map
 
 ### Estimating $\beta$
 
-Most analyses of bisulfite sequencing data have focused on the on the "average" level of methylation at individual methylation loci, $B_{i}$, (e.g. \citet{Cokus:2008fc, Lister:2008bh, Lister:2009hy, Lister:2011kg, Hansen:2011gu}). The simplest estimator $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$ is often used (__CITE__), but model-based estimators have also been suggested[^simple_beta] (__CITE__). 
+Most analyses of bisulfite sequencing data have focused on the on the "average" level of methylation at individual methylation loci, $B_{i}$, and use the simple estimator[^simple_beta] $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$ (e.g. \citet{Cokus:2008fc, Lister:2008bh, Lister:2009hy, Lister:2011kg}). More recently, more sophisticated estimators have also been proposed, such as the empirical Bayes frameworks separately proposed by \citet{Feng:2014iq} and \citet{Sun:2014fk} and the smoothing-based frameworks proposed by \cite{Hansen:2011gu, Hansen:2012gr} and \citet{Hebestreit:2013ko}
 
 [^simple_beta]: The simple estimator $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$ corresponds to the maximum likelihood estimator, doesn't it? It would also have a Bayesian interpretation, I think.
 
-__Give examples of more sophisticated estimators from the Bayesian papers__
+#### Empirical Bayes models of $\beta$-values {-}
+
+Both \citet{Feng:2014iq} and \citet{Sun:2014fk} propose a Beta-Binomial empirical Bayes hierarchical model for the $B_{i}, i = 1, \ldots, N_{loci}. The actual models slightly differ, as do the algorithms for parameter estimation, but the main idea is the same. The R/Bioconductor package `DSS` implements the model of \citet{Feng:2014iq} and the `MOABS` software implements the model of \citet{Sun:2014fk}. I focus on \citet{Feng:2014iq} because the model is better described than that of \citet{Sun:2014fk}. In fact, the empirical Bayes method described in \citet{Sun:2014fk} is poorly written and I think is wrong in several places, which makes it very confusing. (__DISCUSS WITH TERRY___). 
+  
+\citet{Feng:2014iq} model the number of methylated reads at each locus by $M_{i, j, k} = Binomial(m_{i, j, k} + u{i, j, k}, B_{i, j, k})$, where $k = 1, 2$ is the group of each sample in a two-group experiment. They then assume that the $B_{i, j, k}$ follow a $Beta(\mu{i, k}, \theta_{i, k})$ distribution, which is the conjugate prior for the Binomial distribution, where $\mu$ is the mean and $\theta$ is the dispersion. \citet{Feng:2014iq} make the additional modelling assumption that $\theta_{i, k} = \text{log-Normal}(m_{0, k}, r_{0, k}^{2})$. Posterior estimates of $\mu_{i, k}$ are obtained using an empirical Bayes framework. 
+
+__TODO: DISCUSS WITH TERRY - Feng perform tests based on  the parameters from the _prior_ distribution, not the posterior. That doesn't make sense, does it? Sun estimate the posterior parameters $\beta_{i, j, k}$.__
+
+#### Smoothing $\beta$-values {-}
+
+`BSmooth`, published in \citet{Hansen:2011gu, Hansen:2012gr} and available in the R/Bioconductor package `bsseq`, and `BiSeq`, published in \citet{Hebestreit:2013ko} and available in the R/Bioconductor package `BiSeq`, take a different approach to getting improved estimates of the $\beta$-values. Rather than developing an empirical Bayes model, `BSmooth` and `BiSeq` both use statistical smoothing of the "raw" $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$. Smoothing is motivated and justified by the fact that the $\beta$-values are spatially correlated. 
+
+Smoothing is particularly powerful for loci with low sequencing coverage, where the denominimator $m_{i} + u_{i}$ is small and the corresponding standard error estimates of $\beta_{i}$ are large. Is smoothing of the raw $\beta$-values still useful when you have high-coverage sequencing data (__DISCUSS WITH TERRY__)? The smoothed $\beta$-values, and not the raw $\beta$-values, are then generally used in all downstream analyses.
 
 
-`BSmooth/bsseq`, published in \citet{Hansen:2011gu, Hansen:2012gr}, and `BiSeq`, published in \citet{Hebestreit:2013ko}, take a different approach to getting improved estimates of the $\beta$-values. Rather than developing an empirical Bayes model, `BSmooth` and `BiSeq` both use statistical smoothing of the "raw" $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$, which exploits the spatial correlation of $\beta$-values. Smoothing is particularly powerful for loci with low sequencing coverage, where the denominimator $m_{i} + u_{i}$ is small and the corresponding standard error estimates of $\beta_{i}$ are large.
+Both `BSmooth` and `BiSeq` use a binomial local likelihood smoother. This smoother was chosen because `BSmooth` and `BiSeq` model the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample by $M_{i, j} = Binom(m_{i, j} + u_{i, j}, B_{i})$ and it is "local" because "methylation levels are strongly correlated across the genome" \citep{Hansen:2012gr}. \citet{Hansen:2012gr} cite \citet{Eckhardt:2006gh} as evidence that DNA methylation levels are similar at proximal CpGs). 
 
-* __Describe smoothers used in `BSmooth` and `BiSeq`__
-* __Discuss evidence that smoothing is a good idea__
 
-The smoothed $\beta$-values, and not the raw $\beta$-values, are generally used in all downstream analyses.
+Under the binomial model for $M_{i, j}$, $\beta_{i, j} = \frac{m_{i, j}}{m_{i, j} + u_{i, j}}$ is an unbiased estiamtor of $B_{i, j}$ with standard error $se(\beta_{i, j}) = \sqrt(\frac{\beta_{i, j}(1 - \beta_{i, j})}{M_{i, j} + U_{i, j}})$ \citep{Hansen:2012gr} (__CHECK WITH TERRY: the standard error should be defined in terms of estimates not parameters, i.e. $\beta$ instead of $B$, correct?__). 
+
+The raw $\beta$-values are weighted according to the binomial likelihood and the kernel function. The binomial likelihood weights points inversely to their standard error, $se(\beta_{i, j})$, and the kernel gives greater weight to those $\beta_{i, j}$ near the centre of the window. \citet{Lacey:2013iy} note that loci with very high sequencing coverage will strongly influence the smoother, potentially biasing estimates at neighbouring loci with low coverage.
+
+`BSmooth` assumes that for each sample that the underlying methylation level, $f_{j}(i)$, is a smoothly varying function of the position in the genome, $i$. In contrast, `BiSeq` first creates clusters of CpGs and only assumes that the underlying methylation level is smooth at positions within each cluster.
+
+When smoothing, a key parameter is the bandwidth, which is the size of the window in which observations are included at each iteration of the smoother. `BSmooth` uses a much larger window size than `BiSeq`; the default window size in `BSmooth` is one that contains at least 70 CpGs and is at least 2000kb wide, whereas the default window size in `BiSeq` is 80bp, regardless of CpG-density. This is due to `BiSeq` being developed for RRBS data, which has a high CpG-density per window, whereas `BSmooth` was developed for WGBS data, which has a lower and more variable CpG density per window.
+
+Another 'parameter' choice when smoothing is the choice of kernel, although this is less important than the choice of bandwidth, __correct?__. `BSmooth` uses a tricube kernel and `BiSeq` uses a triangular kernel.
+
+\citet{Hebestreit:2013ko} and \citet{Lacey:2013iy} the smoothing results of `BiSeq` to `BSmooth`. Both \citet{Hebestreit:2013ko} and \citet{Lacey:2013iy} provide instances where they claim `BiSeq` gives more 'reasonable' smoothed values than `BSmooth`, but the comparison is selective and limited to a few regions. Furthermore, the comparisons are made using RRBS data, both real and simulated, and, `BSmooth` is designed from WGBS[^rrbs_sim].
+
+[^rrbs_sim]: Both \citet{Hebestreit:2013ko} and \citet{Lacey:2013iy} altered the default `BSmooth` parameters to try to make them comparable to `BiSeq`. \citet{Hebestreit:2013ko} changed the default minimum window size to 80bp but still required at least 20 CpGs per window. \citet{Lacey:2013iy} kept the default minimum window size of 2000 bp but reduced the minimum number of CpGs per window to 50 from the default of 70.
+
 
 ### Distributional assumptions and transformations of $\beta$
 
@@ -378,6 +401,15 @@ The smoothed $\beta$-values, and not the raw $\beta$-values, are generally used 
 
 __There's some theorem that there is no single transformation that will stabilise variance and reduce heteroscedasticity, or something like that__
 
+## Statistical properties of $m$, $u$ and $\beta$
+
+Show plots of the distribution of these variables for a bunch of WGBS (and RRBS?) samples:
+
+* The coverage $m + u$
+* $\beta$
+
+Also, stratify these plots by genomic elements.
+
 
 ## General TODOs
 * Use lower case letters for estimates or hatted versions, e.g. $m$ vs. $\hat{M}$?
@@ -386,7 +418,7 @@ __There's some theorem that there is no single transformation that will stabilis
 * Notation abuse: e.g. m is defined with respect to m-tuples but also in terms of $m_{i}$. Similarly, $M$ is used to represent methylation patterns but also in terms of $M_{i}$. Perhaps use different typefaces to distinguish them?
 * Autocorrelation or correlation?
 * Link to all software and corresponding publications
-* Decide how to give the total number of a loci and samples in a consistent way. Currently usign $n_{loci}$ for loci and $n$ for samples, which is inconsistent.
+* Decide how to give the total number of a loci and samples in a consistent way. Currently usign $N_{loci}$ for loci and $n$ for samples, which is inconsistent.
 * Decide how to denote coverage. Currently using $U + M$ rather than $N$ because $N$ and $n$ are already being used to represent multiple variables.
 * Method descriptions are often ambiguous or missing in details. The majority explanations favour words over mathematics and only __WHICH PAPERS__ provide software that implements their analysis methods.
 
