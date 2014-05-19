@@ -419,7 +419,7 @@ There are several limitations to this study:
 3. Once the "outliers" were removed, almost all the 'co-methylation' disappears. I think these outlier samples need closer investigation rather than just removal.
 
 
-## \citep{Sofer:2013bk}
+## \citet{Sofer:2013bk}
 
 The [`Aclust`](http://www.hsph.harvard.edu/tamar-sofer/packages/) software, published in \citet{Sofer:2013bk}, uses generalised estimating equations to detect differential methylation. `Aclust` first clusters sites and then tests for exposure effects on clusters (e.g. case/control status). This in contrast to most other DMR methods, which test for exposure effects at individual methylation loci and then cluster loci. While `Aclust` was designed for analysing methylation array data, in principle it should also work for bisulfite-sequencing data.
 

@@ -350,11 +350,11 @@ An obvious extension is to weight a methylation call by its base quality or `map
 `comethylation` is the only software that estimates methylation patterns at m-tuples, such as $MM, MU, UM$ and $UU$ for 2-tuples. `comethylation` uses the same "filter + count" method to estimate methylation patterns for all m-tuples (m $= 1, 2, 3, \ldots $).
 
 
-### Estimating $\beta$
+### Estimating $B$
 
-Most analyses of bisulfite sequencing data have focused on the on the "average" level of methylation at individual methylation loci, $B_{i}$, and use the simple estimator[^simple_beta] $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$ (e.g. \citet{Cokus:2008fc, Lister:2008bh, Lister:2009hy, Lister:2011kg}). More recently, more sophisticated estimators have also been proposed, such as the empirical Bayes frameworks separately proposed by \citet{Feng:2014iq} and \citet{Sun:2014fk} and the smoothing-based frameworks proposed by \cite{Hansen:2011gu, Hansen:2012gr} and \citet{Hebestreit:2013ko}
+Most analyses of bisulfite sequencing data have focused on the on the average level of methylation at individual methylation loci, $B_{i}$, and use the simple estimator[^simple_beta] $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$ (e.g. \citet{Cokus:2008fc, Lister:2008bh, Lister:2009hy, Lister:2011kg}). Recently, more sophisticated estimators have also been proposed, such as the empirical Bayes frameworks separately proposed by \citet{Feng:2014iq} and \citet{Sun:2014fk} and the smoothing-methods proposed by \cite{Hansen:2011gu, Hansen:2012gr} and \citet{Hebestreit:2013ko}.
 
-[^simple_beta]: The simple estimator $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$ corresponds to the maximum likelihood estimator, doesn't it? It would also have a Bayesian interpretation, I think.
+[^simple_beta]: Under the Binomial model, $M_{i} | (M_{i} + U_{i}) = Bin(M_{i} + U_{i}, B_{i})$, $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$ corresponds to the maximum likelihood estimator (__CHECK__). It would also have a Bayesian interpretation, I think (__CHECK__).
 
 #### Empirical Bayes models of $\beta$-values {-}
 
@@ -370,11 +370,7 @@ __TODO: DISCUSS WITH TERRY - Feng perform tests based on  the parameters from th
 
 Smoothing is particularly powerful for loci with low sequencing coverage, where the denominimator $m_{i} + u_{i}$ is small and the corresponding standard error estimates of $\beta_{i}$ are large. Is smoothing of the raw $\beta$-values still useful when you have high-coverage sequencing data (__DISCUSS WITH TERRY__)? The smoothed $\beta$-values, and not the raw $\beta$-values, are then generally used in all downstream analyses.
 
-
 Both `BSmooth` and `BiSeq` use a binomial local likelihood smoother. This smoother was chosen because `BSmooth` and `BiSeq` model the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample by $M_{i, j} = Binom(m_{i, j} + u_{i, j}, B_{i})$ and it is "local" because "methylation levels are strongly correlated across the genome" \citep{Hansen:2012gr}. \citet{Hansen:2012gr} cite \citet{Eckhardt:2006gh} as evidence that DNA methylation levels are similar at proximal CpGs). 
-
-
-Under the binomial model for $M_{i, j}$, $\beta_{i, j} = \frac{m_{i, j}}{m_{i, j} + u_{i, j}}$ is an unbiased estiamtor of $B_{i, j}$ with standard error $se(\beta_{i, j}) = \sqrt(\frac{\beta_{i, j}(1 - \beta_{i, j})}{M_{i, j} + U_{i, j}})$ \citep{Hansen:2012gr} (__CHECK WITH TERRY: the standard error should be defined in terms of estimates not parameters, i.e. $\beta$ instead of $B$, correct?__). 
 
 The raw $\beta$-values are weighted according to the binomial likelihood and the kernel function. The binomial likelihood weights points inversely to their standard error, $se(\beta_{i, j})$, and the kernel gives greater weight to those $\beta_{i, j}$ near the centre of the window. \citet{Lacey:2013iy} note that loci with very high sequencing coverage will strongly influence the smoother, potentially biasing estimates at neighbouring loci with low coverage.
 
@@ -401,14 +397,53 @@ Another 'parameter' choice when smoothing is the choice of kernel, although this
 
 __There's some theorem that there is no single transformation that will stabilise variance and reduce heteroscedasticity, or something like that__
 
-## Statistical properties of $m$, $u$ and $\beta$
+## Statistical properties of $\beta$
 
-Show plots of the distribution of these variables for a bunch of WGBS (and RRBS?) samples:
+Under the binomial model, $M_{i, j} | (M_{i, j} + U_{i, j}, B_{i, j}) = Bin(M_{i, j} + U_{i, j}, B_{i, j})$ ,$\beta_{i, j} = \frac{m_{i, j}}{m_{i, j} + u_{i, j}}$ is an unbiased estiamtor of $B_{i, j}$ with standard error $se(\beta_{i, j}) = \sqrt(\frac{\beta_{i, j}(1 - \beta_{i, j})}{M_{i, j} + U_{i, j}})$ \citep{Hansen:2012gr} (__CHECK WITH TERRY: the standard error should be defined in terms of estimates not parameters, i.e. $\beta$ instead of $B$, correct?__). The natural interpretation of $\beta_{i, j}$ is then an estimator of the average level of methylation at the $i^{th}$ locus in the $j^{th}$ sample. In this section I discuss this interpretation and statistical properties of this estimator.
 
-* The coverage $m + u$
-* $\beta$
+### Marginal distributions
 
-Also, stratify these plots by genomic elements.
+The average level of methylation $B_{i}$ varies widely across the genome. Much of this variation is associated with different genomic elements. For example, most CpGs in CGIs are unmethylated, which means that the corresponding $\beta$-values are close to zero. In contrast, CpGs outside of CGIs are typically methylated, which means that the corersponding $\beta$-values are closer to one. In humans, __WHAT PERCENTAGE__ of CpGs are in CGIs, which leads to a bimodal distribution of $\beta$-values for most human genomes (__CITE and SHOW PLOTS__) .
+
+* __Show a bunch of plots of $\beta$-values for different samples__
+
+This bimodality has led to several researchers modelling the distribution of the $\beta$-values by the Beta distribution. For example, \cite{Hebestreit:2013ko, Lacey:2013iy} simulate the "true" methylation level in each sample from a Beta distribution and both \citet{Feng:2014iq, Sun:2014fk} assume a Beta distribution as the prior distribution of the $\beta_{i, j}$ in their empirical Bayes models of bisulfite sequencing data. 
+
+The Beta distribution is a flexible 2-parameter distribution on $[0, 1]$. It can be unimodal, "U"-shaped or "J"-shaped, depending on the choice of parameters. The Beta distribution also includes the Uniform and arcsine distributions as special cases (__Source: [http://en.wikipedia.org/wiki/Beta_distribution](http://en.wikipedia.org/wiki/Beta_distribution)__).
+
+In the above examples, the researchers are modelling the distribution of $B_{i, j}$ or $\beta_{i, j}$ __within__ each sample, i.e., over $i$, by a Beta distribution. As I argue in __SECTION__, the distribution of $\beta_{i, j}$ __between__ samples, i.e., over $j$, is of more relevance and interest when performing inference.
+
+* __Show a bunch of different parameterisations of the Beta distribution__
+
+#### Distribution of $\beta$-values within samples {-}
+
+* Stratify by genomic elements
+
+#### Distribution of $\beta$-values between samples {-}
+
+* Stratify by genomic elements
+* Means and variations of these distributions and how these relate to differential methylation
+
+### Correlations
+
+Many researchers have observed that DNA methylation is spatially correlated along the genome, (e.g. \cite{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Hansen:2011gu, Hebestreit:2013ko, Wang:2011cw, Pedersen:2012vl, Lacey:2013iy, Sofer:2013bk, Liu:dy, Lyko:2010drm, Landan:2012kp, Lister:2009hy}). Just as we can explore the distribution of DNA methylation levels within a sample or between samples, so too can we explore the correlations of DNA methylation levels within a sample or between samples.
+
+#### Correlation of DNA methylation within samples {-}
+
+There are two levels of within-sample correlations of DNA methylation. The lower level is the dependence of DNA methylation at loci on the same DNA fragment, which I call _co-methylation_. I have performed the most comprehensive study to date of this type of within-sample correlation in __CHAPTER__. The higher level is the correlation of the $\beta$-values along the genome. A variety of approaches have been used to estimate these '$\beta$ correlations', although the methods have not always been clearly documented. I clarify these methods and extend these results in __CHAPTER__.
+
+#### Correlation of DNA methylation between samples {-}
+
+There has been less research on between-sample correlations of DNA methylation levels. The most frequently reported between-sample correlation is $cor(\{\beta_{i, j}\}_{i = 1}^{i = N_{loci}}, \{\beta_{i, j'}\}_{i = 1}^{i = N_{loci}})$, which is the correlation of the $\beta$-values for a pair of samples. This has been reported as evidence for the "concordance" or "replicability" of methylation levels for biological \citep{Lister:2009hy} and technical \citep{Zhang:2013uu, Stevens:2013hv, Hansen:2011gu} replicates.
+
+A more detailed measure is the correlation of $\beta$-values for a particular pair of methylation loci between a set of samples. __TODO: Review literature of "co-methylation".__
+
+
+### Bias
+
+The natural interpretation of $beta_{i, j}$ will be biased if the probability of sequencing a fragment with a methylated site is different from the probability of sequencing a fragment with an unmethylated site. It is very likely that this bias exists but it is difficult to assess without a carefully designed experiment. __TODO: Is there any evidence that this bias exists? Is CGI dropout (as see in Sue Clark's lab) evidence for this?__
+
+One reason to believe that this bias exists is that there is a well-documented GC-bias with Illumina sequencing, whereby fragments with a low or high GC-content are undersampled (__CITE__). In bisulfite sequencing, highly methylated fragments will have more _C_s and fewer _T_s than a lowly methylated version of the same fragment and will therefore have a higher GC-content. Depending on the rest of the sequence in the fragment, this could result in a highly methylated fragment being undersampled (very high GC-content of the entire fragment) or a lowly methylated fragment being undersampled (very low GC-content of the entire fragment).
 
 
 ## General TODOs
@@ -421,5 +456,7 @@ Also, stratify these plots by genomic elements.
 * Decide how to give the total number of a loci and samples in a consistent way. Currently usign $N_{loci}$ for loci and $n$ for samples, which is inconsistent.
 * Decide how to denote coverage. Currently using $U + M$ rather than $N$ because $N$ and $n$ are already being used to represent multiple variables.
 * Method descriptions are often ambiguous or missing in details. The majority explanations favour words over mathematics and only __WHICH PAPERS__ provide software that implements their analysis methods.
+* The Binomial model is really a conditional Binomial model, where the condition is on the sequencing coverage, $M_{i} + U_{i}$. That is, $M_{i} | (M_{i} + U_{i}, B_{i}) = Bin(M_{i} + U_{i}, B_{i})$. __DISCUSS WITH TERRY: What is the correct way to write this Binomial model?
+* Discuss distribution of coverage? Perhaps in context of sequencing bias?
 
 
