@@ -434,7 +434,7 @@ There are two levels of within-sample correlations of DNA methylation. The lower
 
 #### Correlation of DNA methylation between samples {-}
 
-There has been less research on between-sample correlations of DNA methylation levels. The most frequently reported between-sample correlation is $cor(\{\beta_{i, j}\}_{i = 1}^{i = N_{loci}}, \{\beta_{i, j'}\}_{i = 1}^{i = N_{loci}})$, which is the correlation of the $\beta$-values for a pair of samples. This has been reported as evidence for the "concordance" or "replicability" of methylation levels for biological \citep{Lister:2009hy} and technical \citep{Zhang:2013uu, Stevens:2013hv, Hansen:2011gu} replicates.
+There has been less research on between-sample correlations of DNA methylation levels. The most frequently reported between-sample correlation is $cor(\{\beta_{i, j}\}_{i = 1}^{i = N_{loci}}, \{\beta_{i, j'}\}_{i = 1}^{i = N_{loci}})$, which is the correlation of the $\beta$-values for a pair of samples. This has been reported as evidence for the "concordance" or "replicability" of methylation levels for biological replicates (e.g. the same cell line after 4 or 5 cell passagings, \citet{Lister:2009hy}, and three different colon tumour samples \citet{Hansen:2011gu}) and technical  replicates (e.g. different technologies and assays \citet{Zhang:2013uu, Stevens:2013hv, Hansen:2011gu}).
 
 A more detailed measure is the correlation of $\beta$-values for a particular pair of methylation loci between a set of samples. __TODO: Review literature of "co-methylation".__
 
