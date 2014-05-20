@@ -385,18 +385,6 @@ Another 'parameter' choice when smoothing is the choice of kernel, although this
 [^rrbs_sim]: Both \citet{Hebestreit:2013ko} and \citet{Lacey:2013iy} altered the default `BSmooth` parameters to try to make them comparable to `BiSeq`. \citet{Hebestreit:2013ko} changed the default minimum window size to 80bp but still required at least 20 CpGs per window. \citet{Lacey:2013iy} kept the default minimum window size of 2000 bp but reduced the minimum number of CpGs per window to 50 from the default of 70.
 
 
-### Distributional assumptions and transformations of $\beta$
-
-* Beta regression
-* M-values
-* arcsine tranformation
-* probit
-* any other common transformations applied to proportions
-
-\cite{Du:2010dc} show improved inferences when using Logit transformed $\beta$-values, which they call M-values. This transformation reduces the heteroscedasticity of $\beta$-values near 0 and 1.
-
-__There's some theorem that there is no single transformation that will stabilise variance and reduce heteroscedasticity, or something like that__
-
 ## Statistical properties of $\beta$
 
 Under the binomial model, $M_{i, j} | (M_{i, j} + U_{i, j}, B_{i, j}) = Bin(M_{i, j} + U_{i, j}, B_{i, j})$ ,$\beta_{i, j} = \frac{m_{i, j}}{m_{i, j} + u_{i, j}}$ is an unbiased estiamtor of $B_{i, j}$ with standard error $se(\beta_{i, j}) = \sqrt(\frac{\beta_{i, j}(1 - \beta_{i, j})}{M_{i, j} + U_{i, j}})$ \citep{Hansen:2012gr} (__CHECK WITH TERRY: the standard error should be defined in terms of estimates not parameters, i.e. $\beta$ instead of $B$, correct?__). The natural interpretation of $\beta_{i, j}$ is then an estimator of the average level of methylation at the $i^{th}$ locus in the $j^{th}$ sample. In this section I discuss this interpretation and statistical properties of this estimator.
@@ -444,6 +432,32 @@ A more detailed measure is the correlation of $\beta$-values for a particular pa
 The natural interpretation of $beta_{i, j}$ will be biased if the probability of sequencing a fragment with a methylated site is different from the probability of sequencing a fragment with an unmethylated site. It is very likely that this bias exists but it is difficult to assess without a carefully designed experiment. __TODO: Is there any evidence that this bias exists? Is CGI dropout (as see in Sue Clark's lab) evidence for this?__
 
 One reason to believe that this bias exists is that there is a well-documented GC-bias with Illumina sequencing, whereby fragments with a low or high GC-content are undersampled (__CITE__). In bisulfite sequencing, highly methylated fragments will have more _C_s and fewer _T_s than a lowly methylated version of the same fragment and will therefore have a higher GC-content. Depending on the rest of the sequence in the fragment, this could result in a highly methylated fragment being undersampled (very high GC-content of the entire fragment) or a lowly methylated fragment being undersampled (very low GC-content of the entire fragment).
+
+### Transformations
+
+$\beta$-values are the _de facto_ standard unit for reporting methylation levels due to their natural interpretation. However, they are not necessarily the best unit for statistical inference. This is because a $\beta$-value is an estimate of a proportion and there are a well-known challenges when working with proportion data, such as:
+
+1. Proportions are bound between 0 and 1, inclusive.
+2. The estimate of the standard error depends on the estimate of the mean (i.e., $\beta$), through $se(\beta) = \sqrt{\frac{\beta (1 - \beta)}{m + u}}$. Taking the derivative of this, we see that the maximum standard error, $\sqrt(\frac{0.25}{m + u})$, occurs at $\beta = 0.5$ and the minimum standard error, $0$, occurs at $\beta = 0, 1$.
+3. We need to more than just the $\beta$-value to have a sense of how precise an estimate it is. Essentially, we need to also know the sequencing coverage of the methylation loci. Consider two CpGs, one with $m = 1, u = 3$ and the other with $m = 100$ $u = 300$. Both CpGs have $\beta = 1/4$ but the second CpG is measured with much greater precision. Assuming the binomial model, the first CpG has $se(\beta) = \sqrt{\frac{1/4 \times 3/4}{4}} = 0.22$ whereas the second CpG has $se(\beta) = \sqrt{\frac{1/4 \times 3/4}{400}} = 0.02$.
+
+To address (2), proportion data are often tranformed via a variance stabilisation transformation. The aim is to make the variance (approximately) independent of the mean. Popular variance stabilisation transformations include:
+
+* The arcsine transformation, $\arcsin{\sqrt{\beta}}$ \citep{ANSCOMBE:1948bw}. A small value, e.g. $0.5$, is added to $m$ and $u$ to avoid $\beta = 0, 1$. 
+* The "averaged arcsine" transformation, $\arcsin{\sqrt{\frac{m}{m + u + 1}}} + \arcsin{\sqrt{\frac{m + 1}{m + u + 1}}}$ \citep{Freeman:1950bh}. This transformation does not have a unique inverse \citep{Nunes:2008vj}.
+
+The use of variance stabilising transformations for proportion data seem to have fallen out of favour (e.g. [http://www.esajournals.org/doi/full/10.1890/10-0340.1](http://www.esajournals.org/doi/full/10.1890/10-0340.1)). The noq favoured approach is generalised linear models (__CITE__), in particular the logistic regression model (__CITE__?).
+
+
+### Regression models
+
+* Logistic regression
+	* M-values 
+	* The logit transformation, $\text{logit} (\frac{\beta}{1 - \beta})$. A small value, e.g. $0.5$, is added to $m$ and $u$ to avoid $\beta = 0, 1$.
+	* The probit transformation, $\Phi^{-1}(\beta)$, where $\Phi$ is the standard Normal cumulative distribution function. A small value, e.g. $0.5$, is added to $m$ and $u$ to avoid $\beta = 0, 1$.
+* Beta regression
+
+\cite{Du:2010dc} show improved inferences when using Logit transformed $\beta$-values, which they call M-values. This transformation reduces the heteroscedasticity of $\beta$-values near 0 and 1.
 
 
 ## General TODOs
