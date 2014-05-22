@@ -34,7 +34,21 @@ statmodel.pdf: latex/phd_thesis.bib markdown/a_statistical_model_of_methlyC-seq.
 	mv latex/a_statistical_model_of_methlyC-seq_sc.pdf pdf/a_statistical_model_of_methlyC-seq.pdf
 	rm latex/a_statistical_model_of_methlyC-seq_sc*
 
-phd_thesis.pdf: introduction.latex statmodel.latex
+wgbs_analysis.latex: latex/phd_thesis.bib markdown/wgbs_analysis.md
+	mkdir -p latex
+	pandoc --chapters -o latex/wgbs_analysis.tex markdown/wgbs_analysis.md
+
+wgbs_analysis.pdf: latex/phd_thesis.bib markdown/wgbs_analysis.md markdown/bibliography.md
+	mkdir -p pdf
+	pandoc --natbib -s --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o latex/wgbs_analysis_sc.tex markdown/wgbs_analysis.md markdown/bibliography.md
+	pdflatex -output-directory latex latex/wgbs_analysis_sc
+	bibtex latex/wgbs_analysis_sc
+	pdflatex -output-directory latex latex/wgbs_analysis_sc
+	pdflatex -output-directory latex latex/wgbs_analysis_sc
+	mv latex/wgbs_analysis_sc.pdf pdf/wgbs_analysis.pdf
+	rm latex/wgbs_analysis_sc*
+
+phd_thesis.pdf: introduction.latex statmodel.latex wgbs_analysis.latex
 	mkdir -p pdf
 	cd latex; pdflatex phd_thesis; \
 	bibtex phd_thesis; \
