@@ -65,7 +65,7 @@ __TABLE__ lists some popular bisulfite-sequencing read mappers with the underlyi
 * BSMAP (SOAP, __CITE__)
 * __OTHERS__
 
-Each of these aligners can report the output in the standard `SAM` format (__CITE__), although each mapper does so in a slightly different way, which makes difficult the development of downstream analysis tools.
+Each of these aligners can report the output in the standard `SAM` format (__CITE__), although each mapper does so in a slightly different way, which it difficult to develop downstream analysis tools.
 
 ### PCR duplicates
 
@@ -89,7 +89,57 @@ In practice, this means that for whole-genome sequencing data we can be fairly c
 
 ### M-bias
 
-* M-bias plots assume the first base of the mapped read is the first base of the sequenced read. __This isn't true if the read had 5' trimming__. This means, e.g., `--ignore_r1 5` might be ignoring cycles 1-5, 2-6, 3-7, etc., depending on whether the read had 5' trimming.
+Ideally, the probability that a base is called methylated should be independent of the sequencing cycle. \citet{Hansen:2011gu} found that this is not the case and that in fact there is considerable bias towards the start (5') and end (3') of reads. They called this bias the _M-bias_.
+
+M-bias can be identified by plotting the proportion of methylation calls for each position within each read. If there is no M-bias then this plot should be a horizontal line. A "bend" in this line is evidence of M-bias. The M-bias should be computed separately for each sample-batch combination, where a batch might be each combination of library preparation, sequencing run and perhaps further variables such as sequencing lane. For paired-end data, the M-bias should be computed separately for each read. Example M-bias plots are shown in __FIGURE__.
+
+The strongest source of M-bias in Illumina WGBS data is at the 5' end of read_2, which sequences the 3' end of the DNA fragment. Because the DNA fragment is often shorter than the sum of the read lengths, the 3' end of the fragment often contains adapter sequence and other "junk" sequence. The adapter sequence may contain cytosine bases, which will be misinterpreted as evidence of methylation \citep{Krueger:2012ks}. Similarly, "fill-in cytosines" are used in the construction of RRBS libraries to repair the ends of DNA fragments after cleavage by MspI; these would also be misinterpreted as evidence of methylation \citep{Krueger:2012ks}. Another source of M-bias is incomplete or uneven bisulfite-conversion. 
+
+#### Computing M-bias {-}
+
+Computing the M-bias and incoporating the results into the methylation calling can be done using two different strategies:
+
+1. Compute the M-bias from the filtered data, then call methylation events incorporating both the filters and the M-bias. This strategy requires two passes over the `SAM/BAM` file - one to compute the M-bias and one to do the methylation calling.
+2. Call methylation events from the filtered data but retain the read-position of each methylation event. Compute the M-bias from this first file and then filter out methylation events that suffer from M-bias. This strategy requires only a single pass over the `SAM/BAM` file but requires additional information to be stored alongside the methylation calls which is then followed by a pass over the first file containing the methylation calls.
+
+I find the first strategy conceptually simpler, and easier to program, and so use it in my methylation calling software, `comethylation`. In theory, the first pass over the `SAM/BAM` could be "skipped" by computing the M-bias simulatenously with sorting the `SAM/BAM` and marking PCR duplicates. For example, using (idealised) Unix pipes:
+
+```
+# 'align' is read mapping software
+# 'mark_duplicates' is PCR duplicate marking software. It creates 'out.bam'.
+# 'mbias' computes mbias. It produces 'mbias.out' and (passes through) 'out.bam'.
+align ref.idx r1.fq r2.fq | mark_duplicates | mbias --filters 
+# call_meth is methylation calling software. It produces 'call_meth.out' based on 'mbias.out' and 'out.bam'
+call_meth --filters mbias.out out.bam
+```
+
+Computing the M-bias without filtering reads or read-positions can overestimate the M-bias. For example, the 3' end of reads from Illumina sequencing are of lower quality than the 5' ends. This means that there are more sequencing errors in the 3' ends of the reads. These sequencing errors are separate to the issue of M-bias and not evidence of it (__Are the two issues really separate? Does sequencing error really inflate M-bias? Compute M-bias without/with evidence filtering and see if it actually makes a difference__). Therefore, \citet{Hansen:2011gu} advocate that the M-bias is computed from the "filtered" evidence for DNA methylation. 
+
+__FIGURE of M-bias computed from raw vs. filtered data__
+
+__FIGURE__ shows several M-bias curves. __Describe the different patterns, e.g. 5' and 3' junk, within-read spikes/troughs, etc.__.
+
+#### Pre-trimming reads confounds read-position with sequencing cycle {-}
+
+Trimming reads prior to alignment, such as using `Trim Galore!` to remove adapter sequence from reads, confounds the sequencing cycle and the read position. This causes a minor problem when computing M-bias because we no longer know whether the read position is identical to the sequencing cycle. Soft- or hard-clipping reads of their adapter sequence __during__ the alignment avoids this issue, because the clipping information (should be) preserved in the `CIGAR` string[^cigar]. __Compare pre-trimming to aligner-trimming. Does pre-clipping do as good a job as aligner-clipping reads of adapter sequence. DISCUSS WITH JAN.__. 
+
+[^cigar]: Many downstream tools, including the current version of `comethylation`, do not properly handle the information in the `CIGAR` string, particularly for soft-clipped reads. The current version of `comethylation` will skip a read (with a warning) that contains a `I` (insertion), `D` (deletion), `S` (soft-clip) or `H` (hard-clip). __FIX THIS__. This is a shortfall of the downstream tools and not aligner-based clipping _per se_, but is nonetheless an issue in practice.
+
+For example, if the first four sequencing cycles of a read have been has been pre-trimmed then the first position of the aligned read is in fact the fifth sequencing cycle. The M-bias plot is based on the read-position from the aligned data and not the sequencing cycle (which isn't directly available in the `SAM/BAM` file). Each read-position in the M-bias plot will therefore contain data from multiple sequencing cycles, which can amplify or mask M-bias signals. 
+
+This problem cannot be avoided if reads are pre-trimmed because the trimming information is not preserved. However, if trimming is performed during the alignment then all the necessary information is retained and software could make use of it.
+
+#### What to do with the M-bias? {-}
+
+In practice, the M-bias curves are visually inspected to look for evidence of M-bias. Read-positions showing evidence of M-bias are then excluded when calling methylation events. 
+
+__TODO: What do `bismark_methylation_extractor`, `BisSNP`, `comethylation`, etc. do with this information? These programs ignore a range, e.g. position 80 onwards, rather than individual cycles, e.g. 80. This means they can't deal with spikes.__ 
+
+__TODO: Could we instead weight the evidence rather than throw it away?__
+
+The problem of distinguising the sequencing cycle from the read position with pre-trimmed reads will also confound efforts to ignore sequencing cycles identified as suffering from M-bias. For example, suppose we performed $100$ bp single-end sequencing and trimmed the first 20 bp of each $90\%$ of the reads. Then, read-position $80$ will comprise $10\%$ sequencing cycle $80$ and $90\%$ sequencing cycle $100$. It is very likely the sequencing cycle $100$ suffers more from M-bias than does cycle $80$, and so this will appear in the M-bias plot as M-bias at read position $80$. This may necessitate that read-positions $80-100$ are ignored in downstream analyses, which would unnecessarily throw away $20\%$ of the data! 
+
+\cite{Hansen:2012gr} suggest a separate M-bias plot for each read-length, which will help distinguish the two read lengths. This will not provide a solution when performing methylation calling because the methylation caller is unaware of this distinction unless run separately on the two read lengths.
 
 ### Other biases
 
