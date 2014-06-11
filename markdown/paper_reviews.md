@@ -489,9 +489,9 @@ where $m$ is the size of the m-tuple, $N$ is the number of reads covering the m-
 
 [^dmeas_problem]: The description of the `DMEAS` software in \citet{He:2013cj} allows for methylation loci with an unknown methylation state. Under this model there are now $3^{m}$ possible methylation patterns per m-tuple and the summatation index should be updated accordingly.
 
-I think that this means it is the entropy value of the $p^{th}$ methylation pattern, where an unmethylated CpG is 0 and methylated CpG is $1$[^dmeas_problem]. This amounts to $e$ being equal to the number of methylated CpGs in the m-tuple. For example, $e = 4$ if the pattern contains 4 methylated CpGs and $e = 2$ if the pattern contains 2 methylated CpGs. This is then normalised to account for the size of the m-tuple, $0 \leq \frac{e}{m} \leq 1$. 
+I think that this means it is the entropy value of the $p^{th}$ methylation pattern, where an unmethylated CpG is 0 and methylated CpG is $1$[^dmeas_problem2]. This amounts to $e$ being equal to the number of methylated CpGs in the m-tuple. For example, $e = 4$ if the pattern contains 4 methylated CpGs and $e = 2$ if the pattern contains 2 methylated CpGs. This is then normalised to account for the size of the m-tuple, $0 \leq \frac{e}{m} \leq 1$. 
 
-[^dmeas_problem]: The `DMEAS` software further defines a CpG of unknown methylation state as 2. This seems to me like it would screw things up because $ME > 1$ is possible if an m-tuple contains a CpG with unknown methylation state.   
+[^dmeas_problem2]: The `DMEAS` software further defines a CpG of unknown methylation state as 2. This seems to me like it would screw things up because $ME > 1$ is possible if an m-tuple contains a CpG with unknown methylation state.   
 
 ME is minimal ($ME = 0$) when all reads mapping to an m-tuple have the same methylation pattern and is maximal ($ME = 1$) when all $2^{m}$ methylation patterns are observed at equal frequency.
 
@@ -630,3 +630,72 @@ __TODO: Represent as contingency table.__ Let $n_{11}$ be the number of reads th
 
 \citet{Stevens:2013hv} plot $\beta_{i}$ vs. $\beta_{i+1}$ for $IPD \leq 750$ bp to argue that the distribution of methylation is highly non-random (Fig 2b).
 
+## \citet{Hon:2013jra}
+
+### Summary of method for identifying tsDMRs
+
+The authors aim to identify tissue-specific differentially methylated regions (tsDMRs). They study 17 different tissues from mouse, although they exclude the placental methylome from most analyses, which reduces the total number of tissues to 16.
+
+To identify tsDMRs they use a Hidden Markov Model (HMM) on the $\chi^2$ test statistics of different methylation levels across the 16 tissues. Specifically, the $\chi^2$ statistic was calculated as follows:
+
+> For a given genomic interval, let $m_{t}$ be the number of methylated cytosines sequenced and $d_{t}$ be the depth of sequencing for tissue $t$. To capture the deviation of the methylomes from that expected if all tissues were uniformly methylated, we used a $\chi^2$ test statistic. We denoted the uniform methylation level in this interval as $f = \sum m_{t} / \sum d_{t}$. Then, the expected number of methylated cytosines sequenced for each tissue was $e_{t} = f d_{t}$. Thus, the $\chi^2$ test statistic was calculated by $\chi^2 = \sum(m_{t} - e_{t})^{2} / e_{t}$, with the degrees of freedom equal to one less than the total number of tissues.
+
+It is not clear that they correctly adjusted the degrees of freedom when the number of available tissues (i.e. those with sufficient sequencing coverage) was less than 16 for a given region.
+
+> To identify tsDMRs, we calculated $\chi^2$ values for each CpG unit, __defined as three consecutive CpGs__
+
+The genomic intervals used in their analyses are groups of 3 CpGs, which they at times refer to as _CpG units_. I assume that these CpG units do not overlap but this isn't made clear. This $\chi^2$ test statistic differs from that used in my analysis of the _Avy_ methylome data because I test at every CpG whereas they test at every group of 3 CpGs.
+
+Then, a Hidden Markov Model (HMM) was used to identify putative tsDMRs:
+
+> ..., [we] employed an HMM as implemented by [`pmtk3`](https://github.com/probml/pmtk3) to segment the genome, using methods as previously described[^58] with several alterations. Briefly, we trained a four-state HMM, with each state consisting of a mixture of two Gaussians, with the Baun-Welch [sic] algorithm. States were estimated using the forward-backward algorithm, with the highest-valued $\chi^2$ state denoting a prefiltered set of tsDMRs[^wot].
+
+[^58]: Dixon, J.R. et al. Topological domains in mammalian genomes identified by analysis of chromatin interactions. Nature 485, 376–380 (2012).
+
+[^wot]: "with the highest-valued $\chi^2$ state denoting a prefiltered set of tsDMRs"; what does this even mean?
+
+__There is not enough detail to reproduce the HMM used in their analysis__. They don't describe what the four states in the HMM actually are. Nor do they describe the "several alterations" made to the method in Dixon et al. Moreover, based on a quick scan, Dixon et al. only contains a generic description of a 3-state HMM, which isn't very helpful in trying to understand the methods in the present paper. In summary, the HMM isn't described in sufficient detail to reproduce it.
+
+The putative tsDMRs were then filtered according to variation across tissues:
+
+> To select for tsDMRs with a large magnitude of variance in tissue methylation, we determined the intersection point of tissue-specific and non–tissue specific standard deviation distributions (Fig. 2e, right) and removed sites with smaller standard deviation than this intersection point (here $11.88\%$ mCG). The final set of tsDMRs was represented by three genomic loci: the left and right CpG boundaries were called by the HMM, along with the central CpG site having the highest $\chi^2$ value, which represented an estimate of the methylated base showing the greatest tissue specificity.
+
+No particular comments on this step.
+
+
+They report an FDR for each region:
+
+> To estimate the false discovery rate, we repeated this analysis on ten random permutations of the data set, each of which consisted of random assignment of methylated base calls within each tissue while maintaining baselevel sequencing depth.
+
+They claim that the intial HMM segmentation identifies DMRs at the unbelievable (in the literal sense of the word) FDR value of $3.96 \times 10^{-5}$. My instinct is that the number of permutations is insufficient to accurately estimate the FDR and I take the reported FDRs with a large handful of salt.
+
+Given a putative tsDMR, the tissues driving that variability eredentified as those with the highest specificity relative to the Shannon entropy of the region. This basically amounts to checking which of the tissues had the "most different" methylation levels within putative tsDMRs.
+
+### Other questions
+
+#### Are these tissues from the same mouse? Do they have multiple mice per tissue? How much of the variation is mouse-specific (sequence-driven) rather than tissue-driven? {-}
+
+The Methods says that, "Mouse tissues were isolated from a female C57Bl/6 mouse at least 4 weeks old (Charles River) at 14.5 d of pregnancy". I _think_ this means a single mouse, although the wording is somewhat ambiguous. If multiple mice were used it does not say how many mice were used nor which tissues were collected from which mouse. Later on they say that, "Previously published mouse methylomes (ES and NPC) were downloaded and remapped". So, at least two of the tissues were from different mice.
+
+While they did use methylomes from Cast/129 and 129/Cast hybrids to replicate some of the putative "cortex vestigal enhancers" identified in the C57Bl/6 methylomes, if the majority of the tissues are $n=1$ from a single mouse then there is no sense of the variability of these tsDMRs across mice.
+
+### How could this be adapted to the _Avy_ methylome data?
+
+The basic idea would be to run a HMM on the $\chi^2$ statistics. There are two key things to consider:
+
+1. What goes into the HMM, i.e. what statistic?
+2. What sort of HMM?
+
+#### What goes into the HMM? {-}
+
+You could do this on CpG-specific $\chi^2$ statistics (what we have now) or on $\chi^2$ statistics computed from groups of CpGs (e.g. groups of 3 as done in the present paper). There's no reason to believe that groups of 3 is the "correct" number to use if grouping, and I think the amount of grouping would depend on the region's characteristics (e.g. CpG density, spatial correlation of methylation of the region).
+
+They suggest grouping because they have low coverage (~$8\times$) sequencing data, whereas the _Avy_ methylome data has a higher sequencing coverage, so in that sense grouping may be unnecessary for the _Avy_ methylome data.
+
+#### What sort of HMM? {-}
+
+As discussed above, the HMM used in this paper is not described in sufficient detail to replicate it. In particular, I don't know what the four states are. But if I was to try to use a HMM for this problem in the _Avy_ methylome data I would start with two states: "no difference in methylation across the 5 samples" vs. "difference in methylation across the 5 samples".
+
+There still remain several other important choices to parameterise the HMM such as the transition probabilities and emission distributions, which again aren't described in sufficient detail in the present paper.
+
+In summary, implementing a HMM would require a fair bit of exploratory work to identify a good parameterisation.
