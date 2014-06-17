@@ -714,3 +714,9 @@ While the authors propose a method to test for significant signal, it is not cle
 
 The code is written in Matlab and available from [https://github.com/tknijnen/msr/](https://github.com/tknijnen/msr/). It includes a runtime environment that allows users who don't have Matlab installed to run the `MSR` software.
 
+## \citet{Hovestadt:2014fm}
+
+\citeauthor{Hovestadt:2014fm} performed WGBS on 34 human and five murine medulloblastoma tumors, and eight human and three murine normals. They are interested in integrating DNA methylation with other measures, such as RNA expression and histone modifications. Much of the analysis of the WGBS data is "novel", and is based on binning and thresholding. To identify sub-group-specific differential methylation they do the following:
+
+> For all patterns described earlier, the average methylation level per gene and sample was calculated for the entire WGBS cohort. Analysis of variance was used to determine genes differentially methylated between all four medulloblastoma subgroups and combined controls (adjusted P value , 0.001). The Benjamini–Hochberg procedure was used to adjust for multiple testing. Subgroup-specific differentially methylated genes were determined by applying a post-hoc test on genes previously determined as being differentially methylated. (R package: `multcomp`, functions: `mcp` and `glht`). Individual medulloblastoma subgroups were required to be significant against all other subgroups combined, and against control samples separately (P value , 0.001; in essence eight comparisons were made). This testing procedure was deemed appropriate because of large sample sizes and continuous methylation levels resulting of averaging of multiple CpGs.
+
