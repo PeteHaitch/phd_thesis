@@ -699,3 +699,18 @@ As discussed above, the HMM used in this paper is not described in sufficient de
 There still remain several other important choices to parameterise the HMM such as the transition probabilities and emission distributions, which again aren't described in sufficient detail in the present paper.
 
 In summary, implementing a HMM would require a fair bit of exploratory work to identify a good parameterisation.
+
+## \citet{Knijnenburg:2014ke}
+
+\citeauthor{Knijnenburg:2014ke} propose a segmentation algorithm, `MSR` (multiscale signal representation), to represent a vast array of genomic signals that are measured on different scales. Such signals include DNA methylation. 
+
+An example of segmentation DNA methylation data, comparing a colon tumor to its matched normal mucosa, uses the log-ratio of tumor to normal DNA methylation levels. While this is a "differential methylation" signal, as the authors' note, `MSR` does not explicitly test for differential methylation as its purpose is genome segmentation:
+
+> The `MSR` method is complementary to other segmentation techniques, such as `Segway` and `ChromHMM`: whereas the `MSR` segments one genomic signal at multiple scales, these HMM-based models use multiple genomic signals to provide one segmentation, thereby dividing the genome into a number of functional states called chromatin domains.
+
+This example, like all others in the paper, is effectively an $n=1$ analysis. __It is not clear how this method would be generalised to include biological variation.__
+
+While the authors propose a method to test for significant signal, it is not clear whether or how this method accounts for the fact that the same dataset is used to discover and test the features. This score, called _SFC_ (significant fold change), seems similar in spirit to the CDIF proposed in \cite{Sun:2014fk}. 
+
+The code is written in Matlab and available from [https://github.com/tknijnen/msr/](https://github.com/tknijnen/msr/). It includes a runtime environment that allows users who don't have Matlab installed to run the `MSR` software.
+
