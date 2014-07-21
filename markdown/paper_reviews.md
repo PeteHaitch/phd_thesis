@@ -741,3 +741,71 @@ This is the first paper I've seen that uses phylogenetic approaches to studying 
 This approach discretisation of $\beta$-values into lowly-, intermediate- and highly-methylated categories.
 
 Putting DNA methylation into a phylogenetic framework gives (in principle) access to a whole raft of existing analysis methodologies.
+
+## \citet{Lee:2014cv}
+
+Figure 3 describes several scenarios that would lead to DNA methylation heterogeneity.
+
+## \citet{Gokhman:2014cp}
+
+This paper compares DNA methylomes from a Denisovan sample and a Neandertal to methylomes from present day humans. They exploit the natural deamination of cytosines (mC -> thymine and C -> uracil) to infer the methylation state of cytosines from the C->T conversion ratios. __IMPORTANT:__ These C->T ratios are __not__ the same as $\beta$-values, but they can be scaled by a number, $\frac{1}{p_{m}}$, so that they have a similar interpretation.
+
+
+They smooth these C->T ratios using a sliding window, where the window size is chosen as that which maximises the correlation with methylomes from present day humans (43-89 CpGs, depending on Denisovan or Neandartal and autosome or X-chromosome).
+
+The authors advocate smoothing of DNA methylation:
+
+> Such noise reduction is advisable in methylation samples, as smoothing over neighboring CpGs increases accuracy for low-coverage positions and complies with the high correlation in methylation between adjacent positions and the mostly regional function of DNA methylation
+
+and cite the `BSmooth` paper in support of this position.
+
+They use a rather weird way of removing potential PCR duplicates:
+
+> To remove PCR duplicates that are characterized by abnormally high coverage, we fitted the (strand-specific) coverage distribution to a mixture of (two) Gaussians. Positions with a coverage that was higher than three standard deviations from the mean of the main distribution were removed from the analyses. In the Neandertal, the threshold was set to 46 reads and in the Denisovan the threshold was set to 30 reads.
+
+I don't really understand why they used this and not the standard Picard `MarkDuplicates`-type approach; perhaps it's because the sequencing protocol removes uracils, which would lead to variation in read lengths?
+
+### Identification of DMRs
+
+There's a convoluted procedure to estimate what amounts to the average $\beta$-value of each window, and its associated standard deviation, which are used to form a z-stat. P-values are FDR-adjusted and only windows with FDR $< 0.05$ are retained. Furthermore, only windows with a greater than $60\%$ change in methylation are retained for further analysis.
+
+## \citet{Rijlaarsdam:2014hp}
+
+`DMRforPairs` tries to find DMRs in 1 vs. 1 comparisons - an ambitious aim. I understand the desire for such comparisons but I wouldn't believe the results of most $n = 1$ studies.
+
+## \citep{Chen:2014jb}
+
+This paper proposes a non-parametric test (_Cuzik_ test) of differences in DNA methylation __between multiple groups__, that also accounts for the well-known association of age and DNA methylation. The model requires that the age variables is discretised into bins. There is no discussion of how to choose bins (they use 5-year bins in the real data analysis). Furthermore, my intuition is that leaving age as a continuous variable is preferable.
+
+The Cuzik test assumes there is a trend of differential methylation with age, either increasing ($W_{1}$) or decreasing ($W_{2}$). As the trend is unknown, the authors propose using $W = max(W_{1}, W_{2})$ and then make use of an asymptotic bound to obtain approximate P-values. The description of the Cuzik test sounds rather different [on Wikipedia](http://en.wikipedia.org/wiki/Cuzick%E2%80%93Edwards_test) - I'm not sure what to make of that.
+
+The authors make the reasonable observation that if there is a trend (even if it's not truly linear) then there test, which is designed to detect such a trend, has more power than do tests that aren't designed to detect a trend.
+
+### Simulation study
+
+$\beta$-values are simulated from marginal distributions (Uniform, truncated Normal or Beta), which do not include the spatial correlation of $\beta$-values. They specifically simulate scenarios where there is a trend-with-age of the $\beta$-values, thus ensuring there test looks good, and do not consider a setting where there is no trend.
+
+## \citep{Park:2014ho}
+
+This paper describes the `methylSig` software. `methylSig` uses a Beta-Binomial model to test for DMCs across an arbitrary number of groups (although the proposed test is a likelihood ratio test of group $k$ vs. group $k'$). The dispersion parameter in the Beta-Binomial model, $\theta_{i}$ (assumed constant across groups), is treated as a nuisance parameter that is first estimated and then plugged into the likelihoods to estimate (using maximum likelihood) the parameters of interest, $\mu_{i, k}$ and $\mu_{i, k'}$. For small sample sizes, they use the $t$-distribution, rather than the 'natural' $\chi^{2}_{1}$-distribution of a likelihood ratio statistic. The dispersion parameters are not shrunk, e.g. via Empiricial Bayes.
+
+They also propose incorporating local information, via kernel smoothing, to estimate the parameters $\mu_{i}$ and $\theta_{i}$.
+
+The examples all use ERRBS (enhanced RRBS) data and so it isn't clear whether `methylSig` scales to WGBS data.
+
+To increase power, the authors suggest "tiling" observations. Tiling amounts to pooling data, i.e. summing all measurements within a tile (25 bp for ERRBS data, larger for WGBS)) and then using the tiles as the observations rather than the CpGs.
+
+The plots of the results are very busy and I don't like them much.
+
+### Identifying differentially methylated transcription factors
+
+Rather than looking for general DMRs, the authors focus on identifying differentially methylated transcription factors. There are two approaches:
+
+1. Test which TFs contain a significant number of DMCs.
+2. Test which TFs are hypo- or hyper-methylated (combining all CpGs in the TF).
+
+### Simulation study
+
+The simulation study is based on ERRBS data from a study of acute myeloid leukemia. It uses the coverage distribution, the locations of CpGs and the estimated dispersions from the real data. However, the $\beta$-values are simulated from Beta-Binomial distributions with group-specific means to induce DMCs. This model does not incorporate correlation amongst the $\beta$-values, although the simulation models allows for DMCs to cluster into DMRs, which is similar to inducing correlations amongst the $\beta$-values, albeit restricted to CpGs in DMRs.
+
+The authors advocate for using `methylSig` with dispersions estimated locally via kernel smoothing. They note that `BSmooth` has low power to detect "independent DMCs", but this is not suprising because `BSmooth` is designed to detect DMRs.
