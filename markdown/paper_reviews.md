@@ -809,3 +809,23 @@ Rather than looking for general DMRs, the authors focus on identifying different
 The simulation study is based on ERRBS data from a study of acute myeloid leukemia. It uses the coverage distribution, the locations of CpGs and the estimated dispersions from the real data. However, the $\beta$-values are simulated from Beta-Binomial distributions with group-specific means to induce DMCs. This model does not incorporate correlation amongst the $\beta$-values, although the simulation models allows for DMCs to cluster into DMRs, which is similar to inducing correlations amongst the $\beta$-values, albeit restricted to CpGs in DMRs.
 
 The authors advocate for using `methylSig` with dispersions estimated locally via kernel smoothing. They note that `BSmooth` has low power to detect "independent DMCs", but this is not suprising because `BSmooth` is designed to detect DMRs.
+
+## \citet{Smallwood:2014kn}
+
+This is the first paper that I know of with single-cell bisulfite sequencing data (there is also a scRRBS protocol). The technique, _scBS-seq_, is a variation on PBAT-seq. The single-cell DNA underwent five cycles of random priming, extension and purifying, which means there were up to five 'copies' of each allele.
+
+It is __not a genome-wide technique__, since it only gives "accurate" results for $48.4\%$ of CpGs.
+
+They profile ovulated metaphase II oocytes (MII) because:
+
+> MIIs are an excellent model for technical assessment as they: (i) can be individually handpicked to ensure that only one cell is processed; (ii) represent a highly homogeneous population, which allows discrimination between technical and biological variability; and (iii) present a distinct DNA methylome comprising large-scale hypermethylated and hypomethylated domains.
+
+They contrast the MIIs with embryonic stem cells (ESCs):
+
+> ESCs grown in serum conditions exist in a state of dynamic equilibrium characterized by transcriptional heterogeneity and stochastic switching of transcriptional states9–12, and emerging evidence from immunofluorescence and locus-specific studies suggests that 5mC heterogeneity exists in ESCs13.
+
+A fascinating fact from the supplementary material, which I don't understand:
+
+> The overall higher mapping efficiency of oocytes versus ESCs can be explained by the amount of DNA in each cells (4n for MII oocytes and 2n for ESCs), resulting in a relatively lower contribution of spurious sequences in MIIs.
+
+They sequenced multiple single cells (51 across from four different 'populations') at very shallow depth ($\approx 20 \times 10^{6}$ 100bp PE reads/sample). Furthermore, mapping efficiences were very low ($\approx 3.9 \times 10^{6}$ reads/sample or $20\%$), which is largely due to low-complexity sequences (specifically, poly-Ts that are inherant to the protocol). They also sequenced "bull cell mass" samples, i.e. pools of the same cells. They could largely recapitulate the $\beta$-values of the pools using 12 single-cells.
