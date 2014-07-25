@@ -829,3 +829,28 @@ A fascinating fact from the supplementary material, which I don't understand:
 > The overall higher mapping efficiency of oocytes versus ESCs can be explained by the amount of DNA in each cells (4n for MII oocytes and 2n for ESCs), resulting in a relatively lower contribution of spurious sequences in MIIs.
 
 They sequenced multiple single cells (51 across from four different 'populations') at very shallow depth ($\approx 20 \times 10^{6}$ 100bp PE reads/sample). Furthermore, mapping efficiences were very low ($\approx 3.9 \times 10^{6}$ reads/sample or $20\%$), which is largely due to low-complexity sequences (specifically, poly-Ts that are inherant to the protocol). They also sequenced "bull cell mass" samples, i.e. pools of the same cells. They could largely recapitulate the $\beta$-values of the pools using 12 single-cells.
+
+## \citep{Robinson:2014tx}
+
+Mark has written a review of methods to detect DMRs. It is fairly high-level (as it should be) and could basically act as my description of calling DMCs and DMRs! For example:
+
+> It is therefore no surprise that BB assumptions are made in several recently proposed packages, such as BiSeq [30], MOABS [29], DSS [28] and RADMeth [33]. Similarly, empirical Bayes (EB) methods fit naturally for modeling and inference across many types of genomic data and DNA methylation assays are no different. MOABS and DSS both implement hierarchical models and use the whole dataset to estimate the hyperparameters of the beta distribution; RADMeth and BiSeq use standard maxi- mum likelihood without any moderation. While BiSeq and RADMeth do not moderate parameter estimates, they provide facilities for complex designs through design matrices, which MOABS and DSS do not currently offer.
+
+Mark notes that neither Fisher's exact test, nor logistic regression, control for within-group variability:
+
+> While this strategy (Fisher's exact test) may be sufficient in comparing cell lines, we stress that the use of FET should be avoided in the general case; most systems have inherent biological variation and FET does not account for it.
+
+> Likewise, using the binomial distribution, such as a logistic regression framework (e.g., methylKit; 32), also does not facilitate estimation of biological variability, unless an overdispersion term is used.
+
+This quote fits with my intuition:
+
+> Ultimately, our intuition suggests that moderated t/F-statistics on the normalized log-ratios of intensities seems most rigorous. -- Highlighted 25/07/2014
+
+Mark emphasies the fact that there is a __big__ difference between methods that work on pre-defined regions and methods that seek to identify such regions:
+
+> ... one must distinguish between methods that operate on predefined regions, with those that define regions of DM. The latter is considerably more difficult because ensuring control of the false discovery rate (FDR) at the region-level is non-trivial; in particular, controlling false discoveries at the site-level does not give a direct way to controlling false discoveries at the region-level when the region itself is also to be defined.
+
+
+
+### Missing
+`methylSig`
