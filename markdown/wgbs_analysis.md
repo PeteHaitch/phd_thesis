@@ -202,6 +202,39 @@ Methods to estimate the cellular heterogeneity bias and adjust for it are availa
 
 ## Methylation calling
 
+Methylation calling is the process of calling each sequenced methylation locus as being either methylated or unmethylated[^no_call], as well as determining the _context_ or _type_ of each methylation event (i.e., CpG, CHG or CHH) based on the sequencing data and a reference DNA sequence. In principle, this is a simple process, however, this belies some complications, which I discuss in this section.
+
+[^no_call]: A third possibility is making the call that the "methylation locus" is not in fact a methylation locus. For example, if the sequenced base at a methylation locus is an _A_ or a _G_ then this may be evidence that position is not in fact a methylation locus.
+
+Most bisulfite-sequencing alignment software includes methylation calling software (e.g. Bismark includes `bismark_methylation_extractor`), which is run after the alignment and post-processing of the `SAM/BAM` file. An alternative is `Bis-SNP` \citep{Liu:2012ge}, which performs methylation calling, and also variant genotyping, from bisulfite-sequencing data aligned with the user's choice of alignment software. These aforementioned methods perform methylation calling of 1-tuples. In contrast, `comethylation` can perform methylation calling at m-tuples. `MethPat` (__CITE__) is also capable of performing methylation calling at m-tuples.
+
+### Methylated or unmethylated?
+
+At each cytosine in a reference sequence ($\mathcal{I}$), the base from each read aligned to that locus is compared - if the sequenced base at a methylation locus is a _C_ then call it as methylated, if the sequenced base at a methylation locus is a _T_ then call it as unmethylated, 
+
+
+Determining whether a position is methylated or unmethylated requires that the sequenced base is compared to a reference sequence
+
+All of these software perform reference-based methylation calling. That is, they require the specification of a DNA reference sequence that the aligned bisulfite-sequencing data are compared against to infer the methylation state of each sequenced locus. This is typically the reference genome used in the alignment step, which implicitly defines $\mathcal{I} :=\mathcal{I}_{ref}$, where $\mathcal{I}_{ref}$ is the set of methylation loci in the reference genome. Due to DNA variation between the sample and the reference genome, this assumption is obviously not true but it is often good enough when paired with a post-hoc filtering of the methylation calls (described below).
+
+
+A more refined set of methylation calls can be made by incorporating sample-specific genetic variation into the methylation calling procedure. For example, `Bis-SNP` is calls genetic variation simulataneously with methylation calls at positions defined $\mathcal{I}_{Bis-SNP}$. Alternatively
+
+
+
+
+As mentioned in __SECTION__, these results can be _post-hoc_ filtered to remove problematic sites to produce $\mathcal{I} \subset \mathcal{I}_{ref}$. There reference genome
+
+
+This is typically the reference genome used in the alignment step, although this may be refined by including known sample-specific genetic variation
+
+
+### Determining the context or methylation type
+
+
+The reference sequence may also used to infer the _context_ or _type_ of each methylation event, that is, CpG, CHG or CHH. This is used by Bismark, `comethylation` and `MethPat`. Alternatively, the context could be inferred from the sequencing data rather than the reference genome by looking at the upstream bases
+
+
 __UP TO HERE__
 
 __TODO: Re-write.__
