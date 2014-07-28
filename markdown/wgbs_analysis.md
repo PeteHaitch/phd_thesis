@@ -13,7 +13,9 @@
 
 ## Chapter overview
 
-While there are several bisulfite-sequencing assays (see __CHAPTER__) and many different software tools, there are four fundamental steps when analysing bisulfite-sequencing data:
+This chapter outlines the steps in a bioinformatics analysis of a whole-genome bisulfite-sequencing dataset. Throughout this chapter I concentrate on the methylC-seq protocol, which is a directional protocol and the standard whole-genome bisulfite-sequencing assay. All data used in my thesis were generated using this protocol (__CHECK__). Other bisulfite-sequencing assays, particularly targeted assays such as RRBS and Methyl-Seq, require some additional tweaks.
+
+There are four fundamental steps in the bioinformatics analysis:
 
 1. Data quality control checks
 2. Read mapping and post-processing of mapped reads
@@ -22,7 +24,7 @@ While there are several bisulfite-sequencing assays (see __CHAPTER__) and many d
 
 __FIGURE__ provides a more detailed view of these four steps (__Figure should be a flow chart with the various sub-steps included, e.g. Inference = DMC, DMR, ASM, meth-SNP detection, etc.__)
 
-Steps 1, 2 and 4 will be familiar to anyone who analyses high-thoughput sequencing data, but each requires a "twist" to work with bisulfite-sequencing data. Step 3 is obviously unique to assays of DNA methylation but there are similarities to variant calling from DNA-seq. Throughout this chapter I concentrate on the methylC-seq protocol, which is a directional protocol and the standard whole-genome bisulfite-sequencing assay. All data used in my thesis were generated using this protocol (__CHECK__). Other assays, particularly targetted assays such as RRBS and Methyl-Seq, require some additional tweaks.
+Steps 1, 2 and 4 will be familiar to anyone who analyses high-thoughput sequencing data, but each requires a "twist" to work with bisulfite-sequencing data. Step 3 is obviously unique to assays of DNA methylation but there are similarities to variant calling from DNA-seq.
 
 In this chapter I describe steps 1-2 in broad terms. An excellent review of these fundamental steps, including comparisons of different software, is given by \citet{Krueger:2012ks}. My thesis has focused on steps 3 and 4 of this process. In this chapter I review previous work on steps 3-4 and defer my contributions on these topics to subsequent chapters. While this chapter focuses on analysing bisulfite-sequencing data, in particular whole-genome bisulfite-sequencing data, some parts __SECTION Cellular heterogeneity, Inference, OTHERS???__ will also be applicable to methylation microarrays (__CHECK AFTER I'VE WRITTEN IT__).
 
@@ -211,6 +213,8 @@ Most bisulfite-sequencing alignment software includes methylation calling softwa
 ### Methylated or unmethylated?
 
 All bisulfite-sequencing assays use _reference-based_ methylation calling. That is, they require the specification of a DNA reference sequence that the aligned bisulfite-sequencing data are compared against to infer the methylation state of each sequenced locus. Care must be taken to correctly handle the orientation and strand of the alignment. __FIGURE__ gives several examples (__TODO: Figure explaining reference-based methylation calling for reads aligned to forward and reverse strands__).
+
+Each aligned read may be used for methylation calling, although each read should be subjected to some filtering to remove low-quality reads and low-quality bases. Standard filters include removing reads marked as possible PCR duplicates, reads with a mapping quality (`mapQ`) below a threshold and bases with a base quality below a threshold, and ignoring read-positions where there is evidence of M-bias.
 
 The reference sequence is typically the reference genome used in the alignment step, which implicitly defines $\mathcal{I}_{j} :=\mathcal{I}_{rg}, j = 1, \ldots, N$, where $\mathcal{I}_{rg}$ is the set of methylation loci in the reference genome. Due to DNA variation between the sample and the reference genome, this assumption is obviously not true. A more refined approach incorporates genetic differences between the sample and the reference genome. This can be done in several ways:
 
