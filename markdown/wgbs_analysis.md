@@ -24,7 +24,7 @@ __FIGURE__ provides a more detailed view of these four steps (__Figure should be
 
 Steps 1, 2 and 4 will be familiar to anyone who analyses high-thoughput sequencing data, but each requires a "twist" to work with bisulfite-sequencing data. Step 3 is obviously unique to assays of DNA methylation but there are similarities to variant calling from DNA-seq. Throughout this chapter I concentrate on the methylC-seq protocol, which is a directional protocol and the standard whole-genome bisulfite-sequencing assay. All data used in my thesis were generated using this protocol (__CHECK__). Other assays, particularly targetted assays such as RRBS and Methyl-Seq, require some additional tweaks.
 
-In this chapter I describe steps 1-2 in broad terms. An excellent review of these fundamental steps, including comparisons of different software, is given by \citet{Krueger:2012ks}. My thesis has focused on steps 3 and 4 of this process. In this chapter I review previous work on steps 3-4 and defer my contributions on these topics to subsequent chapters.
+In this chapter I describe steps 1-2 in broad terms. An excellent review of these fundamental steps, including comparisons of different software, is given by \citet{Krueger:2012ks}. My thesis has focused on steps 3 and 4 of this process. In this chapter I review previous work on steps 3-4 and defer my contributions on these topics to subsequent chapters. While this chapter focuses on analysing bisulfite-sequencing data, in particular whole-genome bisulfite-sequencing data, some parts __SECTION Cellular heterogeneity, Inference, OTHERS???__ will also be applicable to methylation microarrays (__CHECK AFTER I'VE WRITTEN IT__).
 
 ## Data quality control checks
 The first step in any analysis of high-throughput sequencing data is to perform a quality control check of the data. Much of this is done visually by comparing summary graphs of the current sample(s) to previous 'good' samples. As such, much of data quality control checking relies on the judgement of the analyst.
@@ -204,85 +204,49 @@ Methods to estimate the cellular heterogeneity bias and adjust for it are availa
 
 Methylation calling is the process of calling each sequenced methylation locus as being either methylated or unmethylated[^no_call], as well as determining the _context_ or _type_ of each methylation event (i.e., CpG, CHG or CHH) based on the sequencing data and a reference DNA sequence. In principle, this is a simple process, however, this belies some complications, which I discuss in this section.
 
-[^no_call]: A third possibility is making the call that the "methylation locus" is not in fact a methylation locus. For example, if the sequenced base at a methylation locus is an _A_ or a _G_ then this may be evidence that position is not in fact a methylation locus.
+[^no_call]: A third possibility is making the call that the "methylation locus" is not in fact a methylation locus. For example, if the sequenced base at a cytosine in the reference sequence is an _A_ or a _G_ then this may be evidence that the position is not in fact a methylation locus.
 
-Most bisulfite-sequencing alignment software includes methylation calling software (e.g. Bismark includes `bismark_methylation_extractor`), which is run after the alignment and post-processing of the `SAM/BAM` file. An alternative is `Bis-SNP` \citep{Liu:2012ge}, which performs methylation calling, and also variant genotyping, from bisulfite-sequencing data aligned with the user's choice of alignment software. These aforementioned methods perform methylation calling of 1-tuples. In contrast, `comethylation` can perform methylation calling at m-tuples. `MethPat` (__CITE__) is also capable of performing methylation calling at m-tuples.
+Most bisulfite-sequencing alignment software includes methylation calling software (e.g. Bismark includes `bismark_methylation_extractor`), which is run after the alignment and post-processing of the `SAM/BAM` file. An general alternative is `Bis-SNP` \citep{Liu:2012ge}, which performs methylation calling, and also variant genotyping, from bisulfite-sequencing data aligned with the user's choice of alignment software. These aforementioned methods all perform methylation calling of 1-tuples. In contrast, `comethylation` can perform methylation calling at m-tuples. `MethPat` (__CITE__) is also capable of performing methylation calling at m-tuples.
 
 ### Methylated or unmethylated?
 
-At each cytosine in a reference sequence ($\mathcal{I}$), the base from each read aligned to that locus is compared - if the sequenced base at a methylation locus is a _C_ then call it as methylated, if the sequenced base at a methylation locus is a _T_ then call it as unmethylated, 
+All bisulfite-sequencing assays use _reference-based_ methylation calling. That is, they require the specification of a DNA reference sequence that the aligned bisulfite-sequencing data are compared against to infer the methylation state of each sequenced locus. Care must be taken to correctly handle the orientation and strand of the alignment. __FIGURE__ gives several examples (__TODO: Figure explaining reference-based methylation calling for reads aligned to forward and reverse strands__).
 
+The reference sequence is typically the reference genome used in the alignment step, which implicitly defines $\mathcal{I}_{j} :=\mathcal{I}_{rg}, j = 1, \ldots, N$, where $\mathcal{I}_{rg}$ is the set of methylation loci in the reference genome. Due to DNA variation between the sample and the reference genome, this assumption is obviously not true. A more refined approach incorporates genetic differences between the sample and the reference genome. This can be done in several ways:
 
-Determining whether a position is methylated or unmethylated requires that the sequenced base is compared to a reference sequence
+* Whole-genome sequencing or genotyping of the sample
+* Calling genetic variations directly from the bisulfite-sequencing data
+* Excluding sites of known genetic variation
 
-All of these software perform reference-based methylation calling. That is, they require the specification of a DNA reference sequence that the aligned bisulfite-sequencing data are compared against to infer the methylation state of each sequenced locus. This is typically the reference genome used in the alignment step, which implicitly defines $\mathcal{I} :=\mathcal{I}_{ref}$, where $\mathcal{I}_{ref}$ is the set of methylation loci in the reference genome. Due to DNA variation between the sample and the reference genome, this assumption is obviously not true but it is often good enough when paired with a post-hoc filtering of the methylation calls (described below).
+#### Whole-genome sequencing or genotyping of the sample {-}
 
+The gold-standard is to perform whole-genome DNA sequencing of each sample. This data is then used to form a set of sample-specific methylation loci, $\mathcal{I}_{j}$. However, this approach is also very expensive due to the extra sequencing requirements. A cheaper alternative is to genotype the sample on a genome-wide SNP microarray. This will give very accurate, very cheap genotypes at a large number of loci ($500,000 - $5,000,000$), however, by definition it cannot identify genetic differences that aren't on the array, such as novel sample-specific genetic variants.
 
-A more refined set of methylation calls can be made by incorporating sample-specific genetic variation into the methylation calling procedure. For example, `Bis-SNP` is calls genetic variation simulataneously with methylation calls at positions defined $\mathcal{I}_{Bis-SNP}$. Alternatively
+#### Calling genetic variations directly from the bisulfite-sequencing data {-}
 
+The next best approach is that implemented in `Bis-SNP` \citep{Liu:2012ge}, which is to call genetic variation from the bisulfite-sequence data itself and to then define a set of sample-specific methylation loci, $\mathcal{I}_{j} := \mathcal{I}_{j}^{Bis-SNP}$, at which to call methylation events. It is designed for _directional_ bisulfite-sequencing libraries such as the widely used Illumina (_Lister-style_) whole-genome bisulfite-sequencing protocol.
 
+Certain variants, in particular (heterozygous) $C>T$ SNPs, are more difficult to accurately genotype than others. Unfortunately, $C>T$ SNPs are also quite important because they are the most common SNPs in mammals \citep{Liu:2012ge}, mostly occur at CG dinucleotides and, as a result, are easily mis-called as unmethylated cytosines rather than as genetic variants. It is possible, although difficult, to distinguish such $C>T$ SNPs from unmethylated cytosines by examining the nucleotide on the opposing strand - if it is a $G$ then the position must be a $C$, if it is a $A$ then it must be a $T$ (see __FIGURE__). Other substitutions are more readily called, and insertion and deletion events (InDels) may also be called. In case it isn't clear, `Bis-SNP` actually provides three important pieces of information that make it almost as good as having whole genome DNA sequencing data on the same sample:
 
+1. Reference-specific methylation loci, i.e., cytosines in the reference genome that are mutated to non-cytosine nucleotides in the sample's genome.
+2. Sample-specific methylation loci, i.e., cytosines in the sample's genome that are non-cytosine nucleotides in the reference genome.
+3. Other genetic variants that may be used in additional analyses, such as identifying allele-specific methylation, or to refine the methylation _type_ or _context_ (see below).
 
-As mentioned in __SECTION__, these results can be _post-hoc_ filtered to remove problematic sites to produce $\mathcal{I} \subset \mathcal{I}_{ref}$. There reference genome
+Genotype calls made using `Bis-SNP` are less accurate than those from equivalent-depth whole-genome DNA sequencing because of the reduced complexity of bisulfite-converted DNA. However, we essentially get DNA variation "for free" by using `Bis-SNP`, which makes it my preferred approach for methylation calling at 1-tuples.
 
+#### Excluding sites of known genetic variation {-}
 
-This is typically the reference genome used in the alignment step, although this may be refined by including known sample-specific genetic variation
+The third approach is to call methylation loci using the reference genome and to _post-hoc_ exclude any loci that overlap sites of known genetic variation in the population. For example, exclude all cytosines in the reference genome that are also SNPs in dbSNP (__CITE__). This approach can only exclude sites from $\mathcal{I}_{j}$, it cannot augment $\mathcal{I}_{j}$ by adding sample-specific methylation loci.
 
+This is a conservative approach, as it will remove loci regardless of whether the sample has a genetic variant at that position or not, but it may be good enough. It also obviously requires a database of known variation for the organism being studied, which is the case for commonly studied organisms such as humans and mice. Finally, post-hoc filtering of known genetic variants is arguably a bare minimum requirement for methylation calling in order to prevent spurious methylation calls contaminating the dataset.
+
+To remove those reference-specific methylation loci that are __not__ found in databases of known genetic variation, we might identify loci in the sample that display a large number of non-C/T bases (resp. non-G/A bases) at a C (resp. G) on the forward (resp. reverse) strand of the reference genome.
 
 ### Determining the context or methylation type
 
+In addition to determining whether a cytosine is methylated or unmethylated, we also want to determine the _context_ of the cytosine, also known as the _methylation type_. That is, we want to determine whether the cytosine is a CG, CHG or a CHH.
 
-The reference sequence may also used to infer the _context_ or _type_ of each methylation event, that is, CpG, CHG or CHH. This is used by Bismark, `comethylation` and `MethPat`. Alternatively, the context could be inferred from the sequencing data rather than the reference genome by looking at the upstream bases
-
-
-__UP TO HERE__
-
-__TODO: Re-write.__
-
-1. __Describe methylation calling__
-2. __Compare reference-based methylation calling to Bis-SNP and sample-specific methylation calling.__
-3. __Describe complications due to sequence variation at or nearby methylation loci.__
-4. __Describe post-hoc filtering approaches.__
-
-If using a reference-based methylation caller, such as `Bismark`, then we are implicitly defining $\mathcal{I} :=\mathcal{I}_{ref}$, where $\mathcal{I}_{ref}$ is the set of methylation loci in the reference genome. Due to DNA variation between the sample and the reference genome, this assumption is not true. As mentioned in __SECTION__, these results can be _post-hoc_ filtered to remove problematic sites to produce $\mathcal{I} \subset \mathcal{I}_{ref}$.
-
-Alternatively, we might use a more sophisticated methylation caller, such as `Bis-SNP` to define $\mathcal{I}$.
-
-However, it is often "good enough" for genome-level analyses, provided that the sample and the reference are not too far genetically diverged, but may lead to false conclusions when performing finer-scale analyses.
-
-
-When relying on a reference genome, there are two different classes of problematic loci:
-
-1. Reference-specific loci: Methylation loci that exist in the reference genome but not in the sample's genome
-2. Sample-specific loci: Methylation loci that exist in the sample's genome but not in the reference genome
-
-Reference-specific methylation loci can lead to false methylation calls whereas sample-specific methylation loci will be missed by a reference-based methylation caller or might be misintepreted as genetic variation rather than methylation.
-
-
-if, for example, a CpG in the reference is a TpG in the sample.
-
-
-Many methylation callers ignore these problematic loci and perform _reference-based_ methylation calling using $\mathcal{I}_{ref}$ (Bismark, __others?__). These calls may then be _post-hoc_ filtered to remove known problematic sites so that $\mathcal{I} \subset \mathcal{I}_{ref}$.
-
-For example, it is commont to remove all loci that are also sites of known genetic variation, such as _single nucleotide polymorphisms_ (SNPs).
-
-
-Overall, defining $\mathcal{I} :=\mathcal{I}_{ref}$ isn't a big problem and  However, for certain loci it is clearly an issue. [@Liu:2012ge] developed the `Bis-SNP` software, which performs more sophisticated methylation calling, that is, refining the definition of $\mathcal{I}$.
-
-__TODO: Read Bis-SNP paper and summarise__
-
-__NOT TRUE (SEE BISSNP)__: It is more-or-less impossible to identify sample-specific loci if DNA sequence data of the sample are not available. The reason is that it is generally not possible to distinguish sample-specific methylation from sample-specific genetic variation from bisulfite-sequencing data alone. __FIGURE__ shows why this is so difficult. These loci lead to false negative methylation calls, we miss these completely, and could lead to false positive genetic variation calls because we misinterpret methylation as genetic variation.
-
-The effect of the reference-specific methylation loci can be more readily moderated. Reference-specific methylation loci lead to false methylation calls if, for example, a CpG in the reference is a TpG in the sample. Then all reads from the sample that map to this locus will have the T base, which can be misinterpreted as being an unmethylated cytosine. There is less of a problem if, for example, the sample has an ApG at this position; an A is not evidence for or against methylation at this loci and so a methylation caller should not be influenced by it.
-
-A standard technique to remove most reference-specific loci is to ignore all positions in the reference genome that are known to be common sites of genetic variation, such as _single nucleotide polymorphisms_ (SNPs) (__CITE__). This is a conservative technique that will remove the vast majority of reference-specific loci from further analysis, regardless of whether the sample has a genetic variant at that position. This obviously requires a database of known variation for the organism being studied, which is the case for frequently studied organisms such as humans and mice.
-
-A less conservative technique is to genotype the sample at these SNPs. __FIGURE__ shows how this can be done using only the bisulfite-sequencing data, provided the data are "directional". Briefly, suppose these is a CpG in the reference genome that is an ApG our sample.
-
-To remove those reference-specific loci that are not found in databases we might identify loci in the sample that display a large number of non-C/T bases (resp. non-G/A bases) at a C (resp. G) on the forward (resp. reverse) reference strand.
-
-* What if the downstream base is mutated
-* Array-specific problems; see "On the analysis of the illumina 450k array data: probes ambiguously mapped to the human genome" and "Guthrie card methylomics identifies temporally stable epialleles that are present at birth in humans."
+This is done by examining the two nucleotides upstream of the cytosine. It can be done based on the reference sequence, as is done in `Bismark` and `comethylation`, or from the reads themselves. The obvious difficulty with using the reads themselves is if the cytosine occurs at the last or second last position of the read, in which case the context may not be unambiguously determined from the the read alone. Instead, the context may be refined by initially using the reference genome context and then correcting for any sample-specific genetic variants in the two downstream bases.
 
 ## Inference
 

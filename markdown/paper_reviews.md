@@ -830,7 +830,7 @@ A fascinating fact from the supplementary material, which I don't understand:
 
 They sequenced multiple single cells (51 across from four different 'populations') at very shallow depth ($\approx 20 \times 10^{6}$ 100bp PE reads/sample). Furthermore, mapping efficiences were very low ($\approx 3.9 \times 10^{6}$ reads/sample or $20\%$), which is largely due to low-complexity sequences (specifically, poly-Ts that are inherant to the protocol). They also sequenced "bull cell mass" samples, i.e. pools of the same cells. They could largely recapitulate the $\beta$-values of the pools using 12 single-cells.
 
-## \citep{Robinson:2014tx}
+## \citet{Robinson:2014tx}
 
 Mark has written a review of methods to detect DMRs. It is fairly high-level (as it should be) and could basically act as my description of calling DMCs and DMRs! For example:
 
@@ -850,7 +850,16 @@ Mark emphasies the fact that there is a __big__ difference between methods that 
 
 > ... one must distinguish between methods that operate on predefined regions, with those that define regions of DM. The latter is considerably more difficult because ensuring control of the false discovery rate (FDR) at the region-level is non-trivial; in particular, controlling false discoveries at the site-level does not give a direct way to controlling false discoveries at the region-level when the region itself is also to be defined.
 
+## \citet{Liu:2012ge}
 
+I believe `Bis-SNP` is the best methylation calling software due to it's comprehensiveness. Unfortunately, it can only call methylation at 1-tuples and I need to be able to call methylation at m-tuples. `Bis-SNP` is built on `GATK (v1)` and so includes base-quality recalibration and indel realignment. Importantly, `Bis-SNP` works with any `BAM` file of bisulfite-sequencing data, which means that the user can choose his/her favourite alignment software.
 
-### Missing
-`methylSig`
+As the authors state:
+
+> Bis-SNP is a practical tool that can both (1) improve DNA methylation calling accuracy by detecting SNPs at cytosines and adjacent positions, and (2) identify heterozygous SNPs that can be used to investigate mono-allelic DNA methylation and polymorphisms in cis-regulatory sequences.
+
+Figure 1 explains how it performs SNP calling from bisulfite-sequencing data.
+
+Calling "C-strand" SNPs depends on the underlying methylation state ($\beta$, which defaults to the standard $\beta$-values) and bisulfite-conversion errors (underconversion = $\alpha$, which defaults to $0.25$) and overconversion = $\gamma$, which defaults to $0$).
+
+Rather than filter out positions from an M-bias plot, `Bis-SNP` "walks" from the 5' end of each read and excludes all positions prior to the first $T$ that is mapped to a reference $C$. This is to remove the so-called "5' bias" of the Illumina bisulfite-sequencing but will do nothing for 3' bias.
