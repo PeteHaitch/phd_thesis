@@ -5,22 +5,22 @@
 * Chapter Overview
 * QC, mapping, post-processing
 * Methylation calling
-        * Reference-based calling
+  + Reference-based calling
 * Biases
-        * M-bias
-        * Cell-composition, age, global hypo- or hyper-methylation, SNPs, alignment artefacts
+  + M-bias
+  + Cell-composition, age, global hypo- or hyper-methylation, SNPs, alignment artefacts
 * Univariate tests of $\beta_i$
 
 ## Chapter overview
 
-This chapter outlines the steps in a bioinformatics analysis of a whole-genome bisulfite-sequencing dataset. Throughout this chapter I concentrate on the methylC-seq protocol, which is a directional protocol and the standard whole-genome bisulfite-sequencing assay. All data used in my thesis were generated using this protocol (__CHECK__). Other bisulfite-sequencing assays, particularly targeted assays such as RRBS and Methyl-Seq, require some additional tweaks.
+This chapter outlines the steps in a bioinformatics analysis of a whole-genome bisulfite-sequencing dataset, with a focus on experiments studying _differential methylation_. Throughout this chapter I concentrate on the methylC-seq protocol, which is a directional protocol and the standard whole-genome bisulfite-sequencing assay. All data used in my thesis were generated using this protocol (__CHECK__). Other bisulfite-sequencing assays, particularly targeted assays such as RRBS and Methyl-Seq, require some additional tweaks.
 
 There are four fundamental steps in the bioinformatics analysis:
 
 1. Data quality control checks
 2. Read mapping and post-processing of mapped reads
 3. Methylation calling
-4. Inference
+4. Identifying differential methylation
 
 __FIGURE__ provides a more detailed view of these four steps (__Figure should be a flow chart with the various sub-steps included, e.g. Inference = DMC, DMR, ASM, meth-SNP detection, etc.__)
 
@@ -252,7 +252,13 @@ In addition to determining whether a cytosine is methylated or unmethylated, we 
 
 This is done by examining the two nucleotides upstream of the cytosine. It can be done based on the reference sequence, as is done in `Bismark` and `comethylation`, or from the reads themselves. The obvious difficulty with using the reads themselves is if the cytosine occurs at the last or second last position of the read, in which case the context may not be unambiguously determined from the the read alone. Instead, the context may be refined by initially using the reference genome context and then correcting for any sample-specific genetic variants in the two downstream bases.
 
-## Inference
+## Identifying differential methylation
+
+Identifying differential methylation refers to identifying sites or regions in the genome that have different levels of methylation between conditions. In practice, a more restricted definition is typically used; differential methylation is the difference in __average__ methylation between __two__ groups. This is analogous to identifying differential gene expression, which focuses on identifying genes that have different __average__ expression levels between two (or more) groups.
+
+While bisulfite-sequencing experiments with multiple groups have been performed and analysed (e.g. \citet{Lister:2009hy, Hansen:2011gu, Hansen:2013eo}), these have typically been done using a series of pair-wise comparisons or by comparing each sample in turn against some 'baseline' sample. This is because the analysis of a pair-wise comparison is relatively simple and because it is also generally easier to interpret a two-group comparison than a multi-group comparison, although the interpretation of multiple pair-wise differences soon becomes complex.
+
+Obviously, we want these DMCs and DMRs to be _replicable_ - it's no good identifying differences that are simply due to technical artefacts or random fluctuations. The use of multiple samples per group, that is, the use of _biological replicates_, is essential in order to estimate within-group variability and to reduce the these spurious differences. Early experiments with whole-genome bisulfite-sequencing had few, if any, biological replicates (e.g. __CITE__). Even when there were replicates, these were often pooled for much of the analysis, thus ignoring all within-group variability (e.g. \citet{Lister:2009hy).
 
 ### Identifying methylcytosines
 
@@ -262,13 +268,61 @@ This is done by examining the two nucleotides upstream of the cytosine. It can b
 
 ### DMRs
 
-### ASM
+There are two very different strategies for identifying differentially methylated regions:
+
+1. Use regions that are defined _a priori_, which are then tested for differential methylation. Such regions might be CpG islands (__CITE__), MspI restriction fragments (__CITE__) gene promoters (__CITE__) or predefined bins (e.g. 3bp tiles [Bing Ren] or 100bp tiles \citep{Park:2014ho}).
+2. Use regions that are defined based on the data, which are then tested for differential methylation. Valid statistical inference of such regions is __very challenging__.
+
+#### Using _a priori_ regions {-}
+
+The methylation level is summarised at the region level and then compared across groups. For example, the average of the $\beta$-values across the region may be compared between groups using a t-test.
+
+__TODO: Describe the above mathematically__
+
+This is qualitatively similar to identifying differentially methylated cytosines.
+
+__PROS__
+
+* Simple to implement
+* Valid statistical properties
+
+__CONS__
+
+* Doesn't account for differential CpG density across regions
+* What is the right "unit" - the CGI, the promoter, a tile???
+* Doesn't account for spatial correlation of methylation
+
+
+#### Using data-driven regions {-}
+
+
+__PROS__
+
+* Can discover the right "unit".
+* Might account for spatial correlation of methylation
+
+__CONS__
+
+* Loss of statistical properties in testing, e.g. FDR control
+* Bloody hard
+
+## Other downstream analyses
+
+Bisulfite-sequencing data are used to address a variety of questions apart from identifying differential methylation. Not all these analyses require statistical inference. For example, if we are interested in knowing whether the promoter of a particular gene is methylated in our sample then it may be sufficient to simply plot the level of methylation at each CpG in the region.
+
+However, once we move to experiments with multiple samples, multiple regions and more complex questions then statistical methods are generally required to distinguish the signal from the noise. In this section I briefly describe other
+
+### Variably methylated regions and differential variability
+
+### Allele-specific methylation
 
 ### Methylation entropy
 
 ### Epipolymorphism
 
 ### Epiallele detection
+
+### Relating methylation changes to gene-expression, histone modifications, etc.
 
 ### Others
 

@@ -336,7 +336,7 @@ For a two-group experiment, `MOABS` uses a hidden Markov model (HMM) to group cy
 
 `DMAP`, published in \citet{Stockwell:2014fq}, does not allow detection of DMCs, rather it focuses solely on identifying DMRs. `DMAP` provides a function to test for differential methylation in sliding windows, _a la_ \cite{Lister:2009hy}, which the authors recommend for analysing WGBS data. For analysing RRBS data, `DMAP` proposes the use of the MspI fragments as the natural unit for calling DMRs. MspI fragments are 40-220 bp long and are identified by scanning the reference genome for the recognition motif, _C'CGG_. `DMAP` includes an algorithm for resolving methylation calls from reads that overlap adjacent MspI fragments.
 
-Within each window, whether it be a fixed-width sliding window or based on MspI fragments, a Fisher's exact test is performed between two samples[^dmap]. If there are more than two samples then the minimum P-value from all pair-wise comparisons is reported as evidence of differential methylation. `DMAP` also provides a $\chi^2$-test for inter-individual variablity of DNA methylation in multiple samples.
+Within each window, whether it be a fixed-width sliding window or based on MspI fragments, a Fisher's exact test is performed between two samples[^dmap]. If there are more than two samples then the minimum P-value from all pair-wise comparisons is reported as evidence of differential methylation. `DMAP` also provides a $\chi^2$-test for inter-individual variability of DNA methylation in multiple samples.
 
 [^dmap]: It is not clear whether `DMAP` only uses the Fisher's exact test for two __samples__ or also for two __groups__, e.g., by first aggregating all read counts within each group and then doing a Fisher's exact test.
 
