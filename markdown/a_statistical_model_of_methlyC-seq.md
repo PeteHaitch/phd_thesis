@@ -20,7 +20,7 @@
 		* Akulenko, R., _et al._ compute gene-level $\beta$ values and compute the correlations between pairs of genes across samples as a function of genomic distance.
 
 ## Chapter overview
-In this chapter I set out a statistical framework for analysing bisulfite sequencing data. I begin by explaining the various levels of stochasticity in a methylC-seq experiment. Following this, I define the mathematical notation that I use throughout my thesis and formalise some of the concepts introduced in the previous section. 
+In this chapter I set out a statistical framework for analysing bisulfite sequencing data. I begin by explaining the various levels of stochasticity in a methylC-seq experiment. Following this, I define the mathematical notation that I use throughout my thesis and formalise some of the concepts introduced in the previous section.
 
 I also use this framework to formulate common questions in studies of DNA methylation. In particular, I define key variables and describe the statistical properties of common estimators of these variables.
 
@@ -32,7 +32,7 @@ Even with only a single sample, this experiment has a hierarchical structure. I 
 1. Pre-sequencing
 2. Post-sequencing
 
-Once I have described the framework for a single sample, I extend it to allow for multiple samples. The ideas here are simple, although when extended to their full generality the notation becomes messy. I address complications and limitations of this framework at the end of this sub-section. 
+Once I have described the framework for a single sample, I extend it to allow for multiple samples. The ideas here are simple, although when extended to their full generality the notation becomes messy. I address complications and limitations of this framework at the end of this sub-section.
 
 ### Single locus analysis
 
@@ -40,7 +40,7 @@ As described in __SECTION__, most analyses to date of WGBS data have focused on 
 
 
 #### Pre-sequencing {-}
-A methylation locus is a single cytosine, that is, a CpG, CHG or CHH. The set of these loci is labelled $\mathcal{I} = \{pos_{i}: i = 1, \ldots, N_{loci} \}$, where $pos_{i}$ is the genomic co-ordinates of the $i^{th}$ locus with respect to the forward strand, e.g. chr1:723,461-723,461. I frequently refer to loci by the subscript $i$ rather than by $pos_{i}$. This means that the distance between the $i^{th}$ and $(i + 1)^{th}$ methylation loci varies along the genome and, for a small number of instances, that the $i^{th}$ and $(i + 1)^{th}$ methylation loci are on separate chromosomes. Generally, $N_{loci}$ is not known exactly, although estimates can be made based on a reference genome, but this is no great concern. 
+A methylation locus is a single cytosine, that is, a CpG, CHG or CHH. The set of these loci is labelled $\mathcal{I} = \{pos_{i}: i = 1, \ldots, N_{loci} \}$, where $pos_{i}$ is the genomic co-ordinates of the $i^{th}$ locus with respect to the forward strand, e.g. chr1:723,461-723,461. I frequently refer to loci by the subscript $i$ rather than by $pos_{i}$. This means that the distance between the $i^{th}$ and $(i + 1)^{th}$ methylation loci varies along the genome and, for a small number of instances, that the $i^{th}$ and $(i + 1)^{th}$ methylation loci are on separate chromosomes. Generally, $N_{loci}$ is not known exactly, although estimates can be made based on a reference genome, but this is no great concern.
 
 The methylation state of a locus can vary within a sample due to the fact that DNA for each sample is extracted from hundreds or thousands of cells and each cell can have a slightly different methylation profile. Furthermore, within a diploid cell there are two copies of each chromosome, and therefore two copies of each methylation locus, and these two copies can have different methylation states. Therefore, it is also necessary to consider the next level down in the hierarchy; the DNA fragments within the sample.
 
@@ -51,7 +51,7 @@ I suppose that in the pool of DNA fragments for the sample that there are $H_{i}
 Although we do not know the number of fragments in the pool, we can define (and measure) the methylation state of a locus on a single DNA fragment. I denote by the indicator random variable, $Z_{h, i}$, the methylation state of $i^{th}$ methylation locus on the $h^{th}$ DNA fragment containing the $i^{th}$ methylation locus:
 
 \begin{equation*}
-Z_{h, i} = \left\{ 
+Z_{h, i} = \left\{
   \begin{array}{l l}
     1 & \quad \text{if methylated on the } h^{th} \text{ fragment}\\
     0 & \quad \text{if unmethylated on the } h^{th} \text{ fragment}
@@ -89,14 +89,14 @@ The effect of the first assumption is minor. When using single-end sequencing, t
 1. There may be gaps due to the insert size being longer than the sum of the read lengths, e.g. $(i, i + 1, i + 3, i + 4))$. In effect, we have missing data for any intervening methylation loci; the $(i + 2)^{th}$ loci in this example.
 2. Loci may be measured twice if the insert size is less than the sum of the read lengths, e.g. read_1 gives us $(i, i + 1)$ and read_2 gives us $(i + 1, i + 2, i + 3)$. In this example we must use only one of read_1 or read_2 as the measurement of the $(i + 1)^{th}$ locus because we are "double-counting" (__SOURCE__)
 
-I discuss the implications of the latter two assumptions in __SECTION__. 
+I discuss the implications of the latter two assumptions in __SECTION__.
 
 Each read measures the methylation state of one or more loci from a single DNA fragment. I denote by $\mathcal{R}_i$ the set of all reads containing the $i^{th}$ locus. Therefore, the number of reads containing the $i^{th}$ locus is $|\mathcal{R}_{i}|$, where $|\mathcal{R}_{i}| \leq H_{i}$ with strict inequality for almost all $i$.
 
 A single read containing the $i^{th}$ locus is denoted by $z: z \in \mathcal{R}_{i}$; the observed methylation state is given by:
 
 \begin{equation*}
-z: z \in \mathcal{R}_{i} = \left\{ 
+z: z \in \mathcal{R}_{i} = \left\{
   \begin{array}{l l}
     1 & \quad \text{if methylated at the } i^{th} \text{ locus}\\
     0 & \quad \text{if unmethylated at the } i^{th} \text{ locus}
@@ -125,11 +125,11 @@ I define an m-tuple to be a tuple of methylation loci, where m = $1, 2, \ldots$ 
 
 An observation on an m-tuple is the methylation pattern from a single read that overlaps the m-tuple. I require that the observation is from a single read as this ensures that each observation ultimately comes from a single cell[^chimeric_reads]. For example, suppose we have a read containing 3 CpGs -- the first two CpGs are methylated while the last one is unmethylated. From this read we can observe 3 $\times$ CpG 1-tuples, 2 $\times$ CpG 2-tuples and 1 $\times$ CpG 3-tuple. We can have multiple observations on an m-tuple by observing multiple reads, each containing the m-tuple. __FIGURE__ illustrates this example.
 
-[^chimeric_reads]: Might need to note the possibility of chimeric reads. 
+[^chimeric_reads]: Might need to note the possibility of chimeric reads.
 
 Note that in __FIGURE__ I haven't constructed a 2-tuple using the first CpG and the last CpG. In general, I focus on m-tuples where the m methylation loci are adjacent. That is, I focus on m-tuples where the _number of intervening loci_ is zero ($NIL = 0$). There are 3 reasons for this:
 
-1. Quantity: From a sequence containing $M$ methylation loci there are $M - \text{m} + 1$ m-tuples, provided that we restrict ourselves to those m-tuples with $NIL = 0$. In contrast, if we allow $NIL \geq 0$ then there are $\binom{M}{\text{m}} ~ $ m-tuples. (__TODO__: Describe how these terms grow asymptotically).
+1. Quantity: From a sequence containing $M$ methylation loci there are $M - \text{m} + 1$ m-tuples, provided that we restrict ourselves to those m-tuples with $NIL = 0$. In contrast, if we allow $NIL \geq 0$ then there are $\binom{M}{m} \sim$ m-tuples. (__TODO__: Describe how these terms grow asymptotically).
 2. Interpretability: Discussed in __SECTION__
 3. Measurability: We cannot observe m-tuples where the methylation loci are far apart due to the read length limitations of the Illumina sequencing technology. This is true even when $NIL = 0$ but is especially the case if we allow $NIL \geq 0$.
 
@@ -144,7 +144,7 @@ Mathemtically, an m-tuple is denoted by a sequence of methylation loci, $(i, i +
 I denote by the vector of indicator random variable, $Z_{h, (i, i + 1, \ldots, i + \text{m} - 1)}$, the methylation pattern of the m-tuple $(i, i + 1, \ldots, i + m - 1)$ on the $h^{th}$ DNA fragment containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$:
 
 \begin{equation*}
-Z_{h, i} = \left\{ 
+Z_{h, i} = \left\{
   \begin{array}{l l}
     (0, 0, \ldots, 0) & \quad \text{if unmethylated at the } i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 1)^{th}) \text{ locus on the } h^{th} \text{ fragment}\\
     (0, 0, \ldots, 1) & \quad \text{if unmethylated at the } i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 2)^{th}) \text{ locus and methlyated at the } (i + \text{m} - 1)^{th} \text{ locus on the } h^{th} \text{ fragment} \\
@@ -155,7 +155,7 @@ Z_{h, i} = \left\{
 
 $\mathcal{H}_{(i, i + 1, i + m - 1)}$ denotes the set of all fragments containing the m-tuple $(i, i + 1, i + m - 1)$ and $\mathcal{R}_{(i, i + 1, i + m - 1)}$ denotes the set of all reads containing the m-tuple $(i, i + 1, i + m - 1)$.
 
-There are $2^{\text{m}}$ possible methylation patterns at an m-tuple. I also write these using $U$ and $M$ instead of $0$ and $1$; for example, the possible methylation patterns at a 2-tuple are $MM, MU, UM$ and $UU$. 
+There are $2^{\text{m}}$ possible methylation patterns at an m-tuple. I also write these using $U$ and $M$ instead of $0$ and $1$; for example, the possible methylation patterns at a 2-tuple are $MM, MU, UM$ and $UU$.
 
 Analogously to the definition of $M_{i}$ and $U_{i}$ and $m_{i}$ and $u_{i}$ for the case where $\text{m} = 1$, we have when $\text{m} = 2$:
 
@@ -171,7 +171,7 @@ We can extend the $B_{i}$ values to m-tuples, although the intuitive interpretat
 	B_{(i, i + 1)}^{MM} &= \frac{MM_{(i, i + 1)}}{MM_{(i, i + 1)} + MU_{(i, i + 1)} + UM_{(i, i + 1)} + UU_{(i, i + 1)}} \\
 	B_{(i, i + 1)}^{MU} &= \frac{MU_{(i, i + 1)}}{MM_{(i, i + 1)} + MU_{(i, i + 1)} + UM_{(i, i + 1)} + UU_{(i, i + 1)}}  \\
 	B_{(i, i + 1)}^{UM} &= \frac{UM_{(i, i + 1)}}{MM_{(i, i + 1)} + MU_{(i, i + 1)} + UM_{(i, i + 1)} + UU_{(i, i + 1)}}  \\
-	B_{(i, i + 1)}^{UU} &= \frac{UU_{(i, i + 1)}}{MM_{(i, i + 1)} + MU_{(i, i + 1)} + UM_{(i, i + 1)} + UU_{(i, i + 1)}} 
+	B_{(i, i + 1)}^{UU} &= \frac{UU_{(i, i + 1)}}{MM_{(i, i + 1)} + MU_{(i, i + 1)} + UM_{(i, i + 1)} + UU_{(i, i + 1)}}
 \end{align*}
 The definitions for $\text{m} > 3$ follow in the obvious manner.
 
@@ -182,7 +182,7 @@ Again, I emphasise that $H_{(i, i + 1, i + \text{m} - 1), j}, Z_{h, (i, i + 1, i
 The the set of all reads containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$ is denoted by $\mathcal{R}_i$. A single read containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$ is denoted by $z: z \in \mathcal{R}_{(i, i + 1, \ldots, i + \text{m} - 1)}$; the observed methylation state is given by:
 
 \begin{equation*}
-z: z \in \mathcal{R}_{(i, i + 1, \ldots, i + \text{m} - 1)} = \left\{ 
+z: z \in \mathcal{R}_{(i, i + 1, \ldots, i + \text{m} - 1)} = \left\{
   \begin{array}{l l}
     (0, 0, \ldots, 0) & \quad \text{if unmethylated at the } i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 1)^{th}) \text{ locus}\\
     (0, 0, \ldots, 1) & \quad \text{if unmethylated at the } i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 2)^{th}) \text{ locus and methlyated at the } (i + \text{m} - 1)^{th} \text{ locus} \\
@@ -198,9 +198,9 @@ By "summing" over the number of reads containing the m-tuple $(i, i + 1, \ldots,
 
 \begin{align*}
 	mm_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (1, 1)\}| \\
-	mu_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (1, 0)\}| \\ 
-	um_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (0, 1)\}| \\ 
-	uu_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (0, 0)\}| 
+	mu_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (1, 0)\}| \\
+	um_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (0, 1)\}| \\
+	uu_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (0, 0)\}|
 \end{align*}
 
 The definitions for $\text{m} > 2$ follow in the obvious manner.
@@ -249,15 +249,15 @@ The second effect of sequencing errors is on read mapping, which I discuss below
 
 #### Mapping against a reference genome produces errors {-}
 
-Read mapping is not perfect and produces both false positive and false negative results. False positives are reads mapped to the wrong location and reads mapped to multiple locations with equal mapping scores. False negatives are reads that are not mapped to any location; these reads are effectively lost from any downstream analysis. The parameter settings used by the mapping software determine the false positive and false negative rates. 
+Read mapping is not perfect and produces both false positive and false negative results. False positives are reads mapped to the wrong location and reads mapped to multiple locations with equal mapping scores. False negatives are reads that are not mapped to any location; these reads are effectively lost from any downstream analysis. The parameter settings used by the mapping software determine the false positive and false negative rates.
 
-There are biological and technical reasons why mapping against a reference genome can produce these errors. Biologically, if the sample contains sequences that are too genetically divergent from the reference genome then these sequences will be difficult, even impossible, to map. A particularly problematic class of sequences are those from repetitive regions of the genome. These repetitive sequences will map to multiple locations in the reference genome equally well. Furthermore, the number of times these repetitive sequences occur differs between the reference genome and sample's genome. 
+There are biological and technical reasons why mapping against a reference genome can produce these errors. Biologically, if the sample contains sequences that are too genetically divergent from the reference genome then these sequences will be difficult, even impossible, to map. A particularly problematic class of sequences are those from repetitive regions of the genome. These repetitive sequences will map to multiple locations in the reference genome equally well. Furthermore, the number of times these repetitive sequences occur differs between the reference genome and sample's genome.
 
 Technically, reads from Illumina sequencing are often too short to "resolve" the mapping location of these repetitive sequences. Resolving the mapping location of repetitive sequences can be achieved byusing other sequencing technologies, such as Pacific Biosciences (__CITE__) and Oxford Nanopore (__CITE__), which produce longer reads.
 
 Another source of technical error in read mapping is sequencing error. A sequencing error can transform a uniquely mapping read to one that maps equally well to multiple locations or, worse still, a read that maps uniquely to a new but incorrect location. Sequencing errors can also corrupt a read so badly that it no longer can be mapped, which leads to that read being a false negative.
 
-In practice, most people try to mitigate these problems through their choice of parameters used by the mapping software. Many studies have been published that seek to provide the "optimal" parameters for a variety of common scenarios (__CITE__). 
+In practice, most people try to mitigate these problems through their choice of parameters used by the mapping software. Many studies have been published that seek to provide the "optimal" parameters for a variety of common scenarios (__CITE__).
 
 In theory, reads might be down-weighted in downstream analyses based on the mapping quality score. Ideally, mapping software assigns the degree of confidence it has that the read is "correctly" mapped via a mapping quality score (`mapQ`). However, these mapping quality scores are often poorly calibrated, particularly for methylC-seq data, which makes them less useful. For this reason, the popular methylC-seq mapping software, Bismark (__VERSION__), does not even provide mapping quality scores.
 
@@ -274,11 +274,11 @@ __DISCUSS WITH TERRY: Is it better to use $j$ to denote samples and encode group
 
 To move from a single sample to $n$ samples simply requires an additional subscript, $j = 1, \ldots, n$. $\mathcal{I}_{j}$ is the set of methylation loci in the $j^{th}$ sample and $\beta_{i, j}$ is the beta value for the $i^{th}$ locus in the $j^{th}$ sample. This defines the three levels in the hierarchy of a typical experiment -- individual molecules ($h$), individual methylation loci ($j$) and individual samples ($j$). A fourth level is how the samples relate in terms of an outcome of interest, such as phenotype. This fourth level might be defined up-front, such as in a designed experiment looking for differences in methylation between pre-defined groups of samples, or the aim of the experiment might be to discover this level.
 
-A common experiment of the first type is the two-group design in which $n_{1}$ samples are from group $1$ and $n_{2}$ samples are from group $2$ ($n_{1} + n_{2} = n$). This can be represented by a design matrix $X = [X_{j}]$, where $X_{j} = 1$ if the sample is from group $1$ and $X_{j} = 0$ if the sample is from group $2$. 
+A common experiment of the first type is the two-group design in which $n_{1}$ samples are from group $1$ and $n_{2}$ samples are from group $2$ ($n_{1} + n_{2} = n$). This can be represented by a design matrix $X = [X_{j}]$, where $X_{j} = 1$ if the sample is from group $1$ and $X_{j} = 0$ if the sample is from group $2$.
 
 More generally, we can study multi-group experiments via a suitable definition of the design matrix $X$. We can also include covariates by allowing $X_{j}$ to be a row vector, $X_{j} = (x_{1, j}, \ldots, x_{P, j})$, where $x_{p, j}$ encodes the information on the $p^{th}$ covariate for the $j^{th}$ sample.
 
-The second type of experiment is one that aims to cluster individuals based on methylation patterns. This can be thought of as an experiment where the outcome of interest is unknown and we wish to discover it by lumping together samples with "similar" methylation patterns. We might also wish to then correlate these clusters with some external information such as disease-status. 
+The second type of experiment is one that aims to cluster individuals based on methylation patterns. This can be thought of as an experiment where the outcome of interest is unknown and we wish to discover it by lumping together samples with "similar" methylation patterns. We might also wish to then correlate these clusters with some external information such as disease-status.
 
 ### Some complications for $n$ samples
 
@@ -288,7 +288,7 @@ In addition to the complications of the previous section, we now have sample-to-
 
 Each individual has their own set of methylation loci, that is, $\mathcal{I}_{j}$ differs for all $j$. Furthermore, sequencing coverage varies from sample-to-sample. This means that even if the samples have exactly the same $\mathcal{I}_{j}$, e.g. the samples are genetically identical, each sample will have a different set of loci with "sufficient" sequencing coverage. Loci without sufficient coverage are effectively missing data.
 
-In practice, we might choose to study $\mathcal{I}^{common} = \cap_{j} \mathcal{I}_{j}$ or some other combination of the $\mathcal{I}_{j}$, such as all methylation loci present in at least some fraction of the $n$ samples. 
+In practice, we might choose to study $\mathcal{I}^{common} = \cap_{j} \mathcal{I}_{j}$ or some other combination of the $\mathcal{I}_{j}$, such as all methylation loci present in at least some fraction of the $n$ samples.
 
 A conservative analysis might only analyse those loci where at least some fraction of the $n$ samples have sufficient sequencing coverage. A less conservative analysis might try to impute the missing values based on methylation levels at neighbouring loci (__bsseq__).
 
@@ -301,7 +301,7 @@ A conservative analysis might only analyse those loci where at least some fracti
 ## Parameter estimation
 In this section I summarise current techniques for parameter estimation from WGBS data. I do not describe the processing of the raw data. When necessary, I have 'translated' the original work into my notation to make these methods more readily comparable.
 
-All methods estimate parameters from files containing the aligned reads. 
+All methods estimate parameters from files containing the aligned reads.
 
 ### Estimating $M$ and $U$
 
@@ -309,9 +309,9 @@ The simplest and most commonly used estimators of $M_{i}$ and $U_{i}$ are $m_{i}
 
 [^strand_aggregation]: Estimates can only be aggregated across strands if the methylation marks is symmetric across strands, which CpG is and CHG and CHH methylation are not __TODO: CHECK SYMMETRY ARGUMENT__.
 
-Not all reads, and positions within reads, are equally treated in this counting process. Essentially, each sequenced nucleotide is assigned a weight. By far the most used weighting scheme is a set of filters that assigns each sequenced nucleotide a weight of 0 (observation excluded) or 1 (observation included). 
+Not all reads, and positions within reads, are equally treated in this counting process. Essentially, each sequenced nucleotide is assigned a weight. By far the most used weighting scheme is a set of filters that assigns each sequenced nucleotide a weight of 0 (observation excluded) or 1 (observation included).
 
-When using a set of filters, at each step a read either "survives", and is subjected to the proceeding filter, or "dies", and is excluded from the estimation of $M$ and $U$[^read_filters]. While strictly speaking each sequenced nucleotide is assigned a weight, in practice weights are normally first assigned to reads and then to all nucleotides within "surviving" reads. 
+When using a set of filters, at each step a read either "survives", and is subjected to the proceeding filter, or "dies", and is excluded from the estimation of $M$ and $U$[^read_filters]. While strictly speaking each sequenced nucleotide is assigned a weight, in practice weights are normally first assigned to reads and then to all nucleotides within "surviving" reads.
 
 [^read_filters]: A read that is not used to estimate $M$ and $U$ may still be used in other analyses, such as estimating copy number variation, and vice-versa.
 
@@ -325,7 +325,7 @@ A read survives if:
 1. Read is mapped (SE, PE) and mapped in the expected orientation (PE only).
 2. Read is not marked as a PCR duplicate. `--ignoreDuplicates`.
 3. Read has a mapping quality score (`mapQ`) greater than some threshold. `minMapQ <int>`.
-4. Read does not contain more than a certain level of non-CpG methylation. 
+4. Read does not contain more than a certain level of non-CpG methylation.
 5. Read passes aligner-specific filters designed to remove known biases of the alignment software.
 
 #### Base-level filters {-}
@@ -358,19 +358,19 @@ Most analyses of bisulfite sequencing data have focused on the on the average le
 
 #### Empirical Bayes models of $\beta$-values {-}
 
-Both \citet{Feng:2014iq} and \citet{Sun:2014fk} propose a Beta-Binomial empirical Bayes hierarchical model for the $B_{i}, i = 1, \ldots, N_{loci}. The actual models slightly differ, as do the algorithms for parameter estimation, but the main idea is the same. The R/Bioconductor package `DSS` implements the model of \citet{Feng:2014iq} and the `MOABS` software implements the model of \citet{Sun:2014fk}. I focus on \citet{Feng:2014iq} because the model is better described than that of \citet{Sun:2014fk}. In fact, the empirical Bayes method described in \citet{Sun:2014fk} is poorly written and I think is wrong in several places, which makes it very confusing. (__DISCUSS WITH TERRY___). 
-  
-\citet{Feng:2014iq} model the number of methylated reads at each locus by $M_{i, j, k} = Binomial(m_{i, j, k} + u{i, j, k}, B_{i, j, k})$, where $k = 1, 2$ is the group of each sample in a two-group experiment. They then assume that the $B_{i, j, k}$ follow a $Beta(\mu{i, k}, \theta_{i, k})$ distribution, which is the conjugate prior for the Binomial distribution, where $\mu$ is the mean and $\theta$ is the dispersion. \citet{Feng:2014iq} make the additional modelling assumption that $\theta_{i, k} = \text{log-Normal}(m_{0, k}, r_{0, k}^{2})$. Posterior estimates of $\mu_{i, k}$ are obtained using an empirical Bayes framework. 
+Both \citet{Feng:2014iq} and \citet{Sun:2014fk} propose a Beta-Binomial empirical Bayes hierarchical model for the $B_{i}, i = 1, \ldots, N_{loci}. The actual models slightly differ, as do the algorithms for parameter estimation, but the main idea is the same. The R/Bioconductor package `DSS` implements the model of \citet{Feng:2014iq} and the `MOABS` software implements the model of \citet{Sun:2014fk}. I focus on \citet{Feng:2014iq} because the model is better described than that of \citet{Sun:2014fk}. In fact, the empirical Bayes method described in \citet{Sun:2014fk} is poorly written and I think is wrong in several places, which makes it very confusing. (__DISCUSS WITH TERRY___).
+
+\citet{Feng:2014iq} model the number of methylated reads at each locus by $M_{i, j, k} = Binomial(m_{i, j, k} + u{i, j, k}, B_{i, j, k})$, where $k = 1, 2$ is the group of each sample in a two-group experiment. They then assume that the $B_{i, j, k}$ follow a $Beta(\mu{i, k}, \theta_{i, k})$ distribution, which is the conjugate prior for the Binomial distribution, where $\mu$ is the mean and $\theta$ is the dispersion. \citet{Feng:2014iq} make the additional modelling assumption that $\theta_{i, k} = \text{log-Normal}(m_{0, k}, r_{0, k}^{2})$. Posterior estimates of $\mu_{i, k}$ are obtained using an empirical Bayes framework.
 
 __TODO: DISCUSS WITH TERRY - Feng perform tests based on  the parameters from the _prior_ distribution, not the posterior. That doesn't make sense, does it? Sun estimate the posterior parameters $\beta_{i, j, k}$.__
 
 #### Smoothing $\beta$-values {-}
 
-`BSmooth`, published in \citet{Hansen:2011gu, Hansen:2012gr} and available in the R/Bioconductor package `bsseq`, and `BiSeq`, published in \citet{Hebestreit:2013ko} and available in the R/Bioconductor package `BiSeq`, take a different approach to getting improved estimates of the $\beta$-values. Rather than developing an empirical Bayes model, `BSmooth` and `BiSeq` both use statistical smoothing of the "raw" $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$. Smoothing is motivated and justified by the fact that the $\beta$-values are spatially correlated. 
+`BSmooth`, published in \citet{Hansen:2011gu, Hansen:2012gr} and available in the R/Bioconductor package `bsseq`, and `BiSeq`, published in \citet{Hebestreit:2013ko} and available in the R/Bioconductor package `BiSeq`, take a different approach to getting improved estimates of the $\beta$-values. Rather than developing an empirical Bayes model, `BSmooth` and `BiSeq` both use statistical smoothing of the "raw" $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$. Smoothing is motivated and justified by the fact that the $\beta$-values are spatially correlated.
 
 Smoothing is particularly powerful for loci with low sequencing coverage, where the denominimator $m_{i} + u_{i}$ is small and the corresponding standard error estimates of $\beta_{i}$ are large. Is smoothing of the raw $\beta$-values still useful when you have high-coverage sequencing data (__DISCUSS WITH TERRY__)? The smoothed $\beta$-values, and not the raw $\beta$-values, are then generally used in all downstream analyses.
 
-Both `BSmooth` and `BiSeq` use a binomial local likelihood smoother. This smoother was chosen because `BSmooth` and `BiSeq` model the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample by $M_{i, j} = Binom(m_{i, j} + u_{i, j}, B_{i})$ and it is "local" because "methylation levels are strongly correlated across the genome" \citep{Hansen:2012gr}. \citet{Hansen:2012gr} cite \citet{Eckhardt:2006gh} as evidence that DNA methylation levels are similar at proximal CpGs). 
+Both `BSmooth` and `BiSeq` use a binomial local likelihood smoother. This smoother was chosen because `BSmooth` and `BiSeq` model the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample by $M_{i, j} = Binom(m_{i, j} + u_{i, j}, B_{i})$ and it is "local" because "methylation levels are strongly correlated across the genome" \citep{Hansen:2012gr}. \citet{Hansen:2012gr} cite \citet{Eckhardt:2006gh} as evidence that DNA methylation levels are similar at proximal CpGs).
 
 The raw $\beta$-values are weighted according to the binomial likelihood and the kernel function. The binomial likelihood weights points inversely to their standard error, $se(\beta_{i, j})$, and the kernel gives greater weight to those $\beta_{i, j}$ near the centre of the window. \citet{Lacey:2013iy} note that loci with very high sequencing coverage will strongly influence the smoother, potentially biasing estimates at neighbouring loci with low coverage.
 
@@ -395,7 +395,7 @@ The average level of methylation $B_{i}$ varies widely across the genome. Much o
 
 * __Show a bunch of plots of $\beta$-values for different samples__
 
-This bimodality has led to several researchers modelling the distribution of the $\beta$-values by the Beta distribution. For example, \cite{Hebestreit:2013ko, Lacey:2013iy} simulate the "true" methylation level in each sample from a Beta distribution and both \citet{Feng:2014iq, Sun:2014fk} assume a Beta distribution as the prior distribution of the $\beta_{i, j}$ in their empirical Bayes models of bisulfite sequencing data. 
+This bimodality has led to several researchers modelling the distribution of the $\beta$-values by the Beta distribution. For example, \cite{Hebestreit:2013ko, Lacey:2013iy} simulate the "true" methylation level in each sample from a Beta distribution and both \citet{Feng:2014iq, Sun:2014fk} assume a Beta distribution as the prior distribution of the $\beta_{i, j}$ in their empirical Bayes models of bisulfite sequencing data.
 
 The Beta distribution is a flexible 2-parameter distribution on $[0, 1]$. It can be unimodal, "U"-shaped or "J"-shaped, depending on the choice of parameters. The Beta distribution also includes the Uniform and arcsine distributions as special cases (__Source: [http://en.wikipedia.org/wiki/Beta_distribution](http://en.wikipedia.org/wiki/Beta_distribution)__).
 
@@ -443,7 +443,7 @@ $\beta$-values are the _de facto_ standard unit for reporting methylation levels
 
 To address (2), proportion data are often tranformed via a variance stabilisation transformation. The aim is to make the variance (approximately) independent of the mean. Popular variance stabilisation transformations include:
 
-* The arcsine transformation, $\arcsin{\sqrt{\beta}}$ \citep{ANSCOMBE:1948bw}. A small value, e.g. $0.5$, is added to $m$ and $u$ to avoid $\beta = 0, 1$. 
+* The arcsine transformation, $\arcsin{\sqrt{\beta}}$ \citep{ANSCOMBE:1948bw}. A small value, e.g. $0.5$, is added to $m$ and $u$ to avoid $\beta = 0, 1$.
 * The "averaged arcsine" transformation, $\arcsin{\sqrt{\frac{m}{m + u + 1}}} + \arcsin{\sqrt{\frac{m + 1}{m + u + 1}}}$ \citep{Freeman:1950bh}. This transformation does not have a unique inverse \citep{Nunes:2008vj}.
 
 The use of variance stabilising transformations for proportion data seem to have fallen out of favour (e.g. [http://www.esajournals.org/doi/full/10.1890/10-0340.1](http://www.esajournals.org/doi/full/10.1890/10-0340.1)). The noq favoured approach is generalised linear models (__CITE__), in particular the logistic regression model (__CITE__?).
@@ -452,7 +452,7 @@ The use of variance stabilising transformations for proportion data seem to have
 ### Regression models
 
 * Logistic regression
-	* M-values 
+	* M-values
 	* The logit transformation, $\text{logit} (\frac{\beta}{1 - \beta})$. A small value, e.g. $0.5$, is added to $m$ and $u$ to avoid $\beta = 0, 1$.
 	* The probit transformation, $\Phi^{-1}(\beta)$, where $\Phi$ is the standard Normal cumulative distribution function. A small value, e.g. $0.5$, is added to $m$ and $u$ to avoid $\beta = 0, 1$.
 * Beta regression
@@ -472,5 +472,3 @@ The use of variance stabilising transformations for proportion data seem to have
 * Method descriptions are often ambiguous or missing in details. The majority explanations favour words over mathematics and only __WHICH PAPERS__ provide software that implements their analysis methods.
 * The Binomial model is really a conditional Binomial model, where the condition is on the sequencing coverage, $M_{i} + U_{i}$. That is, $M_{i} | (M_{i} + U_{i}, B_{i}) = Bin(M_{i} + U_{i}, B_{i})$. __DISCUSS WITH TERRY: What is the correct way to write this Binomial model?
 * Discuss distribution of coverage? Perhaps in context of sequencing bias?
-
-
