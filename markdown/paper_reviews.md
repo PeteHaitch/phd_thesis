@@ -85,10 +85,12 @@ To summarise, I take the "co-methylation" results of \cite{Lister:2009hy} with a
 
 A sliding window approach was also used to identify partially methylated domains. The authors did not investigate the dependence structure of DNA methylation.
 
-## \cite{Lister:2013et}
+[Mark van de Wiel](http://www.few.vu.nl/~MA.van.de.Wiel/) raised some concerns about the statistical analysis of these experiments [on Nature's website](http://www.nature.com/nature/journal/v471/n7336/full/nature09798.html#comments).
+
+## \citet{Lister:2013et}
 \cite{Lister:2013et} used methylC-seq to study 5mc and TAB-seq to study 5hmC in neurons and glial cells from the frontal cortex of human and mouse samples. The authors reported that non-CpG methylation was the dominant form of 5mC in neurons but not in glial cells.
 
-The analysis of 5mC used a similar strategy to that in both \cite{Lister:2009hy} and  \cite{Lister:2011kg}. Firstly, methylcytosines were identifed, however, it appears that rather than identifying these on a per-sample basis with a binomial test, they now did this by testing all samples with a $\chi^2$ goodness-of-fit test (__ASK TERRY: they actually reference a stats paper that descibes a root-mean test rather than reference their papers that use the binomial test; are the two equivalent?__). DMRs were again constructed using a sliding window approach and were subjected to _post-hoc_ filters.
+The analysis of 5mC used a different strategy to that of \cite{Lister:2009hy, Lister:2011kg}. Firstly, they did not perform an initial screen for "methylcytosines" using the Binomial test. Secondly, differentially methylated cytosines were identifed using a test of the $J \times 2$ contingency table.  Specifically, for the $i^{th}$ CpG a $J \times 2$ table was constructed where row $j$ was the counts of methylated and unmethylated reads for the $j^{th}$ sample, $(m_{i, j}, u_{i, j})$. This table was tested for goodness-of-fit using a root-mean test (http://tygert.com/chi.pdf). DMRs were again constructed using a sliding window approach and were subjected to _post-hoc_ filters.
 
 ## \cite{Li:2010fb}
 \cite{Li:2010fb} report the methylome of a single sample. They used WGBS to study 5mC from peripheral blood mononuclear cells (PBMCs) from an Asian man whose genome had also been used to create the Han Chinese reference genome.
