@@ -210,6 +210,36 @@ Methylation calling is the process of calling each sequenced methylation locus a
 
 Most bisulfite-sequencing alignment software includes methylation calling software (e.g. Bismark includes `bismark_methylation_extractor`), which is run after the alignment and post-processing of the `SAM/BAM` file. An general alternative is `Bis-SNP` \citep{Liu:2012ge}, which performs methylation calling, and also variant genotyping, from bisulfite-sequencing data aligned with the user's choice of alignment software. These aforementioned methods all perform methylation calling of 1-tuples. In contrast, `comethylation` can perform methylation calling at m-tuples. `MethPat` (__CITE__) is also capable of performing methylation calling at m-tuples.
 
+### A criticism of "identifying methylcytosines"
+
+__TODO: Need a better title for this section__
+
+\citet{Lister:2008bh}, one of the first papers to include WGBS data, introduced an idea "to identify the presence of a methylated cytosine" [supplementary material]. This idea was also used in subsequent, and similarly high-profile, publications from the same group \citep{Lister:2009hy, Lister:2011kg}[^Lister_2013]. I believe this idea is an unrequired source of confusion, as I will explain.
+
+[^Lister_2013]: It is worth noting that this idea was not used in the analysis of WGBS data from more recent paper from the same group \citep{Lister:2013et}.
+
+It is necessary to use scare quotes to distinguish the term "methylcytosine", as used by \citet{Lister:2008bh, Lister:2009hy, Lister:2011kg}, from methylcytosine, the standard definition meaning a 5-methylcytosine. I will first describe the idea and how it differs from methylation calling. Then I will describe how it is used to (1) estimate the number of methylcytosines in the sample, and (2) as a kind of screening procedure that determines whether each cytosines will be used in downstream analyses. Finally, I will explain why (1) is a bad estimator and why I think (2) is unnecessary or misguided.
+
+A "methylcytosine" is a cytosine in the reference genome where "at least s [sic; I believe this should be "a"] subset of the genomes within the sample were methylated" \citep[supplementary material]{Lister:2009hy}. Thus, the idea of identifying "methylcytosines" is to determine whether each cytosine in the reference genome displays any evidence of methylation in the sample. To do so, Lister et al. compare each $\beta$-value to a (coverage-specific and sample-specific) cutoff that determines whether the cytosine is classified as a "methylcytosine" or not.
+
+The exact procedure is not mathematically described in any of \citet{Lister:2008bh, Lister:2009hy, Lister:2011kg}. The earliest of these papers, \citet{Lister:2008bh}, includes a short non-mathematical description, while the most detailed description is given in the supplementary material of \citet{Lister:2009hy} and \citet{Lister:2011kg} simply refers to \citet{Lister:2009hy}. Because the written descriptions are unclear, and no code is provided to implement the idea, I am unable to determine exactly what was done (__TODO: Discuss with Terry__). What follows is my interpretation based on what is described in \citet{Lister:2008bh, Lister:2009hy, Lister:2011kg}.
+
+The idea is to test the null hypothesis that the observed number of methylated reads at the $i^{th}$ cytosine were simply due to "error", where "error" is a combination of the estimated sequencing error and the estimated bisulfite-converstion error. Mathematically, for each cytosine compute a P-value, $P_{i} = \sum_{k = m_{i} + 1}^{k = m_{i} + u_{i}} Prob(X = k)$, where $X = Binom(u_{i} + m_{i}, \epsilon))$ and $\epsilon$ is the estimated "error". Then, apply a false discovery rate correction to the resulting $P_{i}$ and declare all cytosines with a FDR-adjusted $P_{i}$ less than some nominal value[^nominal_fdr] to be "methylcytosines".
+
+[^nominal_fdr]: \citet{Lister:2008bh} used an FDR-adjusted P-value cutoff of $0.05$; \citet{Lister:2009hy} used an FDR-adjusted P-value cutoff of $0.01$.
+
+I presume the FDR-adjustment to be based on the Benjamini-Hochberg procedure (__CITE__). This procedure was performed separately for each methylation context in \citet{Lister:2009hy}, but it is not clear if this is the case for \citet{Lister:2008bh} (a study of _A. thaliani_, which has large amounts of non-CG methylation) or \citet{Lister:2011kg} (a study that includes pluripotent human cell lines that have non-negligible levels of non-CG methylation).
+
+The $\epsilon$ are estimated on a per-sample basis, with bisulfite-conversion error estimated from the unmethylated chloroplast genome \citep{Lister:2008bh} or from the genome of the lambda phage spike-in control \citep{Lister:2009hy, Lister:2011kg}. It is not clear how the sequencing error rate was estimated, particularly given that the base qualities are not included in the data available from the website.
+
+Now to why I don't think this is a very useful procedure. Firstly, this isn't actually estimating the number of methylcytosines in the sample; it is estimating the number of "methylcytosines", which are cytosines in the reference genome that appear to be methylated in at least some subset of the sample. These are two different things. If you want to estimate the number of methylcytosines then a better estimator is based on $\frac{1}{N_{loci}} \sum_{i = 1}^{N_{loci}} \beta_{i}$. A simple example makes this clear.
+
+Suppose we have ten cytosines in our reference sequence, each with a true methylation level of $B_{i} = 0.4$ in our sample, which contains multiple cells of known ploidy. Then the true number of methylcytosines is $0.4$ multiplied by the number of cells in our sample multiplied by the ploidy. We can estimate this by computing the average $\beta_{i}$ (an estimate of the average $B_{i}$) and multiplying it by an estimate of the number of molecules and the (known) ploidy. From this system we could easily generate sequencing data where the observed $\beta$-values are all "significantly" non-zero and thus, according to Lister et al.'s procedure, every cytosine is classified as a "methylcytosine".
+
+Secondly, \citet{Lister:2008bh, Lister:2009hy, Lister:2011kg} use only those cytosines that are classified as "methylcytosines" in many downstream analyses or use the 0-1 classification rather than the actual $\beta$-values. For example, in \citet[supplementary figure 2a]{Lister:2009hy} they use a Venn diagram to compare the number of "methylcytosines" called in two biological replicates to summarise the concordance between the two biological replicates. A far better summary of the biological replicability is to plot the $\beta$-values from each replicate against one another as a scatter plot, as this includes the magnitude of the $\beta$-values and not just whether they are "non-zero".
+
+Another example is that only cytosines identified as "methylcytosines" in at least one sample were used in differential methylation analyses \citep{Lister:2009hy, Lister:2011kg}. While there are often good reasons for screening loci prior to differential testing \citep[e.g.]{Bourgon:2010cr}, this could potentially bias results when looking for regions of differential methylation. For example, suppose there are ten cytosines in a row where the first three and last three are differentially methylated. If we ignore the four intervening cytosines, which are not differentially methylated, then we falsely conclude that the entire region is differentially methylated rather than it being two smaller DMRs.
+
 ### Methylated or unmethylated?
 
 All bisulfite-sequencing assays use _reference-based_ methylation calling. That is, they require the specification of a DNA reference sequence that the aligned bisulfite-sequencing data are compared against to infer the methylation state of each sequenced locus. Care must be taken to correctly handle the orientation and strand of the alignment. __FIGURE__ gives several examples (__TODO: Figure explaining reference-based methylation calling for reads aligned to forward and reverse strands__).
@@ -259,10 +289,6 @@ Identifying differential methylation refers to identifying sites or regions in t
 While bisulfite-sequencing experiments with multiple groups have been performed and analysed (e.g. \citet{Lister:2009hy, Hansen:2011gu, Hansen:2013eo}), these have typically been done using a series of pair-wise comparisons or by comparing each sample in turn against some 'baseline' sample. This is because the analysis of a pair-wise comparison is relatively simple and because it is also generally easier to interpret a two-group comparison than a multi-group comparison, although the interpretation of multiple pair-wise differences soon becomes complex.
 
 Obviously, we want these DMCs and DMRs to be _replicable_ - it's no good identifying differences that are simply due to technical artefacts or random fluctuations. The use of multiple samples per group, that is, the use of _biological replicates_, is essential in order to estimate within-group variability and to reduce the these spurious differences. Early experiments with whole-genome bisulfite-sequencing had few, if any, biological replicates (e.g. __CITE__). Even when there were replicates, these were often pooled for much of the analysis, thus ignoring all within-group variability (e.g. \citet{Lister:2009hy).
-
-### Identifying methylcytosines
-
-* i.e. Lister's approach
 
 ### DMCs
 
