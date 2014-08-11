@@ -284,13 +284,118 @@ This is done by examining the two nucleotides upstream of the cytosine. It can b
 
 ## Identifying differential methylation
 
-Identifying differential methylation refers to identifying sites or regions in the genome that have different levels of methylation between conditions. In practice, a more restricted definition is typically used; differential methylation is the difference in __average__ methylation between __two__ groups. This is analogous to identifying differential gene expression, which focuses on identifying genes that have different __average__ expression levels between two (or more) groups.
+Identifying differential methylation means to identify sites (differentially methylated cytosines or _DMC_s) or regions (differentially methylated regions or _DMR_s) in the genome that have different levels of methylation between two or more conditions. Much of the methodology for identifying differential methylation has focused on two-group experiments and a restricted definition: differential methylation is the difference in __average__ methylation between __two__ groups. This is analogous to identifying differential gene expression, which focuses on identifying genes that have different __average__ expression levels between two groups.
 
-While bisulfite-sequencing experiments with multiple groups have been performed and analysed (e.g. \citet{Lister:2009hy, Hansen:2011gu, Hansen:2013eo}), these have typically been done using a series of pair-wise comparisons or by comparing each sample in turn against some 'baseline' sample. This is because the analysis of a pair-wise comparison is relatively simple and because it is also generally easier to interpret a two-group comparison than a multi-group comparison, although the interpretation of multiple pair-wise differences soon becomes complex.
+While bisulfite-sequencing experiments with multiple groups have been performed and analysed (e.g. \citet{Lister:2009hy, Hansen:2011gu, Hansen:2013eo}), these have typically been done using a series of pair-wise comparisons or by comparing each sample in turn against some 'baseline' sample. This is because the analysis of a pair-wise comparison is relatively simple and because it is also generally easier to interpret a two-group comparison than a multi-group comparison. However, as the number of groups increases it becomes more difficult to interpret multiple pair-wise comparisons.
 
-Obviously, we want these DMCs and DMRs to be _replicable_ - it's no good identifying differences that are simply due to technical artefacts or random fluctuations. The use of multiple samples per group, that is, the use of _biological replicates_, is essential in order to estimate within-group variability and to reduce the these spurious differences. Early experiments with whole-genome bisulfite-sequencing had few, if any, biological replicates (e.g. __CITE__). Even when there were replicates, these were often pooled for much of the analysis, thus ignoring all within-group variability (e.g. \citet{Lister:2009hy).
+Like any experimental questions, good experimental design is essential in order to reliably infer differential methylation. Identifying DMCs is relatively straightforward statistical problem since it amounts to the well-worn problem of testing the difference of means. However, identifying DMRs, which may or may not build upon an initial scan for DMCs, is a far more challenging statistical problem owing the high spatial dependence of methylation at neighbouring cytosines and the uneven spacing of cytosines throughout the genome.
+
+### Experimental design
+
+In any experiment of differential methylation we want the DMCs and DMRs to be _biological_ and _replicable_; it's no good if all the differences are simply due to technical artefacts or random fluctuations. Key to ensuring biological relevance good experimental design, such as the use of _replicates_ in each experimental group. A distinction is often made between _technical replicates_ and _biological replicates_. Roughly, biological replicates are experimental units that all underwent the same treatment and are used to estimate the within-group variability of the treatment. Technical replicates are repeated measurements of the same experimental unit, perhaps with slight variations in the sample preparation, and are used to estimate the variability of the sample preparation and measurement process.
+
+As is clear from this definition, the boundary between biological and technical replication is often a fuzzy one. For example, \cite{Lister:2009hy} state that, "_For each cell type, two __biological__ replicates were performed with cells of different passage number_" (emphasis mine). I contend that these are more like technical replicates since each replicate came from the same cell line, underwent passaging under near-identical conditions and differ only by the number of cell passages in each media[^cell_passaging].
+
+[^cell_passaging]: In the case of IMR90 cell line, the first replicate, IMR90_r1, underwent 4 cell passages and the second replicate, IMR90_r2, underwent 5 cell passages. In the caase of the H1 cell line, the first replicate, H1_r1, underwent 25 passages in the first media and 9 passages in the second media, and the second replicate, H1_r2, underwent 27 passages in the first media and 5 passages in the second media.
+
+Moreover, early experiments with whole-genome bisulfite-sequencing frequently had no replicates of any kind, as is the case of the H9 and IMR90-iPSC cell lines in \cite{Lister:2009hy}, and once these replicates were judged to be broadly consistent these data were pooled prior to analysis, thus ignoring all within-group variability.
+
+Ideally, variability between technical replicates should be orthogonal to the biological question, but this rarely occurs. Indeed, high-throughput sequencing experiments are particularly susceptible to batch effects, and other sources of unwanted variation, that can swamp the biological variation of interest \citep{Leek:2010jq}.
 
 ### DMCs
+
+There are reports of differential methylation at individual CpGs resulting in a phenotypic difference (__CITE EXAMPLES; Emma Whitelaw has some I think__). Nonetheless, with approximately 25 million CpGs in the human genome, not to mention the many, many more non-CpG cytosines, it is an optimist who aims for the reliable detection of DMCs from WGBS experiments with sample sizes you can count on one or two hands and average sequencing depth of $10-30\times$.
+
+Identifying DMCs boils down to identifying differences in means. As such, it can be readily framed as a "stand-alone" test or cast into a regression framework. There is an enormous body of statistical literature on testing for differences in means (__CITE examples__). Most methods to detect DMCs from WGBS data are parametric and frequently use the binomial model described in __SECTION__.
+
+Regardless of the test used, all analyses must pay a large multiple-hypothesis testing penalty. Correcting for multiple hypothesis testing is standard practice in the analysis of genomics data. but the number of tests, in this case approximately 25 million, is at least an order of magnitude greater than commonly tested in other genomics experiments (e.g. approximately 1 million tests in genome-wide association studies and 20,000 tests in studies of differential gene expression).
+
+However, when identifying DMCs, the _effective_ number of tests is fewer, perhaps very much so, due to the high degree of dependence of methylation at neighbouring methylation loci, which in turn ensures a high degree of dependence amongst the tests.
+
+__TODO: What techniques can be used to do FDR, multiple hypothesis testing? Are standard tools applicable in such high-dependence settings?__
+
+#### One-group tests {-}
+
+The one-group WGBS experiment is uncommon and the $A^{vy}$ experiment (__SECTION__) is the only example that I know of. In a one-group experiment a DMC is one where at least one of the samples has a different methylation level to the group average. Mathematically, we wish to test the null hypothesis  $H_{0}: \beta_{i, j} = \beta_{i, 0}$ for $j = 1, \ldots, n$ against the alternative that $H_{A}: \beta_{i, j} \neq \beta_{i, 0}$ for some $j$, where $\beta_{i, 0}$ may be pre-specified or estimated from the data by, for example, the group average $\frac{1}{n} \sum_{j = 1}^{n} \beta_{i, j}$). This can be tested in a number of ways as I will demonstrate.
+
+The data for the $i^{th}$ methylation locus can be summarised by a $2 \times n$ contingency table, as shown below (__TODO: Prettify table with `booktabs`__)
+
+\begin{table}[h]
+\centering
+\caption{$2 \times n$ contingency table summarising the methylation evidence for the $i^{th}$ methylation locus in a one-group experiment.}
+\label{my-label}
+\begin{tabular}{c c c}
+\hline
+             & m          & u          \\ \hline
+$Sample_{1}$ & $m_{i, 1}$ & $u_{i, 1}$ \\
+$\vdots$     & $\vdots$   & $\vdots$   \\
+$Sample_{n}$ & $m_{i, n}$ & $u_{i, n}$ \\
+\end{tabular}
+\end{table}
+
+Such contingency tables can be analysed in many different ways. Here I apply a few methods to highlight their similarities and differences. Firstly, here are some example data for a single CpG:
+
+```{r}
+x <- cbind(M = c(38, 79, 59, 69, 44), U = c(1, 2, 1, 2, 46))
+names(dimnames(x)) <- c("sample", "meth_state")
+x
+```
+
+We see that while `sample_1, ..., sample_4` are nearly completely methylated at this CpG, `sample_5` has approximately $50\%$ methylation, which may be indicative of allele-specific methylation.
+
+In my analysis of the $A^{vy}$ experiment I used the `prop.test` function in R. As documented in the help page for `prop.test`:
+
+> `prop.test` can be used for testing the null that the proportions (probabilities of success) in several groups are the same
+
+in R to test the equality of the proportions ($\beta$-values) across the five mice.
+
+```{r}
+prop.test(x)
+```
+
+As expected, this test returns a very small P-value, `r print(format.pval(prop.test(x)$p.value), quote = FALSE)`.
+
+What might not be clear from its name is that `prop.test(x)` is just performing Pearson's $\chi^{2}$-test of the null hypothesis that the joint distribution of the cell counts in the $2 \times n$ contingency table is the product of the row and column marginals. This can be seen by examining the source code or by comparing the output to `chisq.test(x)`: (__TODO: Check by hand__)
+
+```{r}
+chisq.test(x)
+```
+
+Instead of using the "stand-alone" tests, `prop.test` and `chisq.test`, we could explicitly frame this as a log-linear model and test the goodness-of-fit of the "no interaction" model using either the likelihood ratio statistic (`lrt`) or the Pearson's $\chi^{2}$ test statistic (`pearson`). Formally, the regression model is (__TODO: Write down the regression model__):
+
+This model can be fit using the `loglin` function in R or using the arguably more user-friendly `loglm` (from the `MASS` package) or `glm` functions:
+
+```{r}
+# Using loglin
+loglin(x, margin = list(1, 2))
+# Using loglm
+library(MASS)
+loglm(formula =  ~ sample + meth_state, data = x)
+# Using glm (1)
+glm(x ~ 1, family = binomial)
+# Using glm (2)
+glm(x[,1] / (x[, 1] + x[, 2]) ~ 1, family = binomial, weights = x[,1] + x[, 2])
+# TODO: Write sentence summarising output.
+```
+
+A key advantage of using regression is the option to include additional covariates in the model, such as the sex of each sample or terms to account for batch effects. __TODO: How to do this using `loglin`?__
+
+More complex regression analyses are possible, such as empirical Bayes or fully Bayesian models. I describe these in more detail in discussing two-group and multi-group experiments, but they may also be applied to one-group experiments.
+
+A proper software implementation needs to take care of issues such as incomplete tables and non-convergence of the iterative proportional scaling algorithm used by `loglin`. Speed is also important when performing this many tests and the regression based approaches are much slower, at least when naively applied, due to additional checks they make of the data:
+
+```{r}
+# Basic benchmarking
+library(microbenchmark)
+print(microbenchmark(prop.test(x), chisq.test(x), loglin(x, margin = list("sample", "meth_state")), loglm(formula = ~ sample + meth_state, data = x), glm(x ~ 1, family = binomial), glm(x[,1] / (x[, 1] + x[, 2]) ~ 1, family = binomial, weights = x[,1] + x[, 2]), glm.fit(x = matrix(, nrow(x), 0L), y = x, family = binomial()), times = 100), order = "median")
+```
+
+#### Two-group experiments
+
+
+
+#### Multi-group experiments
+
 
 ### DMRs
 
@@ -354,3 +459,4 @@ However, once we move to experiments with multiple samples, multiple regions and
 
 ## TODOs
 * See https://github.com/brentp/clustermodel/README.md for a nice, brief summary of the main DMR calling approaches.
+* Replace "R" with "\\R"
