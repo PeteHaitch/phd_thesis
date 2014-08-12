@@ -836,7 +836,7 @@ They sequenced multiple single cells (51 across from four different 'populations
 
 Mark has written a review of methods to detect DMRs. It is fairly high-level (as it should be) and could basically act as my description of calling DMCs and DMRs! For example:
 
-> It is therefore no surprise that BB assumptions are made in several recently proposed packages, such as BiSeq [30], MOABS [29], DSS [28] and RADMeth [33]. Similarly, empirical Bayes (EB) methods fit naturally for modeling and inference across many types of genomic data and DNA methylation assays are no different. MOABS and DSS both implement hierarchical models and use the whole dataset to estimate the hyperparameters of the beta distribution; RADMeth and BiSeq use standard maxi- mum likelihood without any moderation. While BiSeq and RADMeth do not moderate parameter estimates, they provide facilities for complex designs through design matrices, which MOABS and DSS do not currently offer.
+> It is therefore no surprise that BB assumptions are made in several recently proposed packages, such as BiSeq [30], MOABS [29], DSS [28] and RADMeth [33]. Similarly, empirical Bayes (EB) methods fit naturally for modeling and inference across many types of genomic data and DNA methylation assays are no different. MOABS and DSS both implement hierarchical models and use the whole dataset to estimate the hyperparameters of the beta distribution; RADMeth and BiSeq use standard maximum likelihood without any moderation. While BiSeq and RADMeth do not moderate parameter estimates, they provide facilities for complex designs through design matrices, which MOABS and DSS do not currently offer.
 
 Mark notes that neither Fisher's exact test, nor logistic regression, control for within-group variability:
 

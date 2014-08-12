@@ -208,7 +208,11 @@ Methylation calling is the process of calling each sequenced methylation locus a
 
 [^no_call]: A third possibility is making the call that the "methylation locus" is not in fact a methylation locus. For example, if the sequenced base at a cytosine in the reference sequence is an _A_ or a _G_ then this may be evidence that the position is not in fact a methylation locus.
 
-Most bisulfite-sequencing alignment software includes methylation calling software (e.g. Bismark includes `bismark_methylation_extractor`), which is run after the alignment and post-processing of the `SAM/BAM` file. An general alternative is `Bis-SNP` \citep{Liu:2012ge}, which performs methylation calling, and also variant genotyping, from bisulfite-sequencing data aligned with the user's choice of alignment software. These aforementioned methods all perform methylation calling of 1-tuples. In contrast, `comethylation` can perform methylation calling at m-tuples. `MethPat` (__CITE__) is also capable of performing methylation calling at m-tuples.
+Most bisulfite-sequencing alignment software either performs methylation calling during the alignment process, as done by `Bismark`[^bismark_methylation_extractor], or as a separate step after the alignment and post-processing of the `SAM/BAM` file. An example of the latter is `Bis-SNP` \citep{Liu:2012ge}, which performs methylation calling, and also variant genotyping, from bisulfite-sequencing data aligned with the user's choice of alignment software.
+
+[^bismark_methylation_extractor]: `Bismark` also includes a program called `bismark_methylation_extractor`, which, as the name suggests, extracts the methylation calls from the `SAM/BAM` file. So while `Bismark` performs methylation calling as part of the alignment, a secondary step using `bismark_methylation_extractor` or `comethylation` is required to make use of the methylation calls.
+
+Both `Bismark` and `Bis-SNP` perform methylation calling of 1-tuples. In contrast, `comethylation` can perform methylation calling at m-tuples. `MethPat` (__CITE__) is also capable of performing methylation calling at m-tuples.
 
 ### A criticism of "identifying methylcytosines"
 
@@ -243,6 +247,8 @@ Another example is that only cytosines identified as "methylcytosines" in at lea
 ### Methylated or unmethylated?
 
 All bisulfite-sequencing assays use _reference-based_ methylation calling. That is, they require the specification of a DNA reference sequence that the aligned bisulfite-sequencing data are compared against to infer the methylation state of each sequenced locus. Care must be taken to correctly handle the orientation and strand of the alignment. __FIGURE__ gives several examples (__TODO: Figure explaining reference-based methylation calling for reads aligned to forward and reverse strands__).
+
+When using reference-based methylation calling, the position of the methylation locus is with respect to the reference genome, since then all samples will use a common set of co-ordinates. Furthermore, unless the sample of the genome is fully known, methylation loci in insertions cannot be distinguished from genetic variation since there is no reference sequence to compare them against.
 
 Each aligned read may be used for methylation calling, although each read should be subjected to some filtering to remove low-quality reads and low-quality bases. Standard filters include removing reads marked as possible PCR duplicates, reads with a mapping quality (`mapQ`) below a threshold and bases with a base quality below a threshold, and ignoring read-positions where there is evidence of M-bias.
 
@@ -281,6 +287,8 @@ To remove those reference-specific methylation loci that are __not__ found in da
 In addition to determining whether a cytosine is methylated or unmethylated, we also want to determine the _context_ of the cytosine, also known as the _methylation type_. That is, we want to determine whether the cytosine is a CG, CHG or a CHH.
 
 This is done by examining the two nucleotides upstream of the cytosine. It can be done based on the reference sequence, as is done in `Bismark` and `comethylation`, or from the reads themselves. The obvious difficulty with using the reads themselves is if the cytosine occurs at the last or second last position of the read, in which case the context may not be unambiguously determined from the the read alone. Instead, the context may be refined by initially using the reference genome context and then correcting for any sample-specific genetic variants in the two downstream bases.
+
+A further complication occurs when there is a genetic variant in the two nucleotides upstream of the methylation locus. We would like to use the two upstream nucleotides from the sample to infer the sample-specific methylation context, either inferred from each read separately or from a variant calling procedure such as `Bis-SNP`. However, this further complicates the methylation calling and so tools such as `Bismark` derive the context from the reference genome.
 
 ## Identifying differential methylation
 
@@ -391,6 +399,27 @@ print(microbenchmark(prop.test(x), chisq.test(x), loglin(x, margin = list("sampl
 ```
 
 #### Two-group experiments
+
+The data in a two group experiment may be summarised as a __TODO: Check Agresti for the standard form__ $2 \times n \times 2$ contingency table, as shown below (__TODO: Prettify table with `booktabs`__)
+
+\begin{table}[h]
+\centering
+\caption{$2 \times n \times 2$ contingency table summarising the methylation evidence for the $i^{th}$ methylation locus in a two-group experiment.}
+\label{my-label}
+\begin{tabular}{c c c}
+\hline
+             & m          & u          \\ \hline
+$Sample_{1}$ & $m_{i, 1}$ & $u_{i, 1}$ \\
+$\vdots$     & $\vdots$   & $\vdots$   \\
+$Sample_{n}$ & $m_{i, n}$ & $u_{i, n}$ \\
+\end{tabular}
+\end{table}
+
+In a two group experiment, for each methylation locus we are testing the hypothesis that the average methylation level in the first group, $\widebar{\beta_{i}^{(1)}}$, is different to that in the second group, $\widebar{\beta_{i}^{(2)}}$. If there are no replicates in either group then Fisher's exact test may be used. However, Fisher's exact test should __not__ be used if there are replicates as this test ignores all within-group variability since it uses the pooled counts within each group \citep{Hansen:2012gr}. (__TODO: Highlight papers that have inappropriately used Fisher's exact test; does Lister 2013 inappropriately pool then test?)
+
+The t-test, and it's non-parametric equivalent, the Wilcoxon test (__TODO: Check this is true__), are the simplest tests in a two-group experiment with replicates of $H_{0}: \widebar{\beta_{i}^{(1)}} = \widebar{\beta_{i}^{(2)}}$ against $H_{A}: \widebar{\beta_{i}^{(1)}} \neq \widebar{\beta_{i}^{(2)}}$. Several methods based on the t-test or Wilcoxon test have been published, albeit with various bells and whistles such as a Beta-Binomial model of methylation \citep{Feng:2014iq, Sun:2014fk, Park:2014ho}, smoothing of the $\beta$-values \citep{Hansen:2011gu, Lister:2011kg, Hansen:2012gr, Hansen:2013eo,  Hebestreit:2013ko, Gokhman:2014cp, Park:2014ho} and empirical Bayes shrinkage \citep{Feng:2014iq, Sun:2014fk}.
+
+__TODO: Discuss how each of these refinements have been used__
 
 
 
