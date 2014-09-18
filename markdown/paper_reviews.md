@@ -46,7 +46,7 @@ For each locus and sample the authors tested the hypothesis $H_{0}: B_{i, j} = \
 
 The authors did not perform any statistical tests of differential methylation nor did they report any results on the dependence structure of DNA methylation.
 
-## \cite{Lister:2009hy}
+## \citet{Lister:2009hy}
 
 \cite{Lister:2009hy} was a landmark paper in the study of DNA methylation in humans from WGBS data. The authors studied 4 samples: 2 cell types (IMR90 and H1) and 2 biological replicates per cell type. However, most of the results reported in \cite{Lister:2009hy} were from analyses of data pooled across biological replicates. This completely ignores all biologicaly variability and in general isn't a good idea. In the following description of their statistical analyses, all references to "samples" means "pooled samples".
 
@@ -78,10 +78,11 @@ To summarise, I take the "co-methylation" results of \cite{Lister:2009hy} with a
 3. They only look at the co-occurence of methylcytosines and not the co-occurence of unmethylated cytosines.
 4. The number of observations per distance is very small in some contexts. For example, less than 100 observations per IPD are used in the graph of mCHH co-occurence in the "random" context (Sup. Fig. 9).
 
-## \cite{Lister:2011kg}
+## \citet{Lister:2011kg}
+
 \cite{Lister:2011kg} is an extension of \cite{Lister:2009hy}. Here the authors studied 15 methylC-seq datas, 4 of which were from previous publications. These samples came a variety of tissues but can be classified as being either from a cell line that is embryonic stem cell (ESC), induced pluripotent stem cell (iPSC), differentiated cell or _in vitro_ differentiated from pluripotent cell (IVD).
 
-\cite{Lister:2011kg} used the same analysis methods as they did in \cite{Lister:2009hy}. Namely, methylcytosines were identified using the Binomial test and DMRs were identified using a sliding window approach. The details of the DMR finder are more complicated due to the larger sample size and multiple comparisons made between the 4 classes of cell type. For two-group comparisons, the average (smoothed) $\beta$-values in each window were tested for a mean difference using a Wilcoxon test. For multi-group comparisons, the Wilcoxon test was replaced by a Kruskall-Wallis one-way analysis of variance. The authors corrected the resulting P-values using the Benjamini-Hochberg method (__CITE__). Putative DMRs were those with an adjusted P-value < 0.01 and were also required to have a mean-difference greater than some threshold.
+\cite{Lister:2011kg} used similar analysis methods as they did in \cite{Lister:2009hy}. Namely, methylcytosines were identified using the Binomial test and DMRs were identified using a sliding window approach. The details of the DMR finder are more complicated due to the larger sample size and multiple comparisons made between the 4 classes of cell type. For two-group comparisons, the average (smoothed) $\beta$-values in each window were tested for a mean difference using a Wilcoxon test. For multi-group comparisons, the Wilcoxon test was replaced by a Kruskall-Wallis one-way analysis of variance. The authors corrected the resulting P-values using the Benjamini-Hochberg method (__CITE__). Putative DMRs were those with an adjusted P-value < 0.01 and were also required to have a mean-difference greater than some threshold.
 
 A sliding window approach was also used to identify partially methylated domains. The authors did not investigate the dependence structure of DNA methylation.
 
@@ -90,7 +91,7 @@ A sliding window approach was also used to identify partially methylated domains
 ## \citet{Lister:2013et}
 \cite{Lister:2013et} used methylC-seq to study 5mc and TAB-seq to study 5hmC in neurons and glial cells from the frontal cortex of human and mouse samples. The authors reported that non-CpG methylation was the dominant form of 5mC in neurons but not in glial cells.
 
-The analysis of 5mC used a different strategy to that of \cite{Lister:2009hy, Lister:2011kg}. Firstly, they did not perform an initial screen for "methylcytosines" using the Binomial test. Secondly, differentially methylated cytosines were identifed using a test of the $J \times 2$ contingency table.  Specifically, for the $i^{th}$ CpG a $J \times 2$ table was constructed where row $j$ was the counts of methylated and unmethylated reads for the $j^{th}$ sample, $(m_{i, j}, u_{i, j})$. This table was tested for goodness-of-fit using a root-mean test (http://tygert.com/chi.pdf). DMRs were again constructed using a sliding window approach and were subjected to _post-hoc_ filters.
+The analysis of 5mC used a different strategy to that of \cite{Lister:2009hy, Lister:2011kg}. Firstly, they did not perform an initial screen for "methylcytosines" using the Binomial test. Secondly, differentially methylated cytosines were identified using a test of the $J \times 2$ contingency table.  Specifically, for the $i^{th}$ CpG a $J \times 2$ table was constructed where row $j$ was the counts of methylated and unmethylated reads for the $j^{th}$ sample, $(m_{i, j}, u_{i, j})$. This table was tested for goodness-of-fit using a root-mean test (http://tygert.com/chi.pdf). DMRs were again constructed using a sliding window approach and were subjected to _post-hoc_ filters.
 
 ## \cite{Li:2010fb}
 \cite{Li:2010fb} report the methylome of a single sample. They used WGBS to study 5mC from peripheral blood mononuclear cells (PBMCs) from an Asian man whose genome had also been used to create the Han Chinese reference genome.
@@ -289,7 +290,7 @@ In words, for each CpG the true level of methylation, the prior parameters and t
 Parameter estimates are obtained by the following algorithm:
 
 1. For each CpG, estimate the dispersion parameter, $\theta_{i, k}$, using a method  of moments estimator.
-2. Estimate the hyperparameters, $m_{0, k}$ and $r_{0, k}^{2}$, as the mean and variance, respectively, of the empirical distribution of the logirithm of the $\theta_{i, k}$.
+2. Estimate the hyperparameters, $m_{0, k}$ and $r_{0, k}^{2}$, as the mean and variance, respectively, of the empirical distribution of the logarithm of the $\theta_{i, k}$.
 3. Estimate the group-wise mean level of methylation, $\mu_{i, k}$, by $\hat{\mu}_{i, k} = \sum_{j: j \in group_{k}} \frac{m_{i, j, k}}{m_{i, j, k} + u_{i, j, k}}$.
 4. For each CpG, compute relevant quantities, such as the mean and standard deviation, of the conditional posterior distribution of the dispersion parameters, $Pr(\theta_{i, k} | m_{i, j, k}, m_{i, j, k} + u_{i, j, k}, \mu_{i, k})$. In practice, these quantities are computed using the Newton-Raphson method after plugging in estimates of $m_{0, k}, r_{0, k}^{2}$ and $\mu_{i, k}$.
 
@@ -300,6 +301,7 @@ Now that all parameters have been estimated, each CpG is tested for differential
 While \citet{Feng:2014iq} focuses an empirical Bayes model for detecting differential methylation at individual CpGs, the authors propose a simple thresholding algorithm to identify DMRs. This algorithm calls DMRs as regions greater than a specified minimum size (100bp), containing a specified minimal number of CpGs (3) and containing multiple DMCs that satisfy a P-value threshold (at least 80% of DMCs with P-values < a user-specific minimal P-value). As the authors note, there is no accounting for the spatial correlation amongst P-values and say that improved DMR calling is left for future work.
 
 ## \cite{Sun:2014fk}
+
 The `MOABS` software, published in \citet{Sun:2014fk}, uses a Beta-Binomial empirical Bayes hierarchical model of methylation at individual CpGs. The model is therefore similar in spirit to that proposed in \citet{Feng:2014iq}, although the model is not as well described[^moabs_errors1]. For example, it is not made explicit how the hyperparameters of the Beta distribution are estimated.
 
 [^moabs_errors1]: The EB description is poorly written and I think is wrong in several places, which makes it confusing. (__DISCUSS WITH TERRY__)
@@ -626,6 +628,7 @@ The correlation of methylation at a pair of CpGs was computed from the $2 \times
 __TODO: Represent as contingency table.__ Let $n_{11}$ be the number of reads that are methylated at both CpGs, $n_{00}$ be the number of reads that are unmethylated at both CpGs and $n_{01}$ and $n_{10}$ be the number of reads that have different methylation states at each CpG ($N = n_{00} + n{01} + n{10} + n_{11}$). The average methylation level of each CpG is $m_{1} = \frac{n_{11} + n_{10}}{N}$ and $m_{2} = \frac{n_{11} + n_{01}}{N}$, respectively. The variance of methylation at each CpG is $v_{1} = m_{1} \times (1 - m_{1})$ and $v_{2} = m_{2} \times (1 - m_{2})$, respectively. The correlation of methylation at the pair of CpGs is then $\frac{n_{11} / N - m_{1} \times m_{2}}{\sqrt(v_{1} + v_{2})}$. __TODO: Is this the same as correlation of $beta$-values using only those reads that overlap both CpGs?__
 
 ## \citet{Zhang:2013uu} and \citet{Stevens:2013hv}
+
 `M&M`, published in \citet{Zhang:2013uu}, is a statistical framework for jointly analysing MeDIP-seq and MRE-seq to detect DMRs in a two-group experiment. MeDIP-seq is an enrichment-assay and MRE-seq is a restriction enzyme assay. `M&M` is a window-based algorithm (default = 500 bp non-overlapping windows). `M&M` was compared to `MEDIP`, which only uses MeDIP-seq data, and WGBS of the same samples. Each method was run on biological duplicates to estimate the corresponding false positive rate.
 
 `methylCRF`, published in \citet{Stevens:2013hv}, is a software implementation that extends the `M&M` framework. Specifically, it uses a conditional random field model of counts-per-window whereas `M&M` assumes independence across windows. It gives single-base estimates for DNA methylation, despite the input being data from enrichment-assays. \citeauthor{Stevens:2013hv} provide evidence that these predicts single-base estimates are very close to observed values from WGBS of the same sample.
@@ -789,7 +792,7 @@ $\beta$-values are simulated from marginal distributions (Uniform, truncated Nor
 
 ## \citep{Park:2014ho}
 
-This paper describes the `methylSig` software. `methylSig` uses a Beta-Binomial model to test for DMCs across an arbitrary number of groups (although the proposed test is a likelihood ratio test of group $k$ vs. group $k'$). The dispersion parameter in the Beta-Binomial model, $\theta_{i}$ (assumed constant across groups), is treated as a nuisance parameter that is first estimated and then plugged into the likelihoods to estimate (using maximum likelihood) the parameters of interest, $\mu_{i, k}$ and $\mu_{i, k'}$. For small sample sizes, they use the $t$-distribution, rather than the 'natural' $\chi^{2}_{1}$-distribution of a likelihood ratio statistic. The dispersion parameters are not shrunk, e.g. via Empiricial Bayes.
+This paper describes the `methylSig` software. `methylSig` uses a Beta-Binomial model to test for DMCs across an arbitrary number of groups (although the proposed test is a likelihood ratio test of group $k$ vs. group $k'$). The dispersion parameter in the Beta-Binomial model, $\theta_{i}$ (assumed constant across groups), is treated as a nuisance parameter that is first estimated and then plugged into the likelihoods to estimate (using maximum likelihood) the parameters of interest, $\mu_{i, k}$ and $\mu_{i, k'}$. For small sample sizes, they use the $t$-distribution, rather than the 'natural' $\chi^{2}_{1}$-distribution of a likelihood ratio statistic. The dispersion parameters are not shrunk, e.g. via Empirical Bayes.
 
 They also propose incorporating local information, via kernel smoothing, to estimate the parameters $\mu_{i}$ and $\theta_{i}$.
 
