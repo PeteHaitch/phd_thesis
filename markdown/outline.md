@@ -106,6 +106,7 @@
 	* Concept
 	* Pros
 	* Cons
+	* An early reference to comethylation (http://nar.oxfordjournals.org/content/32/21/e167.full)
 * Methods
 	* `comethylation.py`
 	* `cometh`

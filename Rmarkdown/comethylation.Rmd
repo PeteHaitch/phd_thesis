@@ -1,0 +1,95 @@
+---
+title: "Co-methylation"
+author: "Peter Hickey"
+date: "18 September 2014"
+output:
+  pdf_document:
+    fig_caption: yes
+    includes:
+      in_header: ../latex/header.tex
+---
+
+## Chapter overview
+
+Co-methylation is the dependence of DNA methylation at different methylation loci. As such, it is a kind of spatial dependence where the "space" is the genome. In this chapter I describe two measures of co-methylation, namely, _within-fragment co-methylation_ and _correlation of $\beta$-values_. Using both these measures I explore how co-methylation is affected by the distance between methylation loci, the density of methylation loci and the genomic context of the methylation loci.
+
+Throughout this chapter I focus on CpGs although the methods described are also applicable to non-CpG methylation loci. The reason I do not explore co-methylation at non-CpG methylation loci is because such loci are rarely methylated in the samples I am studying.
+
+## Within-fragment co-methylation
+
+Within-fragment co-methylation is the dependence of DNA methylation at methylation loci that occur on the same DNA fragment. It can be thought of as the dependence structure of the binary stochastic process $Z_{h} = (Z_{h, 1}, Z_{h, 2}, \ldots, Z_{h, N_{loci}})$, here assuming a single DNA fragment for each chromosome in the sample (i.e. no fragmentation of the DNA). I would like to learn how, for example, $Z_{h, i}$ affects $Z_{h, i'}$ and develop a simple, tractable model of this dependence structure. In particular, I am interested in how this dependence varies as a function of the distance between methylation loci. 
+
+As every sequencing read is produced from a single DNA fragment[^chimera], we can study within-fragment co-methylation by analysing the methylation patterns along individual sequencing reads, that is, my studying the methylation patterns at m-tuples. Furthermore, since the DNA methyltransferases act on individual DNA fragments (__TODO: check and cite__), these estimates of within-fragment co-methylation are on the same scale as the physical process that lays down and maintains DNA methylation.
+
+[^chimera]: Here I ignore the possibility of chimeric reads that may be artificially produced by DNA fragments ligating to one another during the library preparation or sequencing process (__TODO: reference__).
+
+In studying within-fragment co-methylation, I assume that all copies of each chromosome have the same dependence structure (__TODO: Although not the same mean structure? Make this mathematically precise__). The data are sampled from a population containing multiple copies of each chromosome and if each copy has a different dependence structure then we cannot hope to say anything about these structures since these copies are not identifiable.
+
+If we could sequence entire chromosomes by single reads then we could analyse co-methylation between any set of methylation loci. However, current technologies for bisulfite-sequencing mean that we are limited to studying reads that, at most, span about $200-250$ bp and so are limited to studying co-methylation of methylation loci that are very close to one another.
+
+### Using pairs of methylation loci
+
+The simplest summary of within-fragment co-methylation uses pairs (2-tuples) of methylation loci. Consider a single pair of CpGs in the reference genome and all reads that contain both CpGs of the pair (see Figure \ref{reads_containing_pair_of_CpGs}). 
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=0.5\textwidth]{../figures/reads_containing_pair_of_CpGs.pdf}
+      \caption{All reads containing a pair of CpGs. The CpGs are highlighted by the short blue bars along the bottom of the figure. Each long grey (resp. green) bar is a read mapped to the forward (resp. reverse) strand. Those reads highlighted in yellow contain both CpGs of the pair. Data are from the IMR90-iPSC sample.}
+      \label{reads_containing_pair_of_CpGs}
+\end{figure}
+
+We tabulate the methylation states of each of these reads as shown in Table \ref{reads_containing_pair_of_CpGs_counts}. The `methtuple` software can perform this tabulation for all pairs of methylation loci in a sample.
+
+The within-fragment co-methylation of the pair of CpGs, $(i, i')$, in the $j^{th}$ sample is then defined as the log-odds ratio of this table, $LOR_{(i, i'), j} = log_2 \Big (\frac{MM_{i, i'} \times UU_{i, i'}}{MU_{i, i'} \times UM_{i, i'}} \Big)$. For the data shown in Figure \ref{reads_containing_pair_of_CpGs} the $LOR =$ `r round(log2((1.5 * 4.5) / (0.5 * 2.5)), 1)`.
+
+\begin{table}[h]
+  \centering
+
+  \begin{tabular}{lcccl}
+                           & \multicolumn{1}{l}{} & \multicolumn{2}{l}{Second CpG} &                \\
+                           &                      & \textbf{M}     & \textbf{U}    & \textbf{Total} \\ \cline{2-5} 
+\multirow{2}{*}{First CpG} & \textbf{M}           & 1              & 2             & 3              \\
+                           & \textbf{U}           & 0              & 4             & 4              \\ \cline{2-5} 
+                           & \textbf{Total}       & 1              & 6             & 7             
+\end{tabular}
+\caption{Counts of each methylation pattern for reads shown in Figure \ref{reads_containing_pair_of_CpGs}}
+\label{reads_containing_pair_of_CpGs_counts}
+\end{table}
+
+A positive $LOR$ is evidence that the methylation states are likely to be the same at both CpGs on the same DNA fragment (_co-methylation_), a negative $LOR$ is evidence that the methylation states are likely to be different at each CpG on the same DNA fragment and a value close to zero is evidence that the methylation state at each CpG on the same DNA fragment are independent of one another. More precisely, we may wish to compute a confidence interval for $LOR$ or perform a hypothesis test to determine whether the observed $LOR$ is evidence for co-methylation at this pair of CpGs.
+
+In theory we can compute $LOR$ for all pairs of methylation loci. In practice, using current technology, we can only compute it for pairs of methylation loci that are at most separated by 200-250 bp. 
+
+#### Constructing pairs of methylation loci
+
+In addition to the constraints imposed by the sequencing technology on the construction of pairs of methylation loci, there are user-specified constraints.
+
+For a sequence containing $k$ methlyation loci there are $\binom{k}{2}$ pairs, which is $\mathcal{O}(k^{2})$ as $\lim_{k \to \infty}$. In contrast, there $k - 1$ pairs of _neighbouring_ methylation loci (i.e., pairs where the _number of intervening methylation loci_ equal to zero, $NIML = 0$), which is $\mathcal{O}(k)$ as $\lim_{k \to \infty}$. 
+
+Apart from this difference in the number of pairs, the interpretation of co-methylation at neighbouring loci is far simpler than for non-neighbouring loci and so it may be preferable to focus on neighbouring loci. For example, if we observe $LOR >> 0$ for a pair of CpGs, $(CpG_{1}, CpG_{5})$, with $NIML > 0$ then we need to take care to ensure that this is due to a genuine dependence between these two CpGs above and beyond the pairwise dependencies $(CpG_{1}, CpG_{2}), \ldots, (CpG_{4}, CpG_{5})$.
+
+The `methtuple` software by default tries to only construct pairs of neighbouring methylation loci[^all-combinations]. However, because `methtuple` processes each read independently, filters methylation loci on user-specified criteria and is unaware of the reference genome it will occasionally create pairs that are not truly neighbouring. Therefore, if strictly neighbouring pairs are required, non-neighbouring pairs should be post-hoc filtered (__TODO: e.g. using the `whatFunction` in `myRMethTuplePackage`__). 
+
+[^all-combinations]: `methtuple` also provides the option `--all-combinations` to specifically create all $\binom{k}{m}$ $m$-tuples. However the computational requirements are generally prohibitive for $m > 2$.
+
+A further consideration is whether to collapse CpGs on opposite strands into the same methylation loci. By default, `methtuple` does not collapse CpGs across strands but this option is available via the `--strand-collapse` option or as a post-hoc step in __TODO: e.g. using the `whatFunction` in `myRMethTuplePackage`__. While CpG methylation is typically strand-symmetric it may be better to not collapse across strands until there is evidence that this will not be harmful, e.g., data from the strand-specific CpGs look similar.
+
+### Using higher-order $m$-tuples of methylation loci
+
+__TODO__ 
+
+Complexities:
+* $2^{m - 1}$ $LOR$s
+* Incorporating distance
+
+### Results of co-methylation analyses
+
+### Markov models of within-fragment co-methylation
+
+The 
+
+A $k$-order Markov model of within-fragment co-methylation assumes that the dependence of $Z_{h, i}$ on the "history" of the process, $(Z_{h, 1}, \ldots, Z_{h, i - 1})$ is through the $k$ most recent observations, $Z_{h, i - k}, \ldots, Z_{h, i - 1}$. This could be generalised via a Markov random field model of within-fragment co-methylation to assume that the dependence of $Z_{h, i}$ on the "rest" of the process $Z_{h, 1}, \ldots, Z_{h, i - 1}, Z_{h, i + 1}, Z_{N_{loci}}$ is through the k-nearest observations, $Z_{h, i - k_{1}}, \ldots, Z_{h, i - 1}, Z_{h, i + 1}, \ldots, Z_{h, i + k_{2}}$, where $k_{2} - k_{1} = k$.
+
+Regardless of whether we use a Markov chain or a Markov random field, a complication is that $Z_{h}$ is unevenly spaced along the genome. I use the intra-pair distance ($IPD$) to measure the distance between observations along $Z_{h}$. This distance measure introduces additional dimension(s) to our model.
+
+
