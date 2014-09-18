@@ -400,26 +400,44 @@ print(microbenchmark(prop.test(x), chisq.test(x), loglin(x, margin = list("sampl
 
 #### Two-group experiments
 
-The data in a two group experiment may be summarised as a __TODO: Check Agresti for the standard form__ $2 \times n \times 2$ contingency table, as shown below (__TODO: Prettify table with `booktabs`__)
+In a two group experiment, for each methylation locus we are testing the hypothesis that the average methylation level in the first group, $\widebar{\beta_{i}^{(1)}}$, is different to that in the second group, $\widebar{\beta_{i}^{(2)}}$.
+
+If there are no replicates in either group[^2x2] then we have a $2 \times 2$ contingency table:
+
+[^2x2]: I'd argue that this is a two-sample experiment rather than a two-group experiment since each group has $n = 1$.
+
+(__TODO: Prettify table with `booktabs`__)
 
 \begin{table}[h]
 \centering
-\caption{$2 \times n \times 2$ contingency table summarising the methylation evidence for the $i^{th}$ methylation locus in a two-group experiment.}
+\caption{$2 \times 2$ contingency table summarising the methylation evidence for the $i^{th}$ methylation locus in a two-group experiment with no replicates in either group.}
 \label{my-label}
 \begin{tabular}{c c c}
 \hline
              & m          & u          \\ \hline
-$Sample_{1}$ & $m_{i, 1}$ & $u_{i, 1}$ \\
-$\vdots$     & $\vdots$   & $\vdots$   \\
-$Sample_{n}$ & $m_{i, n}$ & $u_{i, n}$ \\
+$Group_{1}$ & $m_{i, 1}$ & $u_{i, 1}$ \\
+$Group_{2}$ & $m_{i, 2}$ & $u_{i, 2}$ \\
 \end{tabular}
 \end{table}
 
-In a two group experiment, for each methylation locus we are testing the hypothesis that the average methylation level in the first group, $\widebar{\beta_{i}^{(1)}}$, is different to that in the second group, $\widebar{\beta_{i}^{(2)}}$. If there are no replicates in either group then Fisher's exact test may be used. However, Fisher's exact test should __not__ be used if there are replicates as this test ignores all within-group variability since it uses the pooled counts within each group \citep{Hansen:2012gr}. (__TODO: Highlight papers that have inappropriately used Fisher's exact test; does Lister 2013 inappropriately pool then test?)
+This $2 \times 2$ table is then tested for independence of the rows and columns. As the sample size for each table is often small, Fisher's exact test is generally preferable since, unlike Pearson's $\chi^{2}$ test, the P-values are _exact_, meaning they do not rely on large-sample approximations (__CITE: Agresti__). Fisher's exact test is a _conditional_ test because the null distribution (a hypergeometric distribution) is derived by conditioning on both the marginal totals. __CITE: Agresti__ discusses the arguments for and against conditional and unconditional tests of independence in the $2 \times 2$ table.
 
-The t-test, and it's non-parametric equivalent, the Wilcoxon test (__TODO: Check this is true__), are the simplest tests in a two-group experiment with replicates of $H_{0}: \widebar{\beta_{i}^{(1)}} = \widebar{\beta_{i}^{(2)}}$ against $H_{A}: \widebar{\beta_{i}^{(1)}} \neq \widebar{\beta_{i}^{(2)}}$. Several methods based on the t-test or Wilcoxon test have been published, albeit with various bells and whistles such as a Beta-Binomial model of methylation \citep{Feng:2014iq, Sun:2014fk, Park:2014ho}, smoothing of the $\beta$-values \citep{Hansen:2011gu, Lister:2011kg, Hansen:2012gr, Hansen:2013eo,  Hebestreit:2013ko, Gokhman:2014cp, Park:2014ho} and empirical Bayes shrinkage \citep{Feng:2014iq, Sun:2014fk}.
+The more interesting experiment is one that includes replicates within each group, since we can then estimate the within-group variation. Unfortunately, some authors have used Fisher's exact test to analyse experiments including replicates (__TODO: Highlight papers that have inappropriately used Fisher's exact test; does Lister 2013 inappropriately pool then test?). This is incorrect because it effectively aggregates all the counts within each group and so ignores all within-group biological variability \citep{Hansen:2012gr}.
 
-__TODO: Discuss how each of these refinements have been used__
+Instead, a test that incorporates the within-group variability should be used.  For example, we could use a t-test to compare the average methylation level in the first group, $\widebar{\beta_{i}^{(1)}}$, to that in the second group, $\widebar{\beta_{i}^{(2)}}$. Several methods have been proposed for testing for DMCs. These methods differ considerably in how they model and transform the data as well as what test statistic is used to identify DMCs.
+
+##### Transforming {-}
+
+Smoothing of the $\beta$-values has been used advocated by several authors to remove variation due to low sequencing coverage and to exploit the spatial correlation of DNA methylation \citep{Hansen:2011gu, Hebestreit:2013ko, Gokhman:2014c}. Both `BSmooth` \citep{Hansen:2012gr} and `BiSeq` \citep{Hebestreit:2013ko} smooth the $\beta$-values using a binomial local likelihood smoother. \citet{Lister:2011kg, Gokhman:2014cp} used a simpler moving average in windows along the genome.
+
+##### Modeling {-}
+
+`DSS` \citep{Feng:2014iq}, `BiSeq` \citep{Hebestreit:2013ko}, `MOABS` \citep{Sun:2014fk} `methylSig` \citep{Park:2014ho} and `RADmeth` \citep{Dolzhenko:2014bo} are software packages that all use a Beta-Binomial hierarchical model of DNA methylation, although the exact details differ considerably between packages. Broadly, under the Beta-Binomial model the "true" methylation level at the $i^{th}$ methylation locus in the $k^{th}$ group is modeled as a Beta random variable, $B_{i, k} &= Beta(\mu_{i, k}, \theta_{i, k})$. The observed number of methylated reads at the $i^{th}$ methylation locus, in the $j^{th}$ sample is modeled as a Binomial random variable, $M_{i, j, k} | B_{i, k}, n_{i, j, k} &= Binomial(n_{i, j, k}, B_{i, k}), which is conditional on the unobserved $B_{i, k}$ and the observed sequencing coverage, $n_{i, j, k}$.
+
+##### Estimating and testing {-}
+
+`DSS` and `MOABS` use empirical Bayes methods to estimate parameters whereas `methylSig`, `BiSeq` and `RADmeth` use maximum likelihood estimation. The test used to identify DMCs is variously a Wald test (`BiSeq`, `DSS`), likelihood ratio test (`methlySig`, `RADmeth`) or based on the credible interval (Bayesian confidence interval) of the difference in methylation between the two groups (`MOABS`).
+
 
 
 
