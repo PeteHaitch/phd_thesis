@@ -1,12 +1,12 @@
-# Introduction 
+# Introduction
 ## Chapter Overview
 In this chapter I summarise the basic biology necessary for understanding my thesis, such as DNA, genomics and epigenetics. I introduce DNA methylation, describe some of its biological roles and discuss the types of questions asked in experiments studying DNA methylation. I describe assays for studying DNA methylation, with a particular focus on the whole-genome bisulfite-sequencing assay known as _methylC-seq_. I also outline the typical bioinformatics strategies for analysing bisulfite-sequencing data. Finally, I give an overview of the layout of my thesis.
 
 ## Basic biology
 I describe the basic biology of DNA and the role of DNA in genetics and epigenetics.
- 
+
 ### DNA
-_DNA_, a much-needed abbreviation of deoxyribonucleic acid, is the molecule that encodes the genetic instructions for all known living organisms. __INSERT DNA DEFINITION FROM TEXTBOOK__ 
+_DNA_, a much-needed abbreviation of deoxyribonucleic acid, is the molecule that encodes the genetic instructions for all known living organisms. __INSERT DNA DEFINITION FROM TEXTBOOK__
 
 #### The DNA double helix {-}
 
@@ -18,11 +18,11 @@ DNA _self-replicates_ to produce copies of itself. DNA replication occurs during
 
 [^dna_replication]: This of course ignores errors in the replication process. Such errors are very rare events but because DNA replication happens __HOW FREQUENTLY__ these events do occur. There are error-correcting processes that reduce the chance that such an error is retained in the daughter sequence, however, these are not perfect. Hence errors in DNA replication are one source of what are known as _mutations_ in the DNA.
 
-DNA would not be quite so interesting if all it did was self-replicate. But it has an extra trick up its sleeve; it also acts as the template for the creation of new molecules that ultimately lead life as we know it. 
+DNA would not be quite so interesting if all it did was self-replicate. But it has an extra trick up its sleeve; it also acts as the template for the creation of new molecules that ultimately lead life as we know it.
 
 #### Genes and DNA transcription {-}
 
-A gene is a sequence of DNA that is _transcribed_ to produce a functional product called ribonucleic acid or _RNA_ (Source: [http://sandwalk.blogspot.com.au/2007/01/what-is-gene.html](http://sandwalk.blogspot.com.au/2007/01/what-is-gene.html)). 
+A gene is a sequence of DNA that is _transcribed_ to produce a functional product called ribonucleic acid or _RNA_ (Source: [http://sandwalk.blogspot.com.au/2007/01/what-is-gene.html](http://sandwalk.blogspot.com.au/2007/01/what-is-gene.html)).
 
 It is important to note here than not all DNA is transcribed into RNA. That is not to say that untranscribed DNA is not important. For instance, there are untranscribed _regulatory sequences_ of DNA that determine whether a nearby gene is transcribed. There is also _junk DNA_, _garbage DNA_, __etc.__ (__SOURCE__).
 
@@ -53,21 +53,21 @@ Lewin’s GENES VIII defines the Central Dogma of Molecular Biology as,
 ### Genetics
 Within a cell, DNA is packaged into units called _chromosomes_. A chromosome is a structure made up of DNA, RNA(__?__) and proteins. The combination of DNA and proteins is called _chromatin_.  The fundamental repeating unit in eukaryotic chromatin is the _nucleosome_. A nucleosome is comprised of DNA wrapped around a core of _histones_, which are proteins that act as kind of "spool" that the DNA "thread" wrap around. The beautiful compaction of DNA into chromosomes is illustrated in __CLASSIC FIGURE OF DNA -> NUCLEOSOMES -> CHROMATIN -> CHROMOSOMES__.
 
-Chromatin is classified into two classes: _heterochromatin_ or _closed chromatin_ is tightly packed whereas as _euchromatin_ or _open chromatin_ is less tightly packed. DNA polymerase has easier access to euchromatin and therefore expressed genes are usually found in euchromatic regions of the genome. 
+Chromatin is classified into two classes: _heterochromatin_ or _closed chromatin_ is tightly packed whereas as _euchromatin_ or _open chromatin_ is less tightly packed. DNA polymerase has easier access to euchromatin and therefore expressed genes are usually found in euchromatic regions of the genome.
 
 Humans are _diploid_ organisms, meaning that we have two copies of each chromosome in a typical cell[^somatic_cell]. We inherit one chromosome of each pair from our mother and one from our father. A typical human cell has 23 pairs of chromosomes: 22 _autosomes_ and 1 pair of _sex chromosomes_. This 23 pairs of chromosomes comprise what is known as the "human genome"[^mtDNA]
 
-[^somatic_cell]: A sperm or egg cell is haploid and has a single (recombined) copy of each chromosome. 
+[^somatic_cell]: A sperm or egg cell is haploid and has a single (recombined) copy of each chromosome.
 
-[^mtDNA]: A typical human cell also contains the the mitochondrial DNA (mtDNA), which is maternally inherited. The mitochondrial chromosome is very small but there are 100-10,000 copies of it in each cell (__SOURCE__). The mtDNA is also considered to be part of the human genome. 
+[^mtDNA]: A typical human cell also contains the the mitochondrial DNA (mtDNA), which is maternally inherited. The mitochondrial chromosome is very small but there are 100-10,000 copies of it in each cell (__SOURCE__). The mtDNA is also considered to be part of the human genome.
 
-The length of a genome is the number of DNA base pairs (bp) in a haploid copy of that genome, that is, its length considering only a single copy of each chromosome. The human genome is over three billion base pairs long (__SOURCE__). 
+The length of a genome is the number of DNA base pairs (bp) in a haploid copy of that genome, that is, its length considering only a single copy of each chromosome. The human genome is over three billion base pairs long (__SOURCE__).
 
-Every person, except genetically identical twins, has their own unique genome. However, the genomes of any two randomly selected people are identical at __WHAT PERCENTAGE__ of sites.  This enabled the definition and construction of a human _reference genome_, which was completed in __WHEN__ (__SOURCE__). The vast majority of the human genome, as well as the vast majority of the genomes of other organisms, is non-coding. Much of the non-coding DNA is junk DNA. Indeed, over __WHAT PERCENTAGE__ of the human genome is comprised of repetitive DNA. 
+Every person, except genetically identical twins, has their own unique genome. However, the genomes of any two randomly selected people are identical at __WHAT PERCENTAGE__ of sites.  This enabled the definition and construction of a human _reference genome_, which was completed in __WHEN__ (__SOURCE__). The vast majority of the human genome, as well as the vast majority of the genomes of other organisms, is non-coding. Much of the non-coding DNA is junk DNA. Indeed, over __WHAT PERCENTAGE__ of the human genome is comprised of repetitive DNA.
 
 * Each cell has the same genome but different gene expression and different protein expression
 
-Genetic variation can lead to _phenotypic_ variation. A phenotype is the composite of an organism's observable characteristics or traits, such as its morphology, development, biochemical or physiological properties, phenology, behavior, and products of behavior (such as a bird's nest) (Source: [http://en.wikipedia.org/wiki/Phenotype](http://en.wikipedia.org/wiki/Phenotype)). In medical genetics, the phenotype being studied is usually a patient's disease-status or some proxy such as blood pressure. 
+Genetic variation can lead to _phenotypic_ variation. A phenotype is the composite of an organism's observable characteristics or traits, such as its morphology, development, biochemical or physiological properties, phenology, behavior, and products of behavior (such as a bird's nest) (Source: [http://en.wikipedia.org/wiki/Phenotype](http://en.wikipedia.org/wiki/Phenotype)). In medical genetics, the phenotype being studied is usually a patient's disease-status or some proxy such as blood pressure.
 
 Genetic variation is not the only source of phenotypic variation. Environmental factors such as diet and pollution will also affect an individuals's phenotype. More recently, the role of _epigenetic_ variation has been a hot, and contentious, topic.
 
@@ -91,21 +91,21 @@ The _epigenome_ of a cell is the set of epigenetics marks present on the cell's 
 Methylation, acetylation, ubiquination and phosphorylation of histones, which alter the chromatin structure, are examples of the "more biochemical flavour" of recent epigenetics. But the classic epigenetic mark is DNA methylation, which is described in the next section.
 
 ## DNA methylation
-DNA methylation is a chemical modification of DNA that can impart information on top of the DNA sequence. It is heritable during mitotic cell division, which means that it is faithfully copied across to the daughter cell during cell division[^dnam_copying]. It therefore fits into Art Riggs' definition of an epigenetic modification [@russo1996epigenetic]. So pervasive is DNA methylation that [@Lister:2009boa] dubbed it the "fifth base" of the DNA code. 
+DNA methylation is a chemical modification of DNA that can impart information on top of the DNA sequence. It is heritable during mitotic cell division, which means that it is faithfully copied across to the daughter cell during cell division[^dnam_copying]. It therefore fits into Art Riggs' definition of an epigenetic modification [@russo1996epigenetic]. So pervasive is DNA methylation that [@Lister:2009boa] dubbed it the "fifth base" of the DNA code.
 
 [^dnam_copying]: In practice this copying is not as faithful as, say, the copying of DNA from the parent to the daughter strand. Furthermore, the faithfulness of this copying will be different in different conditions, such as in a healthy, well-differentiated liver cell compared to a cancerous liver cell. Nevertheless, the copying of DNA methylation is faithful enough for most biologists to consider it as a mitotically heritable mark, most of the time (__TODO__: Is this just true of 5mC in mammals or more generally?)
 
-What is referred to as DNA methylation is typically methylation of the cytosine nucleotide. Cytosine methylation is by far the most common form of DNA methylation in the animal and plant kingdoms[^other_DNAm], however, I will continue to use the terms _DNA methylation_ and _cytosine methylation_ interchangeably as is standard in the literature. 
+What is referred to as DNA methylation is typically methylation of the cytosine nucleotide. Cytosine methylation is by far the most common form of DNA methylation in the animal and plant kingdoms[^other_DNAm], however, I will continue to use the terms _DNA methylation_ and _cytosine methylation_ interchangeably as is standard in the literature.
 
 [^other_DNAm]: Two additional forms of DNA methylation, N6-Methyladenine (m6A) and N4-methylcytosine (m4C), are primarily found in prokaryotes (__SOURCE: http://en.wikipedia.org/wiki/DNA_methyltransferase#cite_note-21__) (or is it bacterial (__SOURCE: http://www.ncbi.nlm.nih.gov/pubmed/16479578__))
 
-A German chemist, W.G. Ruppel, first identified a methylated nucleic acid in 1898. Ruppel was studying _tuberculinic acid_, the poison of _Mycobacterium tuberculosis_[^tuberculosis] , and discovered that it contained a methylated nucleotide (__SOURCE__). In 1925, Johnson and Coghill isolated this methylated nucleotide as a product of hydrolysis of tuberculinic acid [@Johnson:1925js]. However, Johnson and Coghill's results were disputed for over twenty years by other researchers who were unable to replicate the original findings [@VISCHER:1949ty]. 
+A German chemist, W.G. Ruppel, first identified a methylated nucleic acid in 1898. Ruppel was studying _tuberculinic acid_, the poison of _Mycobacterium tuberculosis_[^tuberculosis] , and discovered that it contained a methylated nucleotide (__SOURCE__). In 1925, Johnson and Coghill isolated this methylated nucleotide as a product of hydrolysis of tuberculinic acid [@Johnson:1925js]. However, Johnson and Coghill's results were disputed for over twenty years by other researchers who were unable to replicate the original findings [@VISCHER:1949ty].
 
 In 1945, Hotchkiss ultimately proved Johnson and Coghill correct when he isolated 5-methylcytosine from nucleic acid prepared from cow thymus [@HOTCHKISS:1948va]. Using paper chromatography, Hodgkiss demonstrated that methylated cytosine existed and was distinct from conventional cytosine and uracil.
 
 [^tuberculosis]: _Mycobacterium tuberculosis_ was then known as _Tubercle bacillus_.
 
-In the next section I focus on DNA methylation in mammals, in particular humans, but include brief descriptions of DNA methylation in other organisms. 
+In the next section I focus on DNA methylation in mammals, in particular humans, but include brief descriptions of DNA methylation in other organisms.
 
 ### DNA methylation in mammals
 DNA methylation is essential for normal development in mammals, such as human and mouse (__REFERENCE__). My thesis focuses on DNA methylation in humans (_Homo sapiens_) but much of the material in this section is true for other mammals.
@@ -114,7 +114,7 @@ The typical site of DNA methylation is at the C5 carbon position of a cytosine n
 
 At the level of single-stranded DNA, methylation is a binary event: a cytosine is either methylated or unmethylated. For double-stranded DNA, methylation is usually symmetric across the two strands (_strand symmetric_) although _hemimethylation_ does occur. Within a diploid cell a particular cytosine may be unmethylated or methylated on both homologous chromosomes or methylated on one chromosome and unmethylated on the other. While the former that is more common, examples of the latter case, such as _allele-specific methylation_ and _genomic imprinting_, are of considerable biological interest (__SOURCE/EXAMPLES__).
 
-In mammalian genomes, most cytosines are unmethylated except for those at the _CpG dinucleotide_, which is usually strand-symmetric. I explain the importance of CpG dinucleotides in the next section. 
+In mammalian genomes, most cytosines are unmethylated except for those at the _CpG dinucleotide_, which is usually strand-symmetric. I explain the importance of CpG dinucleotides in the next section.
 
 ### CpG dinucleotides
 
@@ -146,7 +146,7 @@ Other authors have since provided alternative definitions (__REFERENCES__ Adrian
 
 [@Wu:2010do] developed a Hidden Markov Model to define CGIs. In my thesis I have used the predicted CGIs from this model. These predicted CGIs are available from [http://rafalab.jhsph.edu/CGI/](http://rafalab.jhsph.edu/CGI/).
 
-The "sandy/beachy" metaphors have been continued (i.e. stretched to breaking point) with various authors defining CGI shores, CGI shelves, CpG canyons, CpG deserts and CpGs in the "open sea". CGI shores [@Irizarry:2008hg] are defined as regions within 2kb of CGIs. They regions have been demonstrated to have an increased variability of CpG methylation [@Irizarry:2008hg]. CGI shelves (__WHO__) are defined as __WHAT__ and __WHY ARE THEY USEFUL__. CpG deserts are __WHAT__, CpG canyons are __WHAT__ and the "open sea" is __WHAT AND HOW DOES THIS DIFFER FROM CpG DESERTS__. 
+The "sandy/beachy" metaphors have been continued (i.e. stretched to breaking point) with various authors defining CGI shores, CGI shelves, CpG canyons, CpG deserts and CpGs in the "open sea". CGI shores [@Irizarry:2008hg] are defined as regions within 2kb of CGIs. They regions have been demonstrated to have an increased variability of CpG methylation [@Irizarry:2008hg]. CGI shelves (__WHO__) are defined as __WHAT__ and __WHY ARE THEY USEFUL__. CpG deserts are __WHAT__, CpG canyons are __WHAT__ and the "open sea" is __WHAT AND HOW DOES THIS DIFFER FROM CpG DESERTS__.
 
 ### Non-CpG methylation
 
@@ -158,9 +158,9 @@ Non-CpG methylation is less well studied than CpG methylation. This is partly du
 
 ### Modifications of a modification
 
-Methylation is not the only chemical modification of cytosine nucleobase, although it is by far the most common. Further modifications, listed approximately from most frequent to least frequent, are 5-hydroxymethylcytosine (5hmC), 5-formylcytosine (5fC) and 5-carboxylcytosine (5caC). 
+Methylation is not the only chemical modification of cytosine nucleobase, although it is by far the most common. Further modifications, listed approximately from most frequent to least frequent, are 5-hydroxymethylcytosine (5hmC), 5-formylcytosine (5fC) and 5-carboxylcytosine (5caC) (__TODO:__ cite 10.1038/nrg3772). 
 
-The biological significance of these marks is still being determined, in part because the assays for studying these are still in development (__SOURCE__) and because their relatively scarcity means that experiments to detect these modifications are more difficult and expensive. 
+The biological significance of these marks is still being determined, in part because the assays for studying these are still in development (__SOURCE__) and because their relatively scarcity means that experiments to detect these modifications are more difficult and expensive.
 
 One genome-wide study of 5hmC found that less than $ 1\%$ of all assayed cytosines in mouse fetal cortex and adult cortex cells were hydroxymethylated [@Lister:2013et]. Most of the 5hmC was detected in the CpG context and, although the genome-wide level of 5hmC was low, the authors reported significant levels of 5hmC at particular cytosines in the genome.
 
@@ -174,15 +174,15 @@ In mammalian cells, the writers are the DNA _methyltransferase_ (DNMT) enzymes. 
 
 [^DNMT]: DNMT2, now known as TRDMT1, was once thought to be a DNA methyltransferase, however, __http://www.sciencemag.org/content/311/5759/395__ showed that it in fact methylates a small RNA and not DNA. Another protein, DNMT3L, is homologous to DNMT3a and DNMT3b but does contain catalytic domain that is necessary for methyltransferase activity. Instead, DNMT3L is thought to stimulate the activity of DNMT3a and DNMT3b (__SOURCE__).
 
-[^KO]: A knockout mouse for gene $X$ is a mouse that has been genetically engineered to remove or otherwise inactivate gene $X$. Mouse knockouts can be either heterozygous knockouts (one copy still of the gene is still present/active) or homozygous knockouts (both copies of gene absent/inactive). 
+[^KO]: A knockout mouse for gene $X$ is a mouse that has been genetically engineered to remove or otherwise inactivate gene $X$. Mouse knockouts can be either heterozygous knockouts (one copy still of the gene is still present/active) or homozygous knockouts (both copies of gene absent/inactive).
 
 The readers of DNA methylation recognise methylated DNA. These readers can recruit additional proteins to the site of the methylated cytosine to perform a variety of functions related to gene expression. For example, the _MBD_ (methyl-CpG-binding domain) group of proteins bind to DNA containing a methylated CpG which then suppress gene expression by preventing transcription factor binding at that site (__SOURCE__). Another group, the _UHRF_ (ubiquitin-like, containing PHD and RING finger domain) proteins, help DNMT1 methylate _hemimethylated_ DNA, which is DNA where one strand is methylated and the other is not (e.g. the parent strand compared to the daughter strand following DNA replication).
 
 The removal or erasure of DNA methylation, _demethylation_, is characterised as _passive_ loss or _active_ removal. Passive loss occurs when the maintainence methyltransferases do not efficiently perform their role of restoring DNA methylation following cell division. This leads to a gradual, stochastic and genome-wide loss of DNA methylation after multiple cell divisions. This form of passive demethylation, sometimes called replication-dependent demethylation, cannot explain observations of precise targeted demethylation (__EXAMPLE__) nor the two stages of rapid global demethylation that occur during development [@Wu:2014gw].
 
-Active demethylation is currently a hot topic in epigenetics research. Multiple mechanisms have been proposed, and it is indeed likely that there are multiple ways to achieve active demethylation. These mechanisms were recently reviewed by [@Wu:2014gw], which I now briefly summarise: 
+Active demethylation is currently a hot topic in epigenetics research. Multiple mechanisms have been proposed, and it is indeed likely that there are multiple ways to achieve active demethylation. These mechanisms were recently reviewed by [@Wu:2014gw], which I now briefly summarise:
 
-1. The direct removal of the methyl group from 5mC is considered unlikely due to the strong carbon-carbon bond between the methyl group and the cytosine. 
+1. The direct removal of the methyl group from 5mC is considered unlikely due to the strong carbon-carbon bond between the methyl group and the cytosine.
 2. There is evidence that the DNA repair machinery can be co-opted to remove a methylated base or the surrounding region. The excised base or region is then repaired with unmethylated cytosines replacing 5mCs.
 3. 5mC oxidation-dependent active DNA demethylation. This follows from the observation that the TET enzymes can iteratively oxidate a 5mC -> 5hmC -> 5fC -> 5caC reaction. The removal of 5hmC, 5fC or 5caC is biochemically "easier" than the removal of 5mC and could occur via a more efficient form of replication-dependent demethylation, direct removal of the oxidized methyl group or through the DNA repair machinery (__FIGURE OF TET-CYCLE__).
 
@@ -218,7 +218,7 @@ A challenge to measuring DNA methylation is that it is erased by standard molecu
 2. _Affinity enrichment_
 3. _Sodium bisulfite conversion_
 
-Each of these pre-treatments can then be combined with a second step of amplification or hybridisation. For example, 
+Each of these pre-treatments can then be combined with a second step of amplification or hybridisation. For example,
 
 1. Gel-based analysis
 2. Sanger sequencing
@@ -237,7 +237,7 @@ The throughput of an assay can be quantified in two ways. The first is per-sampl
 
 [^throughput1]: This might reasonably be argued as being a definition of resolution.
 
-The choice of which assay to use for an experiment is a trade-off between resolution, per-sample throughput and per-dollar throughput. Experiments that use an assay with high-resolution and high per-sample throughput generally have fewer samples than experiments using a lower resolution assay or an assay with lower per-sample throughput. 
+The choice of which assay to use for an experiment is a trade-off between resolution, per-sample throughput and per-dollar throughput. Experiments that use an assay with high-resolution and high per-sample throughput generally have fewer samples than experiments using a lower resolution assay or an assay with lower per-sample throughput.
 
 In this section I will describe each of the pre-treatments but will focus on the bisulfite-conversion assays. In particular, I will describe in detail the "gold standard" assay of DNA methylation, _whole-genome bisulfite-sequencing_ (WGBS), that combines the sodium bisulfite conversion pre-treatment with massively parallel sequencing to produce whole-genome maps of DNA methylation at base pair resolution.
 
@@ -245,9 +245,9 @@ In this section I will describe each of the pre-treatments but will focus on the
 ### Enzyme digestion assays
 _Restriction endonucleases_ are an important technique in molecular biology. These enzymes can preferrentially "cut/cleave/digest" DNA at particular sequence motifs. The motif at which a restriction enzyme cleaves DNA is called the _recognition motif_ or _restriction sequence_. The methylation of a position in the recognication motif can inhibit a restriction enzyme from cleaving the DNA. This can be used to design an assay to infer the methylation state of a DNA fragment.
 
-For example, the recognition site of the restriction enzyme _HpaII_ is `CCGC`. However, _HpaII_ will only digest DNA when the second cytosine in the motif is unmethylated. The _HELP_ (_HpaII_ tiny fragment enrichment by ligation-mediated PCR) assay compares DNA digested by _HpaII_ to one digested with another restriction enzyme that has the same recognition motif but is methylation-insensitive (_MspI_) to identify _hypomethylated_ regions of a genome (__SOURCE__). 
+For example, the recognition site of the restriction enzyme _HpaII_ is `CCGC`. However, _HpaII_ will only digest DNA when the second cytosine in the motif is unmethylated. The _HELP_ (_HpaII_ tiny fragment enrichment by ligation-mediated PCR) assay compares DNA digested by _HpaII_ to one digested with another restriction enzyme that has the same recognition motif but is methylation-insensitive (_MspI_) to identify _hypomethylated_ regions of a genome (__SOURCE__).
 
-Another popular restriction enzyme for studying DNA methylation is _McrBC_, "an enzyme with the unusual and desirable property of cutting methylated DNA promiscuously (recognition sequence $R^{m} C(N)_{55– 103} R^{m} C$)" [@Irizarry:2008hg]. 
+Another popular restriction enzyme for studying DNA methylation is _McrBC_, "an enzyme with the unusual and desirable property of cutting methylated DNA promiscuously (recognition sequence $R^{m} C(N)_{55– 103} R^{m} C$)" [@Irizarry:2008hg].
 
 Assays based on restriction enzyme were some of the first developed for studying DNA methylation. They were initially developed for studying particular loci although they have been extended to genome-scale analysis approaches [@Laird:2010iv]. Restriction enzyme assays have a relatively low resolution (__REASONS/SOURCE__) but may also be used as a first-pass to enrich a sample for methylated or unmethylated regions which are then assayed using a higher resolution technique.
 
@@ -259,13 +259,13 @@ Some examples of affinity enrichment assays for DNA methylation are the microarr
 ### Sodium bisulfite conversion assays
 In the 1980s, __Hayatsu OR Wang et al.__ discovered that when _denatured_ (__DEFINE?__) DNA is treated with sodium bisulfite (__CHEMICAL SYMBOL__), unmethylated cytosines deaminate to uracils much faster than do methylated cytosines (__SOURCE__). The methylated cytosines are said to be "protected" from conversion to uracils. When the bisulfite treated is amplified by PCR the uracils are subsequently converted to thymines.
 
-This discovery led to the development of assays for studying studying cytosine methylation based on the pre-treatment of DNA with sodium bisulfite, which are sometimes referred to as bisulfite-conversion assays (__FROMMER; CLARK__). These assays are all based on the idea of comparing the sequence of the untreated DNA to the sequence of the bisulfite treated DNA to infer the methylation state of all cytosines in the sequence by whether or not they were converted to uracil (thymine) following the bisulfite treatment (__see FIGURE__). 
+This discovery led to the development of assays for studying studying cytosine methylation based on the pre-treatment of DNA with sodium bisulfite, which are sometimes referred to as bisulfite-conversion assays (__FROMMER; CLARK__). These assays are all based on the idea of comparing the sequence of the untreated DNA to the sequence of the bisulfite treated DNA to infer the methylation state of all cytosines in the sequence by whether or not they were converted to uracil (thymine) following the bisulfite treatment (__see FIGURE__).
 
 #### Analysis platforms combined with bisulfite conversion {-}
 
-Initial experiments based on the sodium bisulfite pre-treatment of DNA used Sanger sequencing of cloned PCR products, a very laborious task, which restricted experiments to studying a limited number of short segments of DNA (__HOW MANY & LONG?__). Although subsequent enhancements in the automation of Sanger sequencing improved the throughput of these assays, it was never going to be able to deliver a cost-effective, genome-scale assay of DNA methylation. The development of hybridisation microarrays provided an alternative way of analysing bisulfite-treated DNA that could provide cheap, genome-wide measurements of DNA methylation(__SOURCE__). 
+Initial experiments based on the sodium bisulfite pre-treatment of DNA used Sanger sequencing of cloned PCR products, a very laborious task, which restricted experiments to studying a limited number of short segments of DNA (__HOW MANY & LONG?__). Although subsequent enhancements in the automation of Sanger sequencing improved the throughput of these assays, it was never going to be able to deliver a cost-effective, genome-scale assay of DNA methylation. The development of hybridisation microarrays provided an alternative way of analysing bisulfite-treated DNA that could provide cheap, genome-wide measurements of DNA methylation(__SOURCE__).
 
-Microarrays contain thousands, even millions, of short _oligonucleotide_ probes. Each probe is is designed to hybridise to a particular DNA sequence and emits a signal, such as flurousence, that can be measured to infer the strength of the hybridisation. Therefore, an (idealised) way to analyse DNA methylation with a microarray is to hybridise bisulfite-converted DNA to a microarray that contains probes for both the methylated and unmethylated versions of all sequences of interest. The relative methylation of each sequence can be inferred from the relative intensities of the "methylated probe" to the "unmethylated probe". Such an idealised experiment brushes over many complications including [@Laird:2010iv]: 
+Microarrays contain thousands, even millions, of short _oligonucleotide_ probes. Each probe is is designed to hybridise to a particular DNA sequence and emits a signal, such as flurousence, that can be measured to infer the strength of the hybridisation. Therefore, an (idealised) way to analyse DNA methylation with a microarray is to hybridise bisulfite-converted DNA to a microarray that contains probes for both the methylated and unmethylated versions of all sequences of interest. The relative methylation of each sequence can be inferred from the relative intensities of the "methylated probe" to the "unmethylated probe". Such an idealised experiment brushes over many complications including [@Laird:2010iv]:
 
 * The reduced complexity of bisulfite-converted DNA (from a 4-base alphabet to a largely 3-base alphabet) leads to decreased hybridisation specificity
 * Sequences containing multiple cytosines require multiple probe versions in order to assay all possible methylation patterns
@@ -283,11 +283,11 @@ __TODO__
 ### Pros and cons of bisulfite-conversion assays
 Bisulfite-conversion assays are considered the "gold standard" for studying DNA methylation. Currently, multiple cells are required as input although the minimum number required is being lowered and efforts are well produce single-cell, whole-genome DNA methylation maps using bisulfite-treated DNA (__SOURCE__).
 
-A key advantage of bisulfite-conversion assays over enzyme digest and affinity enrichment assays is that it provide base pair resolution of DNA methylation. In fact, single-molecule, base pair resolution is even possible for short DNA sequences when bisulfite-treated DNA is analysed with sequencing[^microarrays]. 
+A key advantage of bisulfite-conversion assays over enzyme digest and affinity enrichment assays is that it provide base pair resolution of DNA methylation. In fact, single-molecule, base pair resolution is even possible for short DNA sequences when bisulfite-treated DNA is analysed with sequencing[^microarrays].
 
 [^microarrays]: Microarray hybridisation can provide base pair resolution but not single molecule resolution. The signal from a microarray-based experiment a sample-wide average since, for a given locus, the signal is relative to the proportion of DNA fragments in the sample methylated at that locus.
 
-A recently discovered disadvantage is that bisulfite-conversion assays are unable to distinguish between 5mC and 5hmC because both modifications similarly protect cytosine from deamination to uracil (__SEE [@Yu:2012ej] for references__). In effect, the detection of 5mC, and all subsequent inference, is confounded with that of 5hmC. For most experiments this isn't much of a problem - most cells have very low levels of 5hmC and so there is little confounding - however, in certain experiments this needs a more careful approach. To address this issue, [@Booth:2012fh] developed _oxidative bisulfite-sequencing_ (oxBS-seq) and [@Yu:2012ej] developed _Tet-assisted bisulfite sequencing_ (TAB-seq) to separate 5mC and 5hmC detection. 
+A recently discovered disadvantage is that bisulfite-conversion assays are unable to distinguish between 5mC and 5hmC because both modifications similarly protect cytosine from deamination to uracil (__SEE [@Yu:2012ej] for references__). In effect, the detection of 5mC, and all subsequent inference, is confounded with that of 5hmC. For most experiments this isn't much of a problem - most cells have very low levels of 5hmC and so there is little confounding - however, in certain experiments this needs a more careful approach. To address this issue, [@Booth:2012fh] developed _oxidative bisulfite-sequencing_ (oxBS-seq) and [@Yu:2012ej] developed _Tet-assisted bisulfite sequencing_ (TAB-seq) to separate 5mC and 5hmC detection.
 
 oxBS-seq specifically measures 5mC. The input DNA is oxidated by potassium perruthenate (KRuO$_{4}$), which converts 5hmC to 5fC, prior to bisulfite-treatment. Only 5mC is protected from conversion during the bisulfite-treatment, which effectively means that only 5mC remains to be detected at the sequencing stage. The level of 5hmC can be estimated by performing traditional bisulfite-sequencing and then "subtracting" the oxBS-seq signal (5mC) from the bisulfite-sequencing signal (5mC + 5hmC).
 

@@ -868,3 +868,55 @@ Figure 1 explains how it performs SNP calling from bisulfite-sequencing data.
 Calling "C-strand" SNPs depends on the underlying methylation state ($\beta$, which defaults to the standard $\beta$-values) and bisulfite-conversion errors (underconversion = $\alpha$, which defaults to $0.25$) and overconversion = $\gamma$, which defaults to $0$).
 
 Rather than filter out positions from an M-bias plot, `Bis-SNP` "walks" from the 5' end of each read and excludes all positions prior to the first $T$ that is mapped to a reference $C$. This is to remove the so-called "5' bias" of the Illumina bisulfite-sequencing but will do nothing for 3' bias.
+
+## \citet{Dolzhenko:2014bo}
+
+> Existing methods based on Fisher’s Exact Test and HMMs are appropriate for comparing a pair of samples at a time (coming either directly from the experiment or obtained by pooling other samples); however, they lack the ability to account for variability of methylation levels between replicates.
+
+> Unlike BSmooth, [BiSeq] can be used for experiments that go beyond comparing two groups of samples, but it requires a set of candidate regions that may exhibit differential methylation.
+
+> The beta- binomial, which has first been used for modeling WGBS proportions by Molaro and others [17], is a natural choice for describing methylation levels of an individual site across replicates as it can account for both sampling and epigenetic variability.
+
+> The beta-binomial regression is fit separately for each target site...[parameters] are estimated using the method of maximum likelihood
+
+> [To find DMRs] the p-values are transformed using weighted Z test (also known as Stouffer-Liptak test), employing an approach proposed by Kechris and others [23].
+
+Correlations of z-scores are computed using the method implemented in `comb-P`.
+
+> We recommend calculating correlation and subsequently combining the pvalues of sites located within 200 bp. In our experience correlation typically becomes much weaker beyond this point, so the users do not generally need to alter this parameter. However, it may be approprtiate to increase the value of this parameter when analyzing very noisy data.
+
+Sounds fair.
+
+> As explained by Rice [33], Fisher’s method is best suited for testing the existence of at least one significant test among the ones being combined, while the Z test is more appropriate in situations requiring the consensus among all of the combined tests, suggesting that the Z test is more appropriate for our purposes.
+
+### Some discussion of Rice
+
+> In a wide variety of biological applications there is a need to combine the results from independent tests for which the raw data cannot be pooled.
+
+True, but the tests in BS-seq are __not independent__. So, what are the consequences of this?
+
+> Fisher's testing procedure represents a test against broad alternatives. It specifically tests whether at least one component test is significant, and can yield a significant combined test statistic when the component tests, on balance, strongly support $H_0$. This is an undesirable characteristic when asking whether a group of tests collectively supports the same $H_0$.
+
+### Simulation
+
+6 vs. 6 two-group experiment.
+
+1. Sample coverage from real data
+2. Sample number of methylated reads from a binomial distribution
+3. Simulate methylation levels from distributions in [Epigenome-wide association studies for common human diseases](http://www.nature.com/nrg/journal/v12/n8/full/nrg3000.html). These distributions are hypothetical.
+
+__No correlations of methylation levels in simulation.__
+
+## \citet{Xie:2014ez}
+
+A Bayesian test to replace the "Lister method" of identifying methylcytosines. I still don't think identifying methylcytosines is particularly useful.
+
+### Simulation
+
+They use the [`BSsim`](http://122.228.158.106/BSSim) software for simulation.
+
+## \citet{Huh:2014ki}
+
+`Bis-class` is a Bayesian method for clasifying sites as methylated or unmethylated. The authors claim it is most useful for lowly methylated genomes with low coverage, which is where simpler methods struggle.
+
+The classifier incorporates information about the global and local methylation levels in the sample via a prior distribution. The "localness" is incorporated via a kernel with the window size set to be the distance where the spatial correlation between methylation levels drops below 0.2. __TODO: Do they describe how they compute these correlations__
