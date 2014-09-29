@@ -19,7 +19,41 @@ I begin by explaining various methods for estimating co-methylation and their as
 
 Throughout this chapter I focus on co-methylation of CpGs, although the methods described are also applicable to non-CpG methylation loci. The reason I do not explore co-methylation at non-CpG methylation loci is because such loci are rarely methylated in the samples I am studying.
 
-## Within-fragment co-methylation
+\subsection{Previous work}\label{subsec:previous work}
+
+I define co-methylation is the dependence of DNA methylation at different methylation loci within a sample. In other words, it is the dependence or correlation structure of DNA methylation data within a sample. This is slightly different to \citeauthor{Schatz:2004cha} who defined it as, "the presence of methylation over a stretch of neighboring CpG positions" and more in line with \citeauthor{Eckhardt:2006gh} who defined it as, "the relationship between the degree of methylation over distance".
+
+There have been several attempts to explore the relationship between methylation events at different loci within an individual. However, frequently the exact question being asked and the methodology have not been well-defined. Moreover, to the best of my knowledge there is no software available that implements any of the proposed methods.
+
+From a biological perspective, by studying co-methylation we hope to better understand the regulation of DNA methylation. From a statistical perspective, more powerful and efficient analysis methods can be developed if this correlation structure is better understood, accounted for and exploited.
+
+An increased understanding of co-methylation could also lead to cheaper and more efficient assays of DNA methylation. For example, we could identify methylation loci whose methylation status is highly predictive of the methylation level of a surrounding region and design an assay to interrogate those highly predictive loci. This idea is analogous to the use of tag-SNPs on whole-genome genotyping microarrays (__CITE__).
+
+### Correlations of aggregate measurements of methylation
+
+Most analyses of co-methylation have been based on aggregate measurements of methylation, such as $\beta$-values \citep{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Lyko:2010dr, Hebestreit:2013ko, Lacey:2013iy, Liu:dy}. This is true of studies using both microarray data, where only these type of measurements are available, and sequencing data, where base-resolution measurements are also available. Very often the exact analysis is not well-described but it can generally be thought of as studying the autocorrelation of the $\beta$-values along the genome.
+
+__UP TO HERE__
+
+
+__TODO__
+
+* Describe some analyses using autocorrelation of beta-values.
+* More recently, within-fragment analyses. Describe concept (move from next section to this section).
+* Other definitions/methods
+  * Lister's mCG correlations
+  * co-methylation across samples
+  * "vertical" correlations of \citet{Capra:2014uh}
+
+
+
+
+
+
+The method I developed, which is described in Section \ref{subsec:wf_cometh}, is superior because of __TODO__.
+
+
+\subsection{Within-fragment co-methylation}\label{subsec:wf_cometh}
 
 Within-fragment co-methylation is the dependence of DNA methylation at methylation loci that occur on the same DNA fragment. It can be thought of as the dependence structure of the binary stochastic process $Z_{h} = (Z_{h, 1}, Z_{h, 2}, \ldots, Z_{h, N_{loci}})$. For example, we may wish to understand how $Z_{h, i}$ affects $Z_{h, i'}$ and to develop a simple, tractable model of this dependence structure. We can study what variables effect this dependence, such as the distance between methylation loci and the genomic context of the methylation loci.
 
@@ -29,9 +63,9 @@ As every sequencing read is produced from a single DNA fragment[^chimera], we ca
 
 In studying within-fragment co-methylation, I assume that all copies of each chromosome have the same dependence structure (__TODO: Although not the same mean structure? Make this mathematically precise__). The data are sampled from a population containing multiple copies of each chromosome and if each copy has a different dependence structure then we cannot hope to say anything about these structures since these copies are not identifiable.
 
-If we could sequence entire chromosomes by single reads then we could analyse co-methylation between any set of methylation loci. However, current technologies for bisulfite-sequencing mean that we are limited to studying reads that, at most, span about $200-250$ bp and so are limited to studying co-methylation of methylation loci that are very close to one another along the chromosome.
+If we could sequence entire chromosomes by single reads then we could analyse co-methylation between any set of methylation loci. However, current technologies for bisulfite-sequencing mean that we are limited to studying reads that, at most, span about $200-250$ bp and so are limited to studying co-methylation of methylation loci that are very close to one another along the chromosome. Obviously, we cannot study within-fragment co-methylation from microarray data since these produce measurements of methylation that are aggregated across many hundreds or thousands of cells.
 
-### Using pairs of methylation loci
+\subsubsection{Using pairs of methylation loci}\label{subsec:pairs}
 
 The simplest summary of within-fragment co-methylation uses pairs (2-tuples) of methylation loci. Consider a single pair of CpGs in the reference genome and all reads that contain both CpGs of the pair (see Figure \ref{reads_containing_pair_of_CpGs}).
 
@@ -63,6 +97,10 @@ The within-fragment co-methylation of the pair of CpGs, $(i, i')$, in the $j^{th
 A positive $LOR$ is evidence that the methylation states are likely to be the same at both CpGs in the pair on the same DNA fragment (_co-methylation_), a negative $LOR$ is evidence that the methylation states are likely to be different at each CpG in the pair on the same DNA fragment and a value close to zero is evidence that the methylation state at each CpG in the pair on the same DNA fragment are independent of one another. More precisely, we may wish to compute a confidence interval for $LOR$ or perform a hypothesis test to determine whether the observed $LOR$ is evidence for co-methylation at this pair of CpGs.
 
 In theory we can compute $LOR$ for all pairs of methylation loci. In practice, using current technology, we can only compute it for pairs of methylation loci that are at most separated by 200-250 bp.
+
+#### Comparison of LOR to correlations
+
+__TODO: Compare use of log-odds ratio to use of correlation coefficient and justify using LOR__
 
 #### Constructing pairs of methylation loci
 
@@ -128,6 +166,12 @@ __TODO:__ Discuss with Terry the idea of fitting a log-linear model to the count
 Aside from estimating this increased number of parameters, we must also interpret these with respect to $IPD$ and other annotations. The $IPD$ vector for $m$-tuples has $(m - 1)$ elements meaning we now have to explore the effect of $IPD$ on $LOR$ over an $(m - 1)$-dimensional _grid_ rather than along a 1-dimensional line. Again, the sparsity of the data make this difficult - approximately $20,000 - 30,000$ unique $IPD$s are observed for 3-tuples - but even more difficult is creating a clear and coherent visualisation of this data.
 
 As is clear from __FIGURE__, these is very difficult for 3-tuples, let alone for higher-order $m$-tuples. We have an $(m - 1)$ grid of $IPD$s and a _distribution_ of $LOR$ for each $IPD$. In the case of 2-tuples I used lines to summarise the quantiles of the $LOR$ distributions, but this is not effective when $m > 2$. Instead, we must create separate figures for each quantile, which makes it difficult to interpret the effects of $IPD$ on $LOR$.
+
+## Correlations of $\beta$-values
+
+
+
+
 
 ## Results of co-methylation analyses
 
