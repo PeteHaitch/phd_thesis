@@ -13,7 +13,7 @@ Nonetheless, they were perhaps the first to study co-methylation, which they def
 __TODO: Discuss interpetation with Terry__
 __TODO: What are the grey and blue dots in Fig. 3c?__
 
-Based on this analysis they concluded that there was "a significant correlation for comethylation over short distances ($\leq$ 1,000 bp), [but] it deteriorated rapidly for distances $>$ 2,000 bp".
+Based on this analysis they concluded that there was "a significant correlation for co-methylation over short distances ($\leq$ 1,000 bp), [but] it deteriorated rapidly for distances $>$ 2,000 bp".
 
 __TODO: Fix indicator function__
 
@@ -67,7 +67,7 @@ The authors used a heuristic approach based on a 1kb sliding window approach and
 
 A sliding window approach was also used to identify partially methylated domains (PMDs). This was only performed for CpG methlylation loci. A larger window size of 10kb and step size of 10kb were used. If the window contained 10 mCpGs, each covered by at least 5 reads, and the __average__ $\beta$-value in the region was less than 0.7 then the region was incremented by 10kb. The extension was terminated once the next increment had an average $\beta$-value greater than 0.7 or less than 10 mCpGs and the region was called a PMD.
 
-\cite{Lister:2009hy} also investigated what at first appears to be a "within-read" measure of co-methylation. However, on a closer reading I do not think it is a truly "within-read" measure. Specifically, they tabulated the number of mCG (resp. mCHG or mCHH) sites 1-50n bp downstream of a mCG (resp. mCHG or mCHH). I believe that they define methylcytosines based on their binomial test, which means these tabulations are "across-reads" rather than "within-reads". To truly do this as a "within-read" analysis you would tabulate $z_{i, j} = (1, 1)$ for a variety of IPD. The fact that they used 50 bp reads and measured over a 1-50 bp window makes it easy to misinterpret their results as being "within-read".
+\cite{Lister:2009hy} also investigated what at first appears to be a "within-read" measure of co-methylation (Fig. 3g, 3h; Supp. Fig. 9). However, on a closer reading I do not think it is a truly "within-read" measure. Specifically, they tabulated the number of mCG (resp. mCHG or mCHH) sites 1-50n bp downstream of a mCG (resp. mCHG or mCHH). I believe that they define methylcytosines based on their binomial test, which means these tabulations are "across-reads" rather than "within-reads". To truly do this as a "within-read" analysis you would tabulate $z_{i, j} = (1, 1)$ for a variety of IPD. The fact that they used 50 bp reads and measured over a 1-50 bp window makes it easy to misinterpret their results as being "within-read".
 
 With that in mind, these results suggest a 8-10 bp periodicity in the co-occurence of methylcytosines. This co-occurence is clearest for CHG and CHH loci in intronic sequences. Other loci and contexts do not show this behaviour or not to the same extend. For example, the graph of mCG co-occurence in exonic sequences is dominated by a 3nt cycle, presumably due to codon structure and selective pressures on coding sequences (Sup. Fig. 9).
 
@@ -528,7 +528,7 @@ __This should go in the co-methylation section.__
 
 \citet{Lyko:2010dr} performed WGBS of honey bee (_Apis mellifera_) brains. It was known that young bees fed large amounts of royal jelly developed into queens (fertile females) whereas those fed smaller amounts develop into drones (males) or workers (infertile females). Furthermore, \citet{Kucharski:2008gu} had shown that a similar effect could be achieved by silencing expression of the DNA methyltransferase, DNMT3. Therefore,\citet{Lyko:2010dr} investigated the hypothesis that honey bees fed large amounts of royal jelly (queens) have different brain methylomes to those bees fed smaller amounts of royal jelly (workers).
 
-As a part of their study, \citeauthor{Lyko:2010dr} investigated autocorrelation of $\beta$-values at CpGs in honey bees. It is not clear whether they only considered pairs with $NIL=0$ or whethey they used all pairs ($NIL \geq 0$).
+As a part of their study, \citeauthor{Lyko:2010dr} investigated autocorrelation of $\beta$-values at CpGs in honey bees. It is not clear whether they only considered pairs with $NIL=0$ or whether they used all pairs ($NIL \geq 0$).
 
 They found that
 
@@ -536,7 +536,7 @@ They found that
 
 However, the absolute value of these correlations are __tiny__, with the maximum being less than $0.015$. I suspect there is an error in these plots (Supplementary Figure 7, __DISCUSS WITH TERRY__).
 
-They did not stratifiy their analysis by genomic elements, such as CGIs.
+They did not stratify their analysis by genomic elements, such as CGIs.
 
 ## \citet{Peng:2012dh}
 
@@ -608,11 +608,11 @@ They then plotted the level of epipolymorphism against the average level of meth
 
 In the ENCODE data they found that differentiated, somatic tissues had a higher frequency of epipolymorphism than did embryonic cells. From this they concluded that germline and pluropotent cells are able to establish or maintain a more coherent methylation state and that somatic cells accumulate substantial stochastic variation during somatic development.
 
-\citeauthor {Landan:2012kp} also found that DMRs identified between the H1 embryonic stem cell line and somatic cell lines had a higher degree of epipolymorphism than non-DMRs[^landan_dmrs]. They found a similar pattern in the bisulfite tumour vs. normal padlock probe bisulfite sequencing data from \cite{Hansen:2011gu}.
+\citeauthor{Landan:2012kp} also found that DMRs identified between the H1 embryonic stem cell line and somatic cell lines had a higher degree of epipolymorphism than non-DMRs[^landan_dmrs]. They found a similar pattern in the bisulfite tumour vs. normal padlock probe bisulfite sequencing data from \cite{Hansen:2011gu}.
 
 [^landan_dmrs]: Sample-specific DMRs were simply defined as regions with $\geq 20\%$ difference in average methylation between the (duplicate-averaged) H1 methylome and the sample of interest. No details are provided on how large the regions had to be to qualify as DMRs.
 
-\citeauthor{Landan:2012kp} then studied the evolution of DNA methylation patterns in an _in vitro_ model system tracking immortalised fibroblasts over 300 generation Two lines, A and B, were tracked and sampled at several time points for profiling with MeDIP-seq. Unfortunately, at least fromy my perspective, MeDIP-seq does not provide single-base-resolution of DNA methylation and so I do not discuss these result any further.
+\citeauthor{Landan:2012kp} then studied the evolution of DNA methylation patterns in an _in vitro_ model system tracking immortalised fibroblasts over 300 generation Two lines, A and B, were tracked and sampled at several time points for profiling with MeDIP-seq. Unfortunately, at least from my perspective, MeDIP-seq does not provide single-base-resolution of DNA methylation and so I do not discuss these result any further.
 
 They did, however, also profile 45 cancer-related CGIs in the the model system at multiple time points with "ultra-deep" ($> 10,000 \times$ coverage) bisulfite-sequencing. By sampling the over time they were able to investigate the evolution of stochastic epipolymorphism. Using this data they also analysed the correlation of DNA methylation at pairs of CpGs in these 45 regions. They visualised these using plots analogous to linkdage-disequilibrium plots. They did not look at how these correlations vary as a function of distance.
 
@@ -621,7 +621,6 @@ From the analysis of this small set of regions they concluded that:
 > [the] correlation between the methylation states of pairs of CpGs was generally very low. This lack of correlation suggests that methylation dynamics are typically independent for different CpGs, making the methylation state of one CpG (whether high or low) uninformative on the methylation state of nearby CpGs.
 
 __My co-methylation results and extensive $\beta$-value correlations suggest otherwise.__
-
 
 The correlation of methylation at a pair of CpGs was computed from the $2 \times 2$ contigency table, shown __BELOW__.
 
