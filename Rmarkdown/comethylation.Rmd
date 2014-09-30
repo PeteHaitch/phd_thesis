@@ -42,9 +42,7 @@ As part of their analysis, the authors analyse co-methylation, which they define
 
 In Figure 3a, the authors plot the "percentage identical methylation" against "distance in bp", which ranges from $0$ to $20,000$ bp (__TODO: Check permission on re-priting this figure__). The average amplicon length is reported as $411$ bp with a standard deviation of $71$ bp. Therefore, it is not possible that the "percentage identical methylation" was obtained from methylation events co-occuring on the same amplicon, at least for those pairs separated by more than approximately $600$ bp. Nowhere in the original paper is it clearly described what the "percentage identical methylation" is nor how it is computed. An email discussion with the senior author, Stephan Beck, was unable to clarify the definition.
 
-My best guess as to the definition of "percentage identical methylation" is that it is the proportion of pairs of methylation calls at different CpGs from (generally) different amplicons where the methylation states are identical, that is, $Pr(z_{h, i} = z_{h', i'})$. I will refer to our best guess of "percentage identical methylation" as  $PIM^{*}$ and discuss some of its properties in the next section. 
-
-##### $PIM^{*}$
+My best guess as to the definition of "percentage identical methylation" is that it is the proportion of pairs of methylation calls at different CpGs from (generally) different amplicons where the methylation states are identical, that is, $Pr(z_{h, i} = z_{h', i'})$. I will refer to my best guess of "percentage identical methylation" as $PIM^{*}$, and now turn to some of its properties.
 
 Let $0 \leq p_{h} \leq 1$ be the genome-wide average CpG methylation level for the sample from which $z_{i, h}$ is sampled, that is, $Pr(z_{h, i} = 1) = p_{h}$. For two distinct CpGs sequenced on two (potentially) distinct amplicons, $z_{h, i}$ and  $z_{h', i'}$, we want to compute the probability that the methylation states are identical, that is, $Pr(z_{h, i} = z_{h', i'})$. Not only may the two CpGs be from distinct amplicons, but the amplicons themselves may be from two distinct samples with different genome-wide average methylation levels. This most general setting is described by $z_{h, i} \eqd \text{Bernoulli}(p_{h})$ and $z_{h, i'} \eqd \text{Bernoulli}(p_{h'})$, with $cor(z_{h, i}, z_{h', i'}) = c$. In this setting we can compute the theoretical $PIM^{*}$ as follows:
 
@@ -58,60 +56,38 @@ PIM^{*} &= Pr(z_{h, i} = z_{h', i'}) \\
         &= (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'} + 2 c p_{h} (1 - p_{h})
 \end{align*}
 
-__UP TO HERE__
-
-__TODO: Write up proof in appendix and link to it__
+This result follows by substituting $z_{h, i}$ and $p_{h}$ (resp. $z_{h', i'}$ and $p_{h'}$) for $X_{1}$ and $p_{1}$ (resp. $X_{2}$ and $p_{2}$) into the result derived in __TODO: Cite and link to appendix__.
 
 __TODO: What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?__
 
-In general, $PIM^{*} \in [0, 1]$. However, there are a few important special cases:
+In general, $PIM^{*} \in [0, 1]$. However, there are a few important special cases that are worth discussing:
 
-__TODO: Derive results for special cases and illustrate them with a plot__
 
-1. $z_{h, i}$ Bernoulli($p_{h}$) and $z_{h, i'}$ Bernoulli($p_{h'}$) and with $cor(z_{h, i}, z_{h', i'}) = c = 0$.
-2. $z_{h, i}$ and $z_{h', i'}$ both Bernoulli($p$), $p = p_{h, i} = p_{h', i'}$, and $cor(z_{h, i}, z_{h', i'}) \neq c$.
-3. $z_{h, i}$ and $z_{h', i'}$ both Bernoulli($p$), $p = p_{h, i} = p_{h', i'} > 0.5$, and $cor(z_{h, i}, z_{h', i'}) \neq c$.
-4. $z_{h, i}$ and $z_{h', i'}$ both Bernoulli($p$), $p = p_{h, i} = p_{h', i'}$, and $cor(z_{h, i}, z_{h', i'}) = c$.
+1. $PIM^{*}_{inid} = (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'} \in [0, 1]$: Independent and non-identically distributed (_inid_), i.e., $z_{h, i} \eqd Bernoulli(p_{h})$ and $z_{h, i'} \eqd Bernoulli(p_{h'})$ and with $cor(z_{h, i}, z_{h', i'}) = c = 0$.
+2. $PIM^{*}_{did} = (1 - p)^{2} + p^{2} + 2 c p ( 1 - p)$: Dependent and identically distributed (_did_), i.e., $z_{h, i}, z_{h', i'} \eqd Bernoulli(p)$ and $cor(z_{h, i}, z_{h', i'}) = c \neq 0$.
+3. $PIM^{*}_{iid} = (1 - p)^{2} + p^{2}$: Independent and identically distributed (_iid_), i.e., $z_{h, i}, z_{h', i'} \eqd Bernoulli(p)$ and $cor(z_{h, i}, z_{h', i'}) = c = 0$.
 
-__TODO START: Re-write and simplify these special case results__
-For case 4 we have:
+As for $PIM^{*}$, $PIM^{*}_{inid} \in [0, 1]$. In contrast, it is easy to show by differentiation that $PIM^{*}_{iid} \geq 0.5$ and that $PIM^{*}_{did} \geq 0.5 (c + 1)$, which is $> 0.5$ (resp. $< 0.5$) for $c > 0$ (resp. $c < 0$). __TODO: Illustrate these special cases with a plot.__
 
-\begin{align}
-\label{eq:pim_iid}
-PIM_{1}^{*} &= Pr(z_{h, i} = z_{h', i'}) \\
-          &= Pr(Pr(z_{h, i} = 0, z_{h', i'} = 0)) + Pr(Pr(z_{h, i} = 1, z_{h', i'} = 1)) \\
-          &= (1 - p)^2 + p^2 \\
-\end{align}
+To return to the plot shown in Figure 3a; the "percentage identical methylation" asymptotes at $40 \%$, or $0.4$, which is less than the theoretical lower-bound of $PIM^{*}_{iid}$. If we believed that all samples had the same average CpG methylation levels, $p_{h}$, then we would conclude that the methylation states of two CpGs separated by a large distance are in fact __anti-correlated__ ($c < 0$) for CpGs separated by approximately $1,000$ bp. However, since we know that there is sample-to-sample variability in the average level of CpG methylation, the more likely explanation for this result is that the $p_{h}$ vary between samples and therefore $PIM^{*} < 0.5$ are possible even supposing $c > 0$.
 
-By differentiating $PIM_{ind}^{*}$ with respect to $p$ we see that $PIM_{iid} \geq 0.5$.
+Of course, the above discussion pre-supposes that what is labelled "percentage identical methylation" in Figure 3a is mathematically equivalent to $PIM^{*}$. I believe this to be true but due to the aforementioned deficiencies of the method description it is not possible to verify this derivation.
 
-For case 2 we have:
+Quite apart from what exactly is plotted in Figure 3a, the analysis is based on data from only $2,524$ amplicons, which is nowhere near a genome-wide analysis. Furthermore, methylation levels have been aggregated across multiple samples and so the profile in Figure 3a does not represent any one sample but a pool of samples.
 
-\begin{align}
-\label{eq:pim_inid}
-PIM_{2}^{*} &= Pr(z_{h, i} = z_{h', i'}) \\
-          &= Pr(Pr(z_{h, i} = 0, z_{h', i'} = 0)) + Pr(Pr(z_{h, i} = 1, z_{h', i'} = 1)) \\
-          &= (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'} \\
-\end{align}
+#### Other co-methylation analyses using aggregate measurements
 
-where $p_{h}$ (resp. $p_{h'}$) is the genome-wide average CpG methylation level for the sample from which the $h^{th}$ (resp. $h'^{th}) arose. Unlike $PIM_{iid}$, $PIM_{inid}$ may be less than 0.5. In fact, $0 \leq PIM_{inid} \leq 1$ for $0 \leq p_{h}, p_{h'} \leq 1$.
-__TODO END: Re-write and simplify these special case results__
 
-The plot of "percentage identical methylation" in Figure 3a of \cite{Eckhardt:2006gh} asymptotes at 0.4, which is less than the theoretical lowerbound under the assumption of indepdence \eqref{eq:pim_ind}. This is likely due to the fact that the amplicons, and thus the $z_{h, i}$, come from a variety of samples and genomic contexts with different average CpG methylation levels, $p$. Alternatively, it may be that it is not $PIM^{*}$ that is plotted in Figure 3a or that the methylation states of two CpGs separated by a large distance are anti-correlated, resulting in $PIM^{*} < 0.5$ (__TODO: Ref equation__).
 
-__TODO__
+#### Previous within-fragment co-methylation analyses
 
-* Describe some analyses using autocorrelation of beta-values.
 * More recently, within-fragment analyses. Describe concept (move from next section to this section).
-* Other definitions/methods
-  * Lister's mCG correlations
-  * co-methylation across samples
-  * "vertical" correlations of \cite{Capra:2014uh}
 
+#### Other definitions
 
-
-
-
+* Lister's mCG correlations
+* co-methylation across samples
+* "vertical" correlations of \cite{Capra:2014uh}
 
 The method I developed, which is described in Section \ref{subsec:wf_cometh}, is superior because of __TODO__.
 

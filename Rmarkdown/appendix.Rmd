@@ -60,4 +60,5 @@ Pr(X_{1} = X_{2}) &= Pr(X_{1} = 0, X_{2} = 0) + Pr(X_{1} = 1, X_{2} = 1) \\
                   &= (1 - p_{1}) (1 - p_{2}) + p_{1} p_{2} + 2 c p_{1} (1 - p_{1})
 \end{align*}
 
+__TODO: What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?__
 

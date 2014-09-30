@@ -26,7 +26,7 @@ for (i in seq_len(n1)) {
 
 sum(z) / length(z)
 
-p <- seq(0, 1, by = 0.01)
+p <- seq(0.01, 0.99, by = 0.01)
 pp <- expand.grid(p, p)
 ppp <- (1 - pp$Var1) * (1 - pp$Var2) + pp$Var1 * pp$Var2
 
@@ -37,11 +37,11 @@ f <- function(p, c) {
          NA)
 }
 
-f(seq(0, 1, 0.01), 0)
-f(seq(0, 1, 0.01), 0.5)
-f(seq(0, 1, 0.01), 1)
-f(seq(0, 1, 0.01), -0.5)
-f(seq(0, 1, 0.01), -1)
+f(p, 0)
+f(p, 0.5)
+f(p, 1)
+f(p, -0.5)
+f(seq(p, -1)
 
 g <- function(p1, p2, c) {
   # TODO: What is the sufficient condition on the value of c?
