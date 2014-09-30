@@ -400,7 +400,7 @@ print(microbenchmark(prop.test(x), chisq.test(x), loglin(x, margin = list("sampl
 
 #### Two-group experiments
 
-In a two group experiment, for each methylation locus we are testing the hypothesis that the average methylation level in the first group, $\widebar{\beta_{i}^{(1)}}$, is different to that in the second group, $\widebar{\beta_{i}^{(2)}}$.
+In a two group experiment, for each methylation locus we are testing the hypothesis that the average methylation level in the first group, $\bar{\beta_{i}^{(1)}}$, is different to that in the second group, $\bar{\beta_{i}^{(2)}}$.
 
 If there are no replicates in either group[^2x2] then we have a $2 \times 2$ contingency table:
 
@@ -424,7 +424,7 @@ This $2 \times 2$ table is then tested for independence of the rows and columns.
 
 The more interesting experiment is one that includes replicates within each group, since we can then estimate the within-group variation. Unfortunately, some authors have used Fisher's exact test to analyse experiments including replicates (__TODO: Highlight papers that have inappropriately used Fisher's exact test; does Lister 2013 inappropriately pool then test?). This is incorrect because it effectively aggregates all the counts within each group and so ignores all within-group biological variability \citep{Hansen:2012gr}.
 
-Instead, a test that incorporates the within-group variability should be used.  For example, we could use a t-test to compare the average methylation level in the first group, $\widebar{\beta_{i}^{(1)}}$, to that in the second group, $\widebar{\beta_{i}^{(2)}}$. Several methods have been proposed for testing for DMCs. These methods differ considerably in how they model and transform the data as well as what test statistic is used to identify DMCs.
+Instead, a test that incorporates the within-group variability should be used.  For example, we could use a t-test to compare the average methylation level in the first group, $\bar{\beta_{i}^{(1)}}$, to that in the second group, $\bar{\beta_{i}^{(2)}}$. Several methods have been proposed for testing for DMCs. These methods differ considerably in how they model and transform the data as well as what test statistic is used to identify DMCs.
 
 ##### Transforming {-}
 
@@ -432,7 +432,7 @@ Smoothing of the $\beta$-values has been used advocated by several authors to re
 
 ##### Modeling {-}
 
-`DSS` \citep{Feng:2014iq}, `BiSeq` \citep{Hebestreit:2013ko}, `MOABS` \citep{Sun:2014fk} `methylSig` \citep{Park:2014ho} and `RADmeth` \citep{Dolzhenko:2014bo} are software packages that all use a Beta-Binomial hierarchical model of DNA methylation, although the exact details differ considerably between packages. Broadly, under the Beta-Binomial model the "true" methylation level at the $i^{th}$ methylation locus in the $k^{th}$ group is modeled as a Beta random variable, $B_{i, k} &= Beta(\mu_{i, k}, \theta_{i, k})$. The observed number of methylated reads at the $i^{th}$ methylation locus, in the $j^{th}$ sample is modeled as a Binomial random variable, $M_{i, j, k} | B_{i, k}, n_{i, j, k} &= Binomial(n_{i, j, k}, B_{i, k}), which is conditional on the unobserved $B_{i, k}$ and the observed sequencing coverage, $n_{i, j, k}$.
+`DSS` \citep{Feng:2014iq}, `BiSeq` \citep{Hebestreit:2013ko}, `MOABS` \citep{Sun:2014fk} `methylSig` \citep{Park:2014ho} and `RADmeth` \citep{Dolzhenko:2014bo} are software packages that all use a Beta-Binomial hierarchical model of DNA methylation, although the exact details differ considerably between packages. Broadly, under the Beta-Binomial model the "true" methylation level at the $i^{th}$ methylation locus in the $k^{th}$ group is modeled as a Beta random variable, $B_{i, k} = Beta(\mu_{i, k}, \theta_{i, k})$. The observed number of methylated reads at the $i^{th}$ methylation locus, in the $j^{th}$ sample is modeled as a Binomial random variable, $M_{i, j, k} | B_{i, k}, n_{i, j, k} = Binomial(n_{i, j, k}, B_{i, k}), which is conditional on the unobserved $B_{i, k}$ and the observed sequencing coverage, $n_{i, j, k}$.
 
 ##### Estimating and testing {-}
 
