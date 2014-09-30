@@ -1,0 +1,63 @@
+---
+title: "Appendix"
+author: "Peter Hickey"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    fig_caption: yes
+    includes:
+      in_header: ../latex/header.tex
+  html_document:
+    keep_md: true
+bibliography: ../latex/phd_thesis.bib
+---
+
+## The probability that two dependent Bernoulli random variables are identical
+
+\cite{Lindqvist:1978fm} wrote a brief note on Bernoulli trials with dependence. Building on earlier work by \cite{Klotz:1973if}, Lindqvist parameterises the Bernoulli process $X_{1}, X_{2}, \ldots$ on $\{0, 1\}$ by the parameters $p = Pr(X_{i} = 1)$ and $c = cor(X_{i - 1}, X_{i})$ and shows that the transition matrix is given by
+
+\begin{equation*}
+\label{eq:transition_matrix_id}
+\Pi =
+ \begin{pmatrix}
+  (1 - p) + cp & p (1 - c) \\
+  (1 - p) (1 - c) & p + c (1 - p)
+ \end{pmatrix}
+\end{equation*}
+
+From this we can compute the joint distribution,
+
+\begin{equation*}
+Pr(X_{1} = x_{1}, \ldots, X_{n} = x_{n}) = Pr(X_{1} = x_{1}) Pr(X_{2} = x_{2} | X_{2} = x_{2}) \cdots Pr(X_{n} = x_{n} | X_{n - 1} = x_{n - 1})
+\end{equation*}
+
+In particular, in the case $n = 2$ we can compute the probability that two dependent but identically distributed Bernoulli random variables are equal, $Pr(X_{1} = X_{2}) = Pr(X_{1} = 0, X_{2} = 0) + Pr(X_{1} = 1, X_{2} = 1)$.
+
+To extend the above result to the probability that two dependent but __non-identically__ distributed Bernoulli random variables are equal simply requires that we derive the appropriate transition matrix.
+
+Let $X_{i} \eqd Bernoulli(p_{i})$ for $i = 1, 2$. The transition matrix, $\Pi = \bigl(\begin{smallmatrix}
+Pr(X_{2} = x_{2} | X_{1} = x_{1}) \end{smallmatrix} \bigr)$, is given by
+
+\begin{equation*}
+\label{eq:transition_matrix_nid}
+\Pi =
+ \begin{pmatrix}
+  (1 - p_{2}) + c p_{1} & p{2} - c p_{1} \\
+  \big [ (1 - p_{2}) + c p_{1} \big ] (1 - p_{1}) & \big [ p_{2} + c (1 - p_{1}) \big ] p_{1}
+ \end{pmatrix}
+\end{equation*}
+
+We can then compute the desired probability
+
+\begin{align*}
+Pr(X_{1} = X_{2}) &= Pr(X_{1} = 0, X_{2} = 0) + Pr(X_{1} = 1, X_{2} = 1) \\
+                  &= Pr(X_{2} = 0 | X_{1} = 0) Pr(X_{0} = 0) +
+                     Pr(X_{2} = 1 | X_{1} = 1) Pr(X_{0} = 1) \\
+                  &= \big [ (1 - p_{2}) + c p_{1} \big ] (1 - p_{1}) + 
+                     \big [ p_{2} + c ( 1 - p_{1}) \big ] p_{1} \\
+                  &= (1 - p_{1}) (1 - p_{2}) + c p_{1} \big [1 - p_{1}] +
+                     p_{1} p_{2} + c p_{1} (1 - p_{1}) \\
+                  &= (1 - p_{1}) (1 - p_{2}) + p_{1} p_{2} + 2 c p_{1} (1 - p_{1})
+\end{align*}
+
+
