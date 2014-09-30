@@ -17,6 +17,11 @@ Based on this analysis they concluded that there was "a significant correlation 
 
 __TODO: Fix indicator function__
 
+A useful quote regarding mosaicism and epipolymorphism:
+
+> we conclude that the majority (490%) of the observed heterogeneous methylation is caused by mosaicism, although we cannot exclude the additional possibility of heteroge- neous tissue sampling.
+
+
 
 ## \cite{Cokus:2008fc}
 \cite{Cokus:2008fc} published the BS-seq protocol for performing WGBS. Most of the results in this paper used BS-seq of wild-type _Arabidopsis Thaliana_ and DNMT mutants. They also report limited results from low-coverage BS-seq of mouse germ cells but these are not relevant to my discussion.

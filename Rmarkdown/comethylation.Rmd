@@ -9,6 +9,7 @@ output:
       in_header: ../latex/header.tex
   html_document:
     keep_md: true
+bibliography: ../latex/phd_thesis.bib
 ---
 
 ## Chapter overview
@@ -17,13 +18,13 @@ Co-methylation is the dependence of DNA methylation at different methylation loc
 
 I begin by explaining various methods for estimating co-methylation and their associated challenges. I then use these methods to analyse more than fifty whole-genome bisulfite-sequencing libraries to study the variation of co-methylation within and between different cell types.
 
-Throughout this chapter I focus on co-methylation of CpGs, although the methods described are also applicable to non-CpG methylation loci. The reason I do not explore co-methylation at non-CpG methylation loci is because such loci are rarely methylated in the samples I am studying.
+Throughout this chapter I focus on co-methylation of CpGs, although the methods described are also applicable to non-CpG methylation loci. The reason I do not explore co-methylation at non-CpG methylation loci is because such loci are rarely methylated in the samples that I am studying.
 
-\subsection{Previous work}\label{subsec:previous work}
+\section{Previous work}\label{subsec:previous work}
 
-I define co-methylation is the dependence of DNA methylation at different methylation loci within a sample. In other words, it is the dependence or correlation structure of DNA methylation data within a sample. This is slightly different to \citeauthor{Schatz:2004cha} who defined it as, "the presence of methylation over a stretch of neighboring CpG positions" and more in line with \citeauthor{Eckhardt:2006gh} who defined it as, "the relationship between the degree of methylation over distance".
+I define co-methylation as the dependence of DNA methylation at different methylation loci within a sample. In other words, it is the dependence or correlation structure of DNA methylation data within a sample. This is slightly different to \cite{Schatz:2004cha} who defined it as, "the presence of methylation over a stretch of neighbouring CpG positions"; it is more in line with \cite{Eckhardt:2006gh} who defined it as, "the relationship between the degree of methylation over distance".
 
-There have been several attempts to explore the relationship between methylation events at different loci within an individual. However, frequently the exact question being asked and the methodology have not been well-defined. Moreover, to the best of my knowledge there is no software available that implements any of the proposed methods.
+There have been several attempts to explore the relationship between methylation events at different loci within an individual. However, frequently the exact question being asked and the methodology have not been well-defined. Moreover, to the best of my knowledge, there is no software available that implements any of the proposed methods.
 
 From a biological perspective, by studying co-methylation we hope to better understand the regulation of DNA methylation. From a statistical perspective, more powerful and efficient analysis methods can be developed if this correlation structure is better understood, accounted for and exploited.
 
@@ -31,10 +32,72 @@ An increased understanding of co-methylation could also lead to cheaper and more
 
 ### Correlations of aggregate measurements of methylation
 
-Most analyses of co-methylation have been based on aggregate measurements of methylation, such as $\beta$-values \citep{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Lyko:2010dr, Hebestreit:2013ko, Lacey:2013iy, Liu:dy}. This is true of studies using both microarray data, where only these type of measurements are available, and sequencing data, where base-resolution measurements are also available. Very often the exact analysis is not well-described but it can generally be thought of as studying the autocorrelation of the $\beta$-values along the genome.
+To date, most analyses of co-methylation have been based on aggregate measurements of methylation, such as $\beta$-values \cite{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Lyko:2010dr, Hebestreit:2013ko, Lacey:2013iy, Liu:dy}. This is true of studies using both microarray data, where only these type of measurements are available, and sequencing data, where base-resolution measurements are also available. Very often the exact analysis is not well-described but it can generally be thought of as studying the autocorrelation of the $\beta$-values along the genome.
+
+#### \cite{Eckhardt:2006gh}
+
+\cite{Eckhardt:2006gh} is an important paper in the field and has been cited as evidence that "methylation levels are strongly spatially correlated" \cite{Hebestreit:2013ko} and that "proximal CpGs [have] similar methylation levels" \cite{Hansen:2011gu}. \cite{Eckhardt:2006gh} performed  PCR-amplicon bisulfite-sequencing of 2,524 amplicons on human chromosomes 6, 20 and 22.  PCR-amplicon bisulfite-sequencing is a labour-intensive assay and so it was a considerable effort to produce these data. Nonetheless, it is important to bear in mind that these data are nowhere near as comprehensive as data generated using modern-day whole-genome bisulfite-sequencing assays. Samples were provided by male and female donors across a wide variety of tissue types and ages, and were were generated to begin a catalogue of CpG methylation in various tissue types.
+
+As part of their analysis, the authors analyse co-methylation, which they define as "the relationship between the degree of methylation over distance". They state that "we were able to establish a significant correlation for comethylation over short distances ($\leq 1,000$ bp), it deteriorated rapidly for distances $ >2,000$ bp" and reference Figure 3a in support of this claim. However, what is plotted in Figure 3a is not "correlation" in the usual sense of the word.
+
+In Figure 3a, the authors plot the "percentage identical methylation" against "distance in bp", which ranges from $0$ to $20,000$ bp (__TODO: Check permission on re-priting this figure__). The average amplicon length is reported as $411$ bp with a standard deviation of $71$ bp. Therefore, it is not possible that the "percentage identical methylation" was obtained from methylation events co-occuring on the same amplicon, at least for those pairs separated by more than approximately $600$ bp. Nowhere in the original paper is it clearly described what the "percentage identical methylation" is nor how it is computed. An email discussion with the senior author, Stephan Beck, was unable to clarify the definition.
+
+My best guess as to the definition of "percentage identical methylation" is that it is the proportion of pairs of methylation calls at different CpGs from (generally) different amplicons where the methylation states are identical, that is, $Pr(z_{h, i} = z_{h', i'})$. I will refer to our best guess of "percentage identical methylation" as  $PIM^{*}$ and discuss some of its properties in the next section. 
+
+##### $PIM^{*}$
+
+Let $0 \leq p_{h} \leq 1$ be the genome-wide average CpG methylation level for the sample from which $z_{i, h}$ is sampled, that is, $Pr(z_{h, i} = 1) = p_{h}$. For two distinct CpGs sequenced on two (potentially) distinct amplicons, $z_{h, i}$ and  $z_{h', i'}$, we want to compute the probability that the methylation states are identical, that is, $Pr(z_{h, i} = z_{h', i'})$. Not only may the two CpGs be from distinct amplicons, but the amplicons themselves may be from two distinct samples with different genome-wide average methylation levels. This most general setting is described by $z_{h, i} \eqd \text{Bernoulli}(p_{h})$ and $z_{h, i'} \eqd \text{Bernoulli}(p_{h'})$, with $cor(z_{h, i}, z_{h', i'}) = c$. In this setting we can compute the theoretical $PIM^{*}$ as follows:
+
+\begin{align*}
+PIM^{*} &= Pr(z_{h, i} = z_{h', i'}) \\
+        &= Pr(z_{h, i} = 0, z_{h', i'} = 0) + Pr(z_{h, i} = 1, z_{h', i'} = 1) \\
+        &= Pr(z_{h', i'} = 0 | z_{h, i} = 0) Pr(z_{h, i} = 0) +
+           Pr(z_{h', i'} = 1 | z_{h, i} = 1) Pr(z_{h, i} = 1) \\
+        &= \big [ (1 - p_{h'}) + c (1 - p_{h}) \big ] (1 - p_{h}) +
+           \big [ (p_{h'} + c (1 - p_{h})) \big ] p_{h} \\
+        &= (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'} + 2 c p_{h} (1 - p_{h})
+\end{align*}
 
 __UP TO HERE__
 
+__TODO: Write up proof in appendix and link to it__
+
+__TODO: What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?__
+
+In general, $PIM^{*} \in [0, 1]$. However, there are a few important special cases:
+
+__TODO: Derive results for special cases and illustrate them with a plot__
+
+1. $z_{h, i}$ Bernoulli($p_{h}$) and $z_{h, i'}$ Bernoulli($p_{h'}$) and with $cor(z_{h, i}, z_{h', i'}) = c = 0$.
+2. $z_{h, i}$ and $z_{h', i'}$ both Bernoulli($p$), $p = p_{h, i} = p_{h', i'}$, and $cor(z_{h, i}, z_{h', i'}) \neq c$.
+3. $z_{h, i}$ and $z_{h', i'}$ both Bernoulli($p$), $p = p_{h, i} = p_{h', i'} > 0.5$, and $cor(z_{h, i}, z_{h', i'}) \neq c$.
+4. $z_{h, i}$ and $z_{h', i'}$ both Bernoulli($p$), $p = p_{h, i} = p_{h', i'}$, and $cor(z_{h, i}, z_{h', i'}) = c$.
+
+__TODO START: Re-write and simplify these special case results__
+For case 4 we have:
+
+\begin{align}
+\label{eq:pim_iid}
+PIM_{1}^{*} &= Pr(z_{h, i} = z_{h', i'}) \\
+          &= Pr(Pr(z_{h, i} = 0, z_{h', i'} = 0)) + Pr(Pr(z_{h, i} = 1, z_{h', i'} = 1)) \\
+          &= (1 - p)^2 + p^2 \\
+\end{align}
+
+By differentiating $PIM_{ind}^{*}$ with respect to $p$ we see that $PIM_{iid} \geq 0.5$.
+
+For case 2 we have:
+
+\begin{align}
+\label{eq:pim_inid}
+PIM_{2}^{*} &= Pr(z_{h, i} = z_{h', i'}) \\
+          &= Pr(Pr(z_{h, i} = 0, z_{h', i'} = 0)) + Pr(Pr(z_{h, i} = 1, z_{h', i'} = 1)) \\
+          &= (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'} \\
+\end{align}
+
+where $p_{h}$ (resp. $p_{h'}$) is the genome-wide average CpG methylation level for the sample from which the $h^{th}$ (resp. $h'^{th}) arose. Unlike $PIM_{iid}$, $PIM_{inid}$ may be less than 0.5. In fact, $0 \leq PIM_{inid} \leq 1$ for $0 \leq p_{h}, p_{h'} \leq 1$.
+__TODO END: Re-write and simplify these special case results__
+
+The plot of "percentage identical methylation" in Figure 3a of \cite{Eckhardt:2006gh} asymptotes at 0.4, which is less than the theoretical lowerbound under the assumption of indepdence \eqref{eq:pim_ind}. This is likely due to the fact that the amplicons, and thus the $z_{h, i}$, come from a variety of samples and genomic contexts with different average CpG methylation levels, $p$. Alternatively, it may be that it is not $PIM^{*}$ that is plotted in Figure 3a or that the methylation states of two CpGs separated by a large distance are anti-correlated, resulting in $PIM^{*} < 0.5$ (__TODO: Ref equation__).
 
 __TODO__
 
@@ -43,7 +106,7 @@ __TODO__
 * Other definitions/methods
   * Lister's mCG correlations
   * co-methylation across samples
-  * "vertical" correlations of \citet{Capra:2014uh}
+  * "vertical" correlations of \cite{Capra:2014uh}
 
 
 
