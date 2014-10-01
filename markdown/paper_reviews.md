@@ -924,3 +924,43 @@ They use the [`BSsim`](http://122.228.158.106/BSSim) software for simulation.
 `Bis-class` is a Bayesian method for clasifying sites as methylated or unmethylated. The authors claim it is most useful for lowly methylated genomes with low coverage, which is where simpler methods struggle.
 
 The classifier incorporates information about the global and local methylation levels in the sample via a prior distribution. The "localness" is incorporated via a kernel with the window size set to be the distance where the spatial correlation between methylation levels drops below 0.2. __TODO: Do they describe how they compute these correlations__
+
+## \citet{Chodavarapu:2010iqa}
+
+> We identified 10-base periodicities in the DNA methylation status of nucleosome-bound DNA (Arabidopsis) and found that nucleosomal DNA was more highly methylated than flanking DNA. These results indicate that nucleosome positioning influences DNA methylation patterning throughout the genome and that DNA methyltransferases preferentially target nucleosome-bound DNA. We also observed similar trends in human nucleosomal DNA, indicating that the relationships between nucleosomes and DNA methyltransferases are conserved.
+
+> Similar to findings in animal and fungal high-throughput nucleosome sequencing studies5–8, we found 10-base periodicities in WW (W 5 A or T) dinucleotides, and SS (S 5 G or C) dinucleotides that were 5 bases out of phase with the WW dinucleotides (Fig. 1d and Supplementary Figs 3–5).
+
+> Notably, all three types of methylation showed a 10-base periodicity on nucleosomal DNA, which was in phase with the WW dinucleotides and out of phase with the SS dinucleotides (Figs 1d, 2a–c and Supplementary Fig. 6). These methylation preferences were not correlated with preferences for CG, CHG or CHH sequences at these locations (Supplementary Fig. 7). Because DNA methyltransferases access the major groove, this methylation would be on DNA that is on the outside of the nucleosome (minor groove facing the histones) and thus more accessible to the DNA methyltransferases. This in turn indicates that DNA might be in part methylated as the DNA is still bound to nucleosomes, leading to the observed 10-base pair periodicity.
+
+> We previously reported a 10-nucleotide periodicity in CHH methylation data when performing autocorrelation analysis on the methylation pattern of the whole genome3. Our previous interpretation was that the structure of the DRM2 enzyme might be responsible for this pattern, because the orthologous Dnmt3 enzymes in mammals are known to act as heteromeric complexes in which two methyltransferase active sites have a spacing equivalent to roughly 10 nucleotides of DNA13. However, the current data in which we see 10-base pair periodicities for all types of methylation indicate a more general explanation: that nucleosomes are to some extent dictating access to the DNA and therefore setting the register of methylation for all DNA methyltransferases. Nucleosomal preferences could also partially explain the sequence preferences that we observed previously for CHG and CHH methylation3. Highly methylated cytosines tended to be followed immediately by A/T but not C, consistent with our finding that DNA methylation is out of phase with CC dinucleotides.
+
+> This suggests the possibility that DNA methylation, which frequently exists in the transcribed regions of active genes26,28, could have a conserved role in exon definition or splicing regulation.
+
+## \cite{Law:2010jr}
+
+> the symmetric CG and CHG contexts (in which H = A, T or C) and the asymmetric CHH context
+
+__This is not correct, CHG is not symmetric__. For example, a CCG on the + strand is a CGG on the - strand, i.e. a CG motif not a CHG motif.
+
+```sh
++   CAG		CCG		CTG
+-   GCT		GGC		GAC
+```
+
+> a model in which the two DNMT3A active sites are separated by approximately one helical DNA turn, which suggests that each tetrameric complex could simultaneously methylate two cytosine residues at a defined spacing of 8–10 bp
+
+> In vivo, the spacing of CG dinucleotides at many DMRs is also consistent with an ~8–10 bp periodicity51, as is the finding that CG dinucleotides at an 8 bp spacing are overrepresented across the human genome68,69 and, to a lesser extent, across the mouse genome68. As DNMT3A seems to be a non-processive DNA methyltransferase70, the formation of an oligomer could help to explain the observed periodic pattern of DNA methylation.
+
+## \cite{Jurkowska:2011dt}
+
+> Active genes usually show hypomethylation around the transcriptional start site (TSS) and high levels of methylation in the gene body, which increase with gene expression.[30, 31, 46] The methylation of the gene body is believed to block aberrant transcription initiation inside the gene and therefore to help in avoiding the production of truncated mRNAs and proteins.
+
+> Dnmt3L hence has a dual, gender-specific role: it is essentialfor the establishment of genomic imprints in oocytes and forthe silencing of the dispersed repeated sequences in malegerm cells.
+
+> In the crystal structure, the active sites of the two central Dnmt3a subunits are separated by one DNA helical turn, which corresponds to around 10 bps, suggesting that two CG sites on __opposite strands__ separated by 10 bps could be methylated by Dnmt3a in one binding event. Additionally, Dnmt3a polymerises on DNA in vitro, forming Dnmt3a-DNA filaments, which positions the adjacent methyltransferase molecules that interact with the same DNA strand at a distance of 8–10 bps,[169] suggesting that these sites could become comethylated by Dnmt3a (Figure 3 B). Indeed, in vitro methylation experiments demonstrated that there is a correlation of methylation between two sites localised ~ 10 bps apart both in the same strands and in opposite strands.
+
+> Additionally, the presence of 5–10 % of hemimethylated sites in the genome[210, 211] cannot be explained by the simple copy model alone, in which every hemimethylated CG site is faithfully and quickly remethylated by Dnmt1 after each round of replication. These considerations led to the development of stochastic models for DNA methylation,[212,213] based on differential equations taking into account the probabilities for methylation of a hemimethylated site (fhm) and methylation of an unmethylated site (fum).
+
+
+> In summary, it appears that the “maintenance DNA methylation” refers to the preservation of average levels of DNA methylation at certain regions, but not to an accurate copying of site-specific DNA methylation patterns.

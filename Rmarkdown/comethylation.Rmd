@@ -75,13 +75,61 @@ Of course, the above discussion pre-supposes that what is labelled "percentage i
 
 Quite apart from what exactly is plotted in Figure 3a, the analysis is based on data from only $2,524$ amplicons, which is nowhere near a genome-wide analysis. Furthermore, methylation levels have been aggregated across multiple samples and so the profile in Figure 3a does not represent any one sample but a pool of samples.
 
+#### \cite{Cokus:2008fc}
+
+\cite{Cokus:2008fc} published the BS-seq protocol for performing whole-genome bisulfite-sequencing. They demonstrated this technique by generating a genome-wide map of DNA methylation in wildtype  _Arabidopsis Thaliana_. They performed an autocorrelation analysis of the $\beta$-values for CG, CHG and CHH methylation[^arabidopsis]. The autocorrelation computes, for a set of distances ($0-5,000$ nt), the (Pearson) correlation coefficient of methylation levels for all pairs of methylation loci separated by each distance. To emphasise, I believe this analysis uses all pairs of methylation loci, that is, regardless of how many intervening methylation loci there are for each pair.
+
+[^arabidopsis]: Many plant species, such as _A. thaliana_, have much higher levels of non-CG methylation than do mammals.
+
+\cite{Cokus:2008fc} found that methylation levels are highly correlated, particularly for CG methylation levels, and that the correlation decays as a function of genomic distance between methylation loci. From this they concluded that the "significant correlation between methylated cytosines for distances up to 5,000 nucleotides or more [were] probably a reflection of regional foci of methylation throughout the genome and of large blocks of pericentromeric heterochromatin". They also identified correlations between different methylation contexts, e.g. CG vs. CHG, which "suggest[s] complex interactions between the different types of methylation".
+
+The autocorrelation plots showed two periodicities, one of $\approx 167$ nucleotides and the other of $10$ nucleotides (CHH only). Both periodicities are visible in plots of the raw autocorrelations and are confirmed by a Fourier transform analysis of the autocorrelation.
+
+[^CHH_only]: The $10$ nucleotide periodicity was later observed for CG and CHG methylation as well, at least for nucleosome bound DNA \cite{Chodavarapu:2010iqa}
+
+The $167$ nucleotide periodicity is "is similar to, but slightly shorter than, estimates of the average spacing of nucleosomes in plant chromatin" and Cokus et al. hypothesise that this periodicity is due to histones dictating access to DNA by the DNA methyltransferases.
+
+The $10$ nucleotide periodicity is equal to the length of one helical DNA turn. From this result Cokus et al. hypothesise that the DOMAINS REARRANGED METHYLASE 2 (_DRM2_), "the main enzyme controlling asymmetric methylation in _Arabidopsis_", contains two active sites that methylate sites 8-10 apart[^comethylation_def2], like its mammalian homologue, DNA methyltransferase 3 (_DNMT3_) (__TODO: If I want a picture explaining this then Figure 3b from \cite{Jurkowska:2011dt} might form the basis for my own illustration). However, in a later paper by the same group, this $10$ nucleotide periodicity was also observed for CG and CHG methylation, at least for nucleosome bound DNA \cite{Chodavarapu:2010iqa}.
+
+[^comethylation_def2]: This is referred to as "co-methylation", here meaning the methylation of multiple loci in a single event, by \cite{Jurkowska:2011dt}. This article reviews a plausible biochemical model for how _DNMT3a_ could co-methylate two CpGs separated by $8-10$ nucleotides; this model includes both the scenario where both CpGs are on the same DNA strand and the scenario where the CpGs are on opposite strands.
+
+The $10$ nucleotide CHH-only periodicity in the autocorrelation analysis of the $\beta$-values is also observed in a _within-fragment analysis_ (discussed in \ref{sec:previous_within-fragment_analyses})
+
+#### \cite{Chodavarapu:2010iqa}
+
+\cite{Chodavarapu:2010iqa} use MNase-seq to study nucleosome positioning and the relationship to DNA methylation, including co-methylation, in _Arabidopsis_ and an embryonic human stem cell line (HSF1). The authors plot a "weighted average methylation", which I presume to be a weighted version of the $\beta$-values, against the distance from predicted nucleosome start sites, which are obtained via MNase-seq. The nucleosome start sites anchor the methylation observations to a common grid and is used to show that nucleosome bound DNA has a greater level of methylation than DNA that is not bound to nucleosomes. A $10$ nucleotide periodicity is readily observed in these plots, consistent with the discovery of $10$ nucleotide periodicities in the autocorrelation of $\beta$-values published by \cite{Cokus:2008fc}. Again, the observed periodicity is confirmed by analysing a Fourier transform of these plots.
+
+In addition to the genome-wide analyses in both _Arabidopsis_ and human embryonic stem cell line (HSF1), the same method is used to examine promoters, genes, repeats, euchromatic regions and centromeric regions of _Arabidopsis_ and promoters, genes, repeats and CpG islands of the HSF1 sample, which confirmed the $10$ nucleotide periodicity. This led \cite{Chodavarapu:2010iqa} to propose an extended version of their earlier hypothesis \cite{Cokus:2008fc}: namely, "that nucleosomes are to some extent dictating access to the DNA and therefore setting the register of methylation __for all DNA methyltransferases__" (emphasis mine) and not just for the DRM2 methyltransferase.
+
+#### \cite{Li:2010fb}
+
+\cite{Li:2010fb} compute "the correlation of methylation level of any two nearby CpGs and the relationship between spatial distance (from one CpG to another) and strength of this correlation". The authors conclude that "co-methylation deteriorates over distance and becomes nearly undetectable at distances $> 1,000$ bp", citing their results as being consistent with those in \cite{Eckhardt:2006gh}. In addition to this genome-wide analysis, \cite{Li:2010fb} perform the same analysis for CpGs within 19 different genomic contexts such as upstream of a gene, untranslated region, coding DNA sequences and various repetitive elements. Somewhat surprisingly, they do not specifically compare CpG islands to non CpG islands, although some of these differences will be captured by the analysis of regions upstream of a gene, which include many CpG island promoters.
+
+Unfortunately, just as in \cite{Eckhardt:2006gh}, \cite{Li:2010fb} never define exactly what is being computed in their analysis of co-methylation and no software is available. All the co-methylation results are presented as supplementary figures, which lack figure legends and are supported by only very brief captions. So, once again, I have been forced to make my best guess as to what these figures show and how it was computed.
+
+Supplementary Figure 6a plots the "correlation" against "distance of CpG" ($0 - 1000$), which I believe are the genome-wide co-methylation estimates over the range $0 - 1000$ bp. Based on the "$n = 18,936,995$" quoted in the header of this figure, which I interpret as the number of pairs used in this plot of "correlation" against "istance of CpG" ($0 - 1000$), I believe that what is shown are the correlations of pairs of CpG $\beta$-values where the pairs are separated by a common distance and have no intervening CpGs. If all pairs were used this $n$ would be much higher since there are more than twenty million CpGs on one strand of the haploid human genome. To emphasise, the correlation shown by \cite{Li:2010fb} is not the same as the autocorrelation computed in \cite{Cokus:2008fc} since the autocorrelation uses all pairs of CpGs, regardless of the number of intervening CpGs.
+
+The genome-wide analysis correlation plot contains a periodicity of approximately $170$ nucleotides, very similar to the $167$ nucleotide period identified in _Arabidopsis_ by \cite{Cokus:2008fc} (highlighted in Supplementary Figure 7). This is further evidence that nucleosome spacing effects the strength of co-methylation. However, \cite{Li:2010fb} found no evidence of higher frequency periods, such as the $10$ nucleotide period reported by \cite{Cokus:2008fc} and \cite{Chodavarapu:2010iqa}.
+
+#### \cite{Lyko:2010dr}
+
+In their study of differential methylation in queen and worker honey bees (_Apis mellifera_), \cite{Lyko:2010dr} perform an autocorrelation analysis of CpG methylation (Supplementary Figure 7). They report that the "correlation of methylation status of neighboring CpGs increases sharply between 1 bp and 20 bp, then drops rapidly between 40 bp and 100 bp, and then slowly fades away". This is the first report of an organism in which the correlation of methylation levels first increases before decreasing (__TODO: Is this the "first and only" such report? Check my data any such increases__). __TODO: Is this the fastest decay of correlation in any species?__ However, I am concerned that the maximum autocorrelation is less $0.015$, which doesn't seem to make sense and is very close to zero. This may simply be due to a mislabelled or "normalised" value being plotted as the "correlation". (__TODO: I have emailed the senior author, Ryszard Maleszka, to try to resolve this concern__).
+
+Additionally, \cite{Lyko:2010dr} identify a $3$ nucleotide periodicity in the autocorrelation of CpG methylation and provide evidence that this "reflect[s] a preferential methylation of CpGs occupying the first and second position of the arginine codons", which is coded for by the DNA triplets CGT, CGC, CGA, CGG, AGA, and AGG (__CITE__). They do not detect a $10$ nucleotide periodicity, which the authors claim is due to "a much lower density of modified CpGs in this species [_Apis mellifera_]" than in human or _Arabidopsis_ genomes.
+
+Since the authors specifically describe their analysis as an "autocorrelation", I believe it uses all pairs of CpGs regardless of the number of intervening CpGs.
+
 #### Other co-methylation analyses using aggregate measurements
 
+* \cite{Hebestreit:2013ko, Lacey:2013iy, Liu:dy}
 
 
-#### Previous within-fragment co-methylation analyses
+
+\paragraph{Previous within-fragment co-methylation analyses}
+\label{sec:previous_within-fragment_analyses}
 
 * More recently, within-fragment analyses. Describe concept (move from next section to this section).
+* Cokus
 
 #### Other definitions
 
