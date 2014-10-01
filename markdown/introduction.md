@@ -112,7 +112,7 @@ DNA methylation is essential for normal development in mammals, such as human an
 
 The typical site of DNA methylation is at the C5 carbon position of a cytosine nucleotide. This modified cytosine is called _5-Methylcytosine_ or _5mC_. [__FIGURE__](http://en.wikipedia.org/wiki/File:5-Methylcytosine.svg) shows the structure of 5mC.
 
-At the level of single-stranded DNA, methylation is a binary event: a cytosine is either methylated or unmethylated. For double-stranded DNA, methylation is usually symmetric across the two strands (_strand symmetric_) although _hemimethylation_ does occur. Within a diploid cell a particular cytosine may be unmethylated or methylated on both homologous chromosomes or methylated on one chromosome and unmethylated on the other. While the former that is more common, examples of the latter case, such as _allele-specific methylation_ and _genomic imprinting_, are of considerable biological interest (__SOURCE/EXAMPLES__).
+At the level of single-stranded DNA, methylation is a binary event: a cytosine is either methylated or unmethylated. For double-stranded DNA, (__TODO: Clarify; only CG methylation can be strand symmetric. CHG and CHH are not strand symmetric motifs__) methylation is usually symmetric across the two strands (_strand symmetric_) although _hemimethylation_ does occur. Within a diploid cell a particular cytosine may be unmethylated or methylated on both homologous chromosomes or methylated on one chromosome and unmethylated on the other. While the former that is more common, examples of the latter case, such as _allele-specific methylation_ and _genomic imprinting_, are of considerable biological interest (__SOURCE/EXAMPLES__).
 
 In mammalian genomes, most cytosines are unmethylated except for those at the _CpG dinucleotide_, which is usually strand-symmetric. I explain the importance of CpG dinucleotides in the next section.
 
@@ -158,7 +158,7 @@ Non-CpG methylation is less well studied than CpG methylation. This is partly du
 
 ### Modifications of a modification
 
-Methylation is not the only chemical modification of cytosine nucleobase, although it is by far the most common. Further modifications, listed approximately from most frequent to least frequent, are 5-hydroxymethylcytosine (5hmC), 5-formylcytosine (5fC) and 5-carboxylcytosine (5caC) (__TODO:__ cite 10.1038/nrg3772). 
+Methylation is not the only chemical modification of cytosine nucleobase, although it is by far the most common. Further modifications, listed approximately from most frequent to least frequent, are 5-hydroxymethylcytosine (5hmC), 5-formylcytosine (5fC) and 5-carboxylcytosine (5caC) (__TODO:__ cite 10.1038/nrg3772).
 
 The biological significance of these marks is still being determined, in part because the assays for studying these are still in development (__SOURCE__) and because their relatively scarcity means that experiments to detect these modifications are more difficult and expensive.
 
