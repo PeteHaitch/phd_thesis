@@ -30,13 +30,16 @@ From a biological perspective, by studying co-methylation we hope to better unde
 
 An increased understanding of co-methylation could also lead to cheaper and more efficient assays of DNA methylation. For example, we could identify methylation loci whose methylation status is highly predictive of the methylation level of a surrounding region and design an assay to interrogate those highly predictive loci. This idea is analogous to the use of tag-SNPs on whole-genome genotyping microarrays (__CITE__).
 
-### Correlations of aggregate measurements of methylation
+\subsection{Correlations of aggregate measurements of methylation}
+\label{sec:previous_cor_of_agg_methylation}
 
-To date, most analyses of co-methylation have been based on aggregate measurements of methylation, such as $\beta$-values \cite{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Lyko:2010dr, Hebestreit:2013ko, Lacey:2013iy, Liu:dy}. This is true of studies using both microarray data, where only these type of measurements are available, and sequencing data, where base-resolution measurements are also available. Very often the exact analysis is not well-described but it can generally be thought of as studying the autocorrelation of the $\beta$-values along the genome.
+To date, most analyses of co-methylation have been based on analysing aggregate measurements of methylation, such as $\beta$-values, within individual samples \cite{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Lyko:2010dr, Lacey:2013iy}. These analyses of within-sample correlations of aggregate methylation levels have an implicit assumption of stationarity along the genome (__TODO: Discuss with Terry__).
+
+Here I review this previous work. I have been forced to make my "best guess" about some of the methods since they are often not sufficiently described in the original publication.
 
 #### \cite{Eckhardt:2006gh}
 
-\cite{Eckhardt:2006gh} is an important paper in the field and has been cited as evidence that "methylation levels are strongly spatially correlated" \cite{Hebestreit:2013ko} and that "proximal CpGs [have] similar methylation levels" \cite{Hansen:2011gu}. \cite{Eckhardt:2006gh} performed  PCR-amplicon bisulfite-sequencing of 2,524 amplicons on human chromosomes 6, 20 and 22.  PCR-amplicon bisulfite-sequencing is a labour-intensive assay and so it was a considerable effort to produce these data. Nonetheless, it is important to bear in mind that these data are nowhere near as comprehensive as data generated using modern-day whole-genome bisulfite-sequencing assays. Samples were provided by male and female donors across a wide variety of tissue types and ages, and were were generated to begin a catalogue of CpG methylation in various tissue types.
+\cite{Eckhardt:2006gh} is an important paper and one of the first to apply bisulfite-sequencing to a large number of regions and samples. Of particular relevance to a discussion of co-methylation, \cite{Eckhardt:2006gh} has been cited as evidence that "methylation levels are strongly spatially correlated" \cite{Hebestreit:2013ko} and that "proximal CpGs [have] similar methylation levels" \cite{Hansen:2011gu}. \cite{Eckhardt:2006gh} performed  PCR-amplicon bisulfite-sequencing of 2,524 amplicons on human chromosomes 6, 20 and 22.  PCR-amplicon bisulfite-sequencing is a labour-intensive assay and so it was a considerable effort to produce these data. Nonetheless, it is important to bear in mind that these data are nowhere near as comprehensive as data generated using modern-day whole-genome bisulfite-sequencing assays. Samples were provided by male and female donors across a wide variety of tissue types and ages, and were were generated to begin a catalogue of CpG methylation in various tissue types.
 
 As part of their analysis, the authors analyse co-methylation, which they define as "the relationship between the degree of methylation over distance". They state that "we were able to establish a significant correlation for comethylation over short distances ($\leq 1,000$ bp), it deteriorated rapidly for distances $ >2,000$ bp" and reference Figure 3a in support of this claim. However, what is plotted in Figure 3a is not "correlation" in the usual sense of the word.
 
@@ -119,28 +122,58 @@ Additionally, \cite{Lyko:2010dr} identify a $3$ nucleotide periodicity in the au
 
 Since the authors specifically describe their analysis as an "autocorrelation", I believe it uses all pairs of CpGs regardless of the number of intervening CpGs.
 
-#### Other co-methylation analyses using aggregate measurements
+#### \cite{Lacey:2013iy}
 
-* \cite{Hebestreit:2013ko, Lacey:2013iy, Liu:dy}
+\cite{Lacey:2013iy} fit a Gaussian variogram model to the $\beta$-values at CpGs obtained via reduced representation bisulfite-sequencing (RRBS) of chromosome 11 from a normal myotube cell line (MTCTL2). The empirical and fitted variograms flatten out for CpGs separated by around $3000$ bp (Figure 1d) and so they conclude that the methylation level of CpGs "show a strong correlation for sites in close proximity, decaying to near independence at distances beyond 3000 bp".
 
+Caution is warranted in extrapolating these results to statements about genome-wide co-methylation. Firstly, this analysis uses only approximately $60,000$ CpGs[^ncpgs], far fewer than the $25$ million CpGs (__TODO: Check number__) in the haploid human genome. Secondly, these data are from a single sample from a single tissue, which cannot capture the sample-to-sample nor tissue-to-tissue variability in co-methylation. Finally, RRBS targets CpG dense regions of the genome with low levels of methylation and so these data do not capture co-methylation outside of these regions, where the majority of the CpGs are found and which are highly methylated.
 
+[^ncpgs]: The data for MTCTL2 are not publicly available so I estimated the number of sequenced CpGs on chromosome 11 from three comparable RRBS libraries (__TODO: Cite and link to appendix__).
 
-\paragraph{Previous within-fragment co-methylation analyses}
+\subsection{Within-fragment co-methylation analyses}
 \label{sec:previous_within-fragment_analyses}
 
 * More recently, within-fragment analyses. Describe concept (move from next section to this section).
 * Cokus
+* \cite{Lacey:2009by}
+* \cite{Paliwal:2013fk}
 
-#### Other definitions
+\subsection{Other related work}
+\label{sec:previous_other_related_work}
+
+Other definitions of co-methylation and related work:
 
 * Lister's mCG correlations
 * co-methylation across samples
 * "vertical" correlations of \cite{Capra:2014uh}
 
+#### \cite{Hebestreit:2013ko}
+
+The `BiSeq` R/Bioconductor software uses a semivariogram to estimate the spatial correlation between test statistics of differential methylation at two methylation loci \cite{Hebestreit:2013ko}. This is not the same as looking for correlations between the $\beta$-values but rather looking for correlations between the test statistics, which themselves are based on _differences_ of $\beta$-values.
+
+#### \cite{Liu:dy}
+
+The focus of this study on identify clusters of correlated CpGs and relating methylation changes at these clusters to SNP genotypes. The authors compute the correlation of pairs of $\beta$-values across samples, which is analogous to estimating the linkage disequilibrium between a pair of single nucleotide polymorphisms (SNPs) across a set of samples. This is different to computing autocorrelations of $\beta$-values, which are computed within, rather than between, samples. An autocorrelation analysis implicitly assumes stationarity along the genome whereas this analysis assumes stationarity across samples (__TODO: Discuss with Terry__).
+
+The discovery cohort contains 247 human samples typed on the Illumina HumanMethylation450 array. After normalisation and other pre-processing steps, they identify the top-$25\%$ most variably methylated CpG sites (vCpGs) in the 247 samples. They then compute Pearson correlations of methylation levels for all pairs of vCpGs across the samples.
+
+From this they conclude that "DNA methylation is correlated over regions with a median length of 274 bp from our data set". However, they also note that "methylation codependency (co-methylation) itself varies across the genome", as is to be expected.
+
+
+
+
+
+
+
 The method I developed, which is described in Section \ref{subsec:wf_cometh}, is superior because of __TODO__.
 
 
-\subsection{Within-fragment co-methylation}\label{subsec:wf_cometh}
+\section{Correlations of $\beta$-values}\label{subsec:beta_cor}
+
+__TODO__
+
+
+\section{Within-fragment co-methylation}\label{subsec:wf_cometh}
 
 Within-fragment co-methylation is the dependence of DNA methylation at methylation loci that occur on the same DNA fragment. It can be thought of as the dependence structure of the binary stochastic process $Z_{h} = (Z_{h, 1}, Z_{h, 2}, \ldots, Z_{h, N_{loci}})$. For example, we may wish to understand how $Z_{h, i}$ affects $Z_{h, i'}$ and to develop a simple, tractable model of this dependence structure. We can study what variables effect this dependence, such as the distance between methylation loci and the genomic context of the methylation loci.
 
@@ -152,7 +185,7 @@ In studying within-fragment co-methylation, I assume that all copies of each chr
 
 If we could sequence entire chromosomes by single reads then we could analyse co-methylation between any set of methylation loci. However, current technologies for bisulfite-sequencing mean that we are limited to studying reads that, at most, span about $200-250$ bp and so are limited to studying co-methylation of methylation loci that are very close to one another along the chromosome. Obviously, we cannot study within-fragment co-methylation from microarray data since these produce measurements of methylation that are aggregated across many hundreds or thousands of cells.
 
-\subsubsection{Using pairs of methylation loci}\label{subsec:pairs}
+\subsection{Using pairs of methylation loci}\label{subsec:pairs}
 
 The simplest summary of within-fragment co-methylation uses pairs (2-tuples) of methylation loci. Consider a single pair of CpGs in the reference genome and all reads that contain both CpGs of the pair (see Figure \ref{reads_containing_pair_of_CpGs}).
 
@@ -185,11 +218,11 @@ A positive $LOR$ is evidence that the methylation states are likely to be the sa
 
 In theory we can compute $LOR$ for all pairs of methylation loci. In practice, using current technology, we can only compute it for pairs of methylation loci that are at most separated by 200-250 bp.
 
-#### Comparison of LOR to correlations
+### Comparison of LOR to correlations
 
 __TODO: Compare use of log-odds ratio to use of correlation coefficient and justify using LOR__
 
-#### Constructing pairs of methylation loci
+### Constructing pairs of methylation loci
 
 There are additional considerations in constructing pairs of methylation loci on top of those constraints imposed by the sequencing technology.
 
@@ -203,7 +236,7 @@ The `methtuple` software by default tries to only construct pairs of neighbourin
 
 Furthermore, while CpG methylation is typically strand-symmetric, it may be preferable to compute co-methylation separately for each strand. This will double the number of CpG 2-tuples. By default, `methtuple` does not collapse CpGs across strands, but this option is available via the `--strand-collapse` option or as a post-hoc step in __TODO: e.g. using the `whatFunction` in `myRMethTuplePackage`__.
 
-#### Visualisations
+### Visualisations
 
 For a typical whole-genome bisulfite-sequencing experiment of human DNA, tens of millions of neighbouring CpG pairs are sequenced (and hundreds of millions of non-neighbouring CpG pairs). For every pair of CpGs, $(i, i')$, in the $j^{th}$ sample we know the $IPD$ and have computed a log-odds ratio, $LOR$_{(i, i'), j}$. Each such pair may have further annotations, such as the genomic context of the pair (e.g. within a CpG island, within a gene body, within a repetitive region, etc.). We need a simple way to summarise these data so that we might explore the effect of each of these variables on within-fragment co-methylation.
 
@@ -215,7 +248,7 @@ Instead, I plot selected quantiles of each $IPD$-specific $LOR$ distribution as 
 
 The simplicity and interpretability of the log-odds ratio make the above described method an attractive one for studying within-fragment co-methylation. However, by using 2-tuples we are limited to exploring "one-step" co-methylation, i.e., one-step dependencies of the stochastic process $Z_{h} = (Z_{h, 1}, Z_{h, 2}, \ldots, Z_{h, N_{loci}})$. In the next section I describe the difficulties of using higher order $m-tuples$ ($m > 2$) to explore within-fragment co-methylation.
 
-### Using higher-order $m$-tuples of methylation loci
+## Using higher-order $m$-tuples of methylation loci
 
 In general, to explore $m$-step dependencies we need to use $(m + 1)$-tuples. We can generalise the use of a two-way contingency table for studying co-methylation of a 2-tuple to the use of an $m$-way contingency table for co-methylation of an m-tuple (see Table ~\ref{reads_containing_three_CpGs_counts}).
 
@@ -244,20 +277,15 @@ However, as we increase $m$ we have more parameters to estimate - an $m$-way tab
 
 Furthermore, as we increase $m$ we have fewer data points with which to estimate these parameters, since we only use reads that contain all $m$ methylation loci in the $m$-tuple (__TODO: Bar chart of how many CpGs per read__). This makes the estimates quite noisy unless some form of regularisation is applied, such as a parametric model of the dependencies or a non-parametric, data-driven smoothing of the estimates. I explore the use of the Expectation-Maximisation algorithm in __SECTION__ to incorporate all reads that overlap at least one methylation loci in the $m$-tuple.
 
-#### An EM algorithm to estimate co-methylation
+### An EM algorithm to estimate co-methylation
 
 __TODO:__ Discuss with Terry the idea of fitting a log-linear model to the counts of methylation states using all reads that overlap at least one methylation loci in the tuple. Effectively, this is a log-linear model with missing data.
 
-#### Visualisations
+### Visualisations
 
 Aside from estimating this increased number of parameters, we must also interpret these with respect to $IPD$ and other annotations. The $IPD$ vector for $m$-tuples has $(m - 1)$ elements meaning we now have to explore the effect of $IPD$ on $LOR$ over an $(m - 1)$-dimensional _grid_ rather than along a 1-dimensional line. Again, the sparsity of the data make this difficult - approximately $20,000 - 30,000$ unique $IPD$s are observed for 3-tuples - but even more difficult is creating a clear and coherent visualisation of this data.
 
 As is clear from __FIGURE__, these is very difficult for 3-tuples, let alone for higher-order $m$-tuples. We have an $(m - 1)$ grid of $IPD$s and a _distribution_ of $LOR$ for each $IPD$. In the case of 2-tuples I used lines to summarise the quantiles of the $LOR$ distributions, but this is not effective when $m > 2$. Instead, we must create separate figures for each quantile, which makes it difficult to interpret the effects of $IPD$ on $LOR$.
-
-## Correlations of $\beta$-values
-
-
-
 
 
 ## Results of co-methylation analyses
