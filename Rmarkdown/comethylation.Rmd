@@ -159,9 +159,22 @@ I consider these results to use a restricted definition of within-fragment "co-m
 
 Furthermore, by aggregating all pairs of CHH loci separated by a common distance and then estimating these probabilities, there is an implicit assumption that all such pairs on the same chromosome have the same conditional probability, $Pr(Z_{h, i'} = 1 | Z_{h, i} = 1)$. There is good reason to suspect that this is not true and that there exists significant pair-to-pair variability. For example, we know for CpGs that those within CpG islands have a vastly different probability of being methylated than do those outside of islands; it is reasonable to suspect that this is also true for CHH methylation in different regions of the _Arabidopsis_ genome and hence for "co-methylation" of these same loci.
 
+#### \cite{Lacey:2009by}
+
+\cite{Lacey:2009by} develop stochastic models of the replication of DNA methylation during mitosis (cell division) for a single double-stranded DNA molecule in humans. The most complex model, called the _neighbouring sites model_, uses a one-step Markov random field where the methylation state of one loci, $Z_{h, i}$, depends on that of its neighbours either side, $Z_{h, i - 1}$ and $Z_{h, i + 1}$. The physical distances between these neighbours, the $IPD$s, are not considered.
+
+The neighbouring sites model requires an analysis of within-fragment co-methylation in order to estimate the transition probabilities. They estimate these parameters from two small regions, each approximately $200$ nucleotides in length and containing 13 and 14 CpGs, from 10 human ovarian carcinoma samples and a pool of somatic controls. These regions were sequenced using hairpin-bisulfite PCR, an assay that measures DNA methylation on both strands of a double-stranded DNA molecule[^hairpin_bs]. For each region, $12-16$ clones were sequenced per sample[^clones]
+
+[^hairpin_bs]: This is unlike traditional bisulfite-sequencing, which only measures methylation along a single DNA strand.
+
+[^clones]: Essentially, $12-16$ reads were generated per sample.
+
+For each of these regions, \cite{Lacey:2009by} found that the methylation level of a CpG strongly depends on that of its neighbours. In other words, they found significant within-fragment co-methylation. They also found that the overall level of methylation of the CpGs in a region influenced the strength of the within-fragment co-methylation.
+
+In summary, this analysis uses high resolution measurements from a moderate number of clones from a moderate number of samples for a miniscule fraction of the human genome. While the methods and models are quite interesting, the data are so focused that the results obtained from these analyses cannot represent a genome-wide picture of within-fragment co-methylation.
+
 __PREVIOUS WORK__
 
-* \cite{Lacey:2009by}
 * \cite{Paliwal:2013fk}
 
 \subsection{Other related work}

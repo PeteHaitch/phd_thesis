@@ -964,3 +964,9 @@ __This is not correct, CHG is not symmetric__. For example, a CCG on the + stran
 
 
 > In summary, it appears that the “maintenance DNA methylation” refers to the preservation of average levels of DNA methylation at certain regions, but not to an accurate copying of site-specific DNA methylation patterns.
+
+## \cite{Lacey:2009by}
+
+> Excessively long context ranges might render the model ineffective, while choosing multiple breakpoints along a sequence would assume a piecewise model that is not likely to be biologically realistic.
+
+I should address the "piecewise model ... unrealistic" issue in my discussion of `methsim`.
