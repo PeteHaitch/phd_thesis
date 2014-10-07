@@ -14,6 +14,8 @@ bibliography: ../latex/phd_thesis.bib
 
 ## Chapter overview
 
+__TODO: Break out review of co-methylation into its own chapter.__
+
 Co-methylation is the dependence of DNA methylation at different methylation loci within a sample. As such, it is a kind of spatial dependence where the "space" is the genome of the sample. In this chapter I describe two measures of co-methylation, namely, _within-fragment co-methylation_ and _correlation of $\beta$-values_. Using both these measures I explore how co-methylation is affected by the distance between methylation loci, the density of methylation loci and the genomic context of the methylation loci.
 
 I begin by explaining various methods for estimating co-methylation and their associated challenges. I then use these methods to analyse more than fifty whole-genome bisulfite-sequencing libraries to study the variation of co-methylation within and between different cell types.
@@ -21,6 +23,8 @@ I begin by explaining various methods for estimating co-methylation and their as
 Throughout this chapter I focus on co-methylation of CpGs, although the methods described are also applicable to non-CpG methylation loci. The reason I do not explore co-methylation at non-CpG methylation loci is because such loci are rarely methylated in the samples that I am studying.
 
 \section{Previous work}\label{subsec:previous work}
+
+__TODO: Incorporate material in "Correlations" section of `a_statistical_model_of_methylC-seq.md`.__
 
 I define co-methylation as the dependence of DNA methylation at different methylation loci within a sample. In other words, it is the dependence or correlation structure of DNA methylation data within a sample. This is slightly different to \cite{Schatz:2004cha} who defined it as, "the presence of methylation over a stretch of neighbouring CpG positions"; it is more in line with \cite{Eckhardt:2006gh} who defined it as, "the relationship between the degree of methylation over distance".
 
@@ -34,6 +38,8 @@ An increased understanding of co-methylation could also lead to cheaper and more
 \label{sec:previous_cor_of_agg_methylation}
 
 To date, most analyses of co-methylation have been based on analysing aggregate measurements of methylation, such as $\beta$-values, within individual samples \cite{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Lyko:2010dr, Lacey:2013iy}. These analyses of within-sample correlations of aggregate methylation levels have an implicit assumption of stationarity along the genome (__TODO: Discuss with Terry__).
+
+The analysis in \cite{Lister:2009hy} takes a different approach. It too uses within-sample aggregate methylation levels, but rather than estimating correlations of the methylation levels, instead looks for patterns in the spacing of "methylcytosines" along the genome.
 
 Here I review this previous work. I have been forced to make my "best guess" about some of the methods since they are often not sufficiently described in the original publication.
 
@@ -130,10 +136,28 @@ Caution is warranted in extrapolating these results to statements about genome-w
 
 [^ncpgs]: The data for MTCTL2 are not publicly available so I estimated the number of sequenced CpGs on chromosome 11 from three comparable RRBS libraries (__TODO: Cite and link to appendix__).
 
+#### \cite{Lister:2009hy}
+
+\cite{Lister:2009hy} report an $8-10$ nucleotide periodicity in the occurence "methylcytosines". Recall that \cite{Lister:2009hy} define a "methylcytosine" as a cytosine that has a non-zero $\beta$-value, as determined by a Binomial test (see Section \ref{sec:criticism_of_methylcytosines} for details and a criticism of this concept). Hence, while this may appear to be a within-fragment analysis of co-methylation, it in fact uses aggregate methylation levels. However, unlike the methods described in Section \ref{sec:previous_cor_of_agg_methylation}, the analysis of these aggregate methylation levels is not based on a correlation of these levels, but rather on unnormalised counts, which leads to problems.
+
+\cite{Lister:2009hy} tabulate the number of neighbouring[^non_redundant] pairs of "methylcytosines" as a function of the $IPD$. These counts are plotted as a bar chart, with $IPD$ along the x-axis and count on the y-axis, along with a cubic spline fit to the counts. This is done separately for each combination of methylation context (CG, CHG and CHH) and genomic context (exonic, intronic or random) for a total of nine plots (Supplementary Figure 9 \cite{Lister:2009hy}).
+
+[^non_redundant]: I think that "neighbouring" is what is meant by "non-redundant pair-wise distances" in the caption of Supplementary Figure 9, but I am not certain.
+
+An $8-10$ nucleotide periodicity in the fitted cubic spline is observed in most, but not all, of these nine plots. This periodicity is very weak several contexts and not at all present for exonic CpGs. The weakness of the signal is partly attributable to the small sample sizes in the CHG and CHH contexts since there are very few "methylcytosines" for these contexts in these human samples. Furthermore, in all nine contexts the reported $8-10$ nucleotide periodicity is weaker than a $3$ nucleotide periodicity for "methylcytosines" at exonic CpGs; this $3$ nucleotide periodicity can clearly be observed in the raw counts, unlike the $8-10$ nucleotide periodicity, but is not commented on by the authors.
+
+Based on these nine plots, \cite{Lister:2009hy} draw parallels to the $10$ periodicity in the autocorrelation of CHH $\beta$-values observed by \cite{Cokus:2008fc} and speculate that "_DNMT3A_  may be responsible for catalysing the methylation at non-CG sites". However, I suspect that the results in these nine plots are driven by periodicities in where cytosines are located in the genome rather than any periodicities in the actual methylation of these cytosines. That is not to say that there aren't periodicities in the methylation of cytosines, but that is not what is being measured in this analysis. To explain, these plots use the raw counts of "methylcytosines", which are not adjusted for the frequency of pairs of cytosines with a given $IPD$. If pairs of cytosines are observed more often at certain $IPD$s then even if methylation was totally independent of $IPD$ we would expect more pairs of "methylcytosines" at these same $IPD$s. Therefore, at a minimum, it is necessary to normalise the number of "methylcytosines" by the number of cytosines.
+
+In fact, there are well known periodicities in the distribution of nucleotides in genomes. For example, in eukaryotic genomes there is a $10$ periodicity of G+C dinucleotides that acts out of phase with a $10$ nucleotide periodicity of A+T dinucleotides for nucleosome-bound DNA \cite{Segal:2006iz} and a "well-known period-3 oscillation in coding regions" of the genome \cite{Li:1997ts}; the former likely explains the $8-10$ nucleotide periodicity and the latter the $3$ nucleotide periodicity for exonic CpGs.
+
+#### \cite{Landan:2012kp}
+
+__TODO: Review co-methylation work in this paper__
+
 \subsection{Within-fragment co-methylation analyses}
 \label{sec:previous_within-fragment_analyses}
 
-Using bisulfite-sequencing technologies we can analyse co-methylation at the level of individual DNA molecules. I call this within-fragment co-methylation, where fragment refers to a fragment of DNA. More precisely, within-fragment co-methylation is the dependence of DNA methylation at methylation loci that occur on the same DNA fragment. It can be thought of as the dependence structure of the binary stochastic process $Z_{h} = (Z_{h, 1}, Z_{h, 2}, \ldots, Z_{h, N_{loci}})$. For example, we may wish to understand how $Z_{h, i}$ affects $Z_{h, i'}$ and to develop a simple, tractable model of this dependence structure. We can study what variables effect this dependence, such as the distance between methylation loci and the genomic context of the methylation loci.
+Using bisulfite-sequencing technologies we can analyse co-methylation at the level of individual DNA molecules. I call this within-fragment co-methylation, where a "fragment" refers to a fragment of DNA. More precisely, within-fragment co-methylation is the dependence of DNA methylation at methylation loci that occur on the same DNA fragment. It can be thought of as the dependence structure of the binary stochastic process $Z_{h} = (Z_{h, 1}, Z_{h, 2}, \ldots, Z_{h, N_{loci}})$. For example, we may wish to understand how $Z_{h, i}$ affects $Z_{h, i'}$ and to develop a simple, tractable model of this dependence structure. We can study what variables effect this dependence, such as the distance between methylation loci and the genomic context of the methylation loci.
 
 Because every sequencing read is produced from a single DNA fragment[^chimera], we can study within-fragment co-methylation by analysing the methylation patterns along individual sequencing reads. That is, by studying the methylation patterns at m-tuples. Furthermore, since the DNA methyltransferases act on individual DNA fragments (__TODO: check and cite__), these estimates of within-fragment co-methylation are on the same scale as the physical process that lays down and maintains DNA methylation.
 
@@ -173,18 +197,15 @@ For each of these regions, \cite{Lacey:2009by} found that the methylation level 
 
 In summary, this analysis uses high resolution measurements from a moderate number of clones from a moderate number of samples for a miniscule fraction of the human genome. While the methods and models are quite interesting, the data are so focused that the results obtained from these analyses cannot represent a genome-wide picture of within-fragment co-methylation.
 
-\subsection{Other related work}
-\label{sec:previous_other_related_work}
+\subsection{Between-sample co-methylation}
+\label{sec:between_sample_cometh}
 
-Other definitions of co-methylation and related work:
+As is clear from the above, there are multiple definitions of within-sample co-methylation. An fundamentally different concept to within-sample co-methylation is between-sample co-methylation, which is the correlation of methylation levels between a single pair of loci across a set of samples rather than the correlation of pairs of loci within a single sample. (__CITE__) estimate various forms of between-sample co-methylation and are reviewed below.
 
-* Lister's mCG correlations
-* co-methylation across samples
 * "vertical" correlations of \cite{Capra:2014uh}
+* MethLD of \cite{Liu:dy}
 
-#### \cite{Hebestreit:2013ko}
-
-The `BiSeq` R/Bioconductor software uses a semivariogram to estimate the spatial correlation between test statistics of differential methylation at two methylation loci \cite{Hebestreit:2013ko}. This is not the same as looking for correlations between the $\beta$-values but rather looking for correlations between the test statistics, which themselves are based on _differences_ of $\beta$-values.
+__TODO: Comment on utility of within-sample vs. between-sample co-methylation__
 
 #### \cite{Liu:dy}
 
@@ -194,14 +215,14 @@ The discovery cohort contains 247 human samples typed on the Illumina HumanMethy
 
 From this they conclude that "DNA methylation is correlated over regions with a median length of 274 bp from our data set". However, they also note that "methylation codependency (co-methylation) itself varies across the genome", as is to be expected.
 
+\subsection{Exploiting co-methylation in analyses of differential methylation}
+\label{sec:exploiting_cometh}
 
+\cite{Hansen:2011gu, Hebestreit:2013ko, Wang:2011cw, Pedersen:2012vl, Sofer:2013bk} have each sought to exploit co-methylation, both the within-sample and between-sample forms, in developing more powerful and efficient ways to identify differential methylation.
 
+#### \cite{Hebestreit:2013ko}
 
-
-
-
-The method I developed, which is described in Section \ref{subsec:wf_cometh}, is superior because of __TODO__.
-
+The `BiSeq` R/Bioconductor software uses a semivariogram to estimate the spatial correlation between test statistics of differential methylation at two methylation loci \cite{Hebestreit:2013ko}. This is not the same as looking for correlations between the $\beta$-values but rather looking for correlations between the test statistics, which themselves are based on _differences_ of $\beta$-values.
 
 \section{Correlations of $\beta$-values}\label{subsec:beta_cor}
 
