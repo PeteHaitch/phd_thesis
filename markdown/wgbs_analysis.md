@@ -214,7 +214,7 @@ Most bisulfite-sequencing alignment software either performs methylation calling
 
 Both `Bismark` and `Bis-SNP` perform methylation calling of 1-tuples. In contrast, `comethylation` can perform methylation calling at m-tuples. `MethPat` (__CITE__) is also capable of performing methylation calling at m-tuples.
 
-### A criticism of "identifying methylcytosines"
+\subsubsection{A criticism of "identifying methylcytosines"}{sec:criticism_of_methylcytosines}
 
 __TODO: Need a better title for this section__
 

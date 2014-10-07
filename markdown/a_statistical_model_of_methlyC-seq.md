@@ -414,6 +414,8 @@ In the above examples, the researchers are modelling the distribution of $B_{i, 
 
 ### Correlations
 
+__TODO: Move this section to the chapter dedicated to reviewing co-methylation.__
+
 Many researchers have observed that DNA methylation is spatially correlated along the genome, (e.g. \cite{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Hansen:2011gu, Hebestreit:2013ko, Wang:2011cw, Pedersen:2012vl, Lacey:2013iy, Sofer:2013bk, Liu:dy, Lyko:2010drm, Landan:2012kp, Lister:2009hy}). Just as we can explore the distribution of DNA methylation levels within a sample or between samples, so too can we explore the correlations of DNA methylation levels within a sample or between samples.
 
 #### Correlation of DNA methylation within samples {-}
