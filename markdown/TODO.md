@@ -144,6 +144,8 @@ TODOs according to the [Unimelb PhD handbook](http://gradresearch.unimelb.edu.au
 
 __URGENT__
 - [ ] Find out the latest date a thesis can be submitted in 2014.
+  - [x] RHD-science replied that the "university is shut from close of business on 24/12/14 and re-opens on 5/1/15"
+  - [ ] Awaiting reply from MSGR
 - [ ] Submit intention to submit form.
 
 ### [Thesis submission](http://gradresearch.unimelb.edu.au/handbooks/phd/thesis.html#submission)
@@ -191,10 +193,18 @@ __URGENT__
 
 ## 3.5 year candidature review
 
-TODOs for 3.5 year candidature review, which is due mid-November.
+TODOs for 3.5 year candidature review, which is due by November 15.
+
+- [ ] Complete progress review
+- [ ] Organise progress review meeting __URGENT__
+  - [x] Emailed Terry
+  - [ ] Emailed Peter
+  - [ ] Emailed Gordon
+
 
 ## Fellowship applications
 
 TODOs for fellowship applications for 2015.
 
 - [ ] Check out the [Joint Academic Scholarships Online Network](http://jason.edu.au/)
+- [ ] __URGENT:__ Consult notes from meeting with Lynne Hartley
