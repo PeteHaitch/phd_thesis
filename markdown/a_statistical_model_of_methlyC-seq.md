@@ -1,4 +1,6 @@
-# A statistical framework for analysing bisulfite sequencing data
+\chapter{A statistical framework for analysing bisulfite sequencing data}
+\label{chap:stat_model}
+
 
 ## Notes from outline.md (plus other notes added along the way)
 * Chapter Overview
