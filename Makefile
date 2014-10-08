@@ -60,7 +60,19 @@ comethylation.pdf: latex/phd_thesis.bib Rmarkdown/comethylation.Rmd markdown/bib
 	mkdir -p pdf
 	Rscript -e "rmarkdown::render('Rmarkdown/comethylation.Rmd', output_format = 'pdf_document', output_file = '../comethylation.pdf', output_dir = '../pdf')"
 
-phd_thesis.pdf: introduction.latex statmodel.latex wgbs_analysis.latex comethylation.latex
+comethylation_review.md: latex/phd_thesis.bib Rmarkdown/comethylation_review.Rmd
+	Rscript -e "rmarkdown::render('Rmarkdown/comethylation_review.Rmd', output_format = 'html_document', output_dir = '../markdown')"
+	rm markdown/comethylation_review.html
+
+comethylation_review.latex: comethylation_review.md latex/phd_thesis.bib Rmarkdown/comethylation_review.Rmd
+	mkdir -p latex
+	pandoc --chapters -o latex/comethylation_review.tex markdown/comethylation_review.md
+
+comethylation_review.pdf: latex/phd_thesis.bib Rmarkdown/comethylation_review.Rmd markdown/bibliography.md
+	mkdir -p pdf
+	Rscript -e "rmarkdown::render('Rmarkdown/comethylation_review.Rmd', output_format = 'pdf_document', output_file = '../comethylation_review.pdf', output_dir = '../pdf')"
+
+phd_thesis.pdf: introduction.latex statmodel.latex wgbs_analysis.latex comethylation_review.latex comethylation.latex
 	mkdir -p pdf
 	cd latex; pdflatex phd_thesis; \
 	bibtex phd_thesis; \
