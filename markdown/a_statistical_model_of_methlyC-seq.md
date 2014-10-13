@@ -24,7 +24,8 @@
 ## Chapter overview
 In this chapter I set out a statistical framework for analysing bisulfite sequencing data. I begin by explaining the various levels of stochasticity in a methylC-seq experiment. Following this, I define the mathematical notation that I use throughout my thesis and formalise some of the concepts introduced in the previous section.
 
-I also use this framework to formulate common questions in studies of DNA methylation. In particular, I define key variables and describe the statistical properties of common estimators of these variables.
+I describe key variables, common estimators of these and their statistical properties, and statistical models used in downstream analyses.
+
 
 ## One sample
 
@@ -42,9 +43,13 @@ As described in __SECTION__, most analyses to date of WGBS data have focused on 
 
 
 #### Pre-sequencing {-}
+
 A methylation locus is a single cytosine, that is, a CpG, CHG or CHH. The set of these loci is labelled $\mathcal{I} = \{pos_{i}: i = 1, \ldots, N_{loci} \}$, where $pos_{i}$ is the genomic co-ordinates of the $i^{th}$ locus with respect to the forward strand, e.g. chr1:723,461-723,461. I frequently refer to loci by the subscript $i$ rather than by $pos_{i}$. This means that the distance between the $i^{th}$ and $(i + 1)^{th}$ methylation loci varies along the genome and, for a small number of instances, that the $i^{th}$ and $(i + 1)^{th}$ methylation loci are on separate chromosomes. Generally, $N_{loci}$ is not known exactly, although estimates can be made based on a reference genome, but this is no great concern.
 
 The methylation state of a locus can vary within a sample due to the fact that DNA for each sample is extracted from hundreds or thousands of cells and each cell can have a slightly different methylation profile. Furthermore, within a diploid cell there are two copies of each chromosome, and therefore two copies of each methylation locus, and these two copies can have different methylation states. Therefore, it is also necessary to consider the next level down in the hierarchy; the DNA fragments within the sample.
+
+__TODO: Stuff between "++++++++" needs a re-write and moving some parts to the post-sequencing section__
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 I suppose that in the pool of DNA fragments for the sample that there are $H_{i}$ fragments containing the $i^{th}$ methylation locus. In general, $H_{i}$ is unknown and will vary from locus to locus within a sample[^H_i]. __$H_{i}$ is post-PCR; therefore, it can give a grossly distorted picture of the true representation of the cells__. I denote by $\mathcal{H}_{i}$ the set of all fragments containing the $i^{th}$ locus.
 
@@ -73,6 +78,8 @@ Related to these is the proportion of fragments that methylated at the $i^{th}$ 
 \end{equation*}
 
 Again, I emphasise that $H_{i, j}, Z_{h, i, j}, M_{i, j}, U_{i, j} \text{ and } B_{i, j}$ are unobservable. However, by sequencing the pools of DNA fragments we aim to estimate these variables.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #### Post-sequencing {-}
 
@@ -274,7 +281,7 @@ __Other issues?__
 
 __DISCUSS WITH TERRY: Is it better to use $j$ to denote samples and encode group information in $X_j$, or to use $j$ to denote replicates and $k$ to denote groups? I think the former will be more general, e.g. a sample belonging to multiple groups.__
 
-To move from a single sample to $n$ samples simply requires an additional subscript, $j = 1, \ldots, n$. $\mathcal{I}_{j}$ is the set of methylation loci in the $j^{th}$ sample and $\beta_{i, j}$ is the beta value for the $i^{th}$ locus in the $j^{th}$ sample. This defines the three levels in the hierarchy of a typical experiment -- individual molecules ($h$), individual methylation loci ($j$) and individual samples ($j$). A fourth level is how the samples relate in terms of an outcome of interest, such as phenotype. This fourth level might be defined up-front, such as in a designed experiment looking for differences in methylation between pre-defined groups of samples, or the aim of the experiment might be to discover this level.
+To move from a single sample to $n$ samples simply requires an additional subscript, $j = 1, \ldots, n$. $\mathcal{I}_{j}$ is the set of methylation loci in the $j^{th}$ sample and $\beta_{i, j}$ is the beta value for the $i^{th}$ locus in the $j^{th}$ sample. This defines the three levels in the hierarchy of a typical experiment -- individual molecules ($h$), individual methylation loci ($i$) and individual samples ($j$). A fourth level is how the samples relate in terms of an outcome of interest, such as phenotype. This fourth level might be defined up-front, such as in a designed experiment looking for differences in methylation between pre-defined groups of samples, or the aim of the experiment might be to discover this level.
 
 A common experiment of the first type is the two-group design in which $n_{1}$ samples are from group $1$ and $n_{2}$ samples are from group $2$ ($n_{1} + n_{2} = n$). This can be represented by a design matrix $X = [X_{j}]$, where $X_{j} = 1$ if the sample is from group $1$ and $X_{j} = 0$ if the sample is from group $2$.
 
@@ -318,7 +325,7 @@ When using a set of filters, at each step a read either "survives", and is subje
 [^read_filters]: A read that is not used to estimate $M$ and $U$ may still be used in other analyses, such as estimating copy number variation, and vice-versa.
 
 
-__TABLE___ describes a standard set of filters for bisulfite-sequencing data, although the choice of filters and thresholds strongly depends on the assay used, design of the experiment and data quality. In the table I have also included the relevant argument for my `comethylation` software, which can estimate $M$ and $U$ using the simple counting procedure.
+__TABLE___ describes a standard set of filters for bisulfite-sequencing data, although the choice of filters and thresholds strongly depends on the assay used, design of the experiment and data quality. In the table I have also included the relevant argument for my `methtuple` software, which can estimate $M$ and $U$ using the simple counting procedure.
 
 #### Read-level filters
 
@@ -347,9 +354,10 @@ Paired-end sequencing data often contain reads where `read_1` and `read_2` overl
 
 An obvious extension is to weight a methylation call by its base quality or `mapQ` value of the read. However, as previously noted, these qualities are often not well calibrated for bisulfite sequencing data, which reduces their utility. Similarly, it might be possible to weight a methylation call by the expected level of M-bias. However, M-bias, as it is currently computed, also has problems with calibration (__SEE INTRODUCTION__).
 
+
 ### Estimating methylation patterns at m-tuples
 
-`comethylation` is the only software that estimates methylation patterns at m-tuples, such as $MM, MU, UM$ and $UU$ for 2-tuples. `comethylation` uses the same "filter + count" method to estimate methylation patterns for all m-tuples (m $= 1, 2, 3, \ldots $).
+`methtuple` is the only software that estimates methylation patterns at m-tuples, such as $MM, MU, UM$ and $UU$ for 2-tuples. `methtuple` uses the same "filter + count" method to estimate methylation patterns for all m-tuples ($m = 1, 2, 3, \ldots$).
 
 
 ### Estimating $B$
@@ -360,7 +368,7 @@ Most analyses of bisulfite sequencing data have focused on the on the average le
 
 #### Empirical Bayes models of $\beta$-values {-}
 
-Both \citet{Feng:2014iq} and \citet{Sun:2014fk} propose a Beta-Binomial empirical Bayes hierarchical model for the $B_{i}, i = 1, \ldots, N_{loci}. The actual models slightly differ, as do the algorithms for parameter estimation, but the main idea is the same. The R/Bioconductor package `DSS` implements the model of \citet{Feng:2014iq} and the `MOABS` software implements the model of \citet{Sun:2014fk}. I focus on \citet{Feng:2014iq} because the model is better described than that of \citet{Sun:2014fk}. In fact, the empirical Bayes method described in \citet{Sun:2014fk} is poorly written and I think is wrong in several places, which makes it very confusing. (__DISCUSS WITH TERRY___).
+Both \citet{Feng:2014iq} and \citet{Sun:2014fk} propose a Beta-Binomial empirical Bayes hierarchical model for the $B_{i}, i = 1, \ldots, N_{loci}$. The actual models slightly differ, as do the algorithms for parameter estimation, but the main idea is the same. The R/Bioconductor package `DSS` implements the model of \citet{Feng:2014iq} and the `MOABS` software implements the model of \citet{Sun:2014fk}. I focus on \citet{Feng:2014iq} because the model is better described than that of \citet{Sun:2014fk}. In fact, the empirical Bayes method described in \citet{Sun:2014fk} is poorly written and I think is wrong in several places, which makes it very confusing. (__DISCUSS WITH TERRY___).
 
 \citet{Feng:2014iq} model the number of methylated reads at each locus by $M_{i, j, k} = Binomial(m_{i, j, k} + u{i, j, k}, B_{i, j, k})$, where $k = 1, 2$ is the group of each sample in a two-group experiment. They then assume that the $B_{i, j, k}$ follow a $Beta(\mu{i, k}, \theta_{i, k})$ distribution, which is the conjugate prior for the Binomial distribution, where $\mu$ is the mean and $\theta$ is the dispersion. \citet{Feng:2014iq} make the additional modelling assumption that $\theta_{i, k} = \text{log-Normal}(m_{0, k}, r_{0, k}^{2})$. Posterior estimates of $\mu_{i, k}$ are obtained using an empirical Bayes framework.
 
@@ -408,11 +416,13 @@ In the above examples, the researchers are modelling the distribution of $B_{i, 
 #### Distribution of $\beta$-values within samples {-}
 
 * Stratify by genomic elements
+* Use EPISCOPE data
 
 #### Distribution of $\beta$-values between samples {-}
 
 * Stratify by genomic elements
 * Means and variations of these distributions and how these relate to differential methylation
+* Use EPISCOPE data
 
 ### Correlations
 
@@ -422,18 +432,11 @@ Many researchers have observed that DNA methylation is spatially correlated alon
 
 #### Correlation of DNA methylation within samples {-}
 
-There are two levels of within-sample correlations of DNA methylation. The lower level is the dependence of DNA methylation at loci on the same DNA fragment, which I call _co-methylation_. I have performed the most comprehensive study to date of this type of within-sample correlation in __CHAPTER__. The higher level is the correlation of the $\beta$-values along the genome. A variety of approaches have been used to estimate these '$\beta$ correlations', although the methods have not always been clearly documented. I clarify these methods and extend these results in __CHAPTER__.
-
-#### Correlation of DNA methylation between samples {-}
-
-There has been less research on between-sample correlations of DNA methylation levels. The most frequently reported between-sample correlation is $cor(\{\beta_{i, j}\}_{i = 1}^{i = N_{loci}}, \{\beta_{i, j'}\}_{i = 1}^{i = N_{loci}})$, which is the correlation of the $\beta$-values for a pair of samples. This has been reported as evidence for the "concordance" or "replicability" of methylation levels for biological replicates (e.g. the same cell line after 4 or 5 cell passagings, \citet{Lister:2009hy}, and three different colon tumour samples \citet{Hansen:2011gu}) and technical  replicates (e.g. different technologies and assays \citet{Zhang:2013uu, Stevens:2013hv, Hansen:2011gu}).
-
-A more detailed measure is the correlation of $\beta$-values for a particular pair of methylation loci between a set of samples. __TODO: Review literature of "co-methylation".__
-
+Correlation of methylation levels is discussed in detail in Chapter \ref{chap:co-methylation_review} and Chapter \ref{chap:co-methylation}.
 
 ### Bias
 
-The natural interpretation of $beta_{i, j}$ will be biased if the probability of sequencing a fragment with a methylated site is different from the probability of sequencing a fragment with an unmethylated site. It is very likely that this bias exists but it is difficult to assess without a carefully designed experiment. __TODO: Is there any evidence that this bias exists? Is CGI dropout (as see in Sue Clark's lab) evidence for this?__
+The natural interpretation of $\beta_{i, j}$ will be biased if the probability of sequencing a fragment with a methylated site is different from the probability of sequencing a fragment with an unmethylated site. It is very likely that this bias exists but it is difficult to assess without a carefully designed experiment. __TODO: Is there any evidence that this bias exists? Is CGI dropout (as see in Sue Clark's lab) evidence for this?__
 
 One reason to believe that this bias exists is that there is a well-documented GC-bias with Illumina sequencing, whereby fragments with a low or high GC-content are undersampled (__CITE__). In bisulfite sequencing, highly methylated fragments will have more _C_s and fewer _T_s than a lowly methylated version of the same fragment and will therefore have a higher GC-content. Depending on the rest of the sequence in the fragment, this could result in a highly methylated fragment being undersampled (very high GC-content of the entire fragment) or a lowly methylated fragment being undersampled (very low GC-content of the entire fragment).
 
@@ -444,6 +447,7 @@ $\beta$-values are the _de facto_ standard unit for reporting methylation levels
 1. Proportions are bound between 0 and 1, inclusive.
 2. The estimate of the standard error depends on the estimate of the mean (i.e., $\beta$), through $se(\beta) = \sqrt{\frac{\beta (1 - \beta)}{m + u}}$. Taking the derivative of this, we see that the maximum standard error, $\sqrt(\frac{0.25}{m + u})$, occurs at $\beta = 0.5$ and the minimum standard error, $0$, occurs at $\beta = 0, 1$.
 3. We need to more than just the $\beta$-value to have a sense of how precise an estimate it is. Essentially, we need to also know the sequencing coverage of the methylation loci. Consider two CpGs, one with $m = 1, u = 3$ and the other with $m = 100$ $u = 300$. Both CpGs have $\beta = 1/4$ but the second CpG is measured with much greater precision. Assuming the binomial model, the first CpG has $se(\beta) = \sqrt{\frac{1/4 \times 3/4}{4}} = 0.22$ whereas the second CpG has $se(\beta) = \sqrt{\frac{1/4 \times 3/4}{400}} = 0.02$.
+4. __TODO: M-values__
 
 To address (2), proportion data are often tranformed via a variance stabilisation transformation. The aim is to make the variance (approximately) independent of the mean. Popular variance stabilisation transformations include:
 
@@ -452,6 +456,7 @@ To address (2), proportion data are often tranformed via a variance stabilisatio
 
 The use of variance stabilising transformations for proportion data seem to have fallen out of favour (e.g. [http://www.esajournals.org/doi/full/10.1890/10-0340.1](http://www.esajournals.org/doi/full/10.1890/10-0340.1)). The noq favoured approach is generalised linear models (__CITE__), in particular the logistic regression model (__CITE__?).
 
+## Downstream analyses
 
 ### Regression models
 
@@ -471,7 +476,7 @@ The use of variance stabilising transformations for proportion data seem to have
 * Notation abuse: e.g. m is defined with respect to m-tuples but also in terms of $m_{i}$. Similarly, $M$ is used to represent methylation patterns but also in terms of $M_{i}$. Perhaps use different typefaces to distinguish them?
 * Autocorrelation or correlation?
 * Link to all software and corresponding publications
-* Decide how to give the total number of a loci and samples in a consistent way. Currently usign $N_{loci}$ for loci and $n$ for samples, which is inconsistent.
+* Decide how to give the total number of a loci and samples in a consistent way. Currently using $N_{loci}$ for loci and $n$ for samples, which is inconsistent.
 * Decide how to denote coverage. Currently using $U + M$ rather than $N$ because $N$ and $n$ are already being used to represent multiple variables.
 * Method descriptions are often ambiguous or missing in details. The majority explanations favour words over mathematics and only __WHICH PAPERS__ provide software that implements their analysis methods.
 * The Binomial model is really a conditional Binomial model, where the condition is on the sequencing coverage, $M_{i} + U_{i}$. That is, $M_{i} | (M_{i} + U_{i}, B_{i}) = Bin(M_{i} + U_{i}, B_{i})$. __DISCUSS WITH TERRY: What is the correct way to write this Binomial model?

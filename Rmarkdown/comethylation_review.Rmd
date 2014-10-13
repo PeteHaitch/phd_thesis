@@ -1,5 +1,5 @@
 ---
-title: "Co-methylation"
+title: "Co-methylation review"
 author: "Peter Hickey"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
