@@ -1,0 +1,50 @@
+---
+title: "A simulation model of DNA methylation data"
+author: "Peter Hickey"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    fig_caption: yes
+    includes:
+      in_header: ../latex/header.tex
+  html_document:
+    keep_md: true
+bibliography: ../latex/phd_thesis.bib
+---
+
+# Chapter overview
+
+
+# Introduction
+
+Simulation studies play a vital role in the development, validation and benchmarking of methods in applied statistics. Simulation is necessary when there is a lack of real datasets with well-known outcomes that we would otherwise use to assess a method's performance. While simulated data can never fully capture the richness of "real" data, we can learn a lot about a method by studying how it performs when applied to simulated data.
+
+While we may sometimes be able to design an experiment with known outcomes via the use of controls, both positive and negative, this is not always possible in genomics. One reason for this is the cost of performing a well-designed control experiment. Why spend your time and money on an experiment where you "know the answer" when you could be spending that same time and money on investigating something new? Another reason is that in genomics we are often working with cutting-edge technology that is so new that we lack the technological and biological knowledge to even design such a control experiment.
+
+The key advantage of using simulated data over real data is that we know the truth _a priori_. Moreover, we can manipulate the truth via parameters in the simulation model and can examine how a method performs under a variety of scenarios. And this manipulation is cheap, a mere matter of changing parameters and re-running a piece of software, which means that we can investigate a broad range of plausible scenarios.
+
+Simulation studies can provide many insights into the performance of a method. At the most basic level, if a method fails to work or performs poorly when applied to simulated data, then it is very unlikely to work well when applied to real data. We can also identify which scenarios are "easy", ones where most methods are able to identify the truth, and scenarios under which certain methods perform better than others.
+
+Simulation studies can also tell us about the plausibility of hypothesised stochastic or mechanistic models of a phenomenon. By simulating data from the proposed model and comparing it to the real data we can identify shortcomings in the model that we can later refine.
+
+In the field of genomics, almost all papers proposing a new method will include a simulation study and perhaps a comparison to existing methods, if these exist. There are a few key criteria when designing a simulation method:
+
+1. Realism: The simulated data must be "similar" to the real data. While this is obvious, it is also often hard to pin down or agree upon what constitutes "similar enough".
+2. Cost: It should be fast and cheap to simulate data. The most common use of simulation models in applied statistics is to repeatedly generate datasets under a range of parameter settings. This requires that each simulation is fast and computationally cheap, otherwise it will be prohibitive to analyse the full space of scenarios. An exception to this rule may occur when the simulation model is used to test a proposed mechanistic or stochastic model of a phenomenon, such as in studies of molecular dynamics. Even then, however, the cost of a simulation should be less than the cost of performing the equivalent experiments, otherwise the simulation is generally not worth the effort.
+3. Usability: There __must__ be a software implementation. Simulation models exist to be simulated from; a simulation model without an implementation is next to useless. The implementation should give the user easy access to the key  parameters and have sensible default settings. The output of the software should be in a standard format or readily convertible to a simple, manipulable format.
+
+The above discussion refers to the general use of simulation models, particularly in applied statistics. I now turn my attention to the need for simulation models in the study of DNA methylation. Whole-genome bisulfite-sequencing remains an expensive assay, costing a few thousand dollars per sample (human) at the time of writing. Understandably, studies using WGBS have been from well-funded research groups focusing on "sexy" biology rather than on efforts to generate extensively-validated control datasets.
+
+The statistical methodology to analyse such experiments lags somewhat behind the ability to generate the data, as is common in genomics. Nonetheless, more statistical methods are being published seeking to address common research questions such as identifying differential methylation. However, because of the lack of "gold-standard" datasets, it is not clear which of these perform well for common experimental designs and research questions. Many of these published methods feature a simulation study in the accompanying paper, but, as we will shortly see, these simulations are woefully inadequate, unrealistic and vary between papers. In order to perform a proper benchmarking of these methods we require a realistic simulation model, something that I have attempted to address with my software, `methsim`, which I describe in this chapter.
+
+# Background + literature review
+
+# Methodology
+
+# Implementation
+
+# Case study
+
+# Discussion of findings
+
+# Conclusions

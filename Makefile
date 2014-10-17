@@ -72,6 +72,18 @@ comethylation_review.pdf: latex/phd_thesis.bib Rmarkdown/comethylation_review.Rm
 	mkdir -p pdf
 	Rscript -e "rmarkdown::render('Rmarkdown/comethylation_review.Rmd', output_format = 'pdf_document', output_file = '../comethylation_review.pdf', output_dir = '../pdf')"
 
+methsim.md: latex/phd_thesis.bib Rmarkdown/methsim.Rmd
+	Rscript -e "rmarkdown::render('Rmarkdown/methsim.Rmd', output_format = 'html_document', output_dir = '../markdown')"
+	rm markdown/methsim.html
+
+methsim.latex: methsim.md latex/phd_thesis.bib Rmarkdown/methsim.Rmd
+	mkdir -p latex
+	pandoc --chapters -o latex/methsim.tex markdown/methsim.md
+
+methsim.pdf: latex/phd_thesis.bib Rmarkdown/methsim.Rmd markdown/bibliography.md
+	mkdir -p pdf
+	Rscript -e "rmarkdown::render('Rmarkdown/methsim.Rmd', output_format = 'pdf_document', output_file = '../methsim.pdf', output_dir = '../pdf')"
+
 phd_thesis.pdf: introduction.latex statmodel.latex wgbs_analysis.latex comethylation_review.latex comethylation.latex
 	mkdir -p pdf
 	cd latex; pdflatex phd_thesis; \
