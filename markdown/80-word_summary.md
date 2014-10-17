@@ -1,1 +1,5 @@
-By analysing more than fifty whole-genome bisulfite-sequencing (WGBS) datasets I develop a statistical framework for analysing and modelling DNA methylation data. In particular, I focus on understanding the complex dependence structure of DNA methylation data and how this structure can be incorporated into statistical analyses. Using this knowledge, I develop software to simulate WGBS data, which can be used to develop and benchmark analysis methods. I also analyse WGBS experiments to identify epialleles and differentially methylated regions.
+# The statistical analysis of data from high-throughput assays for studying DNA methylation
+
+I develop a statistical framework for modelling and analysing DNA methylation data. In particular, I focus on the complex dependence structure of these data. I describe how this can be incorporated into statistical analyses of bisulfite-sequencing (BS-seq) experiments and develop software to simulate realistic BS-seq data by incorporating this dependence.
+
+I also report results from my analysis of more than fifty BS-seq samples, both publicly available and those collected by collaborators, which have informed the methods developed in my thesis.

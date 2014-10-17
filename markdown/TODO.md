@@ -142,11 +142,15 @@ TODOs according to the [Unimelb PhD handbook](http://gradresearch.unimelb.edu.au
 
 > Note: If more than three months lapses between submission of the 80-word summary and the thesis for examination, it is recommended that the candidate notifies the Examinations Office two weeks before the thesis is to be submitted to avoid delays with the examination. The Examinations Office can be notified by email (msgr-exams@unimelb.edu.au).
 
-__URGENT__
-- [ ] Find out the latest date a thesis can be submitted in 2014.
-  - [x] RHD-science replied that the "university is shut from close of business on 24/12/14 and re-opens on 5/1/15"
-  - [ ] Awaiting reply from MSGR
-- [ ] Submit intention to submit form.
+- [x] Submit intention to submit form.
+- [x] Find out the latest date a thesis can be submitted in 2014.
+
+MGSR replied:
+
+> We will be accepting submissions up until around 11am on 24 December 2014, however, we strongly suggest submitting at least a week prior so that your thesis can be sent to examiners, if they have been nominated, prior to the Christmas break.
+
+So, I have nominated 17/12/2014 as the date that I will submit my thesis.
+
 
 ### [Thesis submission](http://gradresearch.unimelb.edu.au/handbooks/phd/thesis.html#submission)
 
