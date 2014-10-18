@@ -114,7 +114,7 @@ As demonstrated in Chapter \ref{chap:co-methylation}, the physical process of co
 
 The second step uses a method published by \cite{Zaykin:2002ko}. The transformed values, $B^{*}$, are created by the transformation $B^{*}_{i, j} = 1 - \Phi{C \Phi - 1(1 - B)}$, where $C$ is a factor of the correlation matrix $\Sigma = C C^{'}$, which is estimated from the fitted Gaussian variogram, and where $\Phi(\dot)$ denotes the standard normal distribution function.
 
-\cite{Lacey:2013iy} supply R scripts to implement their simulation method ([http://rrbs-sim.r-forge.r-project.org/](http://rrbs-sim.r-forge.r-project.org/)). __TODO: Try these scripts, see how long they take__. The running times reported in the orignal publication are shown in __TABLE__. __TODO: To simulate a single RRBS dataset would take HOW LONG__. The simulation scripts could be made more user-friendly by creating an R package, rather than supplying the software as a collection of scripts, and would benefit from some documentation.
+\cite{Lacey:2013iy} supply R scripts to implement their simulation method ([http://rrbs-sim.r-forge.r-project.org/](http://rrbs-sim.r-forge.r-project.org/)). __TODO: Try these scripts, see how long they take__. The running times reported in the orignal publication are shown in __TABLE__ for a single simulation. __TODO: To simulate a single RRBS dataset would take HOW LONG__. The simulation scripts could be made more user-friendly by creating an R package, rather than supplying the software as a collection of scripts, and would benefit from some documentation.
 
 \begin{table}[h]
 \centering
@@ -135,18 +135,23 @@ All of the described methods, except \cite{Lacey:2013iy}, simulate methylation e
 
 ### Other model-based simulations
 
-A separate class of model-based simulation methods are those that simulate the $\beta$-values directly, i.e., without simulating sequencing depth \cite[e.g.,]{Chen:2014jb, Chen:2013eh}. These models are designed for simulating microarray data and not sequencing data, since they do not include the variability caused by variation in sequencing depth.
+A separate class of model-based simulation methods are those that simulate the $\beta$-values directly, i.e., without simulating sequencing depth \cite[e.g.,]{Chen:2014jb, Chen:2013eh}. These models are designed for simulating microarray data and not sequencing data, since they do not include the variability caused by variation in sequencing depth. Neither of these include co-methylation in their simulation model.
 
 ## Methods based entirely on sampling real data
 
-A simulation can be based entirely on sampling real data[^synthetic]. This type of simulated data is attractive because through careful sampling it can capture heterogeneity and correlations that may be too difficult to parameterise in a model. At the same time, if the sampling units are poorly chosen or the sampling strategy is incorrect then it may ignore these same features, or worse, introduce artefacts into the simulated data.
+A simulation can be based entirely on sampling real data[^synthetic]. This type of simulated data is attractive because through careful sampling it can capture heterogeneity and correlations that may be too difficult to parameterise in a model. At the same time, if the sampling units are poorly chosen or the sampling strategy is incorrect, then it may ignore these same features, or worse, introduce artefacts into the simulated data.
 
 [^synthetic]: This may also be referred to as creating a synthetic dataset.
 
+Sampling methods are most easily implemented at the level of $\beta$-values. Sampling reads is reads is far more difficult, except in the special case of down-sampling whereby the positions of reads are held constant but only a sub-sample of them are used in downstream analysis. Down-sampling is only of interest to examine the effects of sequencing coverage on downstream analyses.
 
-__UP TO HERE__
+\cite{Sofer:2013bk} use a sampling-based simulation method in the development of their `Aclust` software for identifying differential methylation from microarray data. The idea is adapted from a simulation method for array comparative genomic hybridization experiments \cite{Gaile:2007bq}. \cite{Sofer:2013bk} sample "blocks" of CpGs, a region of the genome where all CpGs are within 10 kb of the next, to "generate (spatial) correlation-preserved methylation data". By sampling blocks rather than individual CpGs, this sampling scheme preserves the correlation structure between CpGs occuring in the same block. Two blocks are unlikely to be correlated since there is little evidence that CpGs separated by more than 10 kb have spatially correlated methylation levels.
 
-* Xie (2013)
+\cite{Sofer:2013bk} sample from a dataset of 539 Illumina 450k microarrays and select a small number of "target" CpGs, which are CpGs whose methylation level is highly variable across the 539 samples. If a block does not contain a "target" then it is sampled uniformly at random from the 539 samples. However, if a block does contain a "target" then the sampling is weighted so that the "cases" are preferentially sampled from blocks with a high level of methylation at the "target" CpG and the "controls" are preferentially sampled from blocks with a low level of methylation at the "target" CpG[^cases_and_controls]. This is essentially weighted sampling of the real data to induce differential methylation.
+
+[^cases_and_controls] The use of "cases" and "controls" is arbitrary, as is the choice of highly methylated for "cases" and lowly methlyated for "controls" at "target" CpGs.
+
+Due to the correlation structure of the $\beta$-values, the co-methylation, it is likely, although not guaranteed, that other CpGs in the blocks containing targets also display differential methylation.
 
 # Methodology
 
