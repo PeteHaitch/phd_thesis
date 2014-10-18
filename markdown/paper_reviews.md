@@ -379,7 +379,7 @@ __This section to move to chapter on simulating WGBS data.__
 
 It is important to note that \citet{Lacey:2013iy} seek to simulate RRBS data and not WGBS data. This has several implications. Firstly, the RRBS assay enriches for small, CpG-dense regions of the genome such as CGIs. As such the distribution of IPDs is skewed towards zero and is less bimodal than that from WGBS data (__CHECK__), although it still has a long right-tail. Secondly, these CpG-dense regions are enriched for methylation loci with methylation levels near zero. Finally, the sequencing coverage of loci is right-skewed, even bimodal, in RRBS data.
 
-All parameters used in the simulation model were estimated from a single normal myotube cell line (MTCTL2; __CITE Tsumagari et al., 2013__). \citeauthor{Lacey:2013iy} state that this sample is representative of the methylation profiles that they are typically intereted in as part of their research emphasis. It is therefore unclear how generalisable these parameters estimates are.
+All parameters used in the simulation model were estimated from a single normal myotube cell line (MTCTL2; __CITE Tsumagari et al., 2013__). \citeauthor{Lacey:2013iy} state that this sample is representative of the methylation profiles that they are typically interested in as part of their research emphasis. It is therefore unclear how generalisable these parameters estimates are.
 
 Rather than simulate data at methylation loci from a reference genome, the authors model the distribution of IPDs for CpGs. Specifically, they model IPDs in human RRBS data. For this they use a two-component Normal mixture distribution, where one component models CpG-dense regions of the genome and the second component models CpG-sparse regions of the genome. They further impose a hidden Markov model on the distribution of IPDs so that a small IPD is more likely to be followed by another small IPD, in an attempt to model the clusters of CpG sites observed in RRBS data. It is unclear to me what advantage, if any, modelling the distribution of IPDs has over simply taking the empirical distribution of IPDs from a reference genome.
 
@@ -389,12 +389,12 @@ The simulation procedure aims to capture the spatial correlation of $\beta$-valu
 
 [^lacey]: My results show a non-zero correlation beyond 3 kb, which is hardly independence.
 
-They also argue, however, that the correlations of differences in $\beta$-values between two groups will be less than correlations of the $\beta$-values themselves, and provide some evidence for this. To do this they fit expontential variogram models to the raw and `QUASASS`-adjusted P-values from non-differentially methylated loci and report $r \leq 0.4$ for sites with $IPD > 50$ bp and $r < 0.2$ for sites with $IPD > 1000$ bp. It is not clear whether only pairs of sites with $NIL = 0$ where used in this analysis.
+They also argue, however, that the correlations of differences in $\beta$-values between two groups will be less than correlations of the $\beta$-values themselves, and provide some evidence for this. To do this they fit exponential variogram models to the raw and `QUASASS`-adjusted P-values from non-differentially methylated loci and report $r \leq 0.4$ for sites with $IPD > 50$ bp and $r < 0.2$ for sites with $IPD > 1000$ bp. It is not clear whether only pairs of sites with $NIL = 0$ where used in this analysis.
 
 \citet{Lacey:2013iy} also propose an algorithm for inducing DMRs in a two-group experiment, where the first $\frac{n}{2}$ samples are cases and the second $\frac{n}{2}$ samples are controls. The DMR-construction algorithm is as follows:
 
 1. Specify the proportion of the methylation loci that are in DMRs, the expected difference in methylation levels for loci in these DMRs ($\delta_{B}$) and the length of these DMRs.
-2. Regions satisfying the minimum lenth requirement are identified from the data and a subset are sampled so that the constraint on the proportion of methylation loci in DMRs is satisfied.
+2. Regions satisfying the minimum length requirement are identified from the data and a subset are sampled so that the constraint on the proportion of methylation loci in DMRs is satisfied.
 3. Compute the median $B_{i, j}$ for control samples in each region.
 	* If the median $B_{i, j}$ in the controls is less than $\delta_{B}$ then the region is assigned as hypermethylated relative to the controls.
 	* If the median $B_{i, j}$ in the controls is greater than $1 - \delta_{B}$ then the region is assigned as hypomethylated relative to the controls.
@@ -817,7 +817,7 @@ Rather than looking for general DMRs, the authors focus on identifying different
 
 The simulation study is based on ERRBS data from a study of acute myeloid leukemia. It uses the coverage distribution, the locations of CpGs and the estimated dispersions from the real data. However, the $\beta$-values are simulated from Beta-Binomial distributions with group-specific means to induce DMCs. This model does not incorporate correlation amongst the $\beta$-values, although the simulation models allows for DMCs to cluster into DMRs, which is similar to inducing correlations amongst the $\beta$-values, albeit restricted to CpGs in DMRs.
 
-The authors advocate for using `methylSig` with dispersions estimated locally via kernel smoothing. They note that `BSmooth` has low power to detect "independent DMCs", but this is not suprising because `BSmooth` is designed to detect DMRs.
+The authors advocate for using `methylSig` with dispersions estimated locally via kernel smoothing. They note that `BSmooth` has low power to detect "independent DMCs", but this is not surprising because `BSmooth` is designed to detect DMRs.
 
 ## \citet{Smallwood:2014kn}
 
@@ -887,7 +887,7 @@ Rather than filter out positions from an M-bias plot, `Bis-SNP` "walks" from the
 
 Correlations of z-scores are computed using the method implemented in `comb-P`.
 
-> We recommend calculating correlation and subsequently combining the pvalues of sites located within 200 bp. In our experience correlation typically becomes much weaker beyond this point, so the users do not generally need to alter this parameter. However, it may be approprtiate to increase the value of this parameter when analyzing very noisy data.
+> We recommend calculating correlation and subsequently combining the pvalues of sites located within 200 bp. In our experience correlation typically becomes much weaker beyond this point, so the users do not generally need to alter this parameter. However, it may be appropriate to increase the value of this parameter when analyzing very noisy data.
 
 Sounds fair.
 
@@ -970,3 +970,74 @@ __This is not correct, CHG is not symmetric__. For example, a CCG on the + stran
 > Excessively long context ranges might render the model ineffective, while choosing multiple breakpoints along a sequence would assume a piecewise model that is not likely to be biologically realistic.
 
 I should address the "piecewise model ... unrealistic" issue in my discussion of `methsim`.
+
+# Review of simulation methods
+
+### \cite{Feng:2014iq}
+
+1. Sample sample-specific $B_{i, j}$ from observed $\beta_{i, j}$ in an RRBS experiment.
+  - Simulate group-specific dispersion parameters.
+2. Sample sample-specific $u_{i, j} + m_{i, j}$ from same RRBS experiment.
+3. Simulate sample-specfic $\beta_{i, j}$ from Beta-Binomial distribution that incorporates (1) and (2).
+
+### \cite{Lacey:2013iy}
+
+Simulate RRBS and not WGBS. All parameters estimated from a single sample.
+
+0. Simulate CpGs from a point-process (HMM).
+1. Simulate group-specific $B_{i, j}$.
+  - (a) Simulate independent Beta-distributed RVs
+  - (b) Induce correlations via variogram and re-estimate Beta-parameters.
+  - Iterate (a) and (b) until stable.
+2. Simulate sequencing-coverage as Gamma-mixture across bins. Includes across sample correlations of sequencing depth.
+3. Simulate sample-specfic $\beta_{i, j}$ from Beta-Binomial distribution that incorporates (1) and (2).
+
+### \cite{Sofer:2013bk}
+
+Simulate microarray data by sampling from 539 TCGA 450k arrays.
+
+A. Sample blocks of probes to preserve spatial correlation.
+B. Induce differential methylation by weighted sampling of blocks containing "targets" and hopefully across other CpGs in the block since they are generally correlated.
+
+### \cite{Xu:2013eg}
+
+1. Simulate group-specific $B_{i, j_{k}}$
+  - Beta
+  - Truncated Normal
+  - Truncated Normal-mixture
+2. Simulate sample-specific $u_{i, j} + m_{i, j}$ from a round Normal distribution.
+3. Simulate sample-specific $\beta_{i, j}$ from Binomial distribution that incorporates (1) and (2).
+
+### \cite{Chen:2014jb}
+
+No simulation of true values or sequencing coverage, but directly simulate $\beta$-values.
+
+1. Simulate group-specific $B_{i, j_{k}}$
+  - Uniform
+  - Truncated Normal
+  - Beta
+
+Differential methylation is from a trend-with-category model.
+
+### \cite{Chen:2014jb}
+
+Simulate ERRBS and not WGBS.
+
+1. Simulate group-specific $B_{i, j_{k}}$ from Beta distribution
+2. Sample sample-specific $u_{i, j} + m_{i, j}$ from ERRBS experiment.
+3. Simulate sample-specific $\beta_{i, j}$ from Binomial distribution that incorporates (1) and (2).
+
+### \cite{Dolzhenko:2014bo}
+
+1. Simulate group-specific $B_{i, j_{k}}$ from Beta distribution
+2. Sample sample-specific $u_{i, j} + m_{i, j}$ from real data.
+3. Simulate sample-specific $\beta_{i, j}$ from Binomial distribution that incorporates (1) and (2).
+
+### \cite{Chen:2013eh}
+
+No simulation of true values or sequencing coverage, but directly simulate $\beta$-values.
+
+1. Simulate group-specific $B_{i, j_{k}}$
+  - Beta
+  - Normal distribution
+  - Normal-mixture
