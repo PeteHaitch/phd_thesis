@@ -975,8 +975,9 @@ I should address the "piecewise model ... unrealistic" issue in my discussion of
 
 ### \cite{Feng:2014iq}
 
-1. Sample sample-specific $B_{i, j}$ from observed $\beta_{i, j}$ in an RRBS experiment.
-  - Simulate group-specific dispersion parameters.
+1. Simulate group-specific $B_{i, j}$ from a Beta distribution with hyperparameters given by:
+  - Group-specific means sampled from real data.
+  - Group-specific dispersion parameters sampled from real data.
 2. Sample sample-specific $u_{i, j} + m_{i, j}$ from same RRBS experiment.
 3. Simulate sample-specfic $\beta_{i, j}$ from Beta-Binomial distribution that incorporates (1) and (2).
 

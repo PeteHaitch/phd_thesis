@@ -67,7 +67,7 @@ The reads simulated by `DNemulator` will result in $\beta$-values that have more
 
 ## Methods for simulating aggregate methylation levels
 
-Most papers that propose a new method for downstream analysis of bisulfite-sequencing data include a simulation section. Generally, the simulation method is not a major feature of the paper but is there to support claims about the performance of the proposed method. Consequently, the simulation model is often only briefly described and a software implementation is rarely made available.
+Most papers that propose a new method for downstream analysis of bisulfite-sequencing data include a simulation section. Generally, the simulation method is not a major feature of the paper but is there to support claims about the performance of the proposed method. Consequently, the simulation model is often only briefly described and a software implementation is rarely made available. In fact, of the methods reviewed in this section, only that of \citet{Lacey:2013iy} has a software implementation available.
 
 The most widely studied downstream analysis problem is that of identifying differential methylation. Differential methylation is identified by comparing summary measures of methylation, such as $\beta$-values, between two or more groups. It is therefore generally not necessary to simulate individual reads but is sufficient to simulate these summary measures directly. As the `methsim` software is focused on simulating data for comparing methods for calling differential methylation, I review methods designed for a similar purpose.
 
@@ -89,15 +89,45 @@ The most sophisticated approach to simulation of sequencing depth in bisulfite-s
 
 ### Simulating $B_{i, j}$
 
-Under the Beta-Binomial model, $\mu_{i, j}$ is the mean and $\phi_{i, j}$ the dispersion of the Beta distribution[^beta_parameterisation]. The means, $\mu_{i, j}$, are group-specific while the dispersions, $\phi_{i, j}$, are sample specific. If $\mu_{i, j}$ are allowed to be sample-specific then there would be no group-structure in the subsequent $\beta$-values. Conversely, if the dispersions are group-specific then there would be little within-group variability in the subsequent $\beta$-values.
+Under the Beta-Binomial model, $\mu_{i, j}$ is the mean and $\phi_{i, j}$ the dispersion of the Beta distribution[^beta_parameterisation]. Both the means, $\mu_{i, j}$, and the dispersions, $\phi_{i, j}$, are group-specific and are allowed to vary across methylation loci ($i$). The dispersion parameter models the within-group variability of the $B_{i, j}$, i.e., the _biological variability_ of DNA methylation.
 
 [^beta_parameterisation]: Note that this is different to the standard parameterisation of the Beta distribution, which is described by two shape parameters, $\alpha$ and $\beta$. The relationship between the two parameterisations is $\mu = \frac{\alpha}{\alpha + \beta}$ and $\phi = \frac{1}{\alpha + \beta + 1}$ \cite{Feng:2014iq}.
 
-Other distributions may be used instead of the Beta distribution. For example, \cite{Xie:2014ez} also use a Normal distribution and a mixture of Normal distributions and \cite{Xu:2013eg} also use the truncated Normal and a mixture of truncated Normal distributions. An alternative to specifying a parametric distribution for the $B_{i, j}$ is to sample these from real data, i.e., sample the observed $\beta_{i, j}$ from a real experiment.
+As noted by \cite{Feng:2014iq}, the Beta distribution is a very flexible distribution with support on $[0, 1]$ and has "long been a natural choice to model binomial proportions", particularly as a conjugate prior, as it is used in the empirical Bayes model of \cite{Feng:2014iq}. The Beta-Binomial model can also be viewed from a non-Bayesian perspective as a compound distribution or overdispersed Binomail distributions
 
-While the simulation of differentially methylated loci is straightforward - simply vary $B_{i, j_{i}}$ across the $k$ groups - the simulation of differentially methylated regions is more difficult. In principal we would simply simulate runs of differentially methylated loci, however, it must be noted that this requires careful choice of parameters. Such parameters include the length of DMRs, the minimal number of loci they must contain, the maximal intra-pair distances of loci within a DMR and how many of the loci in the DMR must themselves be differentially methylated, e.g., should __FIGURE__ be considered one DMR or two DMRs? (__TODO: Figure with 4 DMCs, then 1 non-DMC and then 5 DMCs). These decisions ultimately have to be made by the user of the simulation software based on the types of events they are interested in. For example, DMRs in cancer can be very long whereas others may be interested in identifying very short DMRs overlapping transcription factor binding sites.
+Other distributions may be used instead of the Beta distribution. For example, \cite{Xie:2014ez} consider a Normal distribution and a mixture of Normal distributions and \cite{Xu:2013eg} consider the truncated Normal and a mixture of truncated Normal distributions.
 
-__TODO: Comment on independence of $B_{i, j}$ in almost all methods.__
+An alternative to specifying a parametric distribution for the $B_{i, j}$ would be to sample these from real data, i.e., sample the observed $\beta_{i, j}$. However, without further perturbation, such an approach would have insufficient within-group variability since all samples in that group have the same "true" methylation level.
+
+While the simulation of differentially methylated loci is straightforward - simply vary the mean of the distribution of $B_{i, j_{i}}$ across the $k$ groups - the simulation of differentially methylated regions is more complex. In principal we would simply simulate a differentially methylated region by simulating runs of differentially methylated loci. However, it must be noted that this requires careful choice of parameters. Such parameters include the length of DMRs, the minimal number of loci they must contain, the maximal intra-pair distances of loci within a DMR and how many of the loci in the DMR must themselves be differentially methylated, e.g., should __FIGURE__ be considered one DMR or two DMRs? (__TODO: Figure with 4 DMCs, then 1 non-DMC and then 5 DMCs). These decisions ultimately have to be made by the user of the simulation software based on the types of events they are interested in. For example, DMRs in cancer can be very long whereas others may be interested in identifying very short DMRs overlapping transcription factor binding sites.
+
+### Simulating co-methylation
+
+A key feature ignored by all the above methods, with the honourable exception of \cite{Lacey:2013iy}, is co-methylation. The methylation states of neighbouring loci are highly dependent and, consequently, the $B_{i, j}$ of nearby loci are highly dependent. To be clear, almost all of the published simulation studies of bisulfite-sequencing data have failed to model a very important feature of DNA methylation data, co-methylation.
+
+As demonstrated in Chapter \ref{chap:co-methylation}, the physical process of co-methylation is at the level of individual DNA fragments, not at the level of aggregate methylation levels. The observed correlations of $\beta$-values are driven by this within-fragment co-methylation. However, a simulation model of DNA methylation data need not induce correlations at the level of individual DNA fragments. Indeed, if the model does not simulate the individual fragments then it cannot simulate within-fragment co-methylation but it may be able to capture correlations of methylation levels by inducing dependence in the $B_{i, j}$. This could be induced under the Beta-Binomial model by forcing the $\mu_{i, j}$ to be spatially dependence. This idea takes its inspiration from \citet{Jaffe:2012gx} who simulate spatially correlated DNA methylation microarray data by imposing an autocorrelation structure [AR(1)] on the simulated $\beta$-values.
+
+\cite{Lacey:2013iy} take a different approach, but one that still results in correlated $B_{i, j}$. To begin, they compute $\beta$-values from chromosome 11 for a single normal myotube cell line that was sequenced with RRBS. They then fit a Gaussian variogram to these $\beta$-values, which shows "a strong correlation for sites in close proximity, decaying to near independence at distances beyong 3000 bp". To simulate spatially correlated $B_{i, j}$ they use an iterative process:
+
+1. Simulate $B_{i, j}$ from a Beta distribution with parameters estimated from the chromosome 11 MTCTL2 data. These are estimated under an assumption of independence.
+2. Induce correlation amongst the $B_{i, j}$ (across $i$) by a transformation of the $B_{i, j}$.
+
+The second step uses a method published by \cite{Zaykin:2002ko}. The transformed values, $B^{*}$, are created by the transformation $B^{*}_{i, j} = 1 - \Phi{C \Phi - 1(1 - B)}$, where $C$ is a factor of the correlation matrix $\Sigma = C C^{'}$, which is estimated from the fitted Gaussian variogram, and where $\Phi(\dot)$ denotes the standard normal distribution function.
+
+\cite{Lacey:2013iy} supply R scripts to implement their simulation method ([http://rrbs-sim.r-forge.r-project.org/](http://rrbs-sim.r-forge.r-project.org/)). __TODO: Try these scripts, see how long they take__. The running times reported in the orignal publication are shown in __TABLE__. __TODO: To simulate a single RRBS dataset would take HOW LONG__. The simulation scripts could be made more user-friendly by creating an R package, rather than supplying the software as a collection of scripts, and would benefit from some documentation.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+Number of samples & Number of sites & Running time (seconds) \\ \midrule
+8                 & 1000            & \textless 1            \\
+8                 & 5000            & 13                     \\
+8                 & 10000           &                        \\ \bottomrule
+\end{tabular}
+\caption{Reported running times for simulation methodology of \cite{Lacey:2013iy}. Simulations were run on "on a desktop with a 3.4 GHz processor and 10 GB RAM running 64-bit Windows 7".}
+\label{tab:Lacey_runtime}
+\end{table}
 
 ### Simulating positions of methylation loci
 
@@ -108,6 +138,13 @@ All of the described methods, except \cite{Lacey:2013iy}, simulate methylation e
 A separate class of model-based simulation methods are those that simulate the $\beta$-values directly, i.e., without simulating sequencing depth \cite[e.g.,]{Chen:2014jb, Chen:2013eh}. These models are designed for simulating microarray data and not sequencing data, since they do not include the variability caused by variation in sequencing depth.
 
 ## Methods based entirely on sampling real data
+
+A simulation can be based entirely on sampling real data[^synthetic]. This type of simulated data is attractive because through careful sampling it can capture heterogeneity and correlations that may be too difficult to parameterise in a model. At the same time, if the sampling units are poorly chosen or the sampling strategy is incorrect then it may ignore these same features, or worse, introduce artefacts into the simulated data.
+
+[^synthetic]: This may also be referred to as creating a synthetic dataset.
+
+
+__UP TO HERE__
 
 * Xie (2013)
 
