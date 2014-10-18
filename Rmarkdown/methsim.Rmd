@@ -149,13 +149,115 @@ Sampling methods are most easily implemented at the level of $\beta$-values. Sam
 
 \cite{Sofer:2013bk} sample from a dataset of 539 Illumina 450k microarrays and select a small number of "target" CpGs, which are CpGs whose methylation level is highly variable across the 539 samples. If a block does not contain a "target" then it is sampled uniformly at random from the 539 samples. However, if a block does contain a "target" then the sampling is weighted so that the "cases" are preferentially sampled from blocks with a high level of methylation at the "target" CpG and the "controls" are preferentially sampled from blocks with a low level of methylation at the "target" CpG[^cases_and_controls]. This is essentially weighted sampling of the real data to induce differential methylation.
 
-[^cases_and_controls] The use of "cases" and "controls" is arbitrary, as is the choice of highly methylated for "cases" and lowly methlyated for "controls" at "target" CpGs.
+[^cases_and_controls] The use of "cases" and "controls" is arbitrary, as is the choice of highly methylated for "cases" and lowly methylated for "controls" at "target" CpGs.
 
 Due to the correlation structure of the $\beta$-values, the co-methylation, it is likely, although not guaranteed, that other CpGs in the blocks containing targets also display differential methylation.
 
 # Methodology
 
-`methsim` is designed for simulating data for downstream analyses, and uses a hybrid strategy that is capable of creating raw, unaligned reads or summary measures, such as $\beta$-values, from the same simulation run.
+`methsim` is is specifically designed to model the co-methylation structure of bisulfite-sequencing data by simulating individual DNA fragments rather than directly simulating summary methylation measurements. My intention in developing `methsim` was to design simulation software that could generate realistic data for use in developing and comparing differential methylation callers. In order to model the co-methylation structure, I decided that `methsim` should simulate at the level of individual DNA fragments. An added bonus of this approach is that `methsim` can (in theory) generate data at multiple resolutions: $\beta$-values, methylation patterns at m-tuples or sequencing reads.
+
+Simulating data with `methsim` involves 3 steps:
+
+1. Simulate the true methylome of each sample.
+2. Sample reads, including sequencing error and bisulfite-conversion error.
+3. Construct the output, be it reads, methylation patterns at m-tuples or $\beta$-values.
+
+`methsim` requires an input dataset from which to estimate key parameters. For the input dataset, `methsim` requires the methylation patterns at various sized m-tuples, which can be produced by the `methtuple` software.
+
+## Simulating the truth
+
+As we have seen, DNA methylation is highly heterogeneous along the genome. Nonetheless, there are clear regions of "similarity", regions where we might hope to model by a simple parametric model. `methsim` is based on the idea of segmenting the genome into "regions of similarity", fitting a simple model to each region and then "stitching" the results together. The idea of segmenting a highly heterogenous stochastic process into a series of locally homogeneous prcoesses is not new. A hidden Markov model is an example of such a process. While the entire process may highly heterogeneous, conditional on the hidden states the process is homogeneous. Hidden Markov models, and other models assuming local similarity in spite of global heterogeneity, have been used with great success in bioinformatics (__CITE__).
+
+`methsim` takes the following approach to simulating the true underlying methylome for each sample:
+
+1. Segment the methylome into regions of similarity.
+2. Within each region simulate the methylation states from a simple parametric model.
+3. "Stitch" the resulting regions together.
+
+Actually, the stitching together of segments is not strictly a separate step and can be incorporated into step 2.
+
+### Segmenting the methylome
+
+\cite{Burger:2013kq} developed the R/Bioconductor package, `MethylSeekR`, to discover regulatory motifs from bisulfite-sequencing data. `MethylSeekR` segments the genome into unmethylated regions (_UMR_s), lowly-methylated regions (_LMR_s) and partially methylated regions[^pmds] (_PMR_s). It does this using a two-stage algorithm applied to the $\beta$-values from a sample:
+
+[^pmds]: Partially methylated regions are more commonly known as partially methylated domains, but I refer to them as regions for consistency with UMRs and LMRs.
+
+1. Identify partially methylated regions. A summary statistic, $\alpha$, which is based on the $\beta$-values in a sliding window of 100 CpGs, is used to identify PMRs. Briefly, a two-state hidden Markov model is fit to the $\alpha$ values to identify _PMR_s and non-_PMR_s
+2. Identify UMRs and LMRs. The PMRs are masked from the genome and simple heuristics are used to identify UMRs and LMRs based on the average $\beta$-values in a window and the number of CpGs in the window.
+
+`methsim` uses the output of `MethylSeekR` to define "regions of similarity", namely UMRs, LMRs, PMRs and the 'rest of the genome'. The 'rest of the genome' roughly corresponds to 'mostly methylated regions' (_MMR_s), although \cite{Burger:2013kq} do not describe it as such. (__TODO: Figure showing 'rest of genome' is MMRs__)
+
+While a tailored algorithm may improve the segmentation process, the segmentation produced by `MethylSeekR` is a reasonable approximation to finding "regions of similarity". This can be seen in __FIGURES__  (__TODO: Figures showing that `MethylSeekR` gives a reasonable segmentation for the purposes of `methsim`)). It should be noted that `methsim` does perform some post-processing of the `MethylSeekR` output so that the segmentation is disjoint and exhaustive.
+
+The segmentation is a property of the sample, not of any particular haploid methylome in the sample.
+
+### Simulating a single haploid methylome
+
+As discussed in Chapter \ref{chap:statmodel}, whole-genome bisulfite sequencing  measures DNA methylation from individual DNA fragments from a pool of 100s or 1000s of cells. The methylation states of each copy of the haploid genome can be represented by a pair of vectors, $Z_{h, j}^{+} = (Z_{h, 1, j}^{+}, \ldots, Z_{h, n_{loci}^{+}, j})$, for the positive strand, and $Z_{h, j}^{-} = (Z_{h, 1, j}^{-}, \ldots, Z_{h, n_{loci}^{-}, j})$, for the negative strand. For simplicity, I will focus on CpG methylation and assume that the methylation state of all CpGs are strand-symmetric so that each haploid genome can be represented by a single vector, $Z_{h, j} = (Z_{h, 1, j}, \ldots, Z_{h, n_{loci}, j})$.
+
+I propose to model $Z_{h, j}$ as a two-state, one-step Markov chain. This allows me to incorporate a model of within-fragment co-methylation into my simulation.  The choice of a one-step chain is one of computational simplicity, although I will show that this is a reasonable approximation of within-fragment co-methylation.
+
+In Chapter \ref{chap:co-methylation} I showed that the strength of within-fragment co-methylation varies as a function of the intra-pair distance and by the genomic context. I also showed that for a pair of CpGs separated by given IPD, and in the same genomic context, that there is a large amount of variability in the strength of within-fragment co-methylation.
+
+For these reasons I allow the transition probabilities to vary with $i$, that is, I allow the Markov chain to be spatially inhomogeneous. In particular, I allow the transition probabilities, $p_{i^{(h, j)}, a, b} = Pr(Z_{h, i + 1, j} = b | Z_{h, i, j} = a)$, to depend on the intra-pair distance between the $i^{th}$ and $(i + 1)^{th}$ locus and on the region for this pair of loci[^context], $p_{i^{(h, j)}, a, b} = Pr(Z_{h, i + 1, j} | Z_{h, i, j}, r_{i}, IPD(i, i + 1))$, where $r_{i}$ is the region type (UMR, LMR, PMR or MMR) of the $i^{th}$ methylation locus.
+
+[^context]: Actually, it only depends on the context of the $i^{th}$ locus. Most pairs of loci, $(i, i + 1)$ will lie in the same genomic feature. For pairs that span the boundary of two different features I have arbitrarily chosen to use the context of the $i^{th}$ locus.
+
+The above-described model, being spatially inhomogeneous, is not particularly amenable to analytical calculations. However, it is very simple to simulate realisations from this model, requiring only a single loop over the set of loci on each chromosome. For a chromosome containing $n$ methylation loci there are $n - 1$ transition matrices, $P_{i^{(h, j)}$, to estimate or otherwise assign.
+
+`methsim` assigns these transition probabilities based on empirical the distributions of  $\beta_{i, j}$ and $LOR_{IPD(i, i + 1), j}$ conditional on the region type of the $i^{th}$ locus, $r_{i}$. Call these empirical distributions $\beta_{i, j | r_{i}}$ and $LOR_{i, j | r_{i}}$, respectively. These empirical distributions are shown for a single sample in __FIGURE__. (__TODO: Do these plots for a single sample__).
+
+__TODO: Describe how a transition probability can be computed from a marginal probability and a log odds ratio__
+
+To simulate $Z_{h, j}$ the algorithm proceeds as follows (in `R` pseudocode):
+
+```{r, echo = TRUE, eval = FALSE}
+n <- length(z)
+u <- runif(n, 0, 1)
+# Sample from region-specific beta-value distributions
+b <- sample(BETA, n)
+# Sample from region-specific LOR distributions
+l <- sample(LOR, n - 1)
+
+# Sample the first observation from the "stationary/marginal" distribution
+if (u[1] < b[1]) {
+  z[1] <- 0
+} else {
+  z[1] <- 1
+}
+
+# Sample the rest of the z
+for (i in 2:n) {
+  if (z[i] == 0) {
+    # Compute transition probability
+    # Compute z[i]
+
+  } else {
+    # Compute transition probability
+    # Compute z[i]
+  }
+}
+```
+
+### Simulating a single sample
+
+Given a set of transition matrices, $\Big { P_{i^{(h, j)} \Big }$, we can readily simulate a realisation of the methylation states along a haploid genome, $Z_{h, j}$. Naively, we might simulate a single sample by simply generating a realisation for each $h$ of $Z_{h, j}$. However, although there is cell-to-cell heterogeneity in the methylation patterns, there is still a degree of dependence for the $i^{th}$ methylation state across the $h$ haploid genomes in the $j^{th}$ sample. After all, the cells are from the same individual and are broadly of the same "type".
+
+What this means is that we want some degree of dependence between the set of transition matrices for haploid methylome $h$, $\Big { P_{i^{(h, j)} \Big }$, and for those for haploid methylome $h'$, $\Big { P_{i^{(h', j)} \Big }$. This is asking quite a lot of our simple simulation model. Instead, `methsim` uses a heuristic procedure to achieve a similar result.
+
+To begin, we assume that all $H$ haploid genomes in the sample have the same co-methylation structure. That is equivalent to defining $\Big { P_{i^{(h, j)} \Big } := $\Big { P_{i^{(j)} \Big }$ for all $h$. __TODO: Comment on this assumption__
+
+Naively, we might simulate a sample by simulating $H$ realisations of the Markov chain with transition matrices $\Big { P_{i^{(j)} \Big }$. However, this gives no control over the dependence between the methylation states at the $i^{th}$ locus over the $H$ haploid genomes in the $j^{th}$ sample. In fact, such a model will have the "correct" co-methylation structure but "incorrect" $\beta$-values. __TODO: Check this and demonstrate using `methsim`__
+
+Instead, `methsim` simulates $R << H$ realisations of the Markov chain with transition probabilities given by $\Big { P_{i^{(j)} \Big }$. It then weights these realisations according to the observed heterogeneity for each region. __TODO: Describe the inuition of this weighting scheme as being that $w_{r}$ of the cells have identical methylation states for that region.
+
+### Simulating multiple samples from the same group
+
+### Simulating differential methylation
+
+## Parameter estimation
+
 
 # Implementation
 
