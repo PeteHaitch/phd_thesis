@@ -84,7 +84,19 @@ methsim.pdf: latex/phd_thesis.bib Rmarkdown/methsim.Rmd markdown/bibliography.md
 	mkdir -p pdf
 	Rscript -e "rmarkdown::render('Rmarkdown/methsim.Rmd', output_format = 'pdf_document', output_file = '../methsim.pdf', output_dir = '../pdf')"
 
-phd_thesis.pdf: introduction.latex statmodel.latex wgbs_analysis.latex comethylation_review.latex comethylation.latex
+avy.md: latex/phd_thesis.bib Rmarkdown/avy.Rmd
+	Rscript -e "rmarkdown::render('Rmarkdown/avy.Rmd', output_format = 'html_document', output_dir = '../markdown')"
+	rm markdown/avy.html
+
+avy.latex: avy.md latex/phd_thesis.bib Rmarkdown/avy.Rmd
+	mkdir -p latex
+	pandoc --chapters -o latex/avy.tex markdown/avy.md
+
+avy.pdf: latex/phd_thesis.bib Rmarkdown/avy.Rmd markdown/bibliography.md
+	mkdir -p pdf
+	Rscript -e "rmarkdown::render('Rmarkdown/avy.Rmd', output_format = 'pdf_document', output_file = '../avy.pdf', output_dir = '../pdf')"
+
+phd_thesis.pdf: introduction.latex statmodel.latex wgbs_analysis.latex avy.latex comethylation_review.latex comethylation.latex methsim.latex
 	mkdir -p pdf
 	cd latex; pdflatex phd_thesis; \
 	bibtex phd_thesis; \
@@ -102,9 +114,9 @@ paper_reviews.pdf: latex/phd_thesis.bib markdown/paper_reviews.md markdown/bibli
 	mv latex/paper_reviews_sc.pdf pdf/paper_reviews.pdf
 	rm latex/paper_reviews_sc*
 
-phd_thesis.html: comethylation.md
+phd_thesis.html: comethylation.md avy.md methsim.md methylation_review.md
 	echo "Citations aren't yet supported!"
 	mkdir html
-	pandoc -s --mathjax --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o html/phd_thesis.html markdown/preamble.md markdown/introduction.md markdown/a_statistical_model_of_methlyC-seq.md markdown/comethylation.md markdown/bibliography.md
+	pandoc -s --mathjax --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o html/phd_thesis.html markdown/preamble.md markdown/introduction.md markdown/a_statistical_model_of_methlyC-seq.md markdown/avy.md markdown/comethylation.md markdown/comethylation_review.md markdown/methsim.md markdown/bibliography.md
 
 all: phd_thesis.pdf phd_thesis.html
