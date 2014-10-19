@@ -1,0 +1,57 @@
+---
+title: "Epialleles in Agouti viable yellow mice"
+author: "Peter Hickey"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    fig_caption: yes
+    includes:
+      in_header: ../latex/header.tex
+  html_document:
+    keep_md: true
+bibliography: ../latex/phd_thesis.bib
+---
+
+# Chapter overview
+
+The agouti viable yellow ($A^{vy}$) mouse model is perhaps the archetype of _heritable_ epigenetic modifications resulting in phenotypic variation. The research group of Professor Emma Whitelaw, one of the researchers to discover the epigenetic variant that underpins this model, recently performed whole-genome bisulfite-sequencing of five mice, including two with the $A^{vy}$ locus, with the aim of identifying epialleles. An epiallele is a region of the genome where samples are genetically identical yet epigenetically variable.
+
+Due to a somewhat unusual experimental design, Professor Whitelaw requested the assistance of Professor Terry Speed and I in analysing the data. As with many experiments, there was pressure to quickly develop methods and implement these as software to analyse the data. This chapter describes the experiment and how we addressed these challenges.
+
+# Introduction + literature review
+
+"The Agouti gene is responsible for determining whether a mammal's coat is banded (_agouti_) or of a solid color (_non-agouti_)" [TODO: re-word. Wikipedia!]. In mice, there are several well-studied mutants where differences in the expression of the agouti protein influences multiple, seemingly unrelated phenotypic traits (_pleiotropy_). Specifically, yellow mice, those with high expression of the agouti protein, are obese, diabetic and have an increased susceptibility to tumours.
+
+One of these agouti-associated obesity mutations is the agouti viable yellow allele ($A^{vy}$), discovered by \cite{Duhl:1994bx}. The cause of the $A^{vy}$ mutation in the agouti protein was identified by a team led by Professor Emma Whitelaw \cite{Morgan:1999ds} as being due to methylation differences upstream of the agouti gene. Moreover, these epigenetic-driven phenotypic differences display variable expressivity (differences between individuals), variegation (mosaicism between cells of the same individual), are mitically heritable and display parent-of-origin effects (distinct from classic parental imprinting).
+
+For the $A^{vy}$ allele, there is an intracisternal A particle (IAP) insertion  approximately 100 kb upstream of the agouti gene. The IAP contains a cryptic promoter that can induce ectopic (unusual) expression of the agouti gene \cite{Rakyan:2002wz}. Methylation of this IAP prevents activation of the cryptic promoter and so the agouti gene is inactive, ultimately resulting in a mouse with a _pseudoagouti[^pseudoagouti_vs_agouti]_ coat. Conversely, when the IAP is unmethylated the mouse has a yellow coat since the cryptic promoter is activated and the agouti protein is expressed. Mice with intermediate levels methylation[^intermediate_methylation] at the IAP have a mottled coat due to mosaicism between cells.
+
+[^pseudoagouti_vs_agouti]: These mice are properly described as pseudoagouti since they are heterozygous for the wildtype agouti allele ($A^{vy}/a$) but are phenotypically indistinguishable from true agouti mice, which are homozygous for the wildtype gene ($a/a$).
+
+[^intermediate_methylation]: Intermediate methylation referring to the average methylation of the IAP across a pool of cells from the individual mouse.
+
+The $A^{vy}$ allele is homozygous lethal, only heterozygous mice ($A^{vy}/a$) and homozygous wildtype mice ($a/a$) are viable, and so the mouse model is properly referred to as the agouti viable yellow mouse (__TODO: Raykan (2012) refer to homozygous $A^{vy}/A^{vy}$ mice, but I thought this was embryonically lethal???__).
+
+An epiallele is a region of the genome that is genetically identical yet epigenetically variable. Epialleles are of most interest when they also confer phenotypic variabilitiy. The $A^{vy}$ allele is the archetype of a _metastable_ epiallele, which \cite{Rakyan:2002wz} define as an allele "at which the epigenetic state can switch and establishment is a probabilistic event". Importantly, such metastable epialleles are mitotically heritable (__TODO: Are there non-metastable epialleles?__).
+
+The $A^{vy}$ epiallele was discoverable because much was known about its probable location and it could be verified through functional assays applied to the offspring of extensive mouse breedings (__TODO: Clarify__). The agouti gene was known to cause differences in coat colour and so it was the obvious candidate. Differences in expression of this gene were not due to genetic variability since the mice were isogenic, and environmental differences were minimal since all mice were raised in a similar laboratory environment. This pointed to the possibility that an epiallele was responsible for the phenotypic variability. I know describe a general strategy for identifying epialleles when there is a strong candidate gene. This is not exactly the strategy employed by \cite{Morgan:1999ds} but is a
+
+## A general strategy for identifying epialleles of known genes
+
+Suppose we have a gene whose expression is known to cause the phenotypic variation we are interested in. Furthermore, suppose that we suspect this difference in gene expression is due to epigenetic variation, such as when the variation in gene expression is observed in genetically identical animals raised in similar environments. These days we could perform bisulfite-sequencing of several samples with different values of the phenotype and look for methylation differences that associate with the phenotype.
+
+The obvious first place to look is at the promoter of the gene, to look for the classical methylation/expression relationship described in Chapter \ref{chap:intro}. Things are rarely so simple and we must often widen our search. Cryptic promoters, such as that in the IAP insertion of the $A^{vy}$ locus, are good candidates (__TODO: How easy is it to identify cryptic promoters__). Enhancers, which can be many kilobases upstream or downstream of a gene, are more challenging to identify since the search must be further widened.
+
+While challenging, this is the "easiest" experimental design from which to identify epialleles since we have a known phenotype and a candidate region(s) in which to search. But what if we want to perform a screen for _putative_ epialleles? A putative epiallele is any region of the genome where the samples display differential methylation. It is identified based solely on differential methylation and not on any association with phenotypic differences. Rather, these putative epialleles may be studied in greater detail in larger cohorts to see whether they associate with an as yet undetermined phenotype. This is the type of experiment that Emma Whitelaw came to Terry and I with to ask for assistance in analysing.
+
+# Description of Emma's experiment
+
+Extra evidence that a putative epiallele might be real:
+
+* It's a retrotransposon. IAP is a retrotransposon and Morgan (1999) state "Because retrotransposons are abundant in mammalian genomes, this type of (epigenetic) inheritance may be common."
+
+# Methodology
+
+# Discussion of findings
+
+# Conclusion

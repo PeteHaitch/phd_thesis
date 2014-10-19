@@ -971,6 +971,12 @@ __This is not correct, CHG is not symmetric__. For example, a CCG on the + stran
 
 I should address the "piecewise model ... unrealistic" issue in my discussion of `methsim`.
 
+## \cite{Morgan:1999ds}
+
+People already knew that differences in agouti expression resulted in phenotypic differences. What they didn't know was what causes the differences in expression. This is what Emma identified:
+
+> In viable yellow (Avy/a) mice, transcription originating in an intra-cisternal A particle (IAP) retrotransposon inserted upstream of the agouti gene (A) causes ectopic expression of agouti protein, resulting in yellow fur, obesity, diabetes and increased susceptibility to tumours (Neomorphic agouti mutations in obese yellow mice, 1994).
+
 # Review of simulation methods
 
 ### \cite{Feng:2014iq}
