@@ -12,10 +12,10 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
-# Chapter overview
+## Chapter overview
 
 
-# Introduction
+## Introduction
 
 Simulation studies play a vital role in the development, validation and benchmarking of methods in applied statistics. Simulation is necessary when there is a lack of real datasets with well-known outcomes that we would otherwise use to assess a method's performance. While simulated data can never fully capture the richness of "real" data, we can learn a lot about a method by studying how it performs when applied to simulated data.
 
@@ -37,7 +37,7 @@ The above discussion refers to the general use of simulation models, particularl
 
 The statistical methodology to analyse such experiments lags somewhat behind the ability to generate the data, as is common in genomics. Nonetheless, more statistical methods are being published seeking to address common research questions such as identifying differential methylation. However, because of the lack of "gold-standard" datasets, it is not clear which of these perform well for common experimental designs and research questions. Many of these published methods feature a simulation study in the accompanying paper, but, as we will shortly see, these simulations are woefully inadequate, unrealistic and vary between papers. In order to perform a proper benchmarking of these methods we require a realistic simulation model, something that I have attempted to address with my software, `methsim`, which I describe in this chapter.
 
-# Background + literature review
+## Background + literature review
 
 Simulated bisulfite-sequencing data may be used in the comparison of strategies for the alignment and processing of bisulfite-converted reads, or in the comparison of downstream analysis methods. Simulation methods for bisulfite-sequencing data may choose to simulate the individual sequencing reads, unaligned or aligned, or some summary measure of methylation, such as $\beta$-values. The former is required for the comparison of different alignment strategies whereas the latter is typically used by developers of downstream analysis methods, such as differential methylation callers, since this is often all that is required to run these methods. Moreover, simulated reads must be aligned and processed before they can be used in comparisons of downstream analysis methods, which is often not of direct relevance in comparisons of these tools.
 
@@ -45,7 +45,7 @@ A simulation may be model-based or based on sampling of real data, roughly corre
 
 In contrast, simulations based on sampling of real data may reduce the number of assumptions required. However, care must be taken in selecting the units to be sampled so that the sampling process is efficient and so that the sampled data don't grossly distort within- and between-sample dependencies.
 
-## Methods for simulating bisulfite-sequencing reads
+### Methods for simulating bisulfite-sequencing reads
 
 All of the available methods for simulating bisulfite-sequencing reads are designed for the comparison of alignment strategies and are model-based. These are not suitable for comparisons of downstream analysis methods.
 
@@ -65,9 +65,9 @@ The reads simulated by `DNemulator` will result in $\beta$-values that have more
 
 `BSsim` ([http://122.228.158.106/BSSim/](http://122.228.158.106/BSSim/) and used in \cite{Xie:2014ez}), uses a similar strategy to `DNemulator`.
 
-## Methods for simulating aggregate methylation levels
+### Methods for simulating aggregate methylation levels
 
-Most papers that propose a new method for downstream analysis of bisulfite-sequencing data include a simulation section. Generally, the simulation method is not a major feature of the paper but is there to support claims about the performance of the proposed method. Consequently, the simulation model is often only briefly described and a software implementation is rarely made available. In fact, of the methods reviewed in this section, only that of \citet{Lacey:2013iy} has a software implementation available.
+Most papers that propose a new method for downstream analysis of bisulfite-sequencing data include a simulation section. Generally, the simulation method is not a major feature of the paper but is there to support claims about the performance of the proposed method. Consequently, the simulation model is often only briefly described and a software implementation is rarely made available. In fact, of the methods reviewed in this section, only that of \cite{Lacey:2013iy} has a software implementation available.
 
 The most widely studied downstream analysis problem is that of identifying differential methylation. Differential methylation is identified by comparing summary measures of methylation, such as $\beta$-values, between two or more groups. It is therefore generally not necessary to simulate individual reads but is sufficient to simulate these summary measures directly. As the `methsim` software is focused on simulating data for comparing methods for calling differential methylation, I review methods designed for a similar purpose.
 
@@ -81,13 +81,13 @@ A common framework for simulating data for a $k$-group experiment is the followi
 
 A popular choice of parametric model is the Beta-Binomial distribution \cite[e.g.,]{Feng:2014iq, Lacey:2013iy, Xu:2013eg, Chen:2014jb, Dolzhenko:2014bo}. Under this model the true methylation level, $B_{i, j}$, is assumed to follow a $Beta(\mu_{i, j}, \phi_{i, j})$ distribution, and the $\beta$-values are simulated from a Binomial distribution, $\beta_{i, j} = Binomial(m_{i, j} + u_{i, j}, B_{i, j})$.
 
-### Simulating sequence depth
+#### Simulating sequence depth
 
 The sequencing depths, $m_{i, j} + u_{i, j}$, are typically sampled from real data \cite[e.g.]{Feng:2014iq, Chen:2014jb, Dolzhenko:2014bo}, although a rounded Normal distribution \cite{Xu:2013eg} and a rounded mixture of Gamma distributions have also been used \cite{Lacey:2013iy}.
 
 The most sophisticated approach to simulation of sequencing depth in bisulfite-sequencing experiments is the RRBS simulation of \cite{Lacey:2013iy}. In addition to using a mixture of distributions to capture both the low-coverage and high-coverage modes observed in RRBS sequencing coverage, the authors model the correlation of sequencing depth across samples for a given region. They do this by using a Normal copula to make the set of sequencing depths a jointly dependent set of random variables. While this is undoubtably sophisticated, the effect of correlated versus uncorrelated sequencing depths in a simulation model is not explored in the paper and so the benefits are unclear. Moreover, it is simpler to include such correlations by a sensible sampling of real data. Specifically, this can be achieved by sampling sequencing depth across samples for a given region rather than sampling across the full set of sequencing depths.
 
-### Simulating $B_{i, j}$
+#### Simulating $B_{i, j}$
 
 Under the Beta-Binomial model, $\mu_{i, j}$ is the mean and $\phi_{i, j}$ the dispersion of the Beta distribution[^beta_parameterisation]. Both the means, $\mu_{i, j}$, and the dispersions, $\phi_{i, j}$, are group-specific and are allowed to vary across methylation loci ($i$). The dispersion parameter models the within-group variability of the $B_{i, j}$, i.e., the _biological variability_ of DNA methylation.
 
@@ -101,11 +101,11 @@ An alternative to specifying a parametric distribution for the $B_{i, j}$ would 
 
 While the simulation of differentially methylated loci is straightforward - simply vary the mean of the distribution of $B_{i, j_{i}}$ across the $k$ groups - the simulation of differentially methylated regions is more complex. In principal we would simply simulate a differentially methylated region by simulating runs of differentially methylated loci. However, it must be noted that this requires careful choice of parameters. Such parameters include the length of DMRs, the minimal number of loci they must contain, the maximal intra-pair distances of loci within a DMR and how many of the loci in the DMR must themselves be differentially methylated, e.g., should __FIGURE__ be considered one DMR or two DMRs? (__TODO: Figure with 4 DMCs, then 1 non-DMC and then 5 DMCs). These decisions ultimately have to be made by the user of the simulation software based on the types of events they are interested in. For example, DMRs in cancer can be very long whereas others may be interested in identifying very short DMRs overlapping transcription factor binding sites.
 
-### Simulating co-methylation
+#### Simulating co-methylation
 
 A key feature ignored by all the above methods, with the honourable exception of \cite{Lacey:2013iy}, is co-methylation. The methylation states of neighbouring loci are highly dependent and, consequently, the $B_{i, j}$ of nearby loci are highly dependent. To be clear, almost all of the published simulation studies of bisulfite-sequencing data have failed to model a very important feature of DNA methylation data, co-methylation.
 
-As demonstrated in Chapter \ref{chap:co-methylation}, the physical process of co-methylation is at the level of individual DNA fragments, not at the level of aggregate methylation levels. The observed correlations of $\beta$-values are driven by this within-fragment co-methylation. However, a simulation model of DNA methylation data need not induce correlations at the level of individual DNA fragments. Indeed, if the model does not simulate the individual fragments then it cannot simulate within-fragment co-methylation but it may be able to capture correlations of methylation levels by inducing dependence in the $B_{i, j}$. This could be induced under the Beta-Binomial model by forcing the $\mu_{i, j}$ to be spatially dependence. This idea takes its inspiration from \citet{Jaffe:2012gx} who simulate spatially correlated DNA methylation microarray data by imposing an autocorrelation structure [AR(1)] on the simulated $\beta$-values.
+As demonstrated in Chapter \ref{chap:co-methylation}, the physical process of co-methylation is at the level of individual DNA fragments, not at the level of aggregate methylation levels. The observed correlations of $\beta$-values are driven by this within-fragment co-methylation. However, a simulation model of DNA methylation data need not induce correlations at the level of individual DNA fragments. Indeed, if the model does not simulate the individual fragments then it cannot simulate within-fragment co-methylation but it may be able to capture correlations of methylation levels by inducing dependence in the $B_{i, j}$. This could be induced under the Beta-Binomial model by forcing the $\mu_{i, j}$ to be spatially dependence. This idea takes its inspiration from \cite{Jaffe:2012gx} who simulate spatially correlated DNA methylation microarray data by imposing an autocorrelation structure [AR(1)] on the simulated $\beta$-values.
 
 \cite{Lacey:2013iy} take a different approach, but one that still results in correlated $B_{i, j}$. To begin, they compute $\beta$-values from chromosome 11 for a single normal myotube cell line that was sequenced with RRBS. They then fit a Gaussian variogram to these $\beta$-values, which shows "a strong correlation for sites in close proximity, decaying to near independence at distances beyong 3000 bp". To simulate spatially correlated $B_{i, j}$ they use an iterative process:
 
@@ -129,15 +129,15 @@ Number of samples & Number of sites & Running time (seconds) \\ \midrule
 \label{tab:Lacey_runtime}
 \end{table}
 
-### Simulating positions of methylation loci
+#### Simulating positions of methylation loci
 
 All of the described methods, except \cite{Lacey:2013iy}, simulate methylation events based on a reference genome. \cite{Lacey:2013iy} propose a hidden Markov model for the intra-pair distances of CpGs in human RRBS data and simulate methylation loci based on this model. I do not think a model-based strategy is useful here, in fact I think it is counterproductive, and I prefer a sampling-based strategy, i.e., the use of methylation loci from a reference genome. While the set of methylation loci do vary across samples within a species due to genetic variation, it is a reasonable approximation to consider the positions of these loci as fixed, particularly when the main aim of the simulation model is to realistically simulate methylation levels and not the location of the methylation loci. Furthermore, if sequence variation is required then this can be achieved by sampling from this set of loci or by sampling from the set of methylation loci from a group of samples.
 
-### Other model-based simulations
+#### Other model-based simulations
 
 A separate class of model-based simulation methods are those that simulate the $\beta$-values directly, i.e., without simulating sequencing depth \cite[e.g.,]{Chen:2014jb, Chen:2013eh}. These models are designed for simulating microarray data and not sequencing data, since they do not include the variability caused by variation in sequencing depth. Neither of these include co-methylation in their simulation model.
 
-## Methods based entirely on sampling real data
+### Methods based entirely on sampling real data
 
 A simulation can be based entirely on sampling real data[^synthetic]. This type of simulated data is attractive because through careful sampling it can capture heterogeneity and correlations that may be too difficult to parameterise in a model. At the same time, if the sampling units are poorly chosen or the sampling strategy is incorrect, then it may ignore these same features, or worse, introduce artefacts into the simulated data.
 
@@ -153,7 +153,7 @@ Sampling methods are most easily implemented at the level of $\beta$-values. Sam
 
 Due to the correlation structure of the $\beta$-values, the co-methylation, it is likely, although not guaranteed, that other CpGs in the blocks containing targets also display differential methylation.
 
-# Methodology
+## Methodology
 
 `methsim` is is specifically designed to model the co-methylation structure of bisulfite-sequencing data by simulating individual DNA fragments rather than directly simulating summary methylation measurements. My intention in developing `methsim` was to design simulation software that could generate realistic data for use in developing and comparing differential methylation callers. In order to model the co-methylation structure, I decided that `methsim` should simulate at the level of individual DNA fragments. An added bonus of this approach is that `methsim` can (in theory) generate data at multiple resolutions: $\beta$-values, methylation patterns at m-tuples or sequencing reads.
 
@@ -165,7 +165,7 @@ Simulating data with `methsim` involves 3 steps:
 
 `methsim` requires an input dataset from which to estimate key parameters. For the input dataset, `methsim` requires the methylation patterns at various sized m-tuples, which can be produced by the `methtuple` software.
 
-## Simulating the truth
+### Simulating the truth
 
 As we have seen, DNA methylation is highly heterogeneous along the genome. Nonetheless, there are clear regions of "similarity", regions where we might hope to model by a simple parametric model. `methsim` is based on the idea of segmenting the genome into "regions of similarity", fitting a simple model to each region and then "stitching" the results together. The idea of segmenting a highly heterogenous stochastic process into a series of locally homogeneous prcoesses is not new. A hidden Markov model is an example of such a process. While the entire process may highly heterogeneous, conditional on the hidden states the process is homogeneous. Hidden Markov models, and other models assuming local similarity in spite of global heterogeneity, have been used with great success in bioinformatics (__CITE__).
 
@@ -177,7 +177,7 @@ As we have seen, DNA methylation is highly heterogeneous along the genome. Nonet
 
 Actually, the stitching together of segments is not strictly a separate step and can be incorporated into step 2.
 
-### Segmenting the methylome
+#### Segmenting the methylome
 
 \cite{Burger:2013kq} developed the R/Bioconductor package, `MethylSeekR`, to discover regulatory motifs from bisulfite-sequencing data. `MethylSeekR` segments the genome into unmethylated regions (_UMR_s), lowly-methylated regions (_LMR_s) and partially methylated regions[^pmds] (_PMR_s). It does this using a two-stage algorithm applied to the $\beta$-values from a sample:
 
@@ -192,7 +192,7 @@ While a tailored algorithm may improve the segmentation process, the segmentatio
 
 The segmentation is a property of the sample, not of any particular haploid methylome in the sample.
 
-### Simulating a single haploid methylome
+#### Simulating a single haploid methylome
 
 As discussed in Chapter \ref{chap:statmodel}, whole-genome bisulfite sequencing  measures DNA methylation from individual DNA fragments from a pool of 100s or 1000s of cells. The methylation states of each copy of the haploid genome can be represented by a pair of vectors, $Z_{h, j}^{+} = (Z_{h, 1, j}^{+}, \ldots, Z_{h, n_{loci}^{+}, j})$, for the positive strand, and $Z_{h, j}^{-} = (Z_{h, 1, j}^{-}, \ldots, Z_{h, n_{loci}^{-}, j})$, for the negative strand. For simplicity, I will focus on CpG methylation and assume that the methylation state of all CpGs are strand-symmetric so that each haploid genome can be represented by a single vector, $Z_{h, j} = (Z_{h, 1, j}, \ldots, Z_{h, n_{loci}, j})$.
 
@@ -204,7 +204,7 @@ For these reasons I allow the transition probabilities to vary with $i$, that is
 
 [^context]: Actually, it only depends on the context of the $i^{th}$ locus. Most pairs of loci, $(i, i + 1)$ will lie in the same genomic feature. For pairs that span the boundary of two different features I have arbitrarily chosen to use the context of the $i^{th}$ locus.
 
-The above-described model, being spatially inhomogeneous, is not particularly amenable to analytical calculations. However, it is very simple to simulate realisations from this model, requiring only a single loop over the set of loci on each chromosome. For a chromosome containing $n$ methylation loci there are $n - 1$ transition matrices, $P_{i^{(h, j)}$, to estimate or otherwise assign.
+The above-described model, being spatially inhomogeneous, is not particularly amenable to analytical calculations. However, it is very simple to simulate realisations from this model, requiring only a single loop over the set of loci on each chromosome. For a chromosome containing $n$ methylation loci there are $n - 1$ transition matrices, $P_{i^{(h, j)}}$, to estimate or otherwise assign.
 
 `methsim` assigns these transition probabilities based on empirical the distributions of  $\beta_{i, j}$ and $LOR_{IPD(i, i + 1), j}$ conditional on the region type of the $i^{th}$ locus, $r_{i}$. Call these empirical distributions $\beta_{i, j | r_{i}}$ and $LOR_{i, j | r_{i}}$, respectively. These empirical distributions are shown for a single sample in __FIGURE__. (__TODO: Do these plots for a single sample__).
 
@@ -240,29 +240,29 @@ for (i in 2:n) {
 }
 ```
 
-### Simulating a single sample
+#### Simulating a single sample
 
-Given a set of transition matrices, $\Big { P_{i^{(h, j)} \Big }$, we can readily simulate a realisation of the methylation states along a haploid genome, $Z_{h, j}$. Naively, we might simulate a single sample by simply generating a realisation for each $h$ of $Z_{h, j}$. However, although there is cell-to-cell heterogeneity in the methylation patterns, there is still a degree of dependence for the $i^{th}$ methylation state across the $h$ haploid genomes in the $j^{th}$ sample. After all, the cells are from the same individual and are broadly of the same "type".
+Given a set of transition matrices, $\Big \{ P_{i^{(h, j)}} \Big \}$, we can readily simulate a realisation of the methylation states along a haploid genome, $Z_{h, j}$. Naively, we might simulate a single sample by simply generating a realisation for each $h$ of $Z_{h, j}$. However, although there is cell-to-cell heterogeneity in the methylation patterns, there is still a degree of dependence for the $i^{th}$ methylation state across the $h$ haploid genomes in the $j^{th}$ sample. After all, the cells are from the same individual and are broadly of the same "type".
 
-What this means is that we want some degree of dependence between the set of transition matrices for haploid methylome $h$, $\Big { P_{i^{(h, j)} \Big }$, and for those for haploid methylome $h'$, $\Big { P_{i^{(h', j)} \Big }$. This is asking quite a lot of our simple simulation model. Instead, `methsim` uses a heuristic procedure to achieve a similar result.
+What this means is that we want some degree of dependence between the set of transition matrices for haploid methylome $h$, $\Big \{ P_{i^{(h, j)}} \Big \}$, and for those for haploid methylome $h'$, $\Big \{ P_{i^{(h', j)}} \Big \}$. This is asking quite a lot of our simple simulation model. Instead, `methsim` uses a heuristic procedure to achieve a similar result.
 
-To begin, we assume that all $H$ haploid genomes in the sample have the same co-methylation structure. That is equivalent to defining $\Big { P_{i^{(h, j)} \Big } := $\Big { P_{i^{(j)} \Big }$ for all $h$. __TODO: Comment on this assumption__
+To begin, we assume that all $H$ haploid genomes in the sample have the same co-methylation structure. That is equivalent to defining $\Big \{ P_{i^{(h, j)}} \Big \} := \Big \{ P_{i^{(j)}} \Big \}$ for all $h$. __TODO: Comment on this assumption__
 
-Naively, we might simulate a sample by simulating $H$ realisations of the Markov chain with transition matrices $\Big { P_{i^{(j)} \Big }$. However, this gives no control over the dependence between the methylation states at the $i^{th}$ locus over the $H$ haploid genomes in the $j^{th}$ sample. In fact, such a model will have the "correct" co-methylation structure but "incorrect" $\beta$-values. __TODO: Check this and demonstrate using `methsim`__
+Naively, we might simulate a sample by simulating $H$ realisations of the Markov chain with transition matrices $\Big \{ P_{i^{(j)}} \Big \}$. However, this gives no control over the dependence between the methylation states at the $i^{th}$ locus over the $H$ haploid genomes in the $j^{th}$ sample. In fact, such a model will have the "correct" co-methylation structure but "incorrect" $\beta$-values. __TODO: Check this and demonstrate using `methsim`__
 
-Instead, `methsim` simulates $R << H$ realisations of the Markov chain with transition probabilities given by $\Big { P_{i^{(j)} \Big }$. It then weights these realisations according to the observed heterogeneity for each region. __TODO: Describe the inuition of this weighting scheme as being that $w_{r}$ of the cells have identical methylation states for that region.
+Instead, `methsim` simulates $R << H$ realisations of the Markov chain with transition probabilities given by $\Big \{ P_{i^{(j)}} \Big \}$. It then weights these realisations according to the observed heterogeneity for each region. __TODO: Describe the inuition of this weighting scheme as being that $w_{r}$ of the cells have identical methylation states for that region.
 
-### Simulating multiple samples from the same group
+#### Simulating multiple samples from the same group
 
-### Simulating differential methylation
+#### Simulating differential methylation
 
-## Parameter estimation
+### Parameter estimation
 
 
-# Implementation
+## Implementation
 
-# Case study
+## Case study
 
-# Discussion of findings
+## Discussion of findings
 
-# Conclusions
+## Conclusions

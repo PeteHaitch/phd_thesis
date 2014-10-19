@@ -12,13 +12,13 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
-# Chapter overview
+## Chapter overview
 
-The agouti viable yellow ($A^{vy}$) mouse model is the archetypical _epiallele_, a genetically identical region where epigenetic variability result in phenotypic variation. The research group of Professor Emma Whitelaw, one of the researchers to discover the epigenetic variant that underpins the $A^{vy}$ model, recently performed whole-genome bisulfite-sequencing of five mice, including two with the $A^{vy}$ locus, with the aim of identifying additional epialleles.
+The agouti viable yellow ($A^{vy}$) allele is the archetypical _epiallele_, a genetically identical region where epigenetic variability result in phenotypic variation. The research group of Professor Emma Whitelaw, one of the researchers to discover the epigenetic variant that underpins the $A^{vy}$ mouse model,  performed whole-genome bisulfite-sequencing of five mice, including two with the $A^{vy}$ allele, with the aim of identifying additional epialleles.
 
 Due to a somewhat unusual experimental design, Professor Whitelaw requested the assistance of Professor Terry Speed and I in analysing the data. As with many experiments, there was pressure to quickly develop methods and implement these as software to analyse the data. This chapter describes the experiment and how we addressed these challenges. It also discusses general considerations for identifying epialleles.
 
-# Introduction + literature review
+## Introduction + literature review
 
 "The Agouti gene is responsible for determining whether a mammal's coat is banded (_agouti_) or of a solid color (_non-agouti_)" [TODO: re-word. Wikipedia!]. In mice, there are several well-studied mutants where differences in the expression of the agouti protein influences multiple, seemingly unrelated phenotypic traits (_pleiotropy_). Specifically, yellow mice, those with high expression of the agouti protein, are obese, diabetic and have an increased susceptibility to tumours.
 
@@ -36,7 +36,7 @@ An epiallele is a region of the genome that is genetically identical yet epigene
 
 The $A^{vy}$ epiallele was discoverable because much was known about its probable location and it could be verified through functional assays applied to the offspring of extensive mouse breedings (__TODO: Clarify__). The agouti gene was known to cause differences in coat colour and so it was the obvious candidate. Differences in expression of this gene were not due to genetic variability since the mice were isogenic, and environmental differences were minimal since all mice were raised in a similar laboratory environment. This pointed to the possibility that an epiallele was responsible for the phenotypic variability. I know describe a general strategy for identifying epialleles when there is a strong candidate gene. This is not exactly the strategy employed by \cite{Morgan:1999ds} but is a
 
-## A general strategy for identifying epialleles of known genes
+### A general strategy for identifying epialleles of known genes
 
 Suppose we have a gene whose expression is known to cause the phenotypic variation we are interested in. Furthermore, suppose that we suspect this difference in gene expression is due to epigenetic variation, such as when the variation in gene expression is observed in genetically identical animals raised in similar environments. These days we could perform bisulfite-sequencing of several samples with different values of the phenotype and look for methylation differences that associate with the phenotype.
 
@@ -44,12 +44,10 @@ The obvious first place to look is at the promoter of the gene, to look for the 
 
 While challenging, this is the "easiest" experimental design from which to identify epialleles since we have a known phenotype and a candidate region(s) in which to search. But what if we want to perform a screen for _putative_ epialleles? A putative epiallele is any region of the genome where the samples display differential methylation. It is identified based solely on differential methylation and not on any association with phenotypic differences. Rather, these putative epialleles may be followed-up in larger cohorts to see whether they associate with a yet-to-be-determined phenotype. This is the type of experiment that Emma Whitelaw came to Terry and I with to ask for assistance in analysing.
 
-# Description of experiment
+## Description of experiment
 
 Five mice on a C57Bl/6 background underwent whole-genome bisulfite-sequencing. Two of the five mice are heterozygous for the $A^{vy}$ locus, one yellow and one pseudoagouti, while the remaining mice are homozygous wildtype agouti (Table \ref{tab:whitelaw_data}).
 
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
 \begin{table}[h]
 \centering
 \begin{tabular}{@{}lll@{}}
@@ -73,7 +71,7 @@ While any differential methylation identified in this analysis is by definition 
 
 My involvement in the project was at a relatively late stage and focused on developing a method to analyse these data. I was to write a software implemention of this method but the final analysis would be performed by Harald Oey, a bioinformatician in the Whitelaw group. Consequently, this chapter focuses on the statistical details of the analysis rather than the biological results and their interpretation.
 
-## Data
+### Data
 
 Harald aligned the reads to the mouse reference genome (mm9) using Bismark \cite{Krueger:2011eb}. __TODO: Check pre- and post-processing of reads.__ I received from Harald five tables, one for each sample, containing the number of methylated and unmethylated reads at each CpG. An example is shown below:
 
@@ -90,33 +88,33 @@ The mouse reference genome is based on the C57Bl/6 strain and does not contain t
 
 __TODO: Comment on sequencing coverage__
 
-# Methodology
+## Methodology
 
 The basic question is to identify loci where not all of the five mice have the same methylation level. There is no grouping structure of the samples. While we could conceivably group the mice by coat colour (yellow vs. agouti and pseudoagouti) or by genotype at the agouti locus ($a/a$ vs. $A^{vy} vs. a$) or by _epigenotype_ at the agouti locus ("yellow" vs. pseudoagouti vs. agouti), the Whitelaw group were interested in _any_ methylation differences between _any_ subset of the five mice[^n=1]. This effectively makes this a one group experiment.
 
 [^n=1]: Both the "coat colour" and "agouti epigenotype" contrasts result in groups with $n = 1$, meaning we would be unable to estimate their corresponding within-group variances.
 
-This is the first example I had seen of a bisulfite-sequencing experiment with one-group. Surprisingly, this rules out all(?) published methods for identifying differential methylation, since these are all designed for identifying differential methylation in experiments with two or more groups.
+This is the first example I had seen of a bisulfite-sequencing experiment with one-group. Surprisingly, this rules out all(?) published methods for identifying differential methylation, since these are all designed for identifying differential methylation in experiments between two or more groups.
 
-There is also the question of what sized "features" we are interested in testing for differential methylation. Harald and Emma told me that they were interested in both differentially methylated CpGs and differentially methylated regions, where the regions were not defined _a priori_. I took the commonly used approach of testing individual CpGs for differential methylation and then building runs of DMCs to define differentially methylated regions.
+There is also the question of what sized "features" we are interested in testing for differential methylation. Harald and Emma told me that they were interested in both differentially methylated CpGs and differentially methylated regions, where the regions were not defined _a priori_. For defining DMRs I took the commonly used approach of testing individual CpGs for differential methylation and then defining DMRs as runs of DMCs.
 
-My algorithm for calling differentially methylated regions is adapted from that of \cite{Hansen:2011gu}. I call my implementation `runDMC` (runs of differentially methylated cytosines) and it proceeds as follows:
+My algorithm for defining differentially methylated regions is adapted from that of \cite{Hansen:2011gu}. I call my implementation `runDMC` (runs of differentially methylated cytosines) and it proceeds as follows:
 
 1. Identify candidate differentially methylated cytosines (_cDMCs_).
 2. Declare contiguous runs of _cDMCs_ where the $IPD$ between _cDMCs_ is less than some threshold to be candidate differentially methylated regions (_cDMRs_).
 3. Summarise _cDMRs_ and apply filters.
 
-## Step 1: Identifying candidate differentially methylated cytosines
+### Step 1: Identifying candidate differentially methylated cytosines
 
 At each CpG, $i$, we are testing the following hypothesis:
 
-\begin{equation*}
-
-H_{0}:& \beta_{i, j} = \beta_{i, 0}, j = 1, \ldots, 5 \\
-  vs.& \\
-H_{1}:& \exists j = 1, \ldots, 5 s.t. \beta_{i, j} \neq \beta_{i, 0}
-
-\end{equation*}
+$$
+\begin{aligned}
+H_{0, i}: & \forall j \; B_{i, j} = B_{i, 0} \\
+& vs.  \\
+H_{1, i}: & \exists j: \; B{i, j} \neq B_{i, 0}
+\end{aligned}
+$$
 
 where $\beta_{i, 0}$ is estimated from the data. For each CpG we can summarise the data by a $5 \times 2$ contingency table:
 
@@ -141,20 +139,96 @@ __TODO: Plot and comment on the distribution of P-values__
 
 A CpG is declared a _cDMC_ if the P-value is in the lower $5\%$ of all P-values across the genome. A stricter criteria is required if the aim of the analysis is to identify differentially methylated cytosines. However, this first step is rather designed to identify sites for the `runDMC` algorithm (described below).
 
-The question of
+__TODO: Some summaries of the cDMCs, e.g., top-ranked CpGs__
 
-## Identifying differentially methylated regions
+__TODO: A discussion of FDR correction for single-loci tests__
+
+### Identifying differentially methylated regions
 
 The `runDMC` algorithm is similar to one proposed in \cite{Hansen:2011gu}, which is implemented in the `bsseq` R/Bioconductor package (__CITE__). `bsseq` defines differentially methylated region as runs of CpGs with a t-statistic greater than an empirically chosen threshold. Because `bsseq` is designed for two-group experiment, it also requires that the t-tatistic has the same sign for all CpGs in the region, indicating that the effect is in the same direction for all CpGs in the DMR.
 
 Rather than using the $\chi^{2}$ test-statistics, `runDMC` uses the corresponding P-values. The reason is that for some CpGs only a subset of the samples have sequencing data, hence the test statistic has fewer degrees of freedom. By using the P-value rather than the raw $\chi^{2}$ test statistic, we effectively normalise for the degrees of freedom.
 
-`runDMC` is written in `C++` and interfaces with `R` via the `Rcpp` package (__CITE__). The `C++` version is some $25$ times faster than the equivalent code written in `R` (__TODO: Include benchmark data__). The user passes it an object containing the set of CpGs, each annotated by whether it is a _cDMC_, and specifies __UP TO HERE__
+`runDMC` is written in `C++` and interfaces with `R` via the `Rcpp` package (__CITE__). The `C++` version is some $25$ times faster than the equivalent code written in `R` (__TODO: Include benchmark data__). The user passes `runDMC` an object containing the set of CpGs, each annotated by whether it is a _cDMC_, and specifies the maximal $IPD$ of CpGs and number of _non-cDMCs_ before a run is "broken". The output is an object with the start and end co-ordinates of each run, as well as some basic summary statistics such as the number of _cDMCs_ and _non-cDMCs_. These cDMRs are then annotated and filtered in the final stage.
+
+__TODO: Some summaries of the `runDMC` output, e.g., number of runs, lengths,
+
+### Summarising and filtering candidate differentially methylated regions
+
+The vast majority of "runs" returned by `runDMC` are a single _cDMC_. Obviously we want to filter these out as they are single loci not runs. For example, we may require a run to contain at least 3 _cDMCs_.
+
+We may want to summarise each _cDMR_ by a statistic that measures how different the entire region is between the sample, not just the individual CpGs. However, care should be taken in the interpretation of such a statistic. We know _a priori_ that the CpGs in an cDMR are 'significantly' differentially methylated and so we expect the region to also be 'significantly' differentially methylated. Nevertheless, a summary statistic may be useful in ranking candidate DMRs.
+
+One potential summary statistic is the Mantel-Haenszel (_MH_) statistic of the CpGs in the _cDMR_. The Mantel-Haenszel statistic can be used to test that two nominal variables are conditional independent in each stratum. In other words,
+
+> The Mantel-Haenszel test tests the null hypothesis that two nominal variables [M and U] are conditionally independent in each stratum [at each CpG], assuming that there is no three-way interaction [assuming that the effect is consistent across all CpGs in the region] (From the help page for the `R` implementation of the Mantel-Haenszel test (see ``?mantelhaen.test`) [with my comments in square brackets])
+
+Testing the conditional independence of $M$ and $U$ _at a single CpG_ is equivalent to testing that $\beta_{j} = \beta_{0}$ for all $j = 1, \ldots, 5$ mice at that CpG. Therefore, the Mantel-Haenszel test is equivalent to testing  the null hypothesis that all mice have the same methylation level at each CpG ($\beta_{0, i}$) in the region, although this may vary from CpG to CpG, i.e. $\beta_{0, i}$ need not equal $\beta_{0, i + 1}$).
+
+In our case, with 2 categories ($M$ and $U$) and 5 mice, the Mantel-Haenszel statistic has an approximate $\chi^{2}((5 - 1) \times (2 - 1) \times(2 - 1)) = \chi^{2}(4)$ distribution under the null hypothesis of no conditional independence of $M$ and $U$ across the sites[^df]. Furthermore, the Mantel-Haenszel statistic is the optimal statistic for the alternative hypothesis stating a consistent (same direction) difference across all CpGs in the region \cite{Somes:1986uk}. We may with to rank regions based on the value of the Mantel-Haenszel statistic.
+
+[^df]: If only a $J < 5$ of the mice have non-zero coverage across all CpGs in the region, then the degrees of freedom are $J - 1$.
+
+There are some important caveats mentioned above that warrant further discussion. One of these, the assumption of no three-way interaction, which is required for the validity of the null distribution of the Mantel-Haenzel statistic, is related to the idea of "consistency" for a DMR.
+
+By "consistency" I mean that the difference in methylation across the region occurs within the same (subset) of mice. This is best illustrated by describing an "inconsistent" DMR. Suppose we have a region containing five CpGs, each of which is differentially methylated. However, suppose that at the first CpG it is `sample1` that is "different", at the second CpG it is `sample2` that is "different", etc. Then this region is not differentially methylated in any single subset of mice, which is the standard interpretation of a DMR. It must be emphasised that the `runDMC` algorithm provides no guarantees that a _cDMR_ is consistent since it simply builds runs of _cDMCs_.
+
+Returning to the Mantel-Haenszel statistic, the assumption of no three-way interaction means no interaction between mouse, methylation level and CpG across the region. Another way to think of this is that no three-way interaction means that there is no CpG-to-CpG heterogeneity across the region in the interaction between mouse and methylation level, i.e., that any difference in methylation between the mice is _consistent_ across the CpGs. __TODO: Discuss interpretation with Terry__.
+
+We could of course test whether there is evidence of a three-way interaction. Specifically, we could fit a log-linear model to the tables in each region and compare the "full" model (mouse $\times$ CpG $\times$ methylation level) against the reduced "all main effects and two-way interactions" model (mouse $\times$ CpG + mouse $\times$ methylation level + CpG $\times$ methylation level) via a likelihood ratio test. Again, we do not use the P-values to strictly rule regions as "significant" or "non-significant", but rather to highlight regions  that may be inconsistent.
+
+__TODO: Is this what we want?__
+
+```{r, eval = FALSE, echo = FALSE}
+# Testing whether no 3-way interaction is the same thing as consistency
+
+# Some data where each CpG is sig but region is not consistent
+x <- matrix(c(3, 40, 30, 40, 30, 40, 30, 40, 30, 40,
+              30, 40, 3, 40, 30, 40, 30, 40, 30, 40,
+              30, 40, 30, 40, 3, 40, 30, 40, 30, 40,
+              30, 40, 30, 40, 30, 40, 3, 40, 30, 40,
+              30, 40, 30, 40, 30, 40, 30, 40, 3, 40),
+              ncol = 10)
+
+tx <- array(x, dim = c(2, 5, 5))
+
+# Every table is significant
+for (i in 1:5) {
+  print(chisq.test(tx[, , i]))
+}
+
+# MH test is non-significant
+mantelhaen.test(tx)
+
+# But that's because no three-way interaction assumption is violated?
+llx <- loglin(table = tx, margin = list(c(1, 2), c(1, 3), c(2, 3)))
+1 - pchisq(llx$lrt, llx$df)
+
+# Try with some permuted data: Every CpG is DMC and region is consistent
+y <- rbind(rep(c(3, 40), 5), matrix(rep(c(30, 40), 20), ncol = 10))
+
+ty <- array(y, dim = c(2, 5, 5))
+
+# Every table is significant
+for (i in 1:5) {
+  print(chisq.test(ty[, , i]))
+}
+
+# MH test is highly significant
+mantelhaen.test(ty)
+
+# And there's no 3-way interaction
+lly <- loglin(table = ty, margin = list(c(1, 2), c(1, 3), c(2, 3)))
+1 - pchisq(lly$lrt, lly$df)
+```
+
+## Results
 
 
-# Results
+## Discussion
 
+* Analysis doesn't incorporate co-methylation
+* Consistency
+* Experiment is a bit of a fishing expedition?
 
-# Discussion
-
-# Conclusion
+## Conclusions
