@@ -1,5 +1,5 @@
 ---
-title: "Epialleles in Agouti viable yellow mice"
+title: "Identifying epialleles in isogenic mice"
 author: "Peter Hickey"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
@@ -14,15 +14,15 @@ bibliography: ../latex/phd_thesis.bib
 
 # Chapter overview
 
-The agouti viable yellow ($A^{vy}$) mouse model is perhaps the archetype of _heritable_ epigenetic modifications resulting in phenotypic variation. The research group of Professor Emma Whitelaw, one of the researchers to discover the epigenetic variant that underpins this model, recently performed whole-genome bisulfite-sequencing of five mice, including two with the $A^{vy}$ locus, with the aim of identifying epialleles. An epiallele is a region of the genome where samples are genetically identical yet epigenetically variable.
+The agouti viable yellow ($A^{vy}$) mouse model is the archetypical _epiallele_, a genetically identical region where epigenetic variability result in phenotypic variation. The research group of Professor Emma Whitelaw, one of the researchers to discover the epigenetic variant that underpins the $A^{vy}$ model, recently performed whole-genome bisulfite-sequencing of five mice, including two with the $A^{vy}$ locus, with the aim of identifying additional epialleles.
 
-Due to a somewhat unusual experimental design, Professor Whitelaw requested the assistance of Professor Terry Speed and I in analysing the data. As with many experiments, there was pressure to quickly develop methods and implement these as software to analyse the data. This chapter describes the experiment and how we addressed these challenges.
+Due to a somewhat unusual experimental design, Professor Whitelaw requested the assistance of Professor Terry Speed and I in analysing the data. As with many experiments, there was pressure to quickly develop methods and implement these as software to analyse the data. This chapter describes the experiment and how we addressed these challenges. It also discusses general considerations for identifying epialleles.
 
 # Introduction + literature review
 
 "The Agouti gene is responsible for determining whether a mammal's coat is banded (_agouti_) or of a solid color (_non-agouti_)" [TODO: re-word. Wikipedia!]. In mice, there are several well-studied mutants where differences in the expression of the agouti protein influences multiple, seemingly unrelated phenotypic traits (_pleiotropy_). Specifically, yellow mice, those with high expression of the agouti protein, are obese, diabetic and have an increased susceptibility to tumours.
 
-One of these agouti-associated obesity mutations is the agouti viable yellow allele ($A^{vy}$), discovered by \cite{Duhl:1994bx}. The cause of the $A^{vy}$ mutation in the agouti protein was identified by a team led by Professor Emma Whitelaw \cite{Morgan:1999ds} as being due to methylation differences upstream of the agouti gene. Moreover, these epigenetic-driven phenotypic differences display variable expressivity (differences between individuals), variegation (mosaicism between cells of the same individual), are mitically heritable and display parent-of-origin effects (distinct from classic parental imprinting).
+One of these agouti-associated obesity mutations is the agouti viable yellow allele ($A^{vy}$), discovered by (__TODO: Either 1960s [according to http://books.google.com.au/books?id=V6wNB2cGxMwC&lpg=PT250&dq=IAP%20near%20avy&pg=PT250#v=onepage&q=IAP%20near%20avy&f=false] or \cite{Duhl:1994bx}). The cause of the $A^{vy}$ mutation in the agouti protein was identified by a team led by Professor Emma Whitelaw \cite{Morgan:1999ds} as being due to methylation differences upstream of the agouti gene. Moreover, these epigenetic-driven phenotypic differences display variable expressivity (differences between individuals), variegation (mosaicism between cells of the same individual), are mitically heritable and display parent-of-origin effects (distinct from classic parental imprinting).
 
 For the $A^{vy}$ allele, there is an intracisternal A particle (IAP) insertion  approximately 100 kb upstream of the agouti gene. The IAP contains a cryptic promoter that can induce ectopic (unusual) expression of the agouti gene \cite{Rakyan:2002wz}. Methylation of this IAP prevents activation of the cryptic promoter and so the agouti gene is inactive, ultimately resulting in a mouse with a _pseudoagouti[^pseudoagouti_vs_agouti]_ coat. Conversely, when the IAP is unmethylated the mouse has a yellow coat since the cryptic promoter is activated and the agouti protein is expressed. Mice with intermediate levels methylation[^intermediate_methylation] at the IAP have a mottled coat due to mosaicism between cells.
 
@@ -42,16 +42,119 @@ Suppose we have a gene whose expression is known to cause the phenotypic variati
 
 The obvious first place to look is at the promoter of the gene, to look for the classical methylation/expression relationship described in Chapter \ref{chap:intro}. Things are rarely so simple and we must often widen our search. Cryptic promoters, such as that in the IAP insertion of the $A^{vy}$ locus, are good candidates (__TODO: How easy is it to identify cryptic promoters__). Enhancers, which can be many kilobases upstream or downstream of a gene, are more challenging to identify since the search must be further widened.
 
-While challenging, this is the "easiest" experimental design from which to identify epialleles since we have a known phenotype and a candidate region(s) in which to search. But what if we want to perform a screen for _putative_ epialleles? A putative epiallele is any region of the genome where the samples display differential methylation. It is identified based solely on differential methylation and not on any association with phenotypic differences. Rather, these putative epialleles may be studied in greater detail in larger cohorts to see whether they associate with an as yet undetermined phenotype. This is the type of experiment that Emma Whitelaw came to Terry and I with to ask for assistance in analysing.
+While challenging, this is the "easiest" experimental design from which to identify epialleles since we have a known phenotype and a candidate region(s) in which to search. But what if we want to perform a screen for _putative_ epialleles? A putative epiallele is any region of the genome where the samples display differential methylation. It is identified based solely on differential methylation and not on any association with phenotypic differences. Rather, these putative epialleles may be followed-up in larger cohorts to see whether they associate with a yet-to-be-determined phenotype. This is the type of experiment that Emma Whitelaw came to Terry and I with to ask for assistance in analysing.
 
-# Description of Emma's experiment
+# Description of experiment
 
-Extra evidence that a putative epiallele might be real:
+Five mice on a C57Bl/6 background underwent whole-genome bisulfite-sequencing. Two of the five mice are heterozygous for the $A^{vy}$ locus, one yellow and one pseudoagouti, while the remaining mice are homozygous wildtype agouti (Table \ref{tab:whitelaw_data}).
 
-* It's a retrotransposon. IAP is a retrotransposon and Morgan (1999) state "Because retrotransposons are abundant in mammalian genomes, this type of (epigenetic) inheritance may be common."
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+Sample code & Mouse number & Agouti genotype           \\ \midrule
+sample1     & mouse \#56   & $A^{vy}/a$ (yellow)       \\
+sample2     & mouse \#57   & $a/a$                     \\
+sample3     & mouse \#58   & $a/a$                     \\
+sample4     & mouse \#65   & $A^{vy}/a$ (pseudoagouti) \\
+sample5     & mouse \#66   &                           \\ \bottomrule
+\end{tabular}
+\caption{Description of mice in Whitelaw experiment.}
+\label{tab:whitelaw_data}
+\end{table}
+
+The aim of the study is identify putative epialleles, regions that differ in methylation between individuals but without any genetic cause (the mice are inbred and isogenic[^isogenic], so we assume methylation is not affected by genetic variants).
+
+[^isogenic]: Technically, the mice are isogenic except for a 3 Mb region surrounding the $A^{vy}$ allele. The $A^{vy}$ allele is inherited from a distant ancestor who was the offspring of mating between a C57Bl/6 mouse ($a$) with a C3H mouse ($A^{vy}$). It is inherited as part of the 3 Mb chunk of DNA from the C3H genome.
+
+While any differential methylation identified in this analysis is by definition a candidate epiallele, certain features are make stronger candidates. The Whitelaw are particularly interested in differential methylation of retrotransposons. Two of the best examples of metastable epialleles, $A^{vy}$ and $Axin^{Fu}$, are due to associations with retroviral elements \cite{Rakyan:2002wz}. To be of interest, the epiallele should also have a functional consequence, but this cannot be determined from this experiment alone. Rather, this will be determined by downstream analyses incorporating additional data and experiments of the putative epialleles.  
+
+My involvement in the project was at a relatively late stage and focused on developing a method to analyse these data. I was to write a software implemention of this method but the final analysis would be performed by Harald Oey, a bioinformatician in the Whitelaw group. Consequently, this chapter focuses on the statistical details of the analysis rather than the biological results and their interpretation.
+
+## Data
+
+Harald aligned the reads to the mouse reference genome (mm9) using Bismark \cite{Krueger:2011eb}. __TODO: Check pre- and post-processing of reads.__ I received from Harald five tables, one for each sample, containing the number of methylated and unmethylated reads at each CpG. An example is shown below:
+
+```
+chr     start   end     beta    M       U
+chr2    3000163 3000164 0.7     7       3
+chr2    3000214 3000215 0.916666666666667       11      1
+chr2    3000221 3000222 1       12      0
+```
+
+I only received the data for chromosome 2, since these were sufficient for me to develop the methodology and its implementation.
+
+The mouse reference genome is based on the C57Bl/6 strain and does not contain the $A^{vy}$ allele. Therefore we cannot measure methylation at the IAP insertion in the $A^{vy}$ allele from the sequencing data. However, because the $A^{vy}$ allele is inserted in chromosome 2, there may be some "bleedover" into the region surrounding the insertion (chr2:154,760,839-154,760,969) (__TODO: This is far shorter than 3 Mb, why?__)
+
+__TODO: Comment on sequencing coverage__
 
 # Methodology
 
-# Discussion of findings
+The basic question is to identify loci where not all of the five mice have the same methylation level. There is no grouping structure of the samples. While we could conceivably group the mice by coat colour (yellow vs. agouti and pseudoagouti) or by genotype at the agouti locus ($a/a$ vs. $A^{vy} vs. a$) or by _epigenotype_ at the agouti locus ("yellow" vs. pseudoagouti vs. agouti), the Whitelaw group were interested in _any_ methylation differences between _any_ subset of the five mice[^n=1]. This effectively makes this a one group experiment.
+
+[^n=1]: Both the "coat colour" and "agouti epigenotype" contrasts result in groups with $n = 1$, meaning we would be unable to estimate their corresponding within-group variances.
+
+This is the first example I had seen of a bisulfite-sequencing experiment with one-group. Surprisingly, this rules out all(?) published methods for identifying differential methylation, since these are all designed for identifying differential methylation in experiments with two or more groups.
+
+There is also the question of what sized "features" we are interested in testing for differential methylation. Harald and Emma told me that they were interested in both differentially methylated CpGs and differentially methylated regions, where the regions were not defined _a priori_. I took the commonly used approach of testing individual CpGs for differential methylation and then building runs of DMCs to define differentially methylated regions.
+
+My algorithm for calling differentially methylated regions is adapted from that of \cite{Hansen:2011gu}. I call my implementation `runDMC` (runs of differentially methylated cytosines) and it proceeds as follows:
+
+1. Identify candidate differentially methylated cytosines (_cDMCs_).
+2. Declare contiguous runs of _cDMCs_ where the $IPD$ between _cDMCs_ is less than some threshold to be candidate differentially methylated regions (_cDMRs_).
+3. Summarise _cDMRs_ and apply filters.
+
+## Step 1: Identifying candidate differentially methylated cytosines
+
+At each CpG, $i$, we are testing the following hypothesis:
+
+\begin{equation*}
+
+H_{0}:& \beta_{i, j} = \beta_{i, 0}, j = 1, \ldots, 5 \\
+  vs.& \\
+H_{1}:& \exists j = 1, \ldots, 5 s.t. \beta_{i, j} \neq \beta_{i, 0}
+
+\end{equation*}
+
+where $\beta_{i, 0}$ is estimated from the data. For each CpG we can summarise the data by a $5 \times 2$ contingency table:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\hline
+Sample code & Methylated reads & Unmethylated reads \\ \hline
+sample1     & $m_{i, 1}$       & $u_{i, 1}$         \\
+sample2     & $m_{i, 2}$       & $u_{i, 2}$         \\
+sample3     & $m_{i, 3}$       & $u_{i, 3}$         \\
+sample4     & $m_{i, 4}$       & $u_{i, 4}$         \\
+sample5     & $m_{i, 5}$       & $u_{i, 5}$         \\ \hline
+\end{tabular}
+\caption{A $5 \times 2$ contingency table summarising the number of methylated and unmethylated reads for each sample, $j$, at the $i^{th}$ CpG.}
+\label{tab:5x2}
+\end{table}
+
+This amounts to the classical test of differences in proportions for a group of samples. I used the simple $\chi^{2}$ test, as implemented by the `prop.test` function in `R` (__CITE__). This compares the observed and expected counts of methylated and unmethylated reads under the assumption that all 5 samples have equal methylation levels at this CpG. In fact, I wrote a simple wrapper around `prop.test`, called `propTest` (__TODO: Include code in appendix__), so that only the the value of the $\chi^{2}$ test statistic, the degrees of freedom and the resulting P-value were retained, since the rest of the object returned by `prop.test` was not required. `propTest` can also parallelise the computation by chromosome for a faster runtime.
+
+__TODO: Plot and comment on the distribution of P-values__
+
+A CpG is declared a _cDMC_ if the P-value is in the lower $5\%$ of all P-values across the genome. A stricter criteria is required if the aim of the analysis is to identify differentially methylated cytosines. However, this first step is rather designed to identify sites for the `runDMC` algorithm (described below).
+
+The question of
+
+## Identifying differentially methylated regions
+
+The `runDMC` algorithm is similar to one proposed in \cite{Hansen:2011gu}, which is implemented in the `bsseq` R/Bioconductor package (__CITE__). `bsseq` defines differentially methylated region as runs of CpGs with a t-statistic greater than an empirically chosen threshold. Because `bsseq` is designed for two-group experiment, it also requires that the t-tatistic has the same sign for all CpGs in the region, indicating that the effect is in the same direction for all CpGs in the DMR.
+
+Rather than using the $\chi^{2}$ test-statistics, `runDMC` uses the corresponding P-values. The reason is that for some CpGs only a subset of the samples have sequencing data, hence the test statistic has fewer degrees of freedom. By using the P-value rather than the raw $\chi^{2}$ test statistic, we effectively normalise for the degrees of freedom.
+
+`runDMC` is written in `C++` and interfaces with `R` via the `Rcpp` package (__CITE__). The `C++` version is some $25$ times faster than the equivalent code written in `R` (__TODO: Include benchmark data__). The user passes it an object containing the set of CpGs, each annotated by whether it is a _cDMC_, and specifies __UP TO HERE__
+
+
+# Results
+
+
+# Discussion
 
 # Conclusion
