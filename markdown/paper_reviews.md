@@ -53,7 +53,7 @@ The authors did not perform any statistical tests of differential methylation no
 
 ## \citet{Lister:2009hy}
 
-\cite{Lister:2009hy} was a landmark paper in the study of DNA methylation in humans from WGBS data. The authors studied 4 samples: 2 cell types (IMR90 and H1) and 2 biological replicates per cell type. However, most of the results reported in \cite{Lister:2009hy} were from analyses of data pooled across biological replicates. This completely ignores all biological variability and in general isn't a good idea. In the following description of their statistical analyses, all references to "samples" means "pooled samples".
+\cite{Lister:2009hy} was a landmark paper in the study of DNA methylation in humans from WGBS data. The authors studied 4 samples: 2 cell types (IMR90 and H1) and 2 "biological" replicates per cell type. However, most of the results reported in \cite{Lister:2009hy} were from analyses of data pooled across "biological" replicates. This completely ignores all biological variability and in general isn't a good idea. In the following description of their statistical analyses, all references to "samples" means "pooled samples".
 
 The authors used the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering of the reads. The authors used the Binomial model from \cite{Lister:2008bh} to identify methylcytosines.  The bisulfite non-conversion rate was estimated from a spike-in control that was included with each sample for sequencing[^spike_in]. It is not clear how they estimated the sequencing error rate. They reported that $\epsilon_{\text{IMR90}} = 0.005$ and $\epsilon_{\text{IMR90}} = 0.0024$. All loci with an FDR < 0.01 were called as methylcytosines.
 
