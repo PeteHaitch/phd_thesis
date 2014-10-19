@@ -1,0 +1,53 @@
+---
+title: "Datasets used in thesis"
+author: "Peter Hickey"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    fig_caption: yes
+    includes:
+      in_header: ../latex/header.tex
+  html_document:
+    keep_md: true
+bibliography: ../latex/phd_thesis.bib
+---
+
+## Chapter overview
+
+I have analysed more than 50 whole-genome bisulfite-sequencing datasets during the course of my PhD studies. This brief chapter documents those that I use in my thesis.
+
+## Lister data
+
+The _Lister data_ refer to whole-genome bisulfite-sequencing libraries used in \cite{Lister:2009hy} and \cite{Lister:2011kg}. The Lister data were the largest publicly available human WGBS datasets until quite recently.
+
+The WGBS libraries from the \cite{Lister:2009hy} paper were the first published WGBS libraries from mammalian DNA. A focus of this paper was comparing DNA methylation levels in a somatic tissue, fetal fibroblasts (_FF_), with those from a pluripotent tissue, embryonic stem cells (_H1_). Each tissue was run in duplicate. While \cite{Lister:2009hy} refer to these "biological" replicates I believe that these are better described technical replicates since each replicate is from the same cell line; what distinguishes the replicates are the number of cell passages and the subsequent library preparations and sequencing. In any case, the published analyses pool these technical duplicates, which ignores all between-replicate variability.
+
+The WGBS libraries from the \cite{Lister:2011kg} include some created and published by other groups (see __TABLE__). These samples include cell lines from differentiated cell lines, embryonic stem cell lines, pluripotent stem cell lines and _in vitro_ differentiated from pluripotent stem cells. Unfortunately, there are no replicates for any of these samples.
+
+__TODO: Table of datasets__
+
+There are a four "mini datasets" within the Lister data that I make some use of in my thesis. These are described below and illustrated in __FIGURE__.
+
+The first I refer to as the _Lister-ADS_ data and includes samples _ADS_, _ADS-adipose_ and _ADS-iPSC_, all from the 2011 paper. The _ADS_ sample, a human adipose tissue cell line, is the "founder" of this mini dataset. The _ADS-adipose_ and _ADS-iPSC_ are both derived from the _ADS_ cell line. Specifically, the _ADS-adipose_ sample is purified adipocytes from _ADS_ while the _ADS-iPSC_ cell line is an induced pluripotent stem cell line derived from _ADS_.
+
+The second mini dataset I refer to as the _Lister-FF_ data and includes samples _FF_, _FF-iPSC\_6.9_, _FF-iPSC\_19.7_, _FF-iPSC\_19.11_ and _FF-iPSC\_11.11+BMP4_, all from the 2011 paper. The _FF_ sample, a foreskin fibroblasts cell line, is the "founder" of this this mini dataset. The _FF-iPSC\_6.9_, _FF-iPSC\_19.7_ and _FF-iPSC\_19.11_ are all induced pluripotent stem cell lines derived from _FF_. In fact, _FF-iPSC\_19.7_ and _FF-iPSC\_19.11_ are subclones derived from _FF-iPSC\_19_, whose methylome was not sequenced. I believe _FF-iPSC\_6.9_ is an independently derived iPSC cell line from _FF_, although this isn't made clear in the original publication. The _FF-iPSC\_19.11+BMP4_ sample is a trophoblast cell line derived by _in vitro_ differentiating the _FF-iPSC\_19.11_ by growing a clone of it in bone morphogenic protein 4 (BMP4).
+
+The third mini dataset I refer to as the _Lister-IMR90_ data and includes samples _IMR90\_r1_ (2009), _IMR90\_r2_ (2009) and _IMR90-iPSC_ (2011). The _IMR90-iPSC_ sample is an induced pluripotent stem cell line derived from the _IMR90_ cell line.
+
+The final mini dataset I refer to as the _Lister-H1_ data and includes samples _H1\_r1_ (2009), _H1\_r2_ (2009) and _H1+BMP4_ (2011). The _H1+BMP4_ sample is a trophoblast cell line derived by _in vitro_ differentiating the _H1_ by growing a clone of it in bone morphogenic protein 4 (BMP4).
+
+The aligned reads for the \cite{Lister:2009hy} data were downloaded from [http://neomorph.salk.edu/human_methylome/](http://neomorph.salk.edu/human_methylome/). The aligned reads for the \cite{Lister:2011kg} data were downloaded from [http://neomorph.salk.edu/ips_methylomes/](http://neomorph.salk.edu/ips_methylomes/). I wrote Python scripts to convert these files to `SAM` files, these scripts are available from [https://github.com/PeteHaitch/Lister2BAM](https://github.com/PeteHaitch/Lister2BAM). These `SAM` files were then converted to `BAM` files and duplicate reads were marked using Picard's `MarkDuplictes` routine [http://broadinstitute.github.io/picard/](http://broadinstitute.github.io/picard/).
+
+## EPISCOPE data
+
+__TODO: Check permission to use data in thesis__
+
+## Whitelaw data
+
+I describe this dataset in detail in Chapter \ref{chap:avy}.
+
+__TODO: Check permission to use data in thesis__
+
+## Ziller data
+
+## Seisenberger data
