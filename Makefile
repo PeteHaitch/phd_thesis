@@ -6,19 +6,29 @@ notation.pdf: Rmarkdown/notation.Rmd
 	mkdir -p pdf
 	Rscript -e "rmarkdown::render(input = 'Rmarkdown/notation.Rmd', output_file = '../pdf/notation.pdf')"
 
-introduction.latex: markdown/introduction.md
+introduction.md: latex/phd_thesis.bib Rmarkdown/introduction.Rmd
+	Rscript -e "rmarkdown::render('Rmarkdown/introduction.Rmd', output_format = 'html_document', output_dir = '../markdown')"
+	rm markdown/introduction.html
+
+introduction.latex: introduction.md latex/phd_thesis.bib Rmarkdown/introduction.Rmd
 	mkdir -p latex
 	pandoc --chapters -o latex/introduction.tex markdown/introduction.md
 
-introduction.pdf: latex/phd_thesis.bib markdown/introduction.md markdown/bibliography.md
+introduction.pdf: latex/phd_thesis.bib Rmarkdown/introduction.Rmd markdown/bibliography.md
 	mkdir -p pdf
-	pandoc --natbib -s --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o latex/introduction_sc.tex markdown/introduction.md markdown/bibliography.md
-	pdflatex -output-directory latex latex/introduction_sc
-	bibtex latex/introduction_sc
-	pdflatex -output-directory latex latex/introduction_sc
-	pdflatex -output-directory latex latex/introduction_sc
-	mv latex/introduction_sc.pdf pdf/introduction.pdf
-	rm latex/introduction_sc*
+	Rscript -e "rmarkdown::render('Rmarkdown/introduction.Rmd', output_format = 'pdf_document', output_file = '../introduction.pdf', output_dir = '../pdf')"
+
+biology_background.md: latex/phd_thesis.bib Rmarkdown/biology_background.Rmd
+	Rscript -e "rmarkdown::render('Rmarkdown/biology_background.Rmd', output_format = 'html_document', output_dir = '../markdown')"
+	rm markdown/biology_background.html
+
+biology_background.latex: biology_background.md latex/phd_thesis.bib Rmarkdown/biology_background.Rmd
+	mkdir -p latex
+	pandoc --chapters -o latex/biology_background.tex markdown/biology_background.md
+
+biology_background.pdf: latex/phd_thesis.bib Rmarkdown/biology_background.Rmd markdown/bibliography.md
+	mkdir -p pdf
+	Rscript -e "rmarkdown::render('Rmarkdown/biology_background.Rmd', output_format = 'pdf_document', output_file = '../biology_background.pdf', output_dir = '../pdf')"
 
 statmodel.latex: latex/phd_thesis.bib markdown/a_statistical_model_of_methlyC-seq.md
 	mkdir -p latex
@@ -96,7 +106,7 @@ avy.pdf: latex/phd_thesis.bib Rmarkdown/avy.Rmd markdown/bibliography.md
 	mkdir -p pdf
 	Rscript -e "rmarkdown::render('Rmarkdown/avy.Rmd', output_format = 'pdf_document', output_file = '../avy.pdf', output_dir = '../pdf')"
 
-phd_thesis.pdf: introduction.latex statmodel.latex wgbs_analysis.latex avy.latex comethylation_review.latex comethylation.latex methsim.latex
+phd_thesis.pdf: introduction.latex biology_background.latex statmodel.latex wgbs_analysis.latex avy.latex comethylation_review.latex comethylation.latex methsim.latex
 	mkdir -p pdf
 	cd latex; pdflatex phd_thesis; \
 	bibtex phd_thesis; \
