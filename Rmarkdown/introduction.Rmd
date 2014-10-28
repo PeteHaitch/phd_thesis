@@ -1,0 +1,13 @@
+---
+title: "Introduction and thesis overview"
+author: "Peter Hickey"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    fig_caption: yes
+    includes:
+      in_header: ../latex/header.tex
+  html_document:
+    keep_md: true
+bibliography: ../latex/phd_thesis.bib
+---
