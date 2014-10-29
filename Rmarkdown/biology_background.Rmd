@@ -210,13 +210,17 @@ Other metaphors, these based on methylation levels rather than CpG density, are 
 
 \subsection{Non-CpG methylation}\label{sec:non_cpg_methylation}
 
-- [ ] Done
+- [x] Done
 
-In humans, cytosine methylation in most cell types is found almost exclusively at CpGs. There are, however, certain cell types with widespread non-CpG methylation. Non-CpG methylation is often classified as CHH methylation or CHG methylation, where H stands for any nucleotide except G (__SOURCE IUPAC__). The rule-of-thumb is that non-CpG methylation is rare in somatic cells but common in pluripotent cells. Of course, there are exceptions to every rule, especially in biology.
+In humans, cytosine methylation in most cell types is found almost exclusively at CpGs. There are, however, certain cell types with widespread non-CpG methylation. Non-CpG methylation is often classified as CHH methylation or CHG methylation, where H stands for any nucleotide except G (__TODO: cite__). The rule-of-thumb is that non-CpG methylation is rare in somatic cells but common in pluripotent cells. Of course, there are exceptions to every rule, especially in biology.
 
-To give a few examples, [@Lister:2009hy] found that in a somatic cell line (_fibroblasts_ or skin cells) $99.98\%$ of methylcytosines occured at CpGs whereas as in an embryonic stem cell line $24.5\%$ of methylcytosines occured in a non-CpG context. A subsequent paper from the same group ([@Lister:2011kg]) extended this result when they reported that, more generally, non-CpG methylation accounts for $20-30\%$ of methylcytosines in _pluripotent_ cell lines (which includes embryonic stem cell lines along with induced pluripotent stem cell lines, see __SECTION___). An exception to the rule is provided by [@Lister:2013et], where they found that neurons, a somatic and not a pluripotent type of cell, also have non-CpG methylation, albeit at a lower level ($1.3-1.5\%$ of all non-CpG cytosines were methylated).
+To give a few examples, \cite{Lister:2009hy} found that in a _fibroblast_ cell line that $99.98\%$ of cytosines that displayed statistically significant evidence of methylation occured at CpGs. In contrast, in an embryonic stem cell line, they found that $24.5\%$ of cytosines that displayed statistically significant evidence of methylation occured in a non-CpG context. However, it should also be noted that these non-CpG loci that were methylated had on average a much lower level of methylation than their CpG counterparts.
 
-Non-CpG methylation is less well studied than CpG methylation. This is partly due to the design of popular assays for studying cytosine methylation; for example the popular Illumina 27k and 450k beadchips (see __SECTION__) only measure cytosine methylation at CpGs __CHECK__. However, recent technological advances (see __SECTION__) mean that cytosine methylation can be routinely assayed regardless of the sequence context. The biological role of non-CpG methylation is less well understood than that of CpG methylation (__SOURCE__).
+A subsequent paper from the same group extended this result when they reported that, more generally, non-CpG cytosines account for $20-30\%$ of cytosines with statistically significant evidence of methylation in _pluripotent_ cell lines \cite{Lister:2011kg}. Pluripotent cells includes embryonic stem cells along with induced pluripotent stem cell lines.
+
+An exception to the rule that non-CpG methylation is largely restricted to pluripotent cells is provided by \cite{Lister:2013et}, where they found that neurons also have non-CpG methylation, albeit at a lower level ($1.3-1.5\%$ of all non-CpG cytosines were methylated).
+
+Overall, non-CpG methylation is less well studied and less well understood than CpG methylation. This is partly due to sampling bias - commonly used assays for studying DNA methylation, such as the Illumina 27k and 450k beadchips (__TODO: ref section on technology__), only measure CpG methylation.  However, recent technological advances (__TODO: ref section on technology__) mean that cytosine methylation can be routinely assayed regardless of the sequence context.
 
 \subsection{Modifications of a modification}\label{sec:modifications_of_a_modification}
 
