@@ -81,3 +81,7 @@ The Seisenberger data are from a study of the dynamics of DNA methylation reprog
 I have the data for three samples, detailed in __TABLE__. Developmentally, the samples are ordered `J1_1`, `E6.5_epiblast_1` and `E16.5_male_1`. Both the `E6.5_epiblast_1` and `E16.5_male_1` samples are from a pool of $10-30$ embryos.
 
 __TODO: Table of datasets__
+
+## CpG islands
+
+I have used CpG island definitions from the hidden Markov model proposed by \cite{@Wu:2010do}. These predicted CpG islands were downloaded from [http://rafalab.jhsph.edu/CGI/](http://rafalab.jhsph.edu/CGI/) on 29/10/2014.
