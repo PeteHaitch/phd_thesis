@@ -180,7 +180,7 @@ There are many other evolutionary pressures on the distribution of nucleotides i
 
 \subsection{CpG islands and other sandy metaphors}\label{sec:cpg_islands}
 
-- [ ] Done
+- [x] Done
 
 One way to explore the distribution of CpGs in the human genome is to look at the distribution of distances from one CpG to the next. __FIGURE__ is a kernel density plot of the distances between neighbouring CpGs  and __FIGURE__ is the empirical cumulative distribution function of the distances between neighbouring CpGs for the human reference genome (hg19)[^cpg_distance].
 
@@ -188,11 +188,9 @@ One way to explore the distribution of CpGs in the human genome is to look at th
 
 As can be seen from __FIGURE__, there are a subset of CpGs that are within __HOW MANY__ bases of the next CpG.
 
-The 20-40% of CpGs that are methylated in mammalian genomes are mostly found in clusters called _CpG islands_ (_CGIs_). Again, there are evolutionary arguments for why these CGIs form (__TODO: sources__).
+The 20-40% of CpGs that are methylated in mammalian genomes are mostly found in clusters called _CpG islands_ (_CGIs_). CpG islands are important regulatory elements in the genome and are where most differences in DNA methylation between different cell types are found (__TODO: sources__). The classical definition of a CpG island, given by \cite{GardinerGarden:1987we} and used by, for example, the UCSC genome browser, is a region of the genome where:
 
-CGIs are important regulatory elements in the genome and are where most differences in DNA methylation between different cell types are found (__TODO: sources__). The classical definition of a CpG island, given by \cite{GardinerGarden:1987we} and used by, for example, the UCSC genome browser, is a region of the genome where:
-
-1. The moving average of GC-content is greater than $50\%$, and
+1. The (moving) average of GC-content is greater than $50\%$, and
 2. The observed-to-expected ratio of CpGs is greater than $0.6$, and
 3. The region is longer than 200 bp.
 
@@ -200,18 +198,15 @@ This definition was refined by \cite{Takai:2002jb} to exclude _Alu_-repetitive e
 
 An alternative definition, and one that pre-dates the definition of \cite{GardinerGarden:1987we}, is based on the identification of unmethylated regions of the genome, which are typically CpG-dense. Such regions were previously called HpaII tiny fragment islands, or _HTF islands_, and named after the restriction enzyme used to identify them \cite{Cooper:1983ev, Bird:1985gj}.
 
-The "sandy/beachy" metaphors have been continued (i.e., stretched to breaking point) with various authors defining CpG island shores, CpG island shelves, CpG canyons and CpGs in the "open sea":
+The "sandy/beachy" metaphors have been continued (i.e., stretched to breaking point) with various authors defining CpG island shores, CpG island shelves, CpGs in the "open sea", CpG deserts and CpG canyons.
+
+CpG island shores, shelves and the open sea are all defined with respect to CpG islands. Specifically,
 
 - CpG island shores: regions within 2 kb of CpG islands \cite{Irizarry:2008hg}. CpG island shores have been demonstrated to have an increased variability of CpG methylation \cite{Irizarry:2008hg}.
 - CpG island shelves have been defined as regions within 2 kb of a CpG island shore \cite{Bibikova:2011fw}.
+- The "open sea" contains those CpGs not classed as being in a CpG island, CpG island shore or CpG island shelf \cite{Sandoval:2011dj}.
 
-__UP TO HERE__
-
-- CpG canyons are __WHAT__ and the
-- "open sea" is __WHAT AND HOW DOES THIS DIFFER FROM CpG DESERTS__.
-- methylation deserts: 100 Kbp windows with the lowest 1% methylation level in the sample of interest
-
-Another metaphor, based on methylation levels rather than CpG density, are methylation deserts. These regions are sample-dependent and were defined by \cite{Li:2012gg} as 100 Kbp windows with the lowest 1% methylation level in the given sample.
+Other metaphors, these based on methylation levels rather than CpG density, are methylation deserts \cite{Li:2012gg} and CpG canyons \cite{Jeong:2014bla}. Because these regions are defined with respect to methylation levels rather than DNA sequence, these are generally identified in a tissue-specific manner.
 
 \subsection{Non-CpG methylation}\label{sec:non_cpg_methylation}
 
