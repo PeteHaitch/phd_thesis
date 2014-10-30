@@ -224,15 +224,13 @@ Overall, non-CpG methylation is less well studied and less well understood than 
 
 \subsection{Modifications of a modification}\label{sec:modifications_of_a_modification}
 
-- [ ] Done
+- [x] Done
 
-Methylation is not the only chemical modification of cytosine nucleobase, although it is by far the most common. Further modifications, listed approximately from most frequent to least frequent, are 5-hydroxymethylcytosine (5hmC), 5-formylcytosine (5fC) and 5-carboxylcytosine (5caC) (__TODO:__ cite 10.1038/nrg3772).
+Methylation is not the only chemical modification of cytosines, although it is by far the most common. These additional modifications may be thought of as 'modifications of a modification' since they extend 5-methylcytosine. Listed approximately from most frequent to least frequent, these are are 5-hydroxymethylcytosine (_5hmC_), 5-formylcytosine (_5fC_) and 5-carboxylcytosine (_5caC_) \cite{Plongthongkum:2014jg}. The biological significance of these marks is still being determined, in part because the assays for studying these are still in development and because their relatively scarcity in the genome means that experiments to detect these modifications are more difficult and expensive.
 
-The biological significance of these marks is still being determined, in part because the assays for studying these are still in development (__SOURCE__) and because their relatively scarcity means that experiments to detect these modifications are more difficult and expensive.
+One genome-wide study of 5hmC found that less than $1\%$ of all assayed cytosines in mouse fetal cortex and adult cortex cells displayed any statistically significant evidence of hydroxymethylation \cite{Lister:2013et}. These cytosines appeared to be restricted to the CpG context and had only very low levels of 5hmC.
 
-One genome-wide study of 5hmC found that less than $ 1\%$ of all assayed cytosines in mouse fetal cortex and adult cortex cells were hydroxymethylated [@Lister:2013et]. Most of the 5hmC was detected in the CpG context and, although the genome-wide level of 5hmC was low, the authors reported significant levels of 5hmC at particular cytosines in the genome.
-
-[@Kriaucionis:2009bm] and [@Tahiliani:2009kl] discovered that the TET enzymes can convert 5mC to 5hmC, 5hmC to 5fC and 5fC to hcaC. This suggested a role for 5hmC, 5fC and 5caC in the process of removing 5mC marks, as is discussed in the next section.
+\cite{Kriaucionis:2009bm} and \cite{Tahiliani:2009kl} discovered that the TET enzymes can convert 5mC to 5hmC, 5hmC to 5fC and 5fC to hcaC. This suggested a role for 5hmC, 5fC and 5caC in the process of removing 5mC marks, as is discussed in the next section.
 
 \subsection{Writers, readers and erasers}\label{sec:writers_reads_and_erasers}
 

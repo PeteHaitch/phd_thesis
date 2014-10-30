@@ -205,6 +205,8 @@ As is clear from the above, there are multiple definitions of within-sample co-m
 
 __TODO: Comment on utility of within-sample vs. between-sample co-methylation__
 
+__TODO: Review [`coMET`](http://epigen.kcl.ac.uk/comet/index.html)__
+
 ### \cite{Liu:dy}
 
 The focus of this study on identify clusters of correlated CpGs and relating methylation changes at these clusters to SNP genotypes. The authors compute the correlation of pairs of $\beta$-values across samples, which is analogous to estimating the linkage disequilibrium between a pair of single nucleotide polymorphisms (SNPs) across a set of samples. This is different to computing autocorrelations of $\beta$-values, which are computed within, rather than between, samples. An autocorrelation analysis implicitly assumes stationarity along the genome whereas this analysis assumes stationarity across samples (__TODO: Discuss with Terry__).
