@@ -152,7 +152,7 @@ In 1945, Hotchkiss ultimately proved Johnson and Coghill correct when he isolate
 
 \subsection{DNA methylation in mammals}\label{sec:dna_methylation_in_mammals}
 
-- [x] Done
+- [x] DONE
 
 DNA methylation is essential for normal development in mammals, such as human and mouse (__REFERENCE__). My thesis focuses on DNA methylation in humans but much of the material in this section is true for other mammals.
 
@@ -168,7 +168,7 @@ In mammalian genomes, most cytosines are unmethylated except for those at _CpG d
 
 \subsection{CpG dinucleotides}\label{cpg_dinucleotides}
 
-- [x] Done
+- [x] DONE
 
 CpGs are underrepresented in the human genome. The GC-content of the human genome, which is defined as the percentage of nucleotides that are either guanines or cytosines, is approximately __WHAT %__. Under a random sampling model of nucleotides we would expect approximately __WHAT %__ of the human genome to be comprised of CpGs. In fact, only __WHAT %__ of the dinucleotides are CpGs. __FIGURE__ shows the frequency of each dinucleotide in the human reference genome (hg19)[^cpg_frequency].
 
@@ -180,7 +180,7 @@ There are many other evolutionary pressures on the distribution of nucleotides i
 
 \subsection{CpG islands and other sandy metaphors}\label{sec:cpg_islands}
 
-- [x] Done
+- [x] DONE
 
 One way to explore the distribution of CpGs in the human genome is to look at the distribution of distances from one CpG to the next. __FIGURE__ is a kernel density plot of the distances between neighbouring CpGs  and __FIGURE__ is the empirical cumulative distribution function of the distances between neighbouring CpGs for the human reference genome (hg19)[^cpg_distance].
 
@@ -210,7 +210,7 @@ Other metaphors, these based on methylation levels rather than CpG density, are 
 
 \subsection{Non-CpG methylation}\label{sec:non_cpg_methylation}
 
-- [x] Done
+- [x] DONE
 
 In humans, cytosine methylation in most cell types is found almost exclusively at CpGs. There are, however, certain cell types with widespread non-CpG methylation. Non-CpG methylation is often classified as CHH methylation or CHG methylation, where H stands for any nucleotide except G (__TODO: cite__). The rule-of-thumb is that non-CpG methylation is rare in somatic cells but common in pluripotent cells. Of course, there are exceptions to every rule, especially in biology.
 
@@ -224,7 +224,7 @@ Overall, non-CpG methylation is less well studied and less well understood than 
 
 \subsection{Modifications of a modification}\label{sec:modifications_of_a_modification}
 
-- [x] Done
+- [x] DONE
 
 Methylation is not the only chemical modification of cytosines, although it is by far the most common. These additional modifications may be thought of as 'modifications of a modification' since they extend 5-methylcytosine. Listed approximately from most frequent to least frequent, these are are 5-hydroxymethylcytosine (_5hmC_), 5-formylcytosine (_5fC_) and 5-carboxylcytosine (_5caC_) \cite{Plongthongkum:2014jg}. The biological significance of these marks is still being determined, in part because the assays for studying these are still in development and because their relatively scarcity in the genome means that experiments to detect these modifications are more difficult and expensive.
 
@@ -234,40 +234,41 @@ One genome-wide study of 5hmC found that less than $1\%$ of all assayed cytosine
 
 \subsection{Writers, readers and erasers}\label{sec:writers_reads_and_erasers}
 
+- [x] DONE
 
-A common analogy used in describing DNA methylation is that of "writers", "readers" and "erasers" [@Moore:2013in]. Writers catalyse the methyl group onto the DNA, readers recognise methylated DNA and erasers remove the methyl group from the DNA.
+A common analogy used in describing DNA methylation uses 'writers', 'readers' and 'erasers' \cite{Moore:2013in}. Writers catalyse the methyl group onto the DNA, readers recognise methylated DNA and erasers remove the methyl group from the DNA.
 
-In mammalian cells, the writers are the DNA _methyltransferase_ (DNMT) enzymes. These DNMTs are commonly split into two groups, namely the maintainence methyltransferase (thought to be DNMT1) and the _de novo_ methyltransferases (thought to be DNMT3a and DNMT3b)[^DNMT]. DNA methylation is not preserved by the DNA replication machinery and so it is the role of DNMT1 to restore the methylation pattern on the daughter strand of DNA following DNA replication. In contrast, DNMT3a and DNMT3b lay down new methylation marks and are particularly active during development when there are widespread changes in DNA methylation (__SOURCE__). DNMT1 and DNMT3b appear to be essential for mammalian development as mouse knockouts[^KO] for either gene is embryonically lethal (__SOURCE: http://labs.genetics.ucla.edu/fan/papers/npp2012112a.pdf__) whereas mouse knockouts for DNMT3a are runted but survive for ~4 weeks after birth (__SOURCE: http://labs.genetics.ucla.edu/fan/papers/npp2012112a.pdf__).
+In mammalian cells, the writers are the DNA _methyltransferase_ (DNMT) enzymes. These DNMTs are commonly split into two groups, namely the maintainence methyltransferase (thought to be DNMT1) and the _de novo_ methyltransferases (thought to be DNMT3a and DNMT3b)[^DNMT]. DNA methylation is not preserved by the DNA replication machinery and so it is the role of DNMT1 to restore the methylation pattern on the daughter strand of DNA following DNA replication. In contrast, DNMT3a and DNMT3b lay down new methylation marks and are particularly active during development when there are widespread changes in DNA methylation (__TODO: cite__). DNMT1 and DNMT3b appear to be essential for mammalian development as mouse knockouts[^KO] for either gene is embryonically lethal \cite{Li:1992bp} whereas mouse knockouts for DNMT3a are runted but survive for ~4 weeks after birth \cite{Li:1992bp}.
 
-[^DNMT]: DNMT2, now known as TRDMT1, was once thought to be a DNA methyltransferase, however, __http://www.sciencemag.org/content/311/5759/395__ showed that it in fact methylates a small RNA and not DNA. Another protein, DNMT3L, is homologous to DNMT3a and DNMT3b but does contain catalytic domain that is necessary for methyltransferase activity. Instead, DNMT3L is thought to stimulate the activity of DNMT3a and DNMT3b (__SOURCE__).
+[^DNMT]: DNMT2, now known as TRDMT1, was once thought to be a DNA methyltransferase, however, it was shown to in fact methylate a small RNA and not DNA \cite{Goll:2006kb}. Another protein, DNMT3L, is homologous to DNMT3a and DNMT3b but does contain catalytic domain that is necessary for methyltransferase activity. Instead, DNMT3L is thought to stimulate the activity of DNMT3a and DNMT3b (__TODO: cite__).
 
 [^KO]: A knockout mouse for gene $X$ is a mouse that has been genetically engineered to remove or otherwise inactivate gene $X$. Mouse knockouts can be either heterozygous knockouts (one copy still of the gene is still present/active) or homozygous knockouts (both copies of gene absent/inactive).
 
-The readers of DNA methylation recognise methylated DNA. These readers can recruit additional proteins to the site of the methylated cytosine to perform a variety of functions related to gene expression. For example, the _MBD_ (methyl-CpG-binding domain) group of proteins bind to DNA containing a methylated CpG which then suppress gene expression by preventing transcription factor binding at that site (__SOURCE__). Another group, the _UHRF_ (ubiquitin-like, containing PHD and RING finger domain) proteins, help DNMT1 methylate _hemimethylated_ DNA, which is DNA where one strand is methylated and the other is not (e.g. the parent strand compared to the daughter strand following DNA replication).
+The readers of DNA methylation recognise methylated DNA. These readers can recruit additional proteins to the site of the methylated cytosine to perform a variety of functions related to gene expression. For example, the methyl-CpG-binding domain (_MBD_) group of proteins bind to DNA containing a methylated CpG, which can then suppress gene expression by preventing transcription factor binding at that site \cite{Nan:1993gm}. Another group, the ubiquitin-like, containing PHD and RING finger domain (_UHRF_) proteins, help _DNMT1_ methylate hemimethylated DNA, such as the daughter strand created during DNA replication \cite{Sharif:2007ft, Bostick:2007jh}.
 
-The removal or erasure of DNA methylation, _demethylation_, is characterised as _passive_ loss or _active_ removal. Passive loss occurs when the maintainence methyltransferases do not efficiently perform their role of restoring DNA methylation following cell division. This leads to a gradual, stochastic and genome-wide loss of DNA methylation after multiple cell divisions. This form of passive demethylation, sometimes called replication-dependent demethylation, cannot explain observations of precise targeted demethylation (__EXAMPLE__) nor the two stages of rapid global demethylation that occur during development [@Wu:2014gw].
+The removal or erasure of DNA methylation, _demethylation_, is characterised as _passive_ loss or _active_ removal. Passive loss occurs when the maintenance methyltransferases do not efficiently perform their role of restoring DNA methylation following cell division. This leads to a gradual, stochastic and genome-wide loss of DNA methylation after multiple cell divisions. This form of passive demethylation, sometimes called replication-dependent demethylation, cannot explain observations of precise targeted demethylation (__TODO: example__) nor the two stages of rapid global demethylation that occur during development \cite{Wu:2014gw}.
 
-Active demethylation is currently a hot topic in epigenetics research. Multiple mechanisms have been proposed, and it is indeed likely that there are multiple ways to achieve active demethylation. These mechanisms were recently reviewed by [@Wu:2014gw], which I now briefly summarise:
+Active demethylation is currently a hot topic in epigenetics research. Multiple mechanisms have been proposed, and it is indeed likely that there are multiple ways to achieve active demethylation. These mechanisms were recently reviewed by \cite{Wu:2014gw}, which I briefly summarise:
 
-1. The direct removal of the methyl group from 5mC is considered unlikely due to the strong carbon-carbon bond between the methyl group and the cytosine.
+1. The direct removal of the methyl group from _5mC_ is considered unlikely due to the strong carbon-carbon bond between the methyl group and the cytosine.
 2. There is evidence that the DNA repair machinery can be co-opted to remove a methylated base or the surrounding region. The excised base or region is then repaired with unmethylated cytosines replacing 5mCs.
-3. 5mC oxidation-dependent active DNA demethylation. This follows from the observation that the TET enzymes can iteratively oxidate a 5mC -> 5hmC -> 5fC -> 5caC reaction. The removal of 5hmC, 5fC or 5caC is biochemically "easier" than the removal of 5mC and could occur via a more efficient form of replication-dependent demethylation, direct removal of the oxidized methyl group or through the DNA repair machinery (__FIGURE OF TET-CYCLE__).
+3. 5mC oxidation-dependent active DNA demethylation. This follows from the observation that the TET enzymes can iteratively oxidate a _5mC_ -> _5hmC_ -> _5fC_ -> _5caC_ reaction. The removal of _5hmC_, _5fC_ or _5caC_ is biochemically "easier" than the removal of _5mC_ and could occur via a more efficient form of replication-dependent demethylation, direct removal of the oxidized methyl group or through the DNA repair machinery (__TODO: Figure of TET cycle__).
 
-One question raised by point (3) is whether 5hmC, 5fC and 5caC are simply intermediate products in an active demethylation cycle or if they themselves are bona fide epigenetic marks.
+One question raised by point (3) is whether _5hmC_, _5fC_ and _5caC_ are simply intermediate products in an active demethylation cycle or if they themselves are bona fide epigenetic marks.
 
 \subsection{Function of DNA methylation: "normal", cancer and development}\label{sec:function_of_dna_methylation}
 
-- [ ] Done
+- [ ] DONE
 
 \subsection{DNA methylation in other organisms}\label{sec:dna_methylation_in_other_organisms}
 
-- [ ] Done
+- [ ] DONE
 
 __TODO: Don't want too much detail here__
 
 \subsubsection{Insect}
 
-- [ ] Done
+- [ ] DONE
 
 * Honeybees
 * Fruit fly? DNA methylation's existance in other organisms, such as the common fruit fly (_Drosophila Melanogaster_), is an area of contention although recent studies suggest it is present albeit at very small quantities and only in very limited contexts [@Takayama:2014jp].
@@ -275,7 +276,7 @@ __TODO: Don't want too much detail here__
 
 \subsubsection{Plants}
 
-- [ ] Done
+- [ ] DONE
 
 
 * Arabadopsis
@@ -283,21 +284,21 @@ __TODO: Don't want too much detail here__
 
 \subsubsection{Fungi}
 
-- [ ] Done
+- [ ] DONE
 
 \subsubsection{Bacteria}
 
-- [ ] Done
+- [ ] DONE
 
 \subsubsection{Archaea}
 
-- [ ] Done
+- [ ] DONE
 
 \section{Assays for studying DNA methylation}\label{sec:dna_methylation_assays}
 
-- [ ] DONE
+- [x] DONE
 
-A challenge to measuring DNA methylation is that it is erased by standard molecular biology techniques, such as _polymerase chain reaction_ (PCR) and bacterial cloning, and it is not revealed by DNA hybridization assays [@Laird:2010iv]. Therefore, almost all assays of DNA methylation require one of the following _pre-treatments_ of the DNA:
+A challenge to measuring DNA methylation is that it is erased by standard molecular biology techniques, such as the _polymerase chain reaction_ (PCR) and bacterial cloning, and it is not revealed by DNA hybridization assays \cite{Laird:2010iv}. Therefore, almost all assays of DNA methylation require one of the following _pre-treatments_ of the DNA:
 
 1. _Enzyme digestion_
 2. _Affinity enrichment_
@@ -310,54 +311,53 @@ Each of these pre-treatments can then be combined with a second step of amplific
 3. Microarray hybridisation
 4. Massively parallel sequencing
 
-An exception to this classification scheme are a new class of assay that seek to directly "read" whether a position is methylated or unmethylated without requiring a pre-treatment of the DNA. For example, both [@Laszlo:2013kf, Schreiber:2013in] measure the change in current as a DNA molecule passes through a nanopore to infer whether a cytosine was methylated while __PACBIO AND ONT DO WHAT?__.
+An exception to this classification scheme are a new class of assay that seek to directly "read" whether a position is methylated or unmethylated without requiring a pre-treatment of the DNA. For example, both \cite{Laszlo:2013kf} and \cite{Schreiber:2013in} measure the change in current as a DNA molecule passes through a nanopore to infer whether a cytosine was methylated. Similarly, __TODO: what does Pacbio and Oxford Nanopore do?__
 
-Almost all assays of DNA methylation measure a "population average" from a pool of hundreds or thousands of cells. For a diploid organism, this is an average over several different levels: the two DNA strands, the two homologous chromosomes within a diploid cell and the hundreds or thousand of cells used in the assay (see __FIGURE__). Hundreds or thousands of cells are required in order to have sufficient material as input for the assay. Assays that require only a single cell as input do exist but are still in development and not in widespread use (__SOURCE/EXAMPLES__).
+Almost all assays of DNA methylation measure a "population average" from a pool of hundreds or thousands of cells. For a diploid organism, this is an average over several different levels: the two DNA strands, the two homologous chromosomes within a diploid cell and the hundreds or thousand of cells used in the assay (see __FIGURE__). Hundreds or thousands of cells are required in order to have sufficient material as input for the assay. Assays that require only a single cell as input do exist but are still in development and not in widespread use (__TODO: sources and examles__).
 
 The _resolution_ and _throughput_ are two key variables when choosing which assay to use for an experiment. The resolution of an assay is the scale on which DNA methylation can be measured[^resolution]. For example, a high resolution assay allows a researcher to quantify the level of DNA methylation at a single base whereas a low resolution assay might only allow for qualitative assessment (i.e. presence or absence) of DNA methylation at larger regions, such as CpG islands.
 
-[^resolution]: Depending on the experiment and its aims, the resolution of an assay might instead be defined as the scale on which DNA methylation can be quantified or that which allows inference to address a specific hypothesis.
+[^resolution]: Depending on the experiment and its aims, the resolution of an assay might instead be defined as the scale on which DNA methylation can be quantified or the scale at which allows inference to address a specific hypothesis.
 
-The throughput of an assay can be quantified in two ways. The first is per-sample throughput, which is how many measurements of DNA methylation are made per-sample[^throughput1]. This is typically what people mean when they describe an assay as being "high-throughput" or "low-throughput" and is the definition I use in the title of my thesis. Depending on your definition of "high", a high-througput assay will produce on the order of tens of thousands to billions of measurements per sample. The second definition of throughput is per-dollar, that is, "how many samples can I process within my budget?". To avoid confusion, __I should refer to the latter definition as something else__.
+The throughput of an assay can be quantified in two ways. The first is per-sample throughput, which is how many measurements of DNA methylation are made per-sample[^throughput1]. This is typically what people mean when they describe an assay as being "high-throughput" or "low-throughput" and is the definition I use in the title of my thesis. Depending on your definition of "high", a high-througput assay will produce on the order of tens of thousands to billions of measurements per sample. The second definition of throughput is  related to cost, be it money or time, i.e., "how many samples can I process?".
 
 [^throughput1]: This might reasonably be argued as being a definition of resolution.
 
-The choice of which assay to use for an experiment is a trade-off between resolution, per-sample throughput and per-dollar throughput. Experiments that use an assay with high-resolution and high per-sample throughput generally have fewer samples than experiments using a lower resolution assay or an assay with lower per-sample throughput.
+The choice of which assay to use for an experiment is a trade-off between resolution, per-sample throughput and per-cost throughput. Experiments that use an assay with high-resolution and high per-sample throughput generally have fewer samples than experiments using a lower resolution assay or an assay with lower per-sample throughput.
 
 In this section I will describe each of the pre-treatments but will focus on the bisulfite-conversion assays. In particular, I will describe in detail the "gold standard" assay of DNA methylation, _whole-genome bisulfite-sequencing_ (WGBS), that combines the sodium bisulfite conversion pre-treatment with massively parallel sequencing to produce whole-genome maps of DNA methylation at base pair resolution.
 
-
 \subsection{Enzyme digestion assays}\label{sec:enzyme_digestion_assays}
 
-- [ ] Done
+- [x] DONE
 
-_Restriction endonucleases_ are an important technique in molecular biology. These enzymes can preferrentially "cut/cleave/digest" DNA at particular sequence motifs. The motif at which a restriction enzyme cleaves DNA is called the _recognition motif_ or _restriction sequence_. The methylation of a position in the recognication motif can inhibit a restriction enzyme from cleaving the DNA. This can be used to design an assay to infer the methylation state of a DNA fragment.
+_Restriction endonucleases_ are an important technique in molecular biology. These enzymes can preferentially "cut/cleave/digest" DNA at particular sequence motifs. The motif at which a restriction enzyme cleaves DNA is called the _recognition motif_ or _restriction sequence_. The methylation of a position in the recognition motif can inhibit a restriction enzyme from cleaving the DNA. This can be used to design an assay to infer the methylation state of a DNA fragment.
 
-For example, the recognition site of the restriction enzyme _HpaII_ is `CCGC`. However, _HpaII_ will only digest DNA when the second cytosine in the motif is unmethylated. The _HELP_ (_HpaII_ tiny fragment enrichment by ligation-mediated PCR) assay compares DNA digested by _HpaII_ to one digested with another restriction enzyme that has the same recognition motif but is methylation-insensitive (_MspI_) to identify _hypomethylated_ regions of a genome (__SOURCE__).
+For example, the recognition site of the restriction enzyme _HpaII_ is `CCGC`. However, _HpaII_ will only digest DNA when the second cytosine in the motif is unmethylated. The _HELP_ (_HpaII_ tiny fragment enrichment by ligation-mediated PCR) assay compares DNA digested by _HpaII_ to one digested with another restriction enzyme that has the same recognition motif but is methylation-insensitive (_MspI_) to identify _hypomethylated_ regions of a genome \cite{Khulan:2006gx}.
 
-Another popular restriction enzyme for studying DNA methylation is _McrBC_, "an enzyme with the unusual and desirable property of cutting methylated DNA promiscuously (recognition sequence $R^{m} C(N)_{55– 103} R^{m} C$)" [@Irizarry:2008hg].
-
-Assays based on restriction enzyme were some of the first developed for studying DNA methylation. They were initially developed for studying particular loci although they have been extended to genome-scale analysis approaches [@Laird:2010iv]. Restriction enzyme assays have a relatively low resolution (__REASONS/SOURCE__) but may also be used as a first-pass to enrich a sample for methylated or unmethylated regions which are then assayed using a higher resolution technique.
+Assays based on restriction enzyme were some of the first developed for studying DNA methylation. They were initially developed for studying particular loci although they have been extended to genome-scale analysis approaches \cite{Laird:2010iv}. Restriction enzyme assays have a relatively low resolution (__TODO: reasons and source__) but may also be used as a first-pass to enrich a sample for methylated or unmethylated regions which are then assayed using a higher resolution technique.
 
 \subsection{Affinity enrichment assays}\label{sec:affinity_enrichment_assays}
 
-- [ ] Done
+- [x] DONE
 
-Affinity enrichment assays compare measurements between an "enriched" version and an "input" (control) version of the same sample to infer the presence or absence of DNA methylation. This is very similar to the idea behind chromatin immunoprecipitation followed by microarray hybridisation (ChIP-chip) or sequencing (ChIP-seq). Enrichment may be done using a methylation-specific antibody, such as __EXAMPLE__, or a __unmethylation-specific(?)__ antibody, such as __EXAMPLE__.
+Affinity enrichment assays compare measurements between an 'enriched' version and an 'input' (control) version of the same sample to infer the presence or absence of DNA methylation. This may use antibody immunoprecipitation or methyl-binding proteins. Some examples of affinity enrichment assays for DNA methylation are the microarray-based MeDIP, mDIP and mCIP and their sequencing-based relatives, MeDIP-seq and mDIP-seq.
 
-Some examples of affinity enrichment assays for DNA methylation are the microarray-based MeDIP, mDIP and mCIP (all based on methylated DNA immunoprecipitation) and their sequencing-based relatives, MeDIP-seq and mDIP-seq. These are all low resolution assays since they are based on the enrichment of regional differences between the enriched and input samples. Furthermore, the bioinformatic analysis of data from these assays is complicated by the varying CpG density along the genome, which leads to different enrichment affinities for different regions of the genome. However, these assays are can provide a relatively cheap and efficient genome-wide assessment of DNA methylation [@Laird:2010iv}].
+These are all low resolution assays since they are based on the enrichment of regional differences between the enriched and input samples. Furthermore, the bioinformatic analysis of data from these assays is complicated by the varying CpG density along the genome, which leads to different enrichment affinities for different regions of the genome. However, these assays are can provide a relatively cheap and efficient genome-wide assessment of DNA methylation \cite{Laird:2010iv}.
 
 \subsection{Sodium bisulfite conversion assays}\label{sec:bs_assays}
 
-- [ ] Done
+- [x] DONE
 
-In the 1980s, __Hayatsu OR Wang et al.__ discovered that when _denatured_ (__DEFINE?__) DNA is treated with sodium bisulfite (__CHEMICAL SYMBOL__), unmethylated cytosines deaminate to uracils much faster than do methylated cytosines (__SOURCE__). The methylated cytosines are said to be "protected" from conversion to uracils. When the bisulfite treated is amplified by PCR the uracils are subsequently converted to thymines.
+In the 1980s, two research groups independently discovered that when DNA is treated with sodium bisulfite ($NaHSO_{3}$), unmethylated cytosines deaminate to uracils much faster than do methylated cytosines \cite{Shapiro:1970im, Hayatsu:1970jv}. The methylated cytosines are said to be "protected" from conversion to uracils. This discovery led to the development of assays for studying studying cytosine methylation based on the pre-treatment of DNA with sodium bisulfite \cite{Frommer:1992wq}, which are referred to as bisulfite-conversion assays.
 
-This discovery led to the development of assays for studying studying cytosine methylation based on the pre-treatment of DNA with sodium bisulfite, which are sometimes referred to as bisulfite-conversion assays (__FROMMER; CLARK__). These assays are all based on the idea of comparing the sequence of the untreated DNA to the sequence of the bisulfite treated DNA to infer the methylation state of all cytosines in the sequence by whether or not they were converted to uracil (thymine) following the bisulfite treatment (__see FIGURE__).
+When bisulfite-treated is amplified by PCR, the uracils are converted to thymines. Thus, these assays are all based on the idea of comparing the sequence of the untreated DNA to the sequence of the bisulfite treated DNA to infer the methylation state of all cytosines in the sequence by whether or not they were converted to uracil/thymine following the bisulfite treatment (__FIGURE__).
 
 \subsubsection{Analysis platforms combined with bisulfite conversion}\label{sec:bs_platforms}
 
-- [ ] Done
+__UP TO HERE__
+
+- [ ] DONE
 
 Initial experiments based on the sodium bisulfite pre-treatment of DNA used Sanger sequencing of cloned PCR products, a very laborious task, which restricted experiments to studying a limited number of short segments of DNA (__HOW MANY & LONG?__). Although subsequent enhancements in the automation of Sanger sequencing improved the throughput of these assays, it was never going to be able to deliver a cost-effective, genome-scale assay of DNA methylation. The development of hybridisation microarrays provided an alternative way of analysing bisulfite-treated DNA that could provide cheap, genome-wide measurements of DNA methylation(__SOURCE__).
 
@@ -375,12 +375,12 @@ One final approach to mention is the use of mass spectrometry to analyse bisulfi
 
 \subsection{DNA kinetics assays}\label{sec:dna_kinetics_assays}
 
-- [ ] Done
+- [ ] DONE
 
 \subsection{Pros and cons of bisulfite-conversion assays}\label{sec:pros_and_cons_of_bs_assays
 }
 
-- [ ] Done
+- [ ] DONE
 
 Bisulfite-conversion assays are considered the "gold standard" for studying DNA methylation. Currently, multiple cells are required as input although the minimum number required is being lowered and efforts are well produce single-cell, whole-genome DNA methylation maps using bisulfite-treated DNA (__SOURCE__).
 
@@ -404,7 +404,7 @@ The bisulfite-treatment of DNA can introduce biases and other problems. Three ex
 
 \subsection{Targeted BS-seq, e.g. RRBS, NimbleGen and Agilent's capture kits, MRE-seq}\label{sec:targeted_bsseq}
 
-- [ ] Done
+- [ ] DONE
 
 * "RRBS’s ability to interrogate a locus is dependent on its MspI-cut-site (CCGG) density and consequently measures 10%–15% of the CpGs in the human genome (Bock et al. 2010; Harris et al. 2010)" \cite{Stevens:2013hv}
 * See \cite{Stevens:2013hv} for MRE-seq details and a good summary of DNA methylation assays
