@@ -1,17 +1,18 @@
-# Analysis of bisulfite-sequencing data
+---
+title: "Analysis of bisulfite-sequencing data"
+author: "Peter Hickey"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    fig_caption: yes
+    includes:
+      in_header: ../latex/header.tex
+  html_document:
+    keep_md: true
+bibliography: ../latex/phd_thesis.bib
+---
 
-## Notes from outline.md (plus other notes added along the way)
-
-* Chapter Overview
-* QC, mapping, post-processing
-* Methylation calling
-  + Reference-based calling
-* Biases
-  + M-bias
-  + Cell-composition, age, global hypo- or hyper-methylation, SNPs, alignment artefacts
-* Univariate tests of $\beta_i$
-
-## Chapter overview
+\section{Chapter overview}\label{sec:wgbs_analysis_chapter_overview}
 
 This chapter outlines the steps in a bioinformatics analysis of a whole-genome bisulfite-sequencing dataset, with a focus on experiments studying _differential methylation_. Throughout this chapter I concentrate on the methylC-seq protocol, which is a directional protocol and the standard whole-genome bisulfite-sequencing assay. All data used in my thesis were generated using this protocol (__CHECK__). Other bisulfite-sequencing assays, particularly targeted assays such as RRBS and Methyl-Seq, require some additional tweaks.
 
@@ -28,7 +29,8 @@ Steps 1, 2 and 4 will be familiar to anyone who analyses high-thoughput sequenci
 
 In this chapter I describe steps 1-2 in broad terms. An excellent review of these fundamental steps, including comparisons of different software, is given by \citet{Krueger:2012ks}. My thesis has focused on steps 3 and 4 of this process. In this chapter I review previous work on steps 3-4 and defer my contributions on these topics to subsequent chapters. While this chapter focuses on analysing bisulfite-sequencing data, in particular whole-genome bisulfite-sequencing data, some parts __SECTION Cellular heterogeneity, Inference, OTHERS???__ will also be applicable to methylation microarrays (__CHECK AFTER I'VE WRITTEN IT__).
 
-## Data quality control checks
+\section{Data quality control checks}\label{sec:data_qc}
+
 The first step in any analysis of high-throughput sequencing data is to perform a quality control check of the data. Much of this is done visually by comparing summary graphs of the current sample(s) to previous 'good' samples. As such, much of data quality control checking relies on the judgement of the analyst.
 
 The `FastQC` software (__CITE__) is a very useful tool for performing this first step. It produces summary graphs of many key measures such as base quality scores, read length distribution and sequence contamination. `FastQC` is a general purpose tool for performing quality control checks of high-throughput sequencing data. This means that some of its output is not so useful, or at least must be cautiously interpreted, for bisulfite-sequencing data. For example, `FastQC` will report a __warning/error__ if the GC-percentage, the percentage of read bases that are guanine or cytosine, is __less than what value__. Due to the bisulfite-treatment, bisulfite-sequencing data will naturally have a very low percentage of cytosine bases (__around what%__) and therefore a low GC-percentage. Therefore, a low GC-percentage is no cause for concern.
@@ -42,7 +44,8 @@ Illumina adapter sequences are ligated to each DNA molecule in the library in or
 
 Using a tool such as `Trim Galore!` (__CITE__) or `trimmomatic` (__CITE__), the reads can be _trimmed_ to remove these contaminants. Reads might also be trimmed to remove low quality positions, which are common at the 3' end of reads, although this isn't as essential as trimming to remove contaminants.
 
-## Read mapping and post-processing of mapped reads
+\section{Read mapping and post-processing of mapped reads}\label{sec:mapping_and_post-processing}
+
 Read mapping is complicated by the bisulfite-treatment of the DNA. Following bisulfite-treatment, the DNA fragments are now mostly composed of three bases rather than four, which means there are many more sequence mismatches between a read and its true mapping location. Simply using standard read mapping software and allowing for more mismatches would result in many reads mapping to multiple locations in the reference genome. Instead, a field of read mapping software dedicated to bisulfite-sequencing data has developed.
 
 These bisulfite-sequencing read mappers take one of two approaches:
@@ -69,7 +72,7 @@ __TABLE__ lists some popular bisulfite-sequencing read mappers with the underlyi
 
 Each of these aligners can report the output in the standard `SAM` format (__CITE__), although each mapper does so in a slightly different way, which it difficult to develop downstream analysis tools.
 
-### PCR duplicates
+\subsection{PCR duplicates}\label{sec:pcr_duplicates}
 
 PCR amplification of the input DNA is a common step in creating a library for high-throughput sequencing. PCR amplification is often required to ensure that there is a sufficient amount of DNA for the sequencer to properly work. Unfortunately, it can introduce biases into the library that result in some molecules being over- or under-represented compared to their "true" frequency. This means that when we sequence the library that we might sequence multiple fragments that are all copies of the same original piece of DNA, which gives a biased sampling of our sample's genome. These multiply-sequenced fragments are called _PCR duplicates_.
 
@@ -89,7 +92,7 @@ We could make this mathematically more precise, but it doesn't give us a simple 
 
 In practice, this means that for whole-genome sequencing data we can be fairly confident that possible PCR duplicates are _true_ PCR duplicates. However, for targetted sequencing, such as RRBS or amplicon sequencing, we are much less confident and may remove some of our signal if we remove possible PCR duplicates. Instead, for RRBS we might exclude regions with an "abnormally" high sequencing coverage \citep{Krueger:2012ks}. For amplicon sequencing we often can't afford to exclude possible PCR duplicates if, for example, the aim is to identify rare epialleles by very deep sequencing of a small region.
 
-### M-bias
+\subsection{M-bias}\label{sec:m-bias}
 
 Ideally, the probability that a base is called methylated should be independent of the sequencing cycle. \citet{Hansen:2011gu} found that this is not the case and that in fact there is considerable bias towards the start (5') and end (3') of reads. They called this bias the _M-bias_.
 
@@ -99,7 +102,7 @@ If a sample was processed in multiple batches, then M-bias estimation (and methy
 
 The strongest source of M-bias in Illumina WGBS data is at the 5' end of `read_2`, which sequences the 3' end of the DNA fragment. Because the DNA fragment is often shorter than the sum of the read lengths, the 3' end of the fragment often contains adapter sequence and other "junk" sequence. The adapter sequence may contain cytosine bases, which will be misinterpreted as evidence of methylation \citep{Krueger:2012ks}. Similarly, "fill-in cytosines" are used in the construction of RRBS libraries to repair the ends of DNA fragments after cleavage by MspI; these would also be misinterpreted as evidence of methylation \citep{Krueger:2012ks}. Another source of M-bias is incomplete or uneven bisulfite-conversion (__CITE__).
 
-#### Estimating M-bias {-}
+\subsubsection{Estimating M-bias}\label{sec:estimating_m-bias}
 
 Estimating the M-bias and incorporating the results into the methylation calling can be done using two different strategies:
 
@@ -117,7 +120,7 @@ align ref.idx r1.fq r2.fq | mark_duplicates | mbias --filters
 call_meth --filters mbias.out out.bam
 ```
 
-A somewhat subtle point is that M-bias should only be estimated from reads that are actually going to be used for methylation calling. Suppose M-bias is highly correlated with some other quality metric, such as base quality, so that positions with M-bias also have low base quality[^bq_mbias]. If you already intend to ignore all positions with a base quality less than 20 in your methylation calling then it makes sense to also ignore these positions when computing M-bias; otherwise you will overestimate the effect of M-bias and unnecessarily exclude read positions in your methylation calling. Unfortunately, the software I use for estimating M-bias, `bismark_methylation_extractor`, does not allow the user to exclude certain reads or read-positions from its calculations.  
+A somewhat subtle point is that M-bias should only be estimated from reads that are actually going to be used for methylation calling. Suppose M-bias is highly correlated with some other quality metric, such as base quality, so that positions with M-bias also have low base quality[^bq_mbias]. If you already intend to ignore all positions with a base quality less than 20 in your methylation calling then it makes sense to also ignore these positions when computing M-bias; otherwise you will overestimate the effect of M-bias and unnecessarily exclude read positions in your methylation calling. Unfortunately, the software I use for estimating M-bias, `bismark_methylation_extractor`, does not allow the user to exclude certain reads or read-positions from its calculations.
 
 [^bq_mbias]: This is very often the case since the 3' end of reads are typically of lower quality and also frequently suffer from M-bias.
 
@@ -126,10 +129,10 @@ A somewhat subtle point is that M-bias should only be estimated from reads that 
 ```
 
 ```{r}
-Figure showing several M-bias curves with different patterns, e.g. 5' and 3' junk, within-read spikes/troughs, etc.
+# TODO: Figure showing several M-bias curves with different patterns, e.g. 5' and 3' junk, within-read spikes/troughs, etc.
 ```
 
-#### Pre-trimming reads destroys the one-to-one relationship between read-position and sequencing cycle {-}
+\subsection{Pre-trimming reads destroys the one-to-one relationship between read-position and sequencing cycle}\label{sec:pre-trimming_reads}
 
 Trimming reads prior to alignment (_pre-trimming_), such as using `Trim Galore!` to remove adapter sequence from reads, destroys the one-to-one relationship between the sequencing cycle and the read position. This causes a minor problem when computing M-bias because we no longer know whether the read position is identical to the sequencing cycle. Soft- or hard-clipping reads of their adapter sequence __during__ the alignment avoids this issue, because the clipping information (should be) preserved in the `CIGAR` string[^cigar].
 
@@ -143,7 +146,7 @@ This problem cannot be avoided if reads are pre-trimmed because the trimming inf
 
 [^read_trimming]: Generally, this would also require that methylation calling is performed separately on each read length because most methylation callers are unable to deal with different M-bias profiles for different read lengths.
 
-#### Identifying M-bias {-}
+\subsection{Identifying M-bias}\label{sec:identifying_m-bias}
 
 In practice, the M-bias curves for each sample are visually inspected to look for evidence of M-bias, i.e. read-positions that are "too far away" from the vast majority of read-positions. A minor problem with this approach is that the user may (unconsciously) use a different cutoff for each sample. For example, it is more difficult to determine an appropriate cutoff when there is a gradual slope in the M-bias plot than when there is a clear jump (__TODO: An example where there last few read-positions are more than `cutoff` from the median but due to a gradual slope vs. an example where a single position is more than `cutoff` from the median due to a spike__).
 
@@ -170,7 +173,7 @@ The results can also be visualised by specifying the `plot = raw` or `plot = nor
 # TODO: Insert code snippet showing plots returned by `trim.bias` with both `plot = raw` and `plot = normalised`
 ```
 
-#### What to do about M-bias? {-}
+\subsubsection{What to do about M-bias?}\label{sec:what_to_do_about_m-bias}
 
 Now that we've found read-positions with M-bias, what can we do about it? Typically, read-positions showing evidence of M-bias are excluded when calling methylation events. In fact, a slightly cruder procedure is often used whereby all read-positions preceding or following those with M-bias are excluded. Both `bismark_methylation_extractor` and `Bis-SNP`, two popular methylation callers, use this method. Generally, this is okay because M-bias tends to occur as runs of read-positions at the 5' and 3' ends of reads.
 
@@ -184,7 +187,7 @@ Ideally, we would be able to remove the effects of M-bias by accounting for it i
 
 One idea is to weight methylation calls by the level of M-bias. A downside to this approach is that this would turn an otherwise binary methylation call into a continuous value between $0$ and $1$, with an attendant loss in interpretability. However, we could still compute $\beta$-values, and use these in downstream inferences, without much loss in interpretation. An additional downside to this approach is an increased computational complexity and cost, and this is why I have not further pursued this idea.
 
-### Other biases
+\subsection{Other biases}\label{sec:other_biases}
 
 There are several other sources of bias when making methylation calls. Some are what I call technical biases - those driven by the sequencing protocol and processing of the data - while others I call biological biases - those driven by measuring something other than what you thought you were measuring.
 
@@ -192,7 +195,7 @@ Apart from M-bias, technical biases include sequencing and alignment errors, whi
 
 Biological biases include cellular heterogeneity \citep{Jaffe:2014gy} and sequence variation at or nearby methylation loci, such as CpGs that are also SNPs or with SNPs nearby. I discuss the latter in the section __METHYLATION CALLING__.
 
-#### Cellular heterogeneity {-}
+\subsubsection{Cellular heterogeneity}\label{sec:cellular_heterogeneity}
 
 Strictly speaking, cellular heterogeneity exists once you study DNA from more than a single cell, as shown in a recent papers using single-cell bisulfite-sequencing \citep{Guo:2013iha,Smallwood:2014kn}, however in this context it means when you study DNA from a sample that is made up of different types of cells.
 
@@ -202,7 +205,7 @@ In contrast to \citet{Houseman:2012km} where this cellular heterogeneity was use
 
 Methods to estimate the cellular heterogeneity bias and adjust for it are available (e.g. \citet{Jaffe:2014gy,Houseman:2014ds,Zou:2014gc}), although they have mostly been applied to DNA methylation arrays and not bisulfite-sequencing data. This is not to say that these problems don't exist for sequencing data, merely that these have not been as well-explored.
 
-## Methylation calling
+\section{Methylation calling}\label{sec:methylation_calling}
 
 Methylation calling is the process of calling each sequenced methylation locus as being either methylated or unmethylated[^no_call], as well as determining the _context_ or _type_ of each methylation event (i.e., CpG, CHG or CHH) based on the sequencing data and a reference DNA sequence. In principle, this is a simple process, however, this belies some complications, which I discuss in this section.
 
@@ -244,7 +247,7 @@ Secondly, \citet{Lister:2008bh, Lister:2009hy, Lister:2011kg} use only those cyt
 
 Another example is that only cytosines identified as "methylcytosines" in at least one sample were used in differential methylation analyses \citep{Lister:2009hy, Lister:2011kg}. While there are often good reasons for screening loci prior to differential testing \citep[e.g.]{Bourgon:2010cr}, this could potentially bias results when looking for regions of differential methylation. For example, suppose there are ten cytosines in a row where the first three and last three are differentially methylated. If we ignore the four intervening cytosines, which are not differentially methylated, then we falsely conclude that the entire region is differentially methylated rather than it being two smaller DMRs.
 
-### Methylated or unmethylated?
+\subsection{Methylated or unmethylated?}\label{sec:methylated_or_unmethylated}
 
 All bisulfite-sequencing assays use _reference-based_ methylation calling. That is, they require the specification of a DNA reference sequence that the aligned bisulfite-sequencing data are compared against to infer the methylation state of each sequenced locus. Care must be taken to correctly handle the orientation and strand of the alignment. __FIGURE__ gives several examples (__TODO: Figure explaining reference-based methylation calling for reads aligned to forward and reverse strands__).
 
@@ -258,11 +261,11 @@ The reference sequence is typically the reference genome used in the alignment s
 * Calling genetic variations directly from the bisulfite-sequencing data
 * Excluding sites of known genetic variation
 
-#### Whole-genome sequencing or genotyping of the sample {-}
+\subsubsection{Whole-genome sequencing or genotyping of the sample}\label{sec:wgs_or_genotyping}
 
 The gold-standard is to perform whole-genome DNA sequencing of each sample. This data is then used to form a set of sample-specific methylation loci, $\mathcal{I}_{j}$. However, this approach is also very expensive due to the extra sequencing requirements. A cheaper alternative is to genotype the sample on a genome-wide SNP microarray. This will give very accurate, very cheap genotypes at a large number of loci ($500,000 - $5,000,000$), however, by definition it cannot identify genetic differences that aren't on the array, such as novel sample-specific genetic variants.
 
-#### Calling genetic variations directly from the bisulfite-sequencing data {-}
+\subsubsection{Calling genetic variations directly from the bisulfite-sequencing data}\label{sec:wgbs_variant_calling}
 
 The next best approach is that implemented in `Bis-SNP` \citep{Liu:2012ge}, which is to call genetic variation from the bisulfite-sequence data itself and to then define a set of sample-specific methylation loci, $\mathcal{I}_{j} := \mathcal{I}_{j}^{Bis-SNP}$, at which to call methylation events. It is designed for _directional_ bisulfite-sequencing libraries such as the widely used Illumina (_Lister-style_) whole-genome bisulfite-sequencing protocol.
 
@@ -274,7 +277,7 @@ Certain variants, in particular (heterozygous) $C>T$ SNPs, are more difficult to
 
 Genotype calls made using `Bis-SNP` are less accurate than those from equivalent-depth whole-genome DNA sequencing because of the reduced complexity of bisulfite-converted DNA. However, we essentially get DNA variation "for free" by using `Bis-SNP`, which makes it my preferred approach for methylation calling at 1-tuples.
 
-#### Excluding sites of known genetic variation {-}
+\subsubsection{Excluding sites of known genetic variation}\label{sec:known_genetic_variation}
 
 The third approach is to call methylation loci using the reference genome and to _post-hoc_ exclude any loci that overlap sites of known genetic variation in the population. For example, exclude all cytosines in the reference genome that are also SNPs in dbSNP (__CITE__). This approach can only exclude sites from $\mathcal{I}_{j}$, it cannot augment $\mathcal{I}_{j}$ by adding sample-specific methylation loci.
 
@@ -282,7 +285,7 @@ This is a conservative approach, as it will remove loci regardless of whether th
 
 To remove those reference-specific methylation loci that are __not__ found in databases of known genetic variation, we might identify loci in the sample that display a large number of non-C/T bases (resp. non-G/A bases) at a C (resp. G) on the forward (resp. reverse) strand of the reference genome.
 
-### Determining the context or methylation type
+\subsection{Determining the context or methylation type}\label{sec:methylation_context}
 
 In addition to determining whether a cytosine is methylated or unmethylated, we also want to determine the _context_ of the cytosine, also known as the _methylation type_. That is, we want to determine whether the cytosine is a CG, CHG or a CHH.
 
@@ -290,7 +293,7 @@ This is done by examining the two nucleotides upstream of the cytosine. It can b
 
 A further complication occurs when there is a genetic variant in the two nucleotides upstream of the methylation locus. We would like to use the two upstream nucleotides from the sample to infer the sample-specific methylation context, either inferred from each read separately or from a variant calling procedure such as `Bis-SNP`. However, this further complicates the methylation calling and so tools such as `Bismark` derive the context from the reference genome.
 
-## Identifying differential methylation
+\section{Identifying differential methylation}\label{sec:identifying_differential_methylation}
 
 Identifying differential methylation means to identify sites (differentially methylated cytosines or _DMC_s) or regions (differentially methylated regions or _DMR_s) in the genome that have different levels of methylation between two or more conditions. Much of the methodology for identifying differential methylation has focused on two-group experiments and a restricted definition: differential methylation is the difference in __average__ methylation between __two__ groups. This is analogous to identifying differential gene expression, which focuses on identifying genes that have different __average__ expression levels between two groups.
 
@@ -298,7 +301,7 @@ While bisulfite-sequencing experiments with multiple groups have been performed 
 
 Like any experimental questions, good experimental design is essential in order to reliably infer differential methylation. Identifying DMCs is relatively straightforward statistical problem since it amounts to the well-worn problem of testing the difference of means. However, identifying DMRs, which may or may not build upon an initial scan for DMCs, is a far more challenging statistical problem owing the high spatial dependence of methylation at neighbouring cytosines and the uneven spacing of cytosines throughout the genome.
 
-### Experimental design
+\subsection{Experimental design}\label{sec:experimental_design}
 
 In any experiment of differential methylation we want the DMCs and DMRs to be _biological_ and _replicable_; it's no good if all the differences are simply due to technical artefacts or random fluctuations. Key to ensuring biological relevance good experimental design, such as the use of _replicates_ in each experimental group. A distinction is often made between _technical replicates_ and _biological replicates_. Roughly, biological replicates are experimental units that all underwent the same treatment and are used to estimate the within-group variability of the treatment. Technical replicates are repeated measurements of the same experimental unit, perhaps with slight variations in the sample preparation, and are used to estimate the variability of the sample preparation and measurement process.
 
@@ -310,7 +313,7 @@ Moreover, early experiments with whole-genome bisulfite-sequencing frequently ha
 
 Ideally, variability between technical replicates should be orthogonal to the biological question, but this rarely occurs. Indeed, high-throughput sequencing experiments are particularly susceptible to batch effects, and other sources of unwanted variation, that can swamp the biological variation of interest \citep{Leek:2010jq}.
 
-### DMCs
+\subsection{DMCs}\label{sec:dmcs}
 
 There are reports of differential methylation at individual CpGs resulting in a phenotypic difference (__CITE EXAMPLES; Emma Whitelaw has some I think__). Nonetheless, with approximately 25 million CpGs in the human genome, not to mention the many, many more non-CpG cytosines, it is an optimist who aims for the reliable detection of DMCs from WGBS experiments with sample sizes you can count on one or two hands and average sequencing depth of $10-30\times$.
 
@@ -322,7 +325,7 @@ However, when identifying DMCs, the _effective_ number of tests is fewer, perhap
 
 __TODO: What techniques can be used to do FDR, multiple hypothesis testing? Are standard tools applicable in such high-dependence settings?__
 
-#### One-group tests {-}
+\subsubsection{One-group tests}\label{sec:one_group_dmcs}
 
 The one-group WGBS experiment is uncommon and the $A^{vy}$ experiment (__SECTION__) is the only example that I know of. In a one-group experiment a DMC is one where at least one of the samples has a different methylation level to the group average. Mathematically, we wish to test the null hypothesis  $H_{0}: \beta_{i, j} = \beta_{i, 0}$ for $j = 1, \ldots, n$ against the alternative that $H_{A}: \beta_{i, j} \neq \beta_{i, 0}$ for some $j$, where $\beta_{i, 0}$ may be pre-specified or estimated from the data by, for example, the group average $\frac{1}{n} \sum_{j = 1}^{n} \beta_{i, j}$). This can be tested in a number of ways as I will demonstrate.
 
@@ -398,7 +401,7 @@ library(microbenchmark)
 print(microbenchmark(prop.test(x), chisq.test(x), loglin(x, margin = list("sample", "meth_state")), loglm(formula = ~ sample + meth_state, data = x), glm(x ~ 1, family = binomial), glm(x[,1] / (x[, 1] + x[, 2]) ~ 1, family = binomial, weights = x[,1] + x[, 2]), glm.fit(x = matrix(, nrow(x), 0L), y = x, family = binomial()), times = 100), order = "median")
 ```
 
-#### Two-group experiments
+\subsubsection{Two-group experiments}\label{sec:two_group_dmcs}
 
 In a two group experiment, for each methylation locus we are testing the hypothesis that the average methylation level in the first group, $\bar{\beta_{i}^{(1)}}$, is different to that in the second group, $\bar{\beta_{i}^{(2)}}$.
 
@@ -426,32 +429,29 @@ The more interesting experiment is one that includes replicates within each grou
 
 Instead, a test that incorporates the within-group variability should be used.  For example, we could use a t-test to compare the average methylation level in the first group, $\bar{\beta_{i}^{(1)}}$, to that in the second group, $\bar{\beta_{i}^{(2)}}$. Several methods have been proposed for testing for DMCs. These methods differ considerably in how they model and transform the data as well as what test statistic is used to identify DMCs.
 
-##### Transforming {-}
+\paragraph{Transforming}\label{sec:transforming}
 
 Smoothing of the $\beta$-values has been used advocated by several authors to remove variation due to low sequencing coverage and to exploit the spatial correlation of DNA methylation \citep{Hansen:2011gu, Hebestreit:2013ko, Gokhman:2014c}. Both `BSmooth` \citep{Hansen:2012gr} and `BiSeq` \citep{Hebestreit:2013ko} smooth the $\beta$-values using a binomial local likelihood smoother. \citet{Lister:2011kg, Gokhman:2014cp} used a simpler moving average in windows along the genome.
 
-##### Modeling {-}
+\paragraph{Modeling}\label{sec:modeling}
 
 `DSS` \citep{Feng:2014iq}, `BiSeq` \citep{Hebestreit:2013ko}, `MOABS` \citep{Sun:2014fk} `methylSig` \citep{Park:2014ho} and `RADmeth` \citep{Dolzhenko:2014bo} are software packages that all use a Beta-Binomial hierarchical model of DNA methylation, although the exact details differ considerably between packages. Broadly, under the Beta-Binomial model the "true" methylation level at the $i^{th}$ methylation locus in the $k^{th}$ group is modeled as a Beta random variable, $B_{i, k} = Beta(\mu_{i, k}, \theta_{i, k})$. The observed number of methylated reads at the $i^{th}$ methylation locus, in the $j^{th}$ sample is modeled as a Binomial random variable, $M_{i, j, k} | B_{i, k}, n_{i, j, k} = Binomial(n_{i, j, k}, B_{i, k}), which is conditional on the unobserved $B_{i, k}$ and the observed sequencing coverage, $n_{i, j, k}$.
 
-##### Estimating and testing {-}
+\paragraph{Estimating and testing}\label{sec:estimating_and_testing}
 
 `DSS` and `MOABS` use empirical Bayes methods to estimate parameters whereas `methylSig`, `BiSeq` and `RADmeth` use maximum likelihood estimation. The test used to identify DMCs is variously a Wald test (`BiSeq`, `DSS`), likelihood ratio test (`methlySig`, `RADmeth`) or based on the credible interval (Bayesian confidence interval) of the difference in methylation between the two groups (`MOABS`).
 
+\subsubsection{Multi-group experiments}\label{sec:multigroup_dmcs}
 
 
-
-#### Multi-group experiments
-
-
-### DMRs
+\subsection{DMRs}
 
 There are two very different strategies for identifying differentially methylated regions:
 
 1. Use regions that are defined _a priori_, which are then tested for differential methylation. Such regions might be CpG islands (__CITE__), MspI restriction fragments (__CITE__) gene promoters (__CITE__) or predefined bins (e.g. 3bp tiles [Bing Ren] or 100bp tiles \citep{Park:2014ho}).
 2. Use regions that are defined based on the data, which are then tested for differential methylation. Valid statistical inference of such regions is __very challenging__.
 
-#### Using _a priori_ regions {-}
+\subsubsection{Using _a priori_ regions}\label{sec:a_prior_regions}
 
 The methylation level is summarised at the region level and then compared across groups. For example, the average of the $\beta$-values across the region may be compared between groups using a t-test.
 
@@ -471,7 +471,7 @@ __CONS__
 * Doesn't account for spatial correlation of methylation
 
 
-#### Using data-driven regions {-}
+\subsubsection{Using data-driven regions}\label{sec:data_driven_regions}
 
 
 __PROS__
@@ -484,25 +484,25 @@ __CONS__
 * Loss of statistical properties in testing, e.g. FDR control
 * Bloody hard
 
-## Other downstream analyses
+\section{Other downstream analyses}\label{sec:other_downstream_analyses}
 
 Bisulfite-sequencing data are used to address a variety of questions apart from identifying differential methylation. Not all these analyses require statistical inference. For example, if we are interested in knowing whether the promoter of a particular gene is methylated in our sample then it may be sufficient to simply plot the level of methylation at each CpG in the region.
 
 However, once we move to experiments with multiple samples, multiple regions and more complex questions then statistical methods are generally required to distinguish the signal from the noise. In this section I briefly describe other
 
-### Variably methylated regions and differential variability
+__TODO: Any other important downstream analyses worth mentioning?__
 
-### Allele-specific methylation
+\subsection{Variably methylated regions and differential variability}\label{sec:vmrs}
 
-### Methylation entropy
+\subsection{Allele-specific methylation}\label{sec:asm}
 
-### Epipolymorphism
+\subsection{Methylation entropy}\label{sec:methylation_entropy}
 
-### Epiallele detection
+\subsection{Epipolymorphism}\label{sec:epipolymorphism}
 
-### Relating methylation changes to gene-expression, histone modifications, etc.
+\subsection{Epiallele detection}\label{sec:epialleles}
 
-### Others
+\subsection{Integrating DNA methylation data with other genomes data}\label{sec:data_integration}
 
 ## TODOs
 * See https://github.com/brentp/clustermodel/README.md for a nice, brief summary of the main DMR calling approaches.
