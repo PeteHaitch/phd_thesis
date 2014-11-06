@@ -14,7 +14,11 @@ bibliography: ../latex/phd_thesis.bib
 
 ## The probability that two dependent Bernoulli random variables are identical
 
-\cite{Lindqvist:1978fm} wrote a brief note on Bernoulli trials with dependence. Building on earlier work by \cite{Klotz:1973if}, Lindqvist parameterises the Bernoulli process $X_{1}, X_{2}, \ldots$ on $\{0, 1\}$ by the parameters $p = Pr(X_{i} = 1)$ and $c = cor(X_{i - 1}, X_{i})$ and shows that the transition matrix is given by
+\cite{Lindqvist:1978fm} wrote a brief note on Bernoulli trials with dependence. 
+Building on earlier work by \cite{Klotz:1973if}, Lindqvist parameterises the 
+Bernoulli process $X_{1}, X_{2}, \ldots$ on $\{0, 1\}$ by the parameters 
+$p = Pr(X_{i} = 1)$ and $c = cor(X_{i - 1}, X_{i})$ and shows that the 
+transition matrix is given by
 
 \begin{equation*}
 \label{eq:transition_matrix_id}
@@ -25,39 +29,47 @@ bibliography: ../latex/phd_thesis.bib
  \end{pmatrix}
 \end{equation*}
 
+provided that $max(1 - \frac{1}{p}, 1 - \frac{1}{1 - p}) \leq c \leq 1$. 
+
 From this we can compute the joint distribution,
 
 \begin{equation*}
 Pr(X_{1} = x_{1}, \ldots, X_{n} = x_{n}) = Pr(X_{1} = x_{1}) Pr(X_{2} = x_{2} | X_{2} = x_{2}) \cdots Pr(X_{n} = x_{n} | X_{n - 1} = x_{n - 1})
 \end{equation*}
 
-In particular, in the case $n = 2$ we can compute the probability that two dependent but identically distributed Bernoulli random variables are equal, $Pr(X_{1} = X_{2}) = Pr(X_{1} = 0, X_{2} = 0) + Pr(X_{1} = 1, X_{2} = 1)$.
+In particular, in the case $n = 2$ we can compute the probability that two 
+dependent but identically distributed Bernoulli random variables are equal. 
 
-To extend the above result to the probability that two dependent but __non-identically__ distributed Bernoulli random variables are equal simply requires that we derive the appropriate transition matrix.
-
-Let $X_{i} \eqd Bernoulli(p_{i})$ for $i = 1, 2$. The transition matrix, $\Pi = \bigl(\begin{smallmatrix}
-Pr(X_{2} = x_{2} | X_{1} = x_{1}) \end{smallmatrix} \bigr)$, is given by
+To extend the above result to the probability that two dependent and 
+__non-identically__ distributed Bernoulli random variables are equal, simply 
+requires that we derive the appropriate transition matrix. Switching notation 
+to that used in Chapter \ref{chap:co-methylation_review}, let 
+$Z_{h, i} \eqd Bernoulli(p_{h})$ and $Z_{h', i'} \eqd Bernoulli(p_{h'})$. The 
+transition matrix, 
+$\Pi = \bigl(\begin{smallmatrix} 
+Pr(Z_{h', i'} = z_{h', i'} | Z_{h, i} = z_{h, i}) 
+\end{smallmatrix} \bigr)$, is given by
 
 \begin{equation*}
 \label{eq:transition_matrix_nid}
 \Pi =
  \begin{pmatrix}
-  (1 - p_{2}) + c p_{1} & p{2} - c p_{1} \\
-  \big [ (1 - p_{2}) + c p_{1} \big ] (1 - p_{1}) & \big [ p_{2} + c (1 - p_{1}) \big ] p_{1}
+  (1 - p_{h'}) + c p_{h} & p_{h'} - c p_{h} \\
+  \big [ (1 - p_{h'}) + c p_{h} \big ] (1 - p_{h}) & \big [ p_{h'} + c (1 - p_{h}) \big ] p_{h}
  \end{pmatrix}
 \end{equation*}
 
 We can then compute the desired probability
 
 \begin{align*}
-Pr(X_{1} = X_{2}) &= Pr(X_{1} = 0, X_{2} = 0) + Pr(X_{1} = 1, X_{2} = 1) \\
-                  &= Pr(X_{2} = 0 | X_{1} = 0) Pr(X_{0} = 0) +
-                     Pr(X_{2} = 1 | X_{1} = 1) Pr(X_{0} = 1) \\
-                  &= \big [ (1 - p_{2}) + c p_{1} \big ] (1 - p_{1}) + 
-                     \big [ p_{2} + c ( 1 - p_{1}) \big ] p_{1} \\
-                  &= (1 - p_{1}) (1 - p_{2}) + c p_{1} \big [1 - p_{1}] +
-                     p_{1} p_{2} + c p_{1} (1 - p_{1}) \\
-                  &= (1 - p_{1}) (1 - p_{2}) + p_{1} p_{2} + 2 c p_{1} (1 - p_{1})
+Pr(Z_{h, i} = Z_{h', i'}) &= Pr(Z_{h, i} = 0, Z_{h', i'} = 0) + Pr(Z_{h, i} = 1, Z_{h', i'} = 1) \\
+                  &= Pr(Z_{h', i'} = 0 | Z_{h, i} = 0) Pr(X_{0} = 0) +
+                     Pr(Z_{h', i'} = 1 | Z_{h, i} = 1) Pr(X_{0} = 1) \\
+                  &= \big [ (1 - p_{h'}) + c p_{h} \big ] (1 - p_{h}) +
+                     \big [ p_{h'} + c ( 1 - p_{h}) \big ] p_{h} \\
+                  &= (1 - p_{h}) (1 - p_{h'}) + c p_{h} \big [1 - p_{h}] +
+                     p_{h} p_{h'} + c p_{h} (1 - p_{h}) \\
+                  &= (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'} + 2 c p_{h} (1 - p_{h})
 \end{align*}
 
 __TODO: What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?__
@@ -67,20 +79,26 @@ __TODO: What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?_
 I want to estimate the number of CpGs used by \cite{Lacey:2013iy} to estimate the correlation of methylation levels. They used the chromosome 11 data from an RRBS experiment on a normal myotube cell line, MTCTL2. Unfortunately, the data are not publicly available. Instead, I use data from ENCODE of a skeletal muscle myotubes cell line that had RRBS performed in triplicate (HSMMtube).
 
 Firstly, I download the data and unzip it:
-```{r, cache = TRUE, message = FALSE}
+```{r, cache = FALSE, message = FALSE}
 library(R.utils)
 library(data.table)
 library(dplyr)
+print(getwd())
+```
 
-tmp <- tempdir()
+```{r, cache = FALSE, message = FALSE}
+dl_dir <- 'downloads/'
 url <- 'http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/'
-files <- paste0(url, 'wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep', 
-                     1:3, '.bed.gz')
-dests <- paste0(tmp,'/rep', 1:3, '.bed.gz')
+files <- paste0('wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep',
+                1:3, '.bed.gz')
+dests <- paste0(dl_dir, files)
 x <- mapply(function(f, d) {
-  download.file(f, d)
-  gunzip(filename = d, overwrite = TRUE)
-  fread(gsub(pattern = '.gz', replacement = '', x = d), sep = '\t')
+  if (!file.exists(gsub(".gz", "", paste0(dl_dir, f)))) {
+    download.file(url = paste0(url, f), d)
+    gunzip(filename = d, overwrite = TRUE)
+    }
+  fread(gsub(pattern = '.gz', replacement = '', x = d), sep = '\t', 
+        verbose = FALSE)
   }, files, dests, SIMPLIFY = FALSE)
 ```
 
@@ -88,8 +106,8 @@ Then I count the number of CpGs on chromosome 11 in each sample:
 ```{r}
 y <- lapply(x, function(xx) {
   xx <- tbl_dt(xx)
-  xx %>% 
-    group_by(V1) %>% 
+  xx %>%
+    group_by(V1) %>%
     summarise(n())
 })
 
@@ -98,6 +116,5 @@ rbind_all(y) %>% filter(V1 == 'chr11')
 
 
 ### TODOs
- 
-* Cite data source and publication
 
+* Cite data source and publication
