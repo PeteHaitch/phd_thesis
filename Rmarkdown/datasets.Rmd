@@ -16,6 +16,8 @@ bibliography: ../latex/phd_thesis.bib
 
 I have analysed more than 50 whole-genome bisulfite-sequencing datasets during the course of my PhD studies. This short chapter documents those that I use in my thesis.
 
+## TODO: Describe processing of data
+
 ## Lister data
 
 The _Lister data_ refer to whole-genome bisulfite-sequencing libraries used in \cite{Lister:2009hy} and \cite{Lister:2011kg}. The Lister data were the largest publicly available human WGBS datasets until quite recently.
