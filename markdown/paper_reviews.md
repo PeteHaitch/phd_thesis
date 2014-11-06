@@ -136,7 +136,7 @@ A binomial local likelihood smoother was chosen because they model $M_{i, j}$ as
 
 Under the binomial model for $M_{i, j}$, $\beta_{i, j} = \frac{m_{i, j}}{m_{i, j} + u_{i, j}}$ is an unbiased estiamtor of $B_{i, j}$ with standard error $se(\beta_{i, j}) = \sqrt(\frac{\beta_{i, j}(1 - \beta_{i, j})}{M_{i, j} + U_{i, j}})$ (__CHECK WITH TERRY: the standard error should be defined in terms of estimates not parameters, i.e. $\beta$ instead of $B$, correct?__). `BSmooth` assumes that for each sample that the underlying methylation level, $f_{j}(i)$, is a smoothly varying function of the position in the genome, $i$.
 
-A window size for smoothing, $w_{i}$, is defined for each $i$. The default window size is defined as one that contains at least 70 CpGs and is at least 2000kb wide, that is, $w_{i} = (pos_{i}, pos_{i'})$, where:
+A window size for smoothing, $w_{i}$, is defined for each $i$. The default window size is defined as one that contains at least 70 CpGs and is at least 2 kb wide, that is, $w_{i} = (pos_{i}, pos_{i'})$, where:
 \begin{equation*}
 pos_{i'} = \left\{
   \begin{array}{l l}
