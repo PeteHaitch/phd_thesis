@@ -1,6 +1,7 @@
 \documentclass[11pt,a4paper,oneside]{book}	%fleqn,
+\usepackage{etex}
 
-\usepackage{longtable,rotating,amsmath,epic, graphics}
+\usepackage{longtable,rotating, amsmath, epic, graphics, bm}
 
 \usepackage{multirow, setspace, fullpage, graphicx, amssymb}
 
@@ -32,159 +33,6 @@
 % TODO: Remove all unused macros
 
 \renewcommand\baselinestretch{1.5} %line spacing is 1.5
-
-% convenient macros for lists
-
-\newcommand\BI{\begin{itemize}}
-
-\newcommand\EI{\end{itemize}}
-
-\newcommand\BE{\begin{enumerate}}
-
-\newcommand\EE{\end{enumerate}}
-
-\newcommand\BD{\begin{description}}
-
-\newcommand\ED{\end{description}}
-
-\newcommand\BF{\begin{figure}}
-
-\newcommand\EF{\end{figure}}
-
-\newcommand\BT{\begin{table}}
-
-\newcommand\ET{\end{table}}
-
-
-\newcommand\I\item
-
-\newcommand\h[1]{\Large\textbf{#1}\vspace{12pt}}
-
-\newcommand\N\newpage
-
-\newcommand\BC{\begin{quotation}\small\noindent}
-
-\newcommand\EC{\end{quotation}}
-
-\newcommand\beq{\begin{equation}}
-
-\newcommand\eeq{\end{equation}}
-
-\newcommand{\ba}{{\bf a}}
-
-\newcommand{\bb}{{\bf b}}
-
-\newcommand{\bc}{{\bf c}}
-
-\newcommand{\bd}{{\bf d}}
-
-\newcommand{\be}{{\bf e}}
-
-\newcommand{\bg}{{\bf g}}
-
-\newcommand{\bh}{{\bf h}}
-
-\newcommand{\bm}{{\bf m}}
-
-\newcommand{\bn}{{\bf n}}
-
-\newcommand{\bp}{{\bf p}}
-
-\newcommand{\bq}{{\bf q}}
-
-\newcommand{\br}{{\bf r}}
-
-\newcommand{\bs}{{\bf s}}
-
-\newcommand{\bt}{{\bf t}}
-
-\newcommand{\bu}{{\bf u}}
-
-\newcommand{\bv}{{\bf v}}
-
-\newcommand{\bw}{{\bf w}}
-
-\newcommand{\bx}{{\bf x}}
-
-\newcommand{\by}{{\bf y}}
-
-\newcommand{\bz}{{\bf z}}
-
-\newcommand{\bC}{{\bf C}}
-
-\newcommand{\bD}{{\bf D}}
-
-\newcommand{\bH}{{\bf H}}
-
-\newcommand{\bI}{{\bf I}}
-
-\newcommand{\bM}{{\bf M}}
-
-\newcommand{\bP}{{\bf P}}
-
-\newcommand{\bT}{{\bf T}}
-
-\newcommand{\bU}{{\bf U}}
-
-\newcommand{\bV}{{\bf V}}
-
-\newcommand{\bW}{{\bf W}}
-
-\newcommand{\bX}{{\bf X}}
-
-\newcommand{\bY}{{\bf Y}}
-
-\newcommand{\bZ}{{\bf Z}}
-
-\newcommand{\bone}{\mbox{\boldmath $1$}}
-
-\newcommand{\balpha}{\mbox{\boldmath $\alpha$}}
-
-\newcommand{\bbeta}{\mbox{\boldmath $\beta$}}
-
-\newcommand{\bdelta}{\mbox{\boldmath $\delta$}}
-
-\newcommand{\bepsilon}{\mbox{\boldmath $\epsilon$}}
-
-\newcommand{\bgamma}{\mbox{\boldmath $\gamma$}}
-
-\newcommand{\blambda}{\mbox{\boldmath $\lambda$}}
-
-\newcommand{\bmu}{\mbox{\boldmath $\mu$}}
-
-\newcommand{\bomea}{\mbox{\boldmath $\omega$}}
-
-\newcommand{\bpi}{\mbox{\boldmath $\pi$}}
-
-\newcommand{\bphi}{\mbox{\boldmath $\phi$}}
-
-\newcommand{\brho}{\mbox{\boldmath $\rho$}}
-
-\newcommand{\bsigma}{\mbox{\boldmath $\sigma$}}
-
-\newcommand{\bSigma}{\mbox{\boldmath $\Sigma$}}
-
-\newcommand{\btau}{\mbox{\boldmath $\tau$}}
-
-\newcommand{\btheta}{\mbox{\boldmath $\theta$}}
-
-\newcommand{\bpsi}{\mbox{\boldmath $\psi$}}
-
-\newcommand{\bxi}{\mbox{\boldmath $\xi$}}
-
-\newcommand{\bzeta}{\mbox{\boldmath $\zeta$}}
-
-\newcommand{\bfeta}{\mbox{\boldmath $\eta$}}
-
-\newcommand{\n}{\frac{1}{n}}
-
-\newcommand{\E}{{\rm I\!E}}
-
-\newcommand{\D}{{\rm I\!D}}
-
-\newcommand{\R}{{\rm I\!R}}
-
-\newcommand{\ls}{{\cal R}}
 
 \newcommand{\var}{{\rm var}}
 
@@ -263,21 +111,21 @@ Microarrays are a popular tool for measuring relative gene expression between RN
 
 {\bf This is to certify that}
 
-\BI
+\begin{itemize}
 
-\I[(i)] the thesis comprises only my original work towards
+\item [(i)] the thesis comprises only my original work towards
 
 the PhD except where indicated in the Preface,
 
-\I[(ii)] due acknowledgement has been made in
+\item [(ii)] due acknowledgement has been made in
 
 the text to all other material used,
 
-\I[(iii)] the thesis is less than 100,000 words in length,
+\item [(iii)] the thesis is less than 100,000 words in length,
 
 exclusive of tables, maps, bibliographies and appendices.
 
-\EI
+\end{itemize}
 
 
 
