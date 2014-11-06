@@ -44,19 +44,17 @@ statmodel.pdf: latex/phd_thesis.bib markdown/a_statistical_model_of_methlyC-seq.
 	mv latex/a_statistical_model_of_methlyC-seq_sc.pdf pdf/a_statistical_model_of_methlyC-seq.pdf
 	rm latex/a_statistical_model_of_methlyC-seq_sc*
 
-wgbs_analysis.latex: latex/phd_thesis.bib markdown/wgbs_analysis.md
+wgbs_analysis.md: latex/phd_thesis.bib Rmarkdown/wgbs_analysis.Rmd
+	Rscript -e "rmarkdown::render('Rmarkdown/wgbs_analysis.Rmd', output_format = 'html_document', output_dir = '../markdown')"
+	rm markdown/wgbs_analysis.html
+
+wgbs_analysis.latex: wgbs_analysis.md latex/phd_thesis.bib Rmarkdown/wgbs_analysis.Rmd
 	mkdir -p latex
 	pandoc --chapters -o latex/wgbs_analysis.tex markdown/wgbs_analysis.md
 
-wgbs_analysis.pdf: latex/phd_thesis.bib markdown/wgbs_analysis.md markdown/bibliography.md
+wgbs_analysis.pdf: latex/phd_thesis.bib Rmarkdown/wgbs_analysis.Rmd markdown/bibliography.md
 	mkdir -p pdf
-	pandoc --natbib -s --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o latex/wgbs_analysis_sc.tex markdown/wgbs_analysis.md markdown/bibliography.md
-	pdflatex -output-directory latex latex/wgbs_analysis_sc
-	bibtex latex/wgbs_analysis_sc
-	pdflatex -output-directory latex latex/wgbs_analysis_sc
-	pdflatex -output-directory latex latex/wgbs_analysis_sc
-	mv latex/wgbs_analysis_sc.pdf pdf/wgbs_analysis.pdf
-	rm latex/wgbs_analysis_sc*
+	Rscript -e "rmarkdown::render('Rmarkdown/wgbs_analysis.Rmd', output_format = 'pdf_document', output_file = '../wgbs_analysis.pdf', output_dir = '../pdf')"
 
 comethylation.md: latex/phd_thesis.bib Rmarkdown/comethylation.Rmd
 	Rscript -e "rmarkdown::render('Rmarkdown/comethylation.Rmd', output_format = 'html_document', output_dir = '../markdown')"
