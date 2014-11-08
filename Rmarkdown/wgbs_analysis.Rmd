@@ -1,5 +1,5 @@
 ---
-title: "Analysis of bisulfite-sequencing data"
+title: "Bioinformatics analysis of bisulfite-sequencing data"
 author: "Peter Hickey"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:

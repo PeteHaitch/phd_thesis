@@ -244,7 +244,7 @@ In mammalian cells, the writers are the DNA _methyltransferase_ (DNMT) enzymes. 
 
 [^KO]: A knockout mouse for gene $X$ is a mouse that has been genetically engineered to remove or otherwise inactivate gene $X$. Mouse knockouts can be either heterozygous knockouts (one copy still of the gene is still present/active) or homozygous knockouts (both copies of gene absent/inactive).
 
-The readers of DNA methylation recognise methylated DNA. These readers can recruit additional proteins to the site of the methylated cytosine to perform a variety of functions related to gene expression. For example, the methyl-CpG-binding domain (_MBD_) group of proteins bind to DNA containing a methylated CpG, which can then suppress gene expression by preventing transcription factor binding at that site \cite{Nan:1993gm}. Another group, the ubiquitin-like, containing PHD and RING finger domain (_UHRF_) proteins, help _DNMT1_ methylate hemimethylated DNA, such as the daughter strand created during DNA replication \cite{Sharif:2007ft, Bostick:2007jh}.
+The readers of DNA methylation recognise methylated DNA. These readers can recruit additional proteins to the site of the methylated cytosine to perform a variety of functions related to gene expression. For example, the methyl-CpG-binding domain (_MBD_) group of proteins bind to DNA containing a methylated CpG, which can then suppress gene expression by preventing transcription factor binding at that site \cite{Nan:1993gma}. Another group, the ubiquitin-like, containing PHD and RING finger domain (_UHRF_) proteins, help _DNMT1_ methylate hemimethylated DNA, such as the daughter strand created during DNA replication \cite{Sharif:2007ft, Bostick:2007jh}.
 
 The removal or erasure of DNA methylation, _demethylation_, is characterised as _passive_ loss or _active_ removal. Passive loss occurs when the maintenance methyltransferases do not efficiently perform their role of restoring DNA methylation following cell division. This leads to a gradual, stochastic and genome-wide loss of DNA methylation after multiple cell divisions. This form of passive demethylation, sometimes called replication-dependent demethylation, cannot explain observations of precise targeted demethylation (__TODO: example__) nor the two stages of rapid global demethylation that occur during development \cite{Wu:2014gw}.
 
@@ -294,6 +294,8 @@ In this section I will describe each of the pre-treatments but will focus on the
 - [x] DONE
 
 _Restriction endonucleases_ are an important technique in molecular biology. These enzymes can preferentially "cut/cleave/digest" DNA at particular sequence motifs. The motif at which a restriction enzyme cleaves DNA is called the _recognition motif_ or _restriction sequence_. The methylation of a position in the recognition motif can inhibit a restriction enzyme from cleaving the DNA. This can be used to design an assay to infer the methylation state of a DNA fragment.
+
+__TODO: Is it most accurate to say that restriction enzymes "cleave", "cut" or "digest" DNA?__
 
 For example, the recognition site of the restriction enzyme _HpaII_ is `CCGC`. However, _HpaII_ will only digest DNA when the second cytosine in the motif is unmethylated. The _HELP_ (_HpaII_ tiny fragment enrichment by ligation-mediated PCR) assay compares DNA digested by _HpaII_ to one digested with another restriction enzyme that has the same recognition motif but is methylation-insensitive (_MspI_) to identify _hypomethylated_ regions of a genome \cite{Khulan:2006gx}.
 
@@ -352,7 +354,7 @@ A key advantage of bisulfite-conversion assays over enzyme digest and affinity e
 
 A recently discovered disadvantage is that bisulfite-conversion assays are unable to distinguish 5hmC from 5mC because hydroxymethyl similarly protects a cytosine from deamination to uracil. In effect, the detection of 5mC, and all subsequent inference, is confounded with that of 5hmC. For most experiments this isn't much of a problem - most cells have very low levels of 5hmC and so there is little confounding - however, in certain experiments this needs a more careful approach. To address this issue, \cite{Booth:2012fh} developed _oxidative bisulfite-sequencing_ (oxBS-seq) and \cite{Yu:2012ej} developed _Tet-assisted bisulfite sequencing_ (TAB-seq) for separate 5mC and 5hmC detection.
 
-oxBS-seq specifically measures 5mC. The input DNA is oxidated by potassium perruthenate (RKRuO_{4}$), which converts 5hmC to 5fC, prior to bisulfite-treatment. Only 5mC is protected from conversion during the bisulfite-treatment, which effectively means that only 5mC remains to be detected at the sequencing stage. The level of 5hmC can be estimated by performing traditional bisulfite-sequencing and then "subtracting" the oxBS-seq signal (5mC) from the bisulfite-sequencing signal (5mC + 5hmC).
+oxBS-seq specifically measures 5mC. The input DNA is oxidated by potassium perruthenate ($RKRuO_{4}$), which converts 5hmC to 5fC, prior to bisulfite-treatment. Only 5mC is protected from conversion during the bisulfite-treatment, which effectively means that only 5mC remains to be detected at the sequencing stage. The level of 5hmC can be estimated by performing traditional bisulfite-sequencing and then "subtracting" the oxBS-seq signal (5mC) from the bisulfite-sequencing signal (5mC + 5hmC).
 
 TAB-seq takes the opposite approach to oxBS-seq by specifically measuring 5hmC. The input DNA is treated with a $\beta$-glucosyltransferase, which converts 5hmC to $\beta$-glucosyl-5-hydroxymethylcytosine (5gmC), followed by TET oxidation. Only 5gmC is protected from TET oxidation, which effectively means that only 5hmC remains to be detected at the sequencing stage. The level of 5mC can be estimated by performing traditional bisulfite-sequencing and then "subtracting" the TAB-seq signal (5hmC) from the bisulfite-sequencing signal (5mC + 5hmC).
 
@@ -369,19 +371,3 @@ The bisulfite-treatment of DNA can introduce biases and other problems. Three ex
 Ideally, an assay of DNA methylation could naturally 'read' methylated cytosines as a distinct signal from unmethylated cytosines. This idea forms the basis of assays using the kinetics of DNA to infer the presence of DNA methylation and other DNA modifications. While very exciting, these assays do not yet scale to studying genome-wide DNA methylation levels in mammalian-sized genomes.
 
 The only commercially available assay in this class is the Pacific Biosciences SMRT technology \cite{Flusberg:2010hra}. It infers the presence of DNA modifications by comparing the time it takes to 'read' the modified form of a nucleotide, such as 5mC, to the time it takes to read its unmodified form.
-
-## General TODOs
-* Nucleotide, residue, (nucleo)base; what's the difference and which term should I use?
-	* A nucleotide is composed of a nucleobase (also termed a nitrogenous base), a five-carbon sugar (either ribose or 2-deoxyribose), and one or more phosphate groups \[Coghill, Anne M.; Garson, Lorrin R., ed. (2006). The ACS style guide: effective communication of scientific information (3rd ed.). Washington, D.C.: American Chemical Society. p. 244. ISBN 978-0-8412-3999-9.)\]
-* Should I give more detail on Rafa's CGI HMM?
-* Define eukaryotes, prokaryotes and viruses
-* Hyphenation or not of "bisulfite-sequencing"?
-  - Yes, hyphenate.
-* General term for methylC-seq, BS-seq, etc.
-  - "whole-genome bisulfite-sequencing (WGBS)"
-* Is it most accurate to say that restriction enzymes "cleave", "cut" or "digest" DNA?
-* Define/describe DNA sequencing and the genomics revolution in the section describing DNA (or reference genome section?)
-	* Define "library"
-* Fix up reference formating
-* Note that when I refer to a read I mean either a single-end read or a paired-end read. I will use to read_1 and read_2 if I want to refer a particular read that makes up a paired-end read.
-* \cite{Zhang:2013uu} credit Laurent et al. (2010) with BS-seq and Cokus with WGBS.

@@ -428,7 +428,7 @@ In the above examples, the researchers are modelling the distribution of $B_{i, 
 
 __TODO: Move this section to the chapter dedicated to reviewing co-methylation.__
 
-Many researchers have observed that DNA methylation is spatially correlated along the genome, (e.g. \cite{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Hansen:2011gu, Hebestreit:2013ko, Wang:2011cw, Pedersen:2012vl, Lacey:2013iy, Sofer:2013bk, Liu:dy, Lyko:2010drm, Landan:2012kp, Lister:2009hy}). Just as we can explore the distribution of DNA methylation levels within a sample or between samples, so too can we explore the correlations of DNA methylation levels within a sample or between samples.
+Many researchers have observed that DNA methylation is spatially correlated along the genome, (e.g. \cite{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Hansen:2011gu, Hebestreit:2013ko, Wang:2011cw, Pedersen:2012vl, Lacey:2013iy, Sofer:2013bk, Liu:dy, Lyko:2010dr, Landan:2012kp, Lister:2009hy}). Just as we can explore the distribution of DNA methylation levels within a sample or between samples, so too can we explore the correlations of DNA methylation levels within a sample or between samples.
 
 #### Correlation of DNA methylation within samples {-}
 
@@ -452,9 +452,9 @@ $\beta$-values are the _de facto_ standard unit for reporting methylation levels
 To address (2), proportion data are often tranformed via a variance stabilisation transformation. The aim is to make the variance (approximately) independent of the mean. Popular variance stabilisation transformations include:
 
 * The arcsine transformation, $\arcsin{\sqrt{\beta}}$ \citep{ANSCOMBE:1948bw}. A small value, e.g. $0.5$, is added to $m$ and $u$ to avoid $\beta = 0, 1$.
-* The "averaged arcsine" transformation, $\arcsin{\sqrt{\frac{m}{m + u + 1}}} + \arcsin{\sqrt{\frac{m + 1}{m + u + 1}}}$ \citep{Freeman:1950bh}. This transformation does not have a unique inverse \citep{Nunes:2008vj}.
+* The "averaged arcsine" transformation, $\arcsin{\sqrt{\frac{m}{m + u + 1}}} + \arcsin{\sqrt{\frac{m + 1}{m + u + 1}}}$ \citep{Freeman:1950bh}. This transformation does not have a unique inverse \citep{Nunes:2009vj}.
 
-The use of variance stabilising transformations for proportion data seem to have fallen out of favour (e.g. [http://www.esajournals.org/doi/full/10.1890/10-0340.1](http://www.esajournals.org/doi/full/10.1890/10-0340.1)). The noq favoured approach is generalised linear models (__CITE__), in particular the logistic regression model (__CITE__?).
+The use of variance stabilising transformations for proportion data seem to have fallen out of favour (e.g. [http://www.esajournals.org/doi/full/10.1890/10-0340.1](http://www.esajournals.org/doi/full/10.1890/10-0340.1)). The now favoured approach is generalised linear models (__CITE__), in particular the logistic regression model (__CITE__?).
 
 ## Downstream analyses
 
