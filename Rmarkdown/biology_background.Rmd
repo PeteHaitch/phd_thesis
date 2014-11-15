@@ -344,7 +344,7 @@ One final class of bisulfite-conversion assays does not use microarrays or high-
 
 - [x] DONE
 
-Bisulfite-conversion assays are considered the "gold standard" for studying DNA methylation since cytosine methylation can be detected at single-base resolution \cite{Stirzaker:2014cu}. However, almost all bisulfite-based assays require a considerable amount of DNA, e.g., $1-5$ $\mu$g for whole-genome bisulfite-sequencing, which is extracted from a population of cells. The minimal amount of DNA is being reduced with each technological advance. Furthermore, single-cell bisulfite-sequencing assays have recently been reported \cite{Guo:2013ih, Smallwood:2014kn}[^not_genome_wide]
+Bisulfite-conversion assays are considered the "gold standard" for studying DNA methylation since cytosine methylation can be detected at single-base resolution \cite{Stirzaker:2014cu}. However, almost all bisulfite-based assays require a considerable amount of DNA, e.g., $1-5$ $\mu$g for whole-genome bisulfite-sequencing, which is extracted from a population of cells. The minimal amount of DNA is being reduced with each technological advance. Furthermore, single-cell bisulfite-sequencing assays have recently been reported \cite{Guo:2013ih, Smallwood:2014kn}[^not_genome_wide].
 
 [^not_genome_wide]: These are not yet proper genome-wide assays. The technique of \cite{Guo:2013ih} is adapted from RRBS and so only assays a small percentage of cytosines in the genome. And the technique of \cite{Smallwood:2014kn}, while intended as a genome-wide assay, can reportedly only "accurately measure DNA methylation at up to 48.4% of cpG sites" \cite{Smallwood:2014kn}.
 
