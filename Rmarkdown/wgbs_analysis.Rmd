@@ -53,7 +53,7 @@ These bisulfite-sequencing read mappers take one of two approaches:
 1. "Methylation-aware" mismatch penalties.
 2. _In silico_ bisulfite-conversion of reads and reference genomes.
 
-While "methylation-aware" mappers provide the highest efficiency, these suffer from a bias whereby methylated reads are preferentially mapped over unmethylated reads (__CITE FELIX__). This biases downstream inference and means that these mappers are generally less popular. I will instead focus on the _in silico_ bisulfite-conversion mappers, called as such because of a key step taken by these in the mapping process.
+While _methylation-aware_ mappers provide the highest efficiency, these suffer from a bias whereby methylated reads are preferentially mapped over unmethylated reads (__CITE FELIX__). This biases downstream inference and means that these mappers are generally less popular. I will instead focus on the _in silico_ bisulfite-conversion mappers, called as such because of a key step taken by these in the mapping process.
 
 _In silico_ bisulfite-conversion mappers convert all cytosines to thymines (resp. guanines to adenines) of the forward (resp. reverse) strand from the reference genome. They then take each read and create two _in silico_ bisulfite-converted versions of it[^2_reads]: the CT-read replaces all residual thymines with cytosines and the GA-read replaces all residual guanines with adenines. The CT-read is mapped against the CT-genome and the GA-read is mapped against the GA-genome using a standard mapping tools such as Bowtie2 (__CITE__) or BWA (__CITE__). This process is illustrated in __FIGURE__.
 
@@ -71,6 +71,18 @@ __TABLE__ lists some popular bisulfite-sequencing read mappers with the underlyi
 * __OTHERS__
 
 Each of these aligners can report the output in the standard `SAM` format (__CITE__), although each mapper does so in a slightly different way, which it difficult to develop downstream analysis tools.
+
+Read mapping is not perfect and produces both false positive and false negative results. False positives are due to reads mapped to the wrong location and reads mapped to multiple locations with equal mapping scores. False negatives are reads that are not mapped to any location; these reads are effectively lost from any downstream analysis. The parameter settings used by the mapping software determine the false positive and false negative rates.
+
+There are biological and technical reasons why mapping against a reference genome can produce these errors. Biologically, if the sample contains sequences that are too genetically divergent from the reference genome then these sequences will be difficult, even impossible, to map. A particularly problematic class of sequences are those from repetitive regions of the genome. These repetitive sequences will map to multiple locations in the reference genome equally well. Furthermore, the number of times these repetitive sequences occur differs between the reference genome and sample's genome.
+
+Technically, reads from Illumina sequencing are often too short to resolve the mapping location of these repetitive sequences. Resolving the mapping location of repetitive sequences can be achieved by using other sequencing technologies, such as Pacific Biosciences SMRT technology \cite{Flusberg:2010hra}, which produces longer reads.
+
+Another source of technical error in read mapping is really due to sequencing error. A sequencing error can transform a uniquely mapping read to one that maps equally well to multiple locations or, worse still, a read that maps uniquely to a single, but incorrect, location. Sequencing errors can also corrupt a read so badly that it no longer can be mapped, which leads to that read being a false negative. In practice, most people try to mitigate these problems through their choice of parameters used by the read mapping software.
+
+Ideally, mapping software assigns the degree of confidence it has that the read is correctly mapped via a mapping quality score (`mapQ`). In theory, reads might be down-weighted in downstream analyses based on the mapping quality score. However, these mapping quality scores are often poorly calibrated, particularly for methylC-seq data, which makes them less useful. `Bismark` \cite{Krueger:2011eb}, a popular bisulfite-sequencing mapping software, only recently introduced mapping quality scores (`v0.12.1` released in April 2014).
+
+The above problems are general challenges of read mapping and are not specific to bisulfite-sequencing data, although the reduced complexity of bisulfite-sequencing reads exacerbates these issues. The difficulty of mapping to repetitive regions of the genome is a particularly frustrating one for  bisulfite-sequencing data. Repetitive sequences, such as LINEs and SINEs, are frequently methylated and so are of interest to researchers studying DNA methylation. The low mapping efficiencies of these regions means that there is often limited data of these elements from bisulfite-sequencing data (__CHECK IN MY DATA AND REPORT COVERAGE__).
 
 \subsection{PCR duplicates}\label{sec:pcr_duplicates}
 
@@ -253,7 +265,21 @@ All bisulfite-sequencing assays use _reference-based_ methylation calling. That 
 
 When using reference-based methylation calling, the position of the methylation locus is with respect to the reference genome, since then all samples will use a common set of co-ordinates. Furthermore, unless the sample of the genome is fully known, methylation loci in insertions cannot be distinguished from genetic variation since there is no reference sequence to compare them against.
 
-Each aligned read may be used for methylation calling, although each read should be subjected to some filtering to remove low-quality reads and low-quality bases. Standard filters include removing reads marked as possible PCR duplicates, reads with a mapping quality (`mapQ`) below a threshold and bases with a base quality below a threshold, and ignoring read-positions where there is evidence of M-bias.
+Each aligned read may be used for methylation calling, although each read should be subjected to some filtering to remove low-quality reads and low-quality bases. When using a set of filters, at each step a read either 'survives', and is subjected to the proceeding filter, or 'dies', and is excluded from the estimation of $M$ and $U$[^read_filters]. Strictly speaking each sequenced nucleotide is assigned a weight, however, in practice, filter are normally first applied to reads and then to all nucleotides within 'surviving' reads. In my own `methtuple` software I routinely use the following filters.
+
+[^read_filters]: A read that is not used to estimate $M$ and $U$ may still be used in other analyses, such as estimating copy number variation, and vice-versa.
+
+A read survives if:
+
+1. Read is mapped (SE, PE) and mapped in the expected orientation (PE only).
+2. Read is not marked as a PCR duplicate.
+3. Read has a mapping quality score greater than some threshold.
+
+A sequenced base survives if:
+
+1. Read-position of base means that it is unlikely to be affected by M-bias.
+2. The base quality score greater than some threshold.
+3. The base is a 'methylation-induced mismatch' (e.g., the sequenced base is a C or T at a C in the reference sequence) and not a "non-methylation-induced mismatch" (e.g., the sequenced base is an A or a G at a C in the reference sequence).
 
 The reference sequence is typically the reference genome used in the alignment step, which implicitly defines $\mathcal{I}_{j} :=\mathcal{I}_{rg}, j = 1, \ldots, N$, where $\mathcal{I}_{rg}$ is the set of methylation loci in the reference genome. Due to DNA variation between the sample and the reference genome, this assumption is obviously not true. A more refined approach incorporates genetic differences between the sample and the reference genome. This can be done in several ways:
 
