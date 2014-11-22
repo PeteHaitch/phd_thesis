@@ -14,18 +14,14 @@ bibliography: ../latex/phd_thesis.bib
 
 \section{Chapter Overview}\label{sec:biology_background_chapter_overview}
 
-- [x] DONE
-
 In this chapter I summarise the basic biology necessary for
 understanding my thesis. I introduce DNA methylation, describe some of its biological roles and assays for studying DNA methylation, with a particular focus on bisulfite-sequencing.
 
 \section{From DNA to genomes}\label{ref:from_dna_to_genomes}
 
-- [x] DONE
+The genome is the genetic material of an organism. In most organisms, the genome is encoded by deoxyribonucleic acid, _DNA_. In eukaryotes[^eukaryotes], which includes plants, fungi and animals, the DNA is wound around repeating units of eight _histone_ protein cores to form _nucleosomes_, which are the fundamental unit of _eukaryotic chromatin_. Chromatin compactly packages the DNA into _chromosomes_, so that the organism's complete nuclear DNA, its nuclear genome, might fit into the nucleus of its cells[^extra_nuclear_genomes].
 
-The genome is the genetic material of an organism. In most organisms, the genome is encoded by deoxyribonucleic acid, _DNA_. __FIGURE__ beautifully illustrates the hierarchy that takes us from DNA through to the genome.
-
-In eukaryotes[^eukaryotes], which includes plants, fungi and animals, the DNA is wound around repeating units of eight _histone_ protein cores to form _nucleosomes_, which are the fundamental unit of _eukaryotic chromatin_. Chromatin compactly packages the DNA into _chromosomes_, so that the organism's complete nuclear DNA, its nuclear genome, might fit into the nucleus of its cells[^extra_nuclear_genomes].
+The material in this chapter can be found in any good introductory molecular biology text, such as \cite{Alberts:2007vj}.
 
 [^eukaryotes]: Eukaryotes are organisms composed of one or more cells with a distinct nucleus and cytoplasm. Most of a eukaryotic cell's DNA is contained in the nucleus \cite{Alberts:2007vj}.
 
@@ -33,29 +29,27 @@ In eukaryotes[^eukaryotes], which includes plants, fungi and animals, the DNA is
 
 \subsection{DNA}\label{sec:DNA}
 
-The double helix is the most common, and most famous, structure of DNA (__REFERENCE__). In the double helix, the two strands of DNA run in opposite directions to each other and are therefore _anti-parallel_. One strand is called the 5' strand (pronounced "5 prime strand") - also known as the sense strand, Crick strand or top strand - and the other strand called the 3' strand (pronounced "3 prime strand") - also known as the antisense strand, Watson strand or bottom strand. Along each strand of the double helix are the four DNA nucleobases (_bases_): adenine (_A_), cytosine (_C_), guanine (_G_) and thymine (_T_). These bases form _complementary_ base pairings, _A_ with _T_ and _C_ with _G_, along the DNA double helix.
+The double helix is the most common, and most famous, structure of DNA. In the double helix, the two strands of DNA run in opposite directions to each other and are therefore _anti-parallel_. One strand is called the 5' strand (pronounced "5 prime strand") - also known as the sense strand, Crick strand or top strand - and the other strand called the 3' strand (pronounced "3 prime strand") - also known as the antisense strand, Watson strand or bottom strand. Along each strand of the double helix are the four DNA nucleobases (_bases_): adenine (_A_), cytosine (_C_), guanine (_G_) and thymine (_T_). These bases form _complementary_ base pairings, _A_ with _T_ and _C_ with _G_, along the DNA double helix. This is illustrated in Figure \ref{fig:double_helix}.
 
-[__FIGURE OF DNA BASE  PAIRING__](http://upload.wikimedia.org/wikipedia/commons/4/4c/DNA_Structure%2BKey%2BLabelled.pn_NoBB.png).
+![Simple diagram of double-stranded DNA showing complementary base pairings. By Forluvoft (Own work) [Public domain], via Wikimedia Commons [http://commons.wikimedia.org/wiki/File%3ADNA_simple2.svg](http://commons.wikimedia.org/wiki/File%3ADNA_simple2.svg)\label{fig:double_helix}](../figures/DNA_simple2.pdf)
 
-A gene is a sequence of DNA that is _transcribed_ to produce a functional product called ribonucleic acid or _RNA_ (Source: [http://sandwalk.blogspot.com.au/2007/01/what-is-gene.html](http://sandwalk.blogspot.com.au/2007/01/what-is-gene.html)). RNA may in turn be translated into a protein sequence or perform other roles in the regulation of gene expression (__CITE__). It is important to note here than not all DNA is transcribed into RNA. That is not to say that untranscribed DNA is unimportant. For instance, there are untranscribed _regulatory sequences_ of DNA that determine whether a nearby gene is transcribed. There is also _junk DNA_, _garbage DNA_, __etc.__ (__SOURCE__). Conversely, not all transcribed DNA is a gene. DNA transcription is "permissive" and there are many DNA sequences that are transcribed by accident or in error.
+A gene is a sequence of DNA that is _transcribed_ to produce a functional product in the form of ribonucleic acid, _RNA_. RNA may in turn be translated into a protein sequence or perform other roles in the regulation of gene expression. It is important to note here than not all DNA is transcribed into RNA, which is not to say that untranscribed DNA is unimportant. For instance, there are untranscribed _regulatory sequences_ of DNA that determine whether a nearby gene is transcribed. There is also _junk DNA_ that is of little consequence to the organism \cite{Alberts:2007vj}. Conversely, not all transcribed DNA is a gene. DNA transcription is _permissive_ and there are many DNA sequences that are transcribed by accident or in error.
 
-DNA is able to self-replicate so that, for example, eukaryotic cells created during _mitosis_ contain the same DNA as the "parent" cell. During DNA replication, the two strands are separated and each strand's _complementary_ DNA sequence is copied by an enzyme called _DNA polymerase_. It is because the two strands of DNA are complementary that ensures the daughter cell contains the same DNA sequence as the parent cell[^dna_replication].
+DNA is able to self-replicate. This means that, for example, eukaryotic cells created during _mitosis_ contain the same DNA as the 'parent' cell. During DNA replication, the two strands are separated and each strand's _complementary_ DNA sequence is copied by an enzyme called _DNA polymerase_. It is because the two strands of DNA are complementary that ensures the daughter cell contains the same DNA sequence as the parent cell[^dna_replication].
 
-[^dna_replication]: This of course ignores errors in the replication process. Such errors are very rare events but because DNA replication happens __HOW FREQUENTLY__ these events do occur. There are error-correcting processes that reduce the chance that such an error is retained in the daughter sequence, however, these are not perfect. Hence errors in DNA replication are one source of what are known as _mutations_ in the DNA.
+[^dna_replication]: This of course ignores errors in the replication process. Such errors are very rare events but because DNA replication happens so frequently these events do occur. There are error-correcting processes that reduce the chance that such an error is retained in the daughter sequence, however, these are not perfect. Hence errors in DNA replication are one source of what are known as _mutations_ in the DNA.
 
 \subsection{Nucleosomes and chromatin}\label{sec:nucleosome_and_chromatin}
 
-Basic descriptions of nucleosomes and chromatin are ripe with analogies. In one such popular analogy, the histones are the 'spool' around which the DNA 'thread' is wrapped to form nucleosomes (__CITE__). These nucleosomes themselves have the appearance of "beads on a string" when viewed under an electron microscope (__CITE__).
+The core of a nucleosome consists of four pairs of histones, H2A, H2B, H3 and H4, which are consequently known as the _core histones_. A fifth histone, H1/H5, is known as the _linker histone_. Each of these histones has a 'tail' consisting of a string of amino acids. These tails can undergo _post-translational modifications_, such as methylation, acetylation and phosphorylation, which can alter their interactions with DNA and nuclear proteins \cite{Alberts:2007vj} (discussed in Section \ref{sec:epigenetics} on epigenetics).
 
-The core of a nucleosome consists of four pairs of histones, H2A, H2B, H3 and H4, which are consequently known as the _core histones_. A fifth histone, H1/H5, is known as the _linker histone_. Each of these histones has a 'tail' consisting of a string of amino acids. These tails can undergo _post-translational modifications_, such as methylation, acetylation and phosphorylation, which can alter their interactions with DNA and nuclear proteins (__CITE__) (see below Section \ref{epigenetics} on epigenetics).
-
-The nucleosomes are interconnected by _linker DNA_ to form the macromolecule  called chromatin. The linker sequences are between $20-60$ nucleotides in length, while approximately 147 nucleotides are wrapped around each nucleosome and a further 20 nucleotides wrapped around each additional H1/H5 histone (__CITE: http://www.nature.com/scitable/topicpage/dna-packaging-nucleosomes-and-chromatin-310#__).
+The nucleosomes are interconnected by _linker DNA_ to form the macromolecule called chromatin. The linker sequences are between $20-60$ nucleotides in length, while approximately 147 nucleotides are wrapped around each nucleosome and a further 20 nucleotides wrapped around each additional H1/H5 histone \cite{Annunziato:2008ue}.
 
 Chromatin is frequently described as either _heterochromatin_ or _euchromatin_. Heterochromatin, or closed chromatin, is more tightly packed than euchromatin, or open chromatin. Heterochromatin is associated with transcriptionally repressed regions of the genome because the machinery required to translate DNA to RNA is unable to physically access the DNA. In contrast, euchromatin is associated with transcriptionally active regions of the genome since its more open nature allows easier access for the translational machinery.
 
 The same region of an individual's genome may vary between heterochromatin and euchromatin states at different stages of the organism's life and in different cells of the organism. This is one mechanism which by gene expression is regulated.
 
-Chromatin is further coiled up into various literally-named structures, such as the 30-nanometre and 250-nanometre fibres, and, ultimately, packaged into _chromosomes_. The set of chromosomes makes up an individual's _genome_.
+Basic descriptions of nucleosomes and chromatin are ripe with analogies. In one such popular analogy, the histones are the 'spool' around which the DNA 'thread' is wrapped to form nucleosomes. The chromatin then has the appearance of "beads on a string" when viewed under an electron microscope \cite{Alberts:2007vj}. Chromatin is further coiled up into various literally-named structures, such as the 30-nanometre and 250-nanometre fibres, and, ultimately, packaged into _chromosomes_. The set of chromosomes makes up an individual's _genome_.
 
 \subsection{Genomes}\label{sec:genomes}
 
@@ -71,49 +65,47 @@ Humans are _diploid_ organisms, meaning that we have two copies of each chromoso
 
 [^mtDNA]: The mitochondrial DNA is maternally inherited.
 
-The length of a chromosome is typically reported as the number of DNA base pairs (bp) in a single copy of that chromosome and the _haploid_ length of a genome is the sum of these chromosome lengths. The haploid human genome is approximately 3.3 billion base pairs long.
+The length of a chromosome is typically reported as the number of DNA base pairs (bp) in a single copy of that chromosome and the _haploid_ length of a genome is the sum of these chromosome lengths. The haploid human genome is approximately 3 billion base pairs long (Golden Path Length [http://asia.ensembl.org/Homo_sapiens/Location/Genome?r=1](http://asia.ensembl.org/Homo_sapiens/Location/Genome?r=1)).
 
-A _reference genome_ was completed by the Human Genome Project in 2003 (__CITE__). This reference genome does not represent the genome of any one  human since it uses DNA donated by several different people. Rather, a reference genome is a kind of map or scaffold that can be used to identify similarities and differences between individual genomes.
+A human _reference genome_ was jointly completed by the International Human Genome Consortium and Celera Genomics in 2003 \cite{Venter:2001fq,Lander:2001hk}. This reference genome does not represent the genome of any one human since it uses DNA donated by several different people \cite{Venter:2001fq,Lander:2001hk}. Rather, a reference genome is a kind of map or scaffold that can be used to identify similarities and differences between individual genomes.
 
-The human genome has obvious uses in medical research and biotechnology, but is also used to learn about evolution and human history, such as migration. Every person, except genetically identical twins, has their own unique genome. However, the genomes of any two randomly selected people are identical at __WHAT PERCENTAGE__ of sites. The vast majority, __WHAT PERCENTAGE__, of the human genome is made up of non-coding DNA. This is similar to other organisms with similarly large genomes (__CITE__). Much of the non-coding DNA is junk DNA. Indeed, over __WHAT PERCENTAGE__ of the human genome is comprised of repetitive DNA.
+The human genome has obvious uses in medical research and biotechnology, but is also used to learn about evolution and human history, such as human migration patterns \cite{Hellenthal:2014ky}. Every person, even a _monozygotic_ ('identical') twin \cite{Hellenthal:2014ky}, has their own unique genome. However, genomes of any two randomly selected people are identical at approximately $99.9\%$ of sites. Furthermore, the vast majority, $98\%$ by some estimates \cite{Elgar:2008dm}, of the human genome is made up of non-coding DNA and upwards of $50\%$ is repetitive sequence \cite{Treangen:2012dn}.
 
 \subsubsection{Mouse genome}\label{sec:mouse_genome}
 
-Mice are also diploid organisms, but have 19 pairs of autosomes, one pair of sex chromosomes and a mitochondrial chromosome. The mouse genome is slightly smaller than the human genome, at 2.8 billion base pairs long. Like the human genome, there is a mouse reference genome (__CITE__). It is based on several female mice from the _C57BL/6J_ strain, an important strain of mouse widely used in medical research.
+Mice are also diploid organisms, but have 19 pairs of autosomes, one pair of sex chromosomes and a mitochondrial chromosome. The mouse genome is slightly smaller than the human genome, at 2.7 billion base pairs long (Golden Path Length [http://asia.ensembl.org/Mus_musculus/Location/Genome?r=1](http://asia.ensembl.org/Mus_musculus/Location/Genome?r=1)). Like the human genome, there is a mouse reference genome \cite{MouseGenomeSequencingConsortium:2002fn}. It is based on several female mice from the _C57BL/6J_ strain, an important strain of mouse widely used in medical research.
 
 Mouse strains used in medical research are highly inbred due to years of concerted mating programs. This reduced genetic variability, and the control that researchers have over it, make these mice a very powerful tool in identifying the biological cause of a diverse range of phenotypes.
 
-\subsubsection{Arabidopsis Thaliana genome}\label{sec:human_genome}
+\subsubsection{Arabidopsis thaliana genome}\label{sec:arabidopsis_genome}
 
-Arabidopsis is a small flowering plant. The most widely studied species is _A. thaliana_, which is diploid and has one of the smallest genomes known in the plant kingdom (__CITE__). The genome of _A. thaliana_ is 135 million base pairs long and is packaged as five pairs of chromosomes (__CITE__). The small size of its genome, coupled with its small physical size, rapid development and its tolerance to both cross-pollination and self-pollination[^cross_and_self_pollination], make _A. thaliana_ an ideal organism for studying plant development.
+Arabidopsis is a small flowering plant. The most widely studied species is _A. thaliana_, which is diploid and has one of the smallest genomes known in the plant kingdom at 135 million base pairs long, which is packaged as five pairs of chromosomes ([http://plants.ensembl.org/Arabidopsis_thaliana/Info/Index](http://plants.ensembl.org/Arabidopsis_thaliana/Info/Index)). The small size of its genome, coupled with its small physical size, rapid development and its tolerance to both cross-pollination and self-pollination[^cross_and_self_pollination], make _A. thaliana_ an ideal organism for studying plant development.
 
 [^cross_and_self_pollination]: The advantage in genetic studies of using a plant that is tolerant of self-pollination is that recessive mutations can be quickly made homozygous and thus expressed. Cross-pollination allows the creation of new strains with multiple mutations.
 
 \subsection{Genetic variation}\label{sec:genetic_variation}
 
-A key question in biology, perhaps _the_ key question, is what determines an organism's _phenotype_. An individual's phenotype is "the set of observable characteristics of an individual resulting from the interaction of its genotype with the environment" (__CITE: currently using google's definition__). Two simple examples of phenotypes are height and weight. Both have a genetic component, e.g., the offspring of tall parents are on average taller than those offspring of short parents, but there are also environmental components, such as the contribution of diet to weight. In medical research, a person's phenotype might be whether she is affected by a particular disease. It might also be some proxy, such as her blood pressure or the expression levels of particular genes.
+A key question in biology, perhaps _the_ key question, is what determines an individual's _phenotype_. An individual's phenotype is the set of its observable characteristics resulting from the interaction of its genotype with the environment. Two simple examples of phenotypes are height and weight. Both have a genetic component, e.g., the offspring of tall parents are on average taller than the offspring of short parents, but also have environmental components, such as the contribution of diet to weight. In medical research, a person's phenotype might be whether she is affected by a particular disease. It might also be some proxy, such as her blood pressure or the expression levels of particular genes.
 
 Variation between individual's genomes, be it at single nucleotides[^snvs_snps] or across larger regions[^indels], is one important source of phenotypic variation. Importantly, genetically-driven phenotypic variation is frequently _heritable_, meaning that phenotypes can be passed on from one generation to the generation via the genome.
 
 [^snvs_snps]: An individual nucleotide that is variable in the population is called a single nucletoide variant (_SNV_). A SNV that is frequently variable in the population, say at least $1\%$ of the population are variable at that site, is called a single nucleotide polymorphism (SNP). All SNPs are SNVs but the converse is not true.
 
-[^indels]: __TODO: Define__
+[^indels]: An indel is a short insertion or deletion of DNA sequence in an organism, usually relative to a reference genome.
 
-Environmental variation has clear influence on certain phenotypes. However, it often can be difficult to determine whether phenotypic variation is driven by genetic varation or environment variation, particularly in humans where genetically similar individuals typically grow up in similar environments.
+Environmental variation has clear influence on certain phenotypes. However, it often can be difficult to determine whether phenotypic variation is driven by genetic varation or environment variation, particularly in humans where genetically similar individuals typically also grow up in similar environments.
 
-The above discussion has been about phenotypic variation in a population. But there is also phenotypic variation within the individual. If that sounds strange, consider the fact that in your body a neuron, a leukocyte (a white blood cell) and a cone cell (a photoreceptor in the retina) all have identical genomes. In fact, all cells in an organism, excluding the gametes, have an identical genome yet play very different roles. This is due to different genes being active in different cells.
+The above discussion has been about phenotypic variation in a population. But there is also phenotypic variation within the individual. If that sounds strange, consider the fact that in your body a neuron, a leukocyte (a white blood cell) and a cone cell (a photoreceptor in the retina) all have identical genomes. In fact, all cells in an organism, excluding the gametes, have an identical genome yet play very different biological roles. This is due to different genes being active in different cells.
 
 _Epigenetics_, which I describe in the next section, plays a role in determining both the between-individual phenotypic variation as well as the within-individual phenotypic variation.
 
 \section{Epigenetics}\label{sec:epigenetics}
 
-- [x] DONE
-
-"Epigenetics" is a real Humpty Dumpty phrase; each author seems to believe that, "When I use [the] word, ... it means just what I choose it to mean - neither more nor less" \cite{carroll1897through}. I am sure to continue in this grand tradition.
+_Epigenetics_ is a real Humpty Dumpty phrase; each author seems to believe that, "When I use [the] word, ... it means just what I choose it to mean - neither more nor less" \cite{carroll1897through}. I am sure to continue in this grand tradition.
 
 Conrad Waddington coined the phrase in 1942 as a portmanteau of the words "epigenesis" and "genetics" \cite{Waddington:2012bu}. Waddington meant epigenetics as the study of how "processes involved in the mechanism by which the genes of the genotype bring about phenotypic effects" \cite{Waddington:2012bu}.
 
-A popular contemporary definition of epigenetics is attributed to the epigeneticist Art Riggs that epigenetics is "the study of mitotically and/or meiotically heritable changes in gene function that cannot be explained by changes in DNA sequence[^mitotic_meiotic]" \cite[p1]{russo1996epigenetic}. The _epi_ prefix, derived from the Greek word for 'upon', 'near to', or 'in addition', emphasises the idea that epigenetics encodes information 'on top of' the DNA sequence. However, it is quite different to Waddington's original definition.
+A popular contemporary definition of epigenetics is attributed to the epigeneticist Arthur Riggs - epigenetics is "the study of mitotically and/or meiotically heritable changes in gene function that cannot be explained by changes in DNA sequence[^mitotic_meiotic]" \cite[p1]{russo1996epigenetic}. The _epi_ prefix, derived from the Greek word for 'upon', 'near to', or 'in addition', emphasises the idea that epigenetics encodes information 'on top of' the DNA sequence. However, it is quite different to Waddington's original definition.
 
 [^mitotic_meiotic]: Mitotically heritable means heritable during cell division and meitotically heritable means heritable during sexual reproduction.
 
@@ -121,62 +113,57 @@ More recently, the definition of epigenetics has taken on a "more biochemical fl
 
 Sir Adrian Bird, an esteemed British geneticist and someone who is in favour of the broader definition, attempts to unite these definitions in the following \cite{Bird:2007em}:
 
-> The following could be a unifying definition of epigenetic events: the structural adaptation of chromosomal regions so as to register, signal or perpetuate altered activity states. This definition is inclusive of chromosomal marks [e.g. histone marks], because transient modifications associated with both DNA repair or cell-cycle phases and stable changes maintained across multiple cell generations qualify.
+> "The following could be a unifying definition of epigenetic events: the structural adaptation of chromosomal regions so as to register, signal or perpetuate altered activity states. This definition is inclusive of chromosomal marks [e.g. histone marks], because transient modifications associated with both DNA repair or cell-cycle phases and stable changes maintained across multiple cell generations qualify."
 
-Regardless of which definition you subscribe to, an _epigenetic mark_ is the modification that causes this "epigenetic change". Actually, "causes" may be too strong a phrase as much of current epigenetics research is in identifying associations rather than causations and the question of whether the epigenetic mark is a cause or consequence of the ascribed function is oft-debated.
+Regardless of which definition you subscribe to, an _epigenetic mark_ is the modification that causes this "epigenetic change". Actually, "causes" may be too strong a phrase, as much of current epigenetics research is in identifying associations rather than causations, and the question of whether the epigenetic mark is a cause or consequence of the ascribed function is oft-debated.
 
-The _epigenome_ of a cell is the set of epigenetic marks present on the cell's genome. In contrast to the genome, which is identical between cells within an individual, the epigenome is highly variable between cells within an individual. Indeed, we can identify variation for a single epigenetic mark within cells of the same cell type from the same individual (__TODO: cite examples or upcoming chapters__). Epigenomics is the study of the epigenome, analogous to genomics being the study of the genome. However, one can rarely study the epigenome in isolation from the underlying genetic sequence, as there is much evidence that genetic variation can drive epigenetic variation (__CITE__).
+The _epigenome_ of a cell is the set of epigenetic marks present on the cell's genome. In contrast to the genome, which is identical between cells within an individual, the epigenome is highly variable between cells within an individual. Indeed, we can identify variation for a single epigenetic mark within cells of the same cell type from the same individual as well will see in later chapters. _Epigenomics_ is the study of the epigenome, analogous to genomics being the study of the genome. However, one can rarely study the epigenome in isolation from the underlying genetic sequence, as there is evidence that the epigenetic variation is associated with genetic variation \cite{McVicker:2013ih,Bell:2011fm,Zhang:2010bg,vanEijk:2012hc}
 
 One mark that most authors agree is an epigenetic mark is DNA methylation, which I describe in the next section and whose study is the focus of my thesis.
 
 \section{DNA methylation}\label{sec:dna_methylation}
 
-- [x] DONE
+DNA methylation is a chemical modification of DNA that can impart information on top of the DNA sequence. It is heritable during mitotic cell division, which means that it is faithfully copied across to the daughter cell during cell division[^dnam_copying]. It therefore fits into Arthur Riggs' afore-mentioned definition of an epigenetic modification \cite[p1]{russo1996epigenetic}. DNA methylation is found in bacteria, fungi, plants and animals.
 
-DNA methylation is a chemical modification of DNA that can impart information on top of the DNA sequence. It is heritable during mitotic cell division, which means that it is faithfully copied across to the daughter cell during cell division[^dnam_copying]. It therefore fits into Art Riggs' afore-mentioned definition of an epigenetic modification \cite[p1]{russo1996epigenetic}. DNA methylation is found in bacteria, fungi, plants and animals.
+[^dnam_copying]: In practice this copying is not as faithful as, say, the copying of DNA from the parent to the daughter strand. Furthermore, the faithfulness of this copying will be different in different conditions, such as in a healthy liver cell compared to a cancerous liver cell. Nevertheless, the copying of DNA methylation is faithful enough for most biologists to consider it as a mitotically heritable mark, most of the time.
 
-[^dnam_copying]: In practice this copying is not as faithful as, say, the copying of DNA from the parent to the daughter strand. Furthermore, the faithfulness of this copying will be different in different conditions, such as in a healthy, well-differentiated liver cell compared to a cancerous liver cell. Nevertheless, the copying of DNA methylation is faithful enough for most biologists to consider it as a mitotically heritable mark, most of the time (__TODO__: Is this just true of 5mC in mammals or more generally?)
+A major reason that DNA methylation is studied is that it is essential for normal development in mammals \cite{Li:1992bp}. It is also involved in many key biological processes related to human development and health, such as the regulation of gene expression \cite{Razin:1991vj}, silencing of transposable elements\cite{Jones:2001eg}, X chromosome inactivation \cite{Mohandas:1981uf} and tumorigenesis \cite{Ehrlich:2002kz}.
 
-A major reason that DNA methylation is studied is that it is essential for normal development in mammals \cite{Li:1992bp}. It is also involved in many key biological processes related to human development and health, such as the regulation of gene expression (__CITE__), silencing of transposable elements (__CITE__), X chromosome inactivation (__CITE__) and tumorigenesis (__CITE__).
-
-However, DNA methylation is not found in all organisms, for example, it not detectable in yeast, and so is not essential for life. Furthermore, the level of DNA methylation varies widely amongst different organisms, with many having very low levels of methylation (__TODO: examples and citations__).
+However, DNA methylation is not found in all organisms, for example, it not detectable in yeast \cite{Capuano:2014cu}, and so is not essential for life. Furthermore, the level of DNA methylation varies widely amongst different organisms, with many having very low levels of methylation\cite{Capuano:2014cu}.
 
 When people speak of DNA methylation they are generally referring to methylation of the cytosine nucleobase. Even more specifically, they are referring to the molecule _5-methylcytosine_. 5-methylcytosine, abbreviated as _5mC_, is by far the most common form of DNA methylation in the animal and plant kingdoms[^other_DNAm]. However, I will continue to use the term _DNA methylation_ to describe the more specific 5mC, as is standard in the literature.
 
 [^other_DNAm]: Two additional forms of DNA methylation are N6-methyladenine (m6A) and N4-methylcytosine (m4C). N6-methyladenine is a methylated form of adenine, which is found in mRNA \cite[e.g.,]{Adams:1975ki} and DNA, although the latter only in bacterial DNA \cite{Ratel:2006dv}. N4-methylcytosine has also been detected in bacterial DNA \cite[e.g.,]{Ehrlich:1985bv, Ratel:2006dv}.
 
-A German chemist, W.G. Ruppel, first identified a methylated nucleic acid in 1898. Ruppel was studying _tuberculinic acid_, the poison of _Mycobacterium tuberculosis_[^tuberculosis] , and discovered that it contained a methylated nucleotide (__TODO: Can only find first page of this paper and it's in German. Need to verify__). In 1925, Johnson and Coghill isolated 5-methylcytosine as a product of hydrolysis of tuberculinic acid, the nucleic acid of _Mycobacterium tuberculosis_ \cite{Johnson:1925js}. However, Johnson and Coghill's results were disputed for over twenty years by other researchers who were unable to replicate the original findings \cite{VISCHER:1949ty}.
+A German chemist, W.G. Ruppel, first identified a methylated nucleic acid in 1898. Ruppel was studying _tuberculinic acid_, the poison of _Mycobacterium tuberculosis_[^tuberculosis] , and discovered that it contained a methylated nucleotide \cite{Ruppel:1899hc}. In 1925, Johnson and Coghill isolated 5-methylcytosine as a product of hydrolysis of tuberculinic acid, the nucleic acid of _Mycobacterium tuberculosis_ \cite{Johnson:1925js}. However, Johnson and Coghill's results were disputed for over twenty years by other researchers who were unable to replicate the original findings \cite{VISCHER:1949ty}.
 
 [^tuberculosis]: _Mycobacterium tuberculosis_ was then known as _Tubercle bacillus_.
 
 In 1945, Hotchkiss ultimately proved Johnson and Coghill correct when he isolated _5-methylcytosine_ from nucleic acid prepared from cow thymus \cite{HOTCHKISS:1948va}. Using paper chromatography, Hotchkiss demonstrated that methylated cytosine existed and was distinct from conventional cytosine and uracil.
 
-The typical site of DNA methylation is at the C5 carbon position of a cytosine nucleotide. This modified cytosine is called _5-Methylcytosine_ or _5mC_. [__FIGURE__](http://en.wikipedia.org/wiki/File:5-Methylcytosine.svg) shows the structure of 5mC. It is common to describe a cytosine as being "methylated" or "unmethylated", however, care must be taken in defining these terms.
+The typical site of DNA methylation is at the C5 carbon position of a cytosine nucleotide. This modified cytosine is called _5-Methylcytosine_ or _5mC_. Figure \ref{fig:5mC} shows the structure of 5mC.
 
-At the lowest level, the level of single-stranded DNA, methylation is a binary event: a cytosine is either methylated or unmethylated. Double-stranded DNA, at least at _palindromic_ methylation loci[^palindromic_sequence], is generally symmetrically methylated, i.e., the loci on each strand are both methylated or both unmethylated. However, _hemimethylation_, where the methylation loci on one strand is methylated and its partner on the opposite strand is unmethylated, can and does occur.
+![Chemical structure of 5-methylcytosine. "5-methylcytosine". By Yikrazuul (Own work) [Public domain], via Wikimedia Commons [http://commons.wikimedia.org/wiki/File:5-Methylcytosine.svg](http://commons.wikimedia.org/wiki/File:5-Methylcytosine.svg)\label{fig:5mC}](../figures/5-methylcytosine.png)
 
-[^palindromic_sequence]: "A palindromic sequence is a nucleic acid sequence (DNA or RNA) that is the same whether read 5' (five-prime) to 3' (three prime) on one strand or 5' to 3' on the complementary strand with which it forms a double helix" (__TODO: current source is wikipedia, find and properly cite__).
+It is common to describe a cytosine as being 'methylated' or 'unmethylated', however, care must be taken in defining these terms. At the lowest level, the level of single-stranded DNA, methylation is a binary event: a cytosine is either methylated or unmethylated. Double-stranded DNA, at least at _palindromic_ methylation loci[^palindromic_sequence], is generally symmetrically methylated, i.e., the loci on each strand are both methylated or both unmethylated. However, _hemimethylation_, where the methylation loci on one strand is methylated and its partner on the opposite strand is unmethylated, can and does occur.
 
-Within a diploid cell, a particular cytosine may be unmethylated or methylated on both homologous chromosomes or methylated on one chromosome and unmethylated on the other. While the former that is more common, examples of the latter case, such as _allele-specific methylation_ and _genomic imprinting_, are of considerable biological interest (__TODO: sources and examples__).
+[^palindromic_sequence]: A palindromic DNA sequence is one that is identical on when read in the 5' to 3' direction on both the original strand and the complementary strand of the double helix. For example, _CG_ is a palindromic sequence.
+
+Within a diploid cell, a particular cytosine may be unmethylated or methylated on both homologous chromosomes or methylated on one chromosome and unmethylated on the other. While the former is more common, examples of the latter case, such as _allele-specific methylation_ \cite{Shoemaker:2010jz} and _genomic imprinting_ \cite{Li:1993ea}, are of considerable biological interest.
 
 \subsection{DNA methylation in mammals}\label{sec:dna_methylation_in_mammals}
 
-- [x] DONE
-The importance of 5-methylcytosine in mammalian genomes is such it has been dubbed the "fifth base" of the DNA code \cite{Lister:2009boa}. In mammalian genomes, most cytosines are unmethylated except for those at _CpG dinucleotides_. A _CpG dinucleotide_, or more simply a _CpG_, is a cytosine followed by a guanine in the linear DNA sequence (__FIGURE__). The "p" stands for the phosphate backbone of DNA and some authors omit it in favour of simply calling it CG methylation. A CpG is a palindromic sequence and is generally symmetrically methylated. Approximately 60-80% of CpGs are methylated in mammals, meaning that the cytosine in the CpG dinucleotide is a 5-methylcytosine (__REFERENCE__).
+The importance of 5-methylcytosine in mammalian genomes is such it has been dubbed the "fifth base" of the DNA code \cite{Lister:2009boa}. In mammalian genomes, most cytosines are unmethylated except for those at _CpG dinucleotides_. A _CpG dinucleotide_, or more simply a _CpG_, is a cytosine followed by a guanine in the linear DNA sequence. The 'p' stands for the phosphate backbone of DNA and some authors omit it in favour of simply calling it CG methylation. A CpG is a palindromic sequence and is generally symmetrically methylated. Approximately 70% of CpGs are methylated in mammals \cite{Laird:2003kw}, meaning that the cytosine in the CpG dinucleotide is a 5-methylcytosine.
 
 \subsection{CpG dinucleotides}\label{cpg_dinucleotides}
 
-- [x] DONE
+CpGs are underrepresented in the human genome. The GC-content of each the human genome, which is defined as the percentage of nucleotides that are either guanines or cytosines, is between $41\%$. If the nucleotides were uniformly distributed across the human genome we would expect about $4.1\%$ of dinucleotides to be Cpgs. Instead, only $1\%$ of dinucleotides are CpGs. See the Appendix for details of these calculations and a figure comparing the observed:expected ratio of each dinucleotide in the human reference genome (hg19).
 
-CpGs are underrepresented in the human genome. The GC-content of the human genome, which is defined as the percentage of nucleotides that are either guanines or cytosines, is approximately __WHAT %__. Under a random sampling model of nucleotides we would expect approximately __WHAT %__ of the human genome to be comprised of CpGs. In fact, only __WHAT %__ of the dinucleotides are CpGs. __FIGURE__ shows the frequency of each dinucleotide in the human reference genome (hg19)[^cpg_frequency].
-
-[^cpg_frequency]: See __APPENDIX__ for the `R` code used to compute these values for the human reference genome (build hg19).
-
-One reason for this relative scarcity of CpGs is that methylated cytosines can spontaneously deaminate to thymines \cite{Scarano:1967ue}. Thus, over time, many methylated CpGs will become TpGs, leading to a genome-wide reduction in the proportion of CpGs and a genome-wide increase in the proportion of TpGs (see __FIGURE__).
-
-There are many other evolutionary pressures on the distribution of nucleotides in a genome. One effect of this is that the distribution of CpGs is far from uniform. In fact, CpGs tend to form clusters, which are termed CpG islands.
+One reason for this relative scarcity of CpGs is that methylated cytosines can spontaneously deaminate to thymines \cite{Scarano:1967ue}. Thus, over time, many methylated CpGs will become TpGs, leading to a genome-wide reduction in the proportion of CpGs and a genome-wide increase in the proportion of TpGs (see Figure \ref{fig:dinuclotide_distribution}). There are many other evolutionary pressures on the distribution of nucleotides in a genome. One effect of this is that the distribution of CpGs is far from uniform. In fact, CpGs tend to form clusters, which are termed CpG islands.
 
 \subsection{CpG islands and other sandy metaphors}\label{sec:cpg_islands}
+
+__UP TO HERE__
 
 - [x] DONE
 
@@ -186,7 +173,7 @@ One way to explore the distribution of CpGs in the human genome is to look at th
 
 As can be seen from __FIGURE__, there are a subset of CpGs that are within __HOW MANY__ bases of the next CpG.
 
-The 20-40% of CpGs that are methylated in mammalian genomes are mostly found in clusters called _CpG islands_ (_CGIs_). CpG islands are important regulatory elements in the genome and are where most differences in DNA methylation between different cell types are found (__TODO: sources__). The classical definition of a CpG island, given by \cite{GardinerGarden:1987we} and used by, for example, the UCSC genome browser, is a region of the genome where:
+The 20-40% of CpGs that are unmethylated in mammalian genomes are mostly found in clusters called _CpG islands_ (_CGIs_). CpG islands are important regulatory elements in the genome and are where most differences in DNA methylation between different cell types are found (__TODO: sources__). The classical definition of a CpG island, given by \cite{GardinerGarden:1987we} and used by, for example, the UCSC genome browser, is a region of the genome where:
 
 1. The (moving) average of GC-content is greater than $50\%$, and
 2. The observed-to-expected ratio of CpGs is greater than $0.6$, and
