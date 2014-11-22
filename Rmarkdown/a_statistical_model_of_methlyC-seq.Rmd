@@ -12,39 +12,19 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
-\section{Notes from outline.md (plus other notes added along the way)}
-
-* Chapter Overview
-* Notation
-  * See `notation.Rmd`
-* Estimating $Z$, $M$, $U$ and $\beta$
-  * See `notation.Rmd`
-  * Current approaches
-* Statistical properties of $z$, $m$, $u$ and $\beta$
-  * See `notation.Rmd`
-  * Marginal distributions
-  * Dependence/correlation over $i$ (see also __Chapter X__)
-    * Li _et al._ compute $\beta$ values and compute correlations within a sample as a function of genomic distance.
-    * Arabidopsis compute $\beta$ values and compute correlations within a sample as a function of genomic distance.
-    * Lister (2009) Fig. 3 and Sup. Fig. 9
-    * Lister _et al._ compute both within-read and across-read correlations or dependencies of DNA methylation.
-    * Akulenko, R., _et al._ compute gene-level $\beta$ values and compute the correlations between pairs of genes across samples as a function of genomic distance.
-  * Dependence/correlation over $j$ (?)
-    * Akulenko, R., _et al._ compute gene-level $\beta$ values and compute the correlations between pairs of genes across samples as a function of genomic distance.
-
 \section{Chapter overview}\label{sec:statmodel_chapter_overview}
 
 - [x] DONE
 
 In this chapter I set out a statistical framework for analysing bisulfite sequencing data. I begin by explaining the various levels of stochasticity in a methylC-seq experiment. Following this, I define the mathematical notation that I use throughout my thesis. I describe key variables, common estimators of these and their statistical properties, and statistical models used in downstream analyses.
 
-To begin, I consider the simple experiment of performing methylC-seq on a single sample. Once I have described the framework for a single sample, I extend it to multiple samples. The ideas here are simple, although when extended to their full generality the notation becomes messy.
+To begin, I consider the simple experiment of performing methylC-seq on a single sample. Once I have described the framework for a single sample, I extend it to multiple samples. The ideas here are simple, although when extended to their full generality there are several subtleties that must be kept in mind.
 
 \section{One sample}\label{sec:one_sample}
 
 - [x] DONE
 
-Even with only a single sample, there are several levels of variation to consider, which have a hierarchical structure. I separate this structure into two stages, as illustrated in __CARTOON FIGURE OF METHYLC-SEQ EXPERIMENT__:
+Even with only a single sample, there are several levels of variation to consider in a bisulfite-sequencing experiment. This variation has a hierarchical structure, which I first separate into two levels, as illustrated in __CARTOON FIGURE OF METHYLC-SEQ EXPERIMENT__:
 
 1. Pre-sequencing
 2. Post-sequencing
@@ -407,40 +387,41 @@ Lab-based solutions to overcome these biases exist for targeted bisulfite-sequen
 
 \subsection{Transformations}
 
-__UP TO HERE__
+- [x] DONE
 
-- [ ] DONE
+$\beta$-values are the _de facto_ standard unit for reporting methylation levels due to their natural interpretation as an estimate of the average level of methylation at the locus. However, they are not necessarily the best unit for statistical inference. This is because a $\beta$-value is an estimate of a proportion and there are a well-known challenges when working with proportion data, such as:
 
-$\beta$-values are the _de facto_ standard unit for reporting methylation levels due to their natural interpretation as the average level of methylation at the locus. However, they are not necessarily the best unit for statistical inference. This is because a $\beta$-value is an estimate of a proportion and there are a well-known challenges when working with proportion data, such as:
+1. The estimate of the standard error depends on the estimate of the mean (i.e., $\beta$), through $se(\beta) = \sqrt{\frac{\beta (1 - \beta)}{m + u}}$. Taking the derivative of this, we see that the maximum standard error, $\sqrt(\frac{0.25}{m + u})$, occurs at $\beta = 0.5$ and the minimum standard error, $0$, occurs at $\beta = 0, 1$.
+2. We need to more than just the $\beta$-value to have a sense of how precise an estimate it is. Essentially, we need to also know the sequencing coverage of the methylation loci. Consider two CpGs, one with $m = 1, u = 3$ and the other with $m = 100$ $u = 300$. Both CpGs have $\beta = 1/4$ but the second CpG is measured with much greater precision. Assuming the binomial model, the first CpG has $se(\beta) = \sqrt{\frac{1/4 \times 3/4}{4}} = 0.22$ whereas the second CpG has $se(\beta) = \sqrt{\frac{1/4 \times 3/4}{400}} = 0.02$.
+3. Proportions are bound between 0 and 1, inclusive.
 
-1. Proportions are bound between 0 and 1, inclusive.
-2. The estimate of the standard error depends on the estimate of the mean (i.e., $\beta$), through $se(\beta) = \sqrt{\frac{\beta (1 - \beta)}{m + u}}$. Taking the derivative of this, we see that the maximum standard error, $\sqrt(\frac{0.25}{m + u})$, occurs at $\beta = 0.5$ and the minimum standard error, $0$, occurs at $\beta = 0, 1$.
-3. We need to more than just the $\beta$-value to have a sense of how precise an estimate it is. Essentially, we need to also know the sequencing coverage of the methylation loci. Consider two CpGs, one with $m = 1, u = 3$ and the other with $m = 100$ $u = 300$. Both CpGs have $\beta = 1/4$ but the second CpG is measured with much greater precision. Assuming the binomial model, the first CpG has $se(\beta) = \sqrt{\frac{1/4 \times 3/4}{4}} = 0.22$ whereas the second CpG has $se(\beta) = \sqrt{\frac{1/4 \times 3/4}{400}} = 0.02$.
+To address (1), proportion data are often transformed via a variance stabilisation transformation. The aim is to make the variance independent of the mean, at least approximately. Popular variance stabilisation transformations include:
 
-To address (2), proportion data are often transformed via a variance stabilisation transformation. The aim is to make the variance (approximately) independent of the mean. Popular variance stabilisation transformations include:
+- The arcsine transformation, $\arcsin({\sqrt{\frac{m + 1}{m + u + 1}}})$ \citep{ANSCOMBE:1948bw}. A small value, in this case 1, is added to both $m$ and $u$ to avoid $\beta = 0, 1$.
+- The "averaged arcsine" transformation, $\arcsin{\sqrt{\frac{m}{m + u + 1}}} + \arcsin{\sqrt{\frac{m + 1}{m + u + 1}}}$ \citep{Freeman:1950bh}. One problem with this transformation is that it does not have a unique inverse \citep{Nunes:2009vj}.
 
-- The arcsine transformation, $\arcsin{\sqrt{\beta}}$ \citep{ANSCOMBE:1948bw}. A small value, e.g. $0.5$, is added to $m$ and $u$ to avoid $\beta = 0, 1$.
-- The "averaged arcsine" transformation, $\arcsin{\sqrt{\frac{m}{m + u + 1}}} + \arcsin{\sqrt{\frac{m + 1}{m + u + 1}}}$ \citep{Freeman:1950bh}. This transformation does not have a unique inverse \citep{Nunes:2009vj}.
+However, the general use of variance stabilising transformations for proportion data has fallen out of favour with the widespread availability of generalised linear model software, in particular for the logistic regression model \cite[e.g.,]{Warton:2011gm}.
 
-The use of variance stabilising transformations for proportion data seem to have fallen out of favour (e.g. [http://www.esajournals.org/doi/full/10.1890/10-0340.1](http://www.esajournals.org/doi/full/10.1890/10-0340.1)). The now favoured approach is generalised linear models (__CITE__), in particular the logistic regression model (__CITE__?).
+One transformation that remains popular, at least in the analysis of DNA methylation microarray data, is the logit-transformation, also known as $\mathcal{M}$-values. An $\mathcal{M}$-value is defined as $logit_{2}(\beta) = \log_{2}(\frac{\beta}{1 - \beta} = \log_{2}\Big ( \frac{m + \alpha}{u + \alpha} \Big )$, where here $m$ and $u$ are the intensities from the methylated and unmethylated probes, respectively, and $\alpha$ is an offset to avoid a numerator or denominator that is zero. Similarly defined $\mathcal{M}$-values, also known as log-ratios, are widely and successfully used in analyses of RNA expression two-colour microarrays \cite[e.g.]{Smyth:2005ta}.
 
-__TODO: Cite beta-values vs. M-value paper and discuss__
+\cite{Du:2010dc} advocate for the use of $\mathcal{M}$-values in statistical analyses of methylation levels from microarray data. The main reason for this is that $\mathcal{M}$-values are approximately _homoscedastic_, i.e., their variances are approximately constant across the full range of $\mathcal{M}$-values. As already noted, the logit-transformation is not the only possible variance-stabilising transformation, but the familiarity of log-ratios to bioinformatics and genomics researchers makes it a favourable choice. Nonetheless, \cite{Du:2010dc} also advocate that the results of analyses should be reported as $\beta$-values, owing to their "more intuitive biological interpretation".
+
+As with $\beta$-values, $\mathcal{M}$-values derived from bisulfite-sequencing data generally cannot be directly analysed due to the variable sequencing coverage across loci. However, the variable sequencing coverage can be accounted for using the afore-mentioned beta-binomial models and related regression models, which are discussed in the next section.
+
 
 \section{Downstream analyses}\label{sec:downstream}
 
 - [ ] DONE
 
-\subsection{Regression models}\label{sec:regression_models}
+- Don't rehash the details of Chapter WGBS analysis. Rather summarise these questions as statistical problems in the framework I outline in this chapter.
+- DMC: Identify $\bar{B_{i}^{(1)}} \neq \bar{B_{i}^{(2)}}$
+- DMR: Identify runs of DMCs
+- DVC: Identify $\sigma(B_{i}^{(1)}) \neq \sigma(B_{i}^{(2)})$
+- DVR: Identify runs of DVCs
 
-- [ ] DONE
 
-* Logistic regression
-  * M-values
-  * The logit transformation, $\text{logit} (\frac{\beta}{1 - \beta})$. A small value, e.g. $0.5$, is added to $m$ and $u$ to avoid $\beta = 0, 1$.
-  * The probit transformation, $\Phi^{-1}(\beta)$, where $\Phi$ is the standard Normal cumulative distribution function. A small value, e.g. $0.5$, is added to $m$ and $u$ to avoid $\beta = 0, 1$.
-* Beta regression
 
-\cite{Du:2010dc} show improved inferences when using Logit transformed $\beta$-values, which they call M-values. This transformation reduces the heteroscedasticity of $\beta$-values near 0 and 1.
+
 
 
 \section{General TODOs}
