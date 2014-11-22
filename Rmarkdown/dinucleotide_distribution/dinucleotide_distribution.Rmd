@@ -5,8 +5,7 @@ date: 22 April 2014
 output: pdf_document
 ---
 
-Distribution of dinucleotides in the human and mouse reference genomes
-========================================================
+## Distribution of dinucleotides in the human and mouse reference genomes
 
 CpGs are underrepresented in mammalian genomes. This appendix demonstrates this result using the human reference genome (build hg19) and mouse reference genome (build mm10). All results are computed at the chromosome-level as well as being summarised genome-wide.
 
@@ -14,14 +13,11 @@ Firstly, the frequency of each nucleotide is computed. Secondly, the expected fr
 
 I only use the autosomes, sex chromosomes and mitochondrial chromosome in all analyses, that is, I do not consider the "random", "unplaced" and "alternate haplotype" contigs in the reference genomes.
 
-Human genome 
-========================================================
+### Human genome 
 
-Step 1: Compute the nucleotide frequencies
---------------------------------------------------------
+#### Step 1: Compute the nucleotide frequencies
 ```{r}
 #### Load necessary packages ####
-library(BSgenome)
 library(BSgenome.Hsapiens.UCSC.hg19)
 
 #### A function to compute the GC-% of a BSgenome object ####
@@ -53,11 +49,10 @@ human_gc_perc
 nucleotide_frequencies <- do.call('rbind', lapply(seqnames, function(seqname, genome){alphabetFrequency(genome[[seqname]])}, genome = Hsapiens)) # TODO: Check (and remove?) mask
 ```
 
-Step 2: Compute expected number of CpGs under an independence model
---------------------------------------------------------
+#### Step 2: Compute expected number of CpGs under an independence model
 
-Software details
-========================================================
+### Software details
+
 ```{r}
-sessionInfo()
+devtools::session_info()
 ```

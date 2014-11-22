@@ -7,10 +7,66 @@ output:
     fig_caption: yes
     includes:
       in_header: ../latex/header.tex
+    keep_tex: no
   html_document:
-    keep_md: true
+    keep_md: yes
 bibliography: ../latex/phd_thesis.bib
 ---
+
+## CpGs are underrepresented in the human genome
+
+This short R script demonstrates that CpGs are underrepresented in the human reference genome (build hg19).
+
+Firstly, the frequency of each nucleotide is computed. Secondly, the expected frequency of each dinucleotide is computed under the _independence model_. Under the independence model, the frequency of each dinucleotide is simply the product of the respective observed nucleotide frequencies. Finally, these expected frequencies are compared to the observed values from the respective reference genomes. 
+
+I only use the autosomes, sex chromosomes and mitochondrial chromosome in all analyses, that is, I do not consider the "random", "unplaced" and "alternate haplotype" contigs in the reference genomes.
+
+All results are computed at the chromosome-level as well as being summarised genome-wide.
+
+### Compute the nucleotide and dinucleotide frequencies
+
+```{r, cache = TRUE}
+library(BSgenome.Hsapiens.UCSC.hg19)
+library(knitr)
+# Nucleotide frequencies
+nf <- bsapply(new("BSParams", X = Hsapiens, FUN = letterFrequency, 
+            exclude = c("rand", "Un", "hap"), simplify = TRUE), 
+            letters = c("A", "C", "G", "T"))
+# Pretty print the results
+kable(data.frame(percentage = round(100 * rowSums(nf) / 
+                                      sum(as.numeric(nf)), 1)))
+
+# GC-percentage
+round(100 * sum(nf[c("C", "G"), ]) / sum(as.numeric(nf)), 1)
+
+# Dinucleotide frequencies
+df <- bsapply(new("BSParams", X = Hsapiens, FUN = dinucleotideFrequency, 
+            exclude = c("rand", "Un", "hap"), simplify = TRUE))
+# Pretty print the results
+kable(data.frame(percentage = round(100 * rowSums(df) / 
+                                      sum(as.numeric(df)), 1)))
+
+# CpG percentage
+round(100 * rowSums(df) / sum(as.numeric(df)), 1)["CG"]
+```
+
+### Plot the observed:expected ratio for each dinucleotide
+
+```{r dinucleotide_distribution, fig.lp = "fig:dinuclotide_distribution"}
+library(ggplot2)
+thesis_theme <- theme_classic(base_size = 12)
+thesis_theme <- theme_bw(base_size = 12)
+edf <- nf %*% t(nf) / (sum(nf %*% t(nf))) * 100
+x <- data.frame(Dinucleotide = names(rowSums(df)),
+                Observed = as.vector(100 * rowSums(df) / sum(as.numeric(df))), 
+                Expected = as.vector(edf))
+ggplot(x, aes(x = Dinucleotide, y = Observed / Expected)) + 
+  geom_point(size = 5) + ylim(c(0, 1.5)) + 
+  ggtitle("CpGs are underrepresented in human reference genome (hg19)") + 
+  thesis_theme +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  geom_hline(yintercept = 1, linetype = 2)
+```
 
 ## The probability that two dependent Bernoulli random variables are identical
 
@@ -114,6 +170,11 @@ y <- lapply(x, function(xx) {
 rbind_all(y) %>% filter(V1 == 'chr11')
 ```
 
+## Software details
+
+```{r}
+devtools::session_info()
+```
 
 ### TODOs
 
