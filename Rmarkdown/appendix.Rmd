@@ -13,9 +13,7 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
-## CpGs are underrepresented in the human genome
-
-This short R script demonstrates that CpGs are underrepresented in the human reference genome (build hg19).
+## CpGs are underrepresented in the human genome (hg19)
 
 Firstly, the frequency of each nucleotide is computed. Secondly, the expected frequency of each dinucleotide is computed under the _independence model_. Under the independence model, the frequency of each dinucleotide is simply the product of the respective observed nucleotide frequencies. Finally, these expected frequencies are compared to the observed values from the respective reference genomes. 
 
@@ -61,12 +59,84 @@ x <- data.frame(Dinucleotide = names(rowSums(df)),
                 Observed = as.vector(100 * rowSums(df) / sum(as.numeric(df))), 
                 Expected = as.vector(edf))
 ggplot(x, aes(x = Dinucleotide, y = Observed / Expected)) + 
-  geom_point(size = 5) + ylim(c(0, 1.5)) + 
+  geom_point(size = 5) + coord_cartestian(ylim = c(0, 1.5)) + 
   ggtitle("CpGs are underrepresented in human reference genome (hg19)") + 
   thesis_theme +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
   geom_hline(yintercept = 1, linetype = 2)
 ```
+
+## Distances between CpGs in the human reference genome (hg19)
+
+I extract the co-ordinates of all CpGs in the human reference genome (hg19) and compute the intra-pair distances (IPD) between adjacent CpGs. I then plot the empirical cumulative distribution function of IPD. These are compared to the distances we would expect if CpGs were uniformly distributed across the genome.
+
+I only use the autosomes, sex chromosomes and mitochondrial chromosome in all analyses, that is, I do not consider the "random", "unplaced" and "alternate haplotype" contigs in the reference genomes.
+
+```{r cpg_ipds, cache = TRUE}
+library(BSgenome.Hsapiens.UCSC.hg19)
+set.seed(666)
+
+# Observed IPDs
+cpgs <- bsapply(new("BSParams", X = Hsapiens, FUN = matchPattern, 
+                    exclude = c("rand", "Un", "hap"), simplify = TRUE),
+                pattern = "CG")
+d <- unlist(lapply(cpgs, start), use.names = FALSE)
+ipd <- diff(d)
+# Drop negative distances, which correspond to CpGs on different chromosomes
+ipd <- ipd[ipd > 0]
+
+# Expected IPDs if CpGs were uniformly distributed on genome
+d_sim <- bsapply(new("BSParams", X = Hsapiens, FUN = function(x) {
+  cpg_freq <- countPattern("CG", x)
+  sort(sample(x = length(x), size = cpg_freq, replace = FALSE))
+}, exclude = c("rand", "Un", "hap"), simplify = TRUE))
+ipd_sim <- diff(unlist(d_sim, use.names = FALSE))
+# Drop negative distances, which correspond to CpGs on different chromosomes
+ipd_sim <- ipd_sim[ipd_sim > 0]
+
+# Drop negative values, which are due to CpGs being on different chromosomes
+ipd_df <- data.frame(IPD = c(ipd, ipd_sim), 
+                  Source = c(rep("Observed", length(ipd)), 
+                             rep("Expected", length(ipd_sim))))
+```
+
+### Empirical cumulative distribution plot
+
+```{r cpg_ipds_cdf}
+library(ggplot2)
+thesis_theme <- theme_classic(base_size = 12)
+thesis_theme <- theme_bw(base_size = 12)
+
+ggplot(aes(x = IPD, colour = Source), data = ipd_df) + stat_ecdf() + thesis_theme + 
+  coord_cartesian(xlim = c(0, 1000)) + 
+  xlab("Distance between CpGs (bp)\n(Axis truncated at 1000)") + 
+  ggtitle("Human reference genome (hg19)")
+```
+
+### Histogram
+
+```{r cpg_ipds_hist}
+library(ggplot2)
+library(scales)
+thesis_theme <- theme_classic(base_size = 12)
+thesis_theme <- theme_bw(base_size = 12)
+
+ipd_table <- table(ipd)
+ipd_sim_table <- table(ipd_sim)
+ipd_table_df <- data.frame(IPD = c(as.numeric(names(ipd_table)), 
+                                   as.numeric(names(ipd_sim_table))), 
+                           Count = c(ipd_table, ipd_sim_table), 
+                           Source = c(rep("Observed", length(ipd_table)), 
+                                      rep("Expected", length(ipd_sim_table))))
+
+ggplot(aes(x = IPD, y = Count), 
+       data = subset(ipd_table_df, Source == "Observed")) + 
+  geom_line() + coord_cartesian(xlim = c(0, 300)) + 
+  xlab("Distance between CpGs (bp)\n (Axis truncated at 300)") + 
+  ggtitle("Human reference genome (hg19)") + 
+  scale_y_continuous(labels = comma)
+```
+
 
 ## The probability that two dependent Bernoulli random variables are identical
 
