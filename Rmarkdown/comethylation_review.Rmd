@@ -12,6 +12,8 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
+\chapter{Co-methylation review}\label{chap:comethylation_review}
+
 \section{Introduction}
 
 Co-methylation is the dependence structure of DNA methylation data. This dependence structure can be viewed from different perspectives and on different scales, which has led to several disparate definitions of co-methylation. In this chapter I first review these definitions and put them in the statistical framework of Chapter \ref{chap:stat_model}. I highlight various shortcomings of proposed methods, which led me to develop the methods and software described in  Chapter \ref{chap:co-methylation}. I also review how methods to detect differential methylation have sought to account for and exploit co-methylation.

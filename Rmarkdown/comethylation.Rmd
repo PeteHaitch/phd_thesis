@@ -12,6 +12,8 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
+\chapter{Co-methylation}\label{chap:comethylation}
+
 ## Chapter overview
 
 In this chapter I describe two measures of within-sample co-methylation, _within-fragment co-methylation_ and _correlation of $\beta$-values_. Using both these measures I explore how co-methylation is affected by the distance between methylation loci, the density of methylation loci and the genomic context of the methylation loci. I apply these methods to more than fifty whole-genome bisulfite-sequencing libraries to study the between-sample variability of co-methylation.

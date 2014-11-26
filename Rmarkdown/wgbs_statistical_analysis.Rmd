@@ -12,6 +12,8 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
+\chapter{Statistical analysis of whole-genome bisulfite-sequencing data}\label{chap:wgbs_statistical_analysis}
+
 \section{Chapter overview}\label{sec:statmodel_chapter_overview}
 
 - [x] DONE

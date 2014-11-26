@@ -10,6 +10,8 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
+\chapter{Bioinformatics analysis of whole-genome bisulfite-sequencing data}\label{chap:wgbs_bioinformatics_analysis}
+
 \section{Chapter overview}\label{sec:wgbs_analysis_chapter_overview}
 
 This chapter and the next describe the analysis of a whole-genome bisulfite-sequencing dataset, including the many computational and statistical challenges. There are four fundamental steps in the analysis of whole-genome bisulfite-sequencing data:
@@ -115,7 +117,7 @@ Ideally, the probability that a base is called methylated should be independent 
 
 M-bias can be identified by plotting the read-position methylation level ($rpml$), which is the proportion of reads that are methylated at each read-position, as a function of read-position. These $rpml$ are computed separately for each methylation type and, for paired-end sequencing data, separately for _read 1_ and _read 2_. If there is no M-bias then this plot should be a horizontal line. A 'bend' or 'spike' in this plot is evidence of M-bias. Furthermore, these lines, which indicate the average level of methylation in the sample for that methylation type, should be at the same height for `read_1` and `read_2`, although we see this is often not quite the case. Figure \ref{fig:ADS_M-bias} shows the M-bias plot for the ADS sample from the Lister (2011) dataset.
 
-```{r m-bias, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:ADS_M-bias", fig.cap = "M-bias plot for the ADS sample from the Lister (2011) dataset. Each of read 1 (R1) and read 2 (R2) are plotted separately. We see significant CpG M-bias at the start of read 2 and some noise at the start of read 1.", fig.width = 8}
+```{r m-bias, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:ADS_M-bias", fig.cap = "M-bias plot for the ADS sample from the Lister (2011) dataset. Each of read 1 (R1) and read 2 (R2) are plotted separately. We see significant CpG M-bias at the start of read 2 and some noise at the start of read 1.", fig.width = 8, dev = "pdf"}
 library(dplyr)
 library(ggplot2)
 thesis_theme <- theme_classic(base_size = 12)
@@ -235,7 +237,7 @@ The M-bias plot is based on the read-position from the aligned data and not the 
 
 For example, suppose we performed $100$ bp single-end sequencing and pre-trimmed the first 20 bp of $90\%$ of the reads. Then, read-position $80$ will comprise $10\%$ sequencing cycle $80$ and $90\%$ sequencing cycle $100$. It is very likely that sequencing cycle $100$ suffers more from M-bias than does cycle $80$, and so this will appear in the M-bias plot as M-bias at read position $80$. As most methylation callers exclude all read positions beyond a certain point, e.g., beyond read position 80, the would unnecessarily throw away $20\%$ of the data. `methtuple` is able to exclude specific read-positions, which allows it to deal with 'spikes' in the M-bias plot, like that shown in Figure \ref{fig:E18VA_M-bias}.
 
-```{r M-bias_spike, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:E18VA_M-bias", fig.cap = "M-bias plot for the E18VA sample from the EPISCOPE dataset. Each of read 1 (R1) and read 2 (R2) are plotted separately. For CpGs in read 1, we see noise at the start of the read, followed by a downward slope in the M-bias, which ends with a spike. For CpGs in read 2, we see a downward spike at the start of the read following by a gradual increase in the M-bias curve, with a spike at read-position 101 and a spike at the last read positions for all methylation types. The spike at read-position 101 is also evidence, albeit to a lesser extent, in read 1. This position should be ignored in downstream analyses but we do not necessarily also want to ignore read-positions $102-150$ since this would remove one-third of the data.", fig.width = 8}
+```{r M-bias_spike, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:E18VA_M-bias", fig.cap = "M-bias plot for the E18VA sample from the EPISCOPE dataset. Each of read 1 (R1) and read 2 (R2) are plotted separately. For CpGs in read 1, we see noise at the start of the read, followed by a downward slope in the M-bias, which ends with a spike. For CpGs in read 2, we see a downward spike at the start of the read following by a gradual increase in the M-bias curve, with a spike at read-position 101 and a spike at the last read positions for all methylation types. The spike at read-position 101 is also evidence, albeit to a lesser extent, in read 1. This position should be ignored in downstream analyses but we do not necessarily also want to ignore read-positions $102-150$ since this would remove one-third of the data.", fig.width = 8, dev = "pdf"}
 #files <- paste0("../M-bias/", list.files("../M-bias/"))
 # E18VA
 files <- "../M-bias/E18VA.M-bias.txt"

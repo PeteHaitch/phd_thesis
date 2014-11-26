@@ -12,11 +12,13 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
-## Chapter overview
+\chapter{Datasets used in thesis}\label{chap:datasets}
+
+\section{Chapter overview}
 
 I have analysed more than 50 whole-genome bisulfite-sequencing datasets during the course of my PhD studies. This short chapter documents those that I use in my thesis.
 
-## TODO: Describe processing of data
+__TODO: Describe processing of data__
 
 ## Lister data
 

@@ -10,7 +10,9 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
-\section{Chapter Overview}\label{sec:biology_background_chapter_overview}
+\chapter{Biology background}\label{chap:biology_background}
+
+\section{Chapter overview}\label{sec:biology_background_chapter_overview}
 
 In this chapter I summarise the basic biology necessary for
 understanding my thesis. I introduce DNA methylation, describe some of its biological roles and assays for studying DNA methylation, with a particular focus on bisulfite-sequencing.

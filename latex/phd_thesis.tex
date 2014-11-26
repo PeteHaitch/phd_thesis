@@ -123,6 +123,8 @@
 
 \pagestyle{plain}
 
+\setcounter{tocdepth}{1}
+
 \begin{document}
 
 
@@ -239,11 +241,13 @@ i.e. & that is\\
 
 \include{biology_background} % biology_background.tex
 
-\include{wgbs_analysis} % wgbs_analysis.tex
+\include{wgbs_bioinformatics_analysis} % wgbs_bioinformatics_analysis.tex
 
-\include{a_statistical_model_of_methlyC-seq} % a_statistical_model_of_methlyC-seq.tex
+\include{wgbs_statistical_analysis} % wgbs_statistical_analysis.tex
 
-\include{avy} % avy.tex
+\include{datasets} % datasets.tex
+
+\include{Avy_epialleles} % Avy_epialleles.tex
 
 \include{comethylation_review} % comethylation_review.tex
 
@@ -264,7 +268,7 @@ In this thesis, several fundamental low-level analysis issues for microarrays ha
 
 \bibliography{phd_thesis}
 
-\chapter{Appendix A}
+\include{appendix} % appendix.tex
 
 \label{chapter:AppendixCode}
 

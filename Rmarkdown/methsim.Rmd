@@ -12,6 +12,8 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
+\chapter{A simulation model of DNA methylation data}\label{chap:methsim}
+
 ## Chapter overview
 
 
