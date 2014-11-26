@@ -307,3 +307,4 @@ __TODO: Are methods using correlations of P-values or test-statistics based on w
 ## TODOs
 
 - An autocorrelation analysis implicitly assumes stationarity along the genome whereas between-sample co-methylation assumes stationarity across samples (__TODO: Discuss with Terry__).
+- Comment on http://nar.oxfordjournals.org/content/40/22/11490.long
