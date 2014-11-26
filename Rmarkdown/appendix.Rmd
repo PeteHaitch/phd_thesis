@@ -59,7 +59,7 @@ x <- data.frame(Dinucleotide = names(rowSums(df)),
                 Observed = as.vector(100 * rowSums(df) / sum(as.numeric(df))), 
                 Expected = as.vector(edf))
 ggplot(x, aes(x = Dinucleotide, y = Observed / Expected)) + 
-  geom_point(size = 5) + coord_cartestian(ylim = c(0, 1.5)) + 
+  geom_point(size = 5) + coord_cartesian(ylim = c(0, 1.5)) + 
   ggtitle("CpGs are underrepresented in human reference genome (hg19)") + 
   thesis_theme +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
