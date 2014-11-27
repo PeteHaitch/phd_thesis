@@ -14,6 +14,8 @@ bibliography: ../latex/phd_thesis.bib
 
 \chapter{Identifying epialleles in isogenic mice}\label{chap:Avy_epialleles}
 
+__TODO: Explain the relationship between epialalles, as defined in this chapter, and epialleles from individual bisulfite-sequencing reads.__
+
 ## Chapter overview
 
 The agouti viable yellow ($A^{vy}$) allele is the archetypical _epiallele_, a genetically identical region where epigenetic variability result in phenotypic variation. The research group of Professor Emma Whitelaw, one of the researchers to discover the epigenetic variant that underpins the $A^{vy}$ mouse model,  performed whole-genome bisulfite-sequencing of five mice, including two with the $A^{vy}$ allele, with the aim of identifying additional epialleles.

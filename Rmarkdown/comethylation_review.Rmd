@@ -12,7 +12,7 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
-\chapter{Co-methylation review}\label{chap:comethylation_review}
+\chapter{Co-methylation review}\label{chap:co-methylation_review}
 
 \section{Introduction}
 

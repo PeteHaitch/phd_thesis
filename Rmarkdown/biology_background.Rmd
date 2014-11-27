@@ -310,6 +310,7 @@ Whole-genome bisulfite-sequencing remains an expensive assay, which limits its u
 
 Some examples of these targeted bisulfite-sequencing are:
 - Reduced representation bisulfite-sequencing (_RRBS_, \cite{Meissner:2005eb}): RRBS uses restriction enzymes to first select regions of the genome with a high CpG density (based on the Msp-I cleavage motif), which are subsequently treated with sodium-bisulfite and sequenced.
+- Extended reduced representation bisulfite-sequencing, also known as enhanced reduced representation bisulfite-sequencing (eRRBS, \cite{Akalin:2012he}). A modified version of the RRBS protocol.
 - NimbleGen's SeqCap Epi Enrichment System and Agilent's SureSelectxt Human Methyl-Seq: Both of these commercial products use DNA hybridisation to enrich the sequencing library for pre-defined regions of interest. This enriched library is then bisulfite-converted and sequenced.
 
 One final class of bisulfite-conversion assays does not use microarrays or high-throughput sequencing. Sequenom's EpiTYPER \cite{Ehrich:2006tt} uses mass spectrometry to analyse DNA methylation from bisulfite-converted DNA. This platform can provide quantitative measurements of CpG methylation across hundreds of loci and multiple samples and may be used to validate findings discovered using other platforms \cite{Laird:2010iv}.
