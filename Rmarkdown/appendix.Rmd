@@ -66,6 +66,13 @@ ggplot(x, aes(x = Dinucleotide, y = Observed / Expected)) +
   geom_hline(yintercept = 1, linetype = 2)
 ```
 
+### Frequency of CpGs on each chromosome in the human reference genome (hg19)
+
+Chromosome 19 has the highest CpG density of the autosomes in the human reference genome (hg19):
+```{r cpg_frequency}
+sort(df['CG', ] / colSums(df) * 100, decreasing = TRUE)
+```
+
 ## Distances between CpGs in the human reference genome (hg19)
 
 I extract the co-ordinates of all CpGs in the human reference genome (hg19) and compute the intra-pair distances (IPD) between adjacent CpGs. I then plot the empirical cumulative distribution function of IPD. These are compared to the distances we would expect if CpGs were uniformly distributed across the genome.
@@ -239,6 +246,25 @@ y <- lapply(x, function(xx) {
 
 rbind_all(y) %>% filter(V1 == 'chr11')
 ```
+
+## Computing details
+
+All computational work was performed on one of the Bioinformatics Division's HP Blade servers. These are shared-use, shared-memory machines. The basic specifications are shown in Table \ref{tab:unices}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Machine name & Processors                           & Cores per processor & Total number of cores & RAM    \\ \midrule
+unix88       & $4\times$ Intel Xeon X7350 @ 2.93GHz & 4                   & 16                    & 128 GB \\
+unix301      & $4\times$ AMD Opteron 8435 @ 2.6GHz  & 6                   & 24                    & 256 GB \\
+unix302      & $4\times$ AMD Opteron 6174 @ 2.2GHz  & 12                  & 48                    & 512 GB \\
+unix303      & $4\times$ AMD Opteron 6176 @ 2.3GHz  & 12                  & 48                    & 512 GB \\
+unix305      & $4\times$ AMD Opteron 6276 @ 2.3GHz  & 16                  & 64                    &        \\ \bottomrule
+\end{tabular}
+\caption{Bioinformatics Division server specifications.}
+\label{tab:unices}
+\end{table}
 
 ## Software details
 
