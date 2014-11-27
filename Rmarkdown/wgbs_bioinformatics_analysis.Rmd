@@ -191,6 +191,7 @@ read.mbias <- function(file) {
             # Convert to an MBias object.
             return(y)
           }
+
 #files <- paste0("../M-bias/", list.files("../M-bias/"))
 # ADS
 files <- "../M-bias/ADS.M-bias.txt"
@@ -206,8 +207,6 @@ mbias %>%
   ylim(c(0, 100)) + ylab("Percentage methylation") + xlab("Read position") +
   thesis_theme +
   scale_color_discrete(guide = guide_legend(title = "Methylation type"))
-
-
 ```
 
 If a sample was processed in multiple batches, then M-bias estimation (and methylation calling) should perhaps be performed separately for each batch and then combined, or in some manner that is 'batch aware'. For example, two libraries with DNA derived from the same cell line, but with separate library preparations and sequencing runs, will likely suffer from batch effects due to differences in the library preparations or differences with the sequencing runs. Unfortunately, the person analysing the data doesn't always know all the sample processing steps that may have introduced such batch effects and so these can be hard to deal with.
@@ -216,12 +215,12 @@ The strongest source of M-bias in Illumina WGBS data is at the 5' end of _read 2
 
 \subsubsection{Computing M-bias}\label{sec:estimating_m-bias}
 
-Computing the M-bias and incorporating the results into the methylation calling can be done using two different strategies:
+Estimating the M-bias and incorporating the results into the methylation calling can be done using two different strategies:
 
-1. Compute the M-bias from the aligned reads, then call methylation events. The methylation calling should include filters to remove the detected M-bias (along with any other additional filters). This strategy requires two passes over the `SAM/BAM` file - one to compute the M-bias and one to do the methylation calling. This is the approach used by `bismark_methylation_extractor` \citep{Krueger:2011eb} and `Bis-SNP` \citep{Liu:2012ge}. ([https://github.com/PeteHaitch/methtuple](https://github.com/PeteHaitch/methtuple)).
+1. Compute the M-bias from the aligned reads, then call methylation events. The methylation calling should include filters to remove the detected M-bias (along with any other additional filters). This strategy requires two passes over the `SAM/BAM` file - one to compute the M-bias and one to do the methylation calling. This is the approach used by `bismark_methylation_extractor` \citep{Krueger:2011eb} and `Bis-SNP` \citep{Liu:2012ge}.
 2. Call methylation events but retain the read-position of each methylation event. Compute the M-bias from this first file and then filter out methylation events that suffer from M-bias. This strategy requires only a single pass over the `SAM/BAM` file but requires additional information to be stored alongside the methylation calls which is then followed by a pass over the first file containing the methylation calls. This is the approach taken by `BSmooth` \citep{Hansen:2012gr}.
 
-I find the first strategy conceptually simpler, and easier to program, and so use it in my methylation calling software, `methtuple` ([https://github.com/PeteHaitch/methtuple](https://github.com/PeteHaitch/methtuple)). In theory, the M-bias could be estimated during the alignment step or during another processing step, such as sorting or marking PCR duplicates, to avoid an additional pass over the `SAM/BAM` file.
+I find the first strategy conceptually simpler, and easier to program, particularly when I start dealing with m-tuples, and so use it in my methylation calling software, `methtuple` ([https://github.com/PeteHaitch/methtuple](https://github.com/PeteHaitch/methtuple)). In theory, the M-bias could be estimated during the alignment step or during another processing step, such as sorting or marking PCR duplicates, to avoid an additional pass over the `SAM/BAM` file.
 
 A somewhat subtle point is that M-bias should only be estimated from reads that are actually going to be used for methylation calling. Suppose M-bias is highly correlated with some other quality metric, such as base quality, so that positions with M-bias also have low base quality[^bq_mbias]. If you already intend to ignore all positions with a base quality less than 20 in your methylation calling then it makes sense to also ignore these positions when computing M-bias; otherwise you will overestimate the effect of M-bias and unnecessarily exclude read positions in your methylation calling. Unfortunately, the software I use for estimating M-bias, `bismark_methylation_extractor`, does not allow the user to exclude certain reads or read-positions from its calculations.
 
@@ -235,7 +234,7 @@ Trimming reads prior to alignment (_pre-trimming_), such as using `Trim Galore!`
 
 The M-bias plot is based on the read-position from the aligned data and not the sequencing cycle (which isn't directly available in the `SAM/BAM` file). If the reads have been pre-trimmed, then each read-position in the M-bias plot will therefore contain data from multiple sequencing cycles, which can amplify or mask M-bias signals.
 
-For example, suppose we performed $100$ bp single-end sequencing and pre-trimmed the first 20 bp of $90\%$ of the reads. Then, read-position $80$ will comprise $10\%$ sequencing cycle $80$ and $90\%$ sequencing cycle $100$. It is very likely that sequencing cycle $100$ suffers more from M-bias than does cycle $80$, and so this will appear in the M-bias plot as M-bias at read position $80$. As most methylation callers exclude all read positions beyond a certain point, e.g., beyond read position 80, the would unnecessarily throw away $20\%$ of the data. `methtuple` is able to exclude specific read-positions, which allows it to deal with 'spikes' in the M-bias plot, like that shown in Figure \ref{fig:E18VA_M-bias}.
+For example, suppose we performed $100$ bp single-end sequencing and pre-trimmed the first 20 bp of $90\%$ of the reads. Then, read-position $80$ will comprise $10\%$ sequencing cycle $80$ and $90\%$ sequencing cycle $100$. It is very likely that sequencing cycle $100$ suffers more from M-bias than does cycle $80$, and so this will appear in the M-bias plot as M-bias at read position $80$.
 
 ```{r M-bias_spike, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:E18VA_M-bias", fig.cap = "M-bias plot for the E18VA sample from the EPISCOPE dataset. Each of read 1 (R1) and read 2 (R2) are plotted separately. For CpGs in read 1, we see noise at the start of the read, followed by a downward slope in the M-bias, which ends with a spike. For CpGs in read 2, we see a downward spike at the start of the read following by a gradual increase in the M-bias curve, with a spike at read-position 101 and a spike at the last read positions for all methylation types. The spike at read-position 101 is also evidence, albeit to a lesser extent, in read 1. This position should be ignored in downstream analyses but we do not necessarily also want to ignore read-positions $102-150$ since this would remove one-third of the data.", fig.width = 8, dev = "pdf"}
 #files <- paste0("../M-bias/", list.files("../M-bias/"))
@@ -279,7 +278,7 @@ The `plot` method has a `type` argument, so that the 'raw' M-bias or the 'normal
 
 Now that we've found read-positions with M-bias, what can we do about it? Typically, read-positions showing evidence of M-bias are excluded when calling methylation events. In fact, a slightly cruder procedure is often used whereby all read-positions preceding or following those with M-bias are excluded. Both `bismark_methylation_extractor` and `Bis-SNP`, two popular methylation callers, use this method. Generally, this is okay because M-bias tends to occur as runs of read-positions at the 5' and 3' ends of reads.
 
-However, occasionally there are spikes in the M-bias plot, which indicate specific read-positions that we would like to exclude. Figure \ref{fig:E18VA_M-bias} shows an example of such a spike that occurred at read-position 101. Using `bismark_methylation_extractor` we would be forced to either retain this position or ignore read-positions $101-150$, effectively ignoring one third of the sequencing data, much of it unaffected by M-bias. My `methtuple` software is more flexible by allowing the user to exclude individual read-positions or ranges of read-positions via the `--ignore-read1-positions` and `--ignore-read2-positions` flags.
+However, occasionally there are spikes in the M-bias plot, which indicate specific read-positions that we would like to exclude. Figure \ref{fig:E18VA_M-bias} shows an example of such a spike that occurred at read-position 101. Using `bismark_methylation_extractor` we would be forced to either retain this position or ignore read-positions $101-150$, effectively ignoring one third of the sequencing data, much of it unaffected by M-bias.
 
 Ideally, we would be able to remove the effects of M-bias by accounting for it in methylation calling rather than by simply excluding those read positions entirely. In the datasets I have analysed, I've had to ignore up to 30 read-positions per read due to M-bias.
 
@@ -309,9 +308,7 @@ Methylation calling is the process of calling each sequenced methylation locus a
 
 Most bisulfite-sequencing alignment software either performs methylation calling during the alignment process, as done by `Bismark`[^bismark_methylation_extractor], or as a separate step after the alignment and post-processing of the `SAM/BAM` file. An example of the latter is `Bis-SNP` \citep{Liu:2012ge}, which performs methylation calling, and also variant genotyping, from bisulfite-sequencing data aligned with the user's choice of alignment software.
 
-[^bismark_methylation_extractor]: `Bismark` also includes a program called `bismark_methylation_extractor`, which, as the name suggests, extracts the methylation calls from the `SAM/BAM` file. So while `Bismark` performs methylation calling as part of the alignment, a secondary step using `bismark_methylation_extractor` is required to make use of the methylation calls. `methtuple` may be used as a drop-in replacement for `bismark_methylation_extractor` and provides several extra features, discussed later in this section.
-
-Most methylation callers, such as `Bismark` and `Bis-SNP`, perform methylation calling at single methylation loci, which I refer to as 1-tuples. In contrast, `methtuple` can perform methylation calling at m-tuples; an m-tuple is $m$ adjacent methylation loci, where $m = 1, 2, \ldots$. m-tuples are discussed in greater detail in Chapter \ref{chap:a_statistical_model_of_wgbs} and are used extensively in Chapter \ref{chap:comethylation}. One of the few other methylation callers that can perform calling at m-tuples is `methpat` ([https://github.com/bjpop/methpat](https://github.com/bjpop/methpat)).
+[^bismark_methylation_extractor]: `Bismark` also includes a program called `bismark_methylation_extractor`, which, as the name suggests, extracts the methylation calls from the `SAM/BAM` file. So while `Bismark` annotates each base as methylated or unmethylated during the alignment, a secondary step using `bismark_methylation_extractor` is required to make the methylation calls.
 
 \subsection{Methylated or unmethylated?}\label{sec:methylated_or_unmethylated}
 
@@ -319,17 +316,17 @@ All bisulfite-sequencing assays use _reference-based_ methylation calling. That 
 
 When using reference-based methylation calling, the position of the methylation locus is with respect to the reference genome, since then all samples will use a common set of co-ordinates. Some loci cannot be typed using a reference-based approach. For example, unless the genome of the sample is fully known, methylation loci in insertions cannot be distinguished from genetic variation since there is no reference sequence to compare them against.
 
-Each aligned read may be used for methylation calling, although each read should be subjected to some filtering to remove low-quality reads and low-quality bases. When using a set of filters, at each step a read either 'survives', and is subjected to the proceeding filter, or 'dies', and is excluded from the estimation of $M$ and $U$[^read_filters]. Strictly speaking each sequenced nucleotide is assigned a weight in the filtering process, however, in practice, filters are normally first applied to reads and then to all nucleotides within 'surviving' reads. In my own `methtuple` software I routinely use the following filters.
+Each aligned read may be used for methylation calling, although each read should be subjected to some filtering to remove low-quality reads and low-quality bases. When using a set of filters, at each step a read either 'survives', and is subjected to the proceeding filter, or 'dies', and is excluded from the estimation of $M$ and $U$[^read_filters]. Strictly speaking each sequenced nucleotide is assigned a weight in the filtering process, however, in practice, filters are normally first applied to reads and then to all nucleotides within 'surviving' reads. In my own work, I routinely use the following filters.
 
 A read survives if:
 
-1. Read is mapped (single-end or paire-end) and mapped in the expected orientation (paired-end only).
-2. Read is not marked as a PCR duplicate.
-3. Read has a mapping quality score greater than some threshold.
+1. The read is mapped (single-end or paire-end) and mapped in the expected orientation (paired-end only).
+2. The read is not marked as a PCR duplicate.
+3. The read has a mapping quality score greater than some threshold.
 
 A sequenced base survives if:
 
-1. Read-position of base means that it is unlikely to be affected by M-bias.
+1. The read-position of the base means that it is unlikely to be affected by M-bias.
 2. The base quality score greater than some threshold.
 3. The base is a 'bisulfite mismatch' (e.g., the sequenced base is a C or T at a C in the reference sequence) and not a 'non-bisulfite mismatch; (e.g., the sequenced base is an A or a G at a C in the reference sequence).
 
@@ -381,6 +378,202 @@ This is done by examining the two nucleotides upstream of the cytosine. It can b
 
 A further complication occurs when there is a genetic variant in the two nucleotides upstream of the methylation locus. We would like to use the two upstream nucleotides from the sample to infer the sample-specific methylation context, either inferred from each read separately or from a variant calling procedure such as `Bis-SNP`. However, this further complicates the methylation calling and so tools such as `Bismark` derive the context from the reference genome.
 
-\section{\texttt{methtuple}}
+\section{\texttt{methtuple}}\label{sec:methtuple}
 
-__TODO__
+Most methylation callers, such as `Bismark` and `Bis-SNP`, perform methylation calling at single methylation loci, which I refer to as 1-tuples. The output file is a table, where each row records the co-ordinates of a cytosine and the number of methylated and unmethylated reads at that position. Table \ref{tab:1-tuples} is representative of the type of data returned by these programs. The file format is generally tab-delimited plain text, the Browser Extensible Data (BED) format or the Variant Call Format (VCF).
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Chromosome & Strand & Position & M & U \\ \midrule
+chr1       & +      & 100      & 7 & 1 \\
+chr1       & -      & 101      & 5 & 2 \\
+chr2       & +      & 400      & 0 & 3 \\
+chr2       & +      & 450      & 1 &   \\ \bottomrule
+\end{tabular}
+\caption{My caption}
+\label{tab:1-tuples}
+\end{table}
+
+While 1-tuples are the basis of most analyses of bisulfite-sequencing data, these do not make full use of the information available from bisulfite-sequencing data. Each bisulfite-sequencing read may contain multiple methylation loci, which I call an m-tuple. Furthermore, since each read is from a single cell[^chimeric_reads], we can study the methylation calls at m-tuples to learn about _epialleles_ and _epipolymorphisms_ (Chapter \ref{chap:wgbs_statistical_analysis}) and _co-methylation_ (Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}). In order to study these concepts, we need software that can perform methylation calling at m-tuples, which was not available when I began my PhD, and so I wrote `methtuple`.
+
+[^chimeric_reads]: This ignores chimeric reads, which are created when two DNA fragments ligate to one another during the library preparation. Certain bisulfite-sequencing protocols frequently produce chimeric reads. For example, using the post-bisulfite adapter tagging (PBAT) protocol \citep{Miura:2012fr} with a low input amount of DNA results in a huge number of chimeric reads (personal communication from Felix Krueger). The standard whole-genome bisulfite-sequencing protocol is not known to suffer from this issue.
+
+\subsection{m-tuples}\label{sec:m-tuples}
+
+I define an m-tuple to be a tuple of $m = 1, 2, \ldots$ methylation loci. I refer to $m$ as the _size_ of the tuple. In principle, the $m$ loci that make up an m-tuple could come from anywhere in the genome, but it makes more sense to require that the $m$ loci be close to one another. In fact, I generally require that an m-tuple consists of $m$ _adjacent_ methylation loci[^adjacent]. An equivalent way of describing an m-tuple as comprising adjacent methylation loci is that the number of intervening loci is zero ($NIL = 0$). There are three reasons that I focus on m-tuples with $NIL = 0$:
+
+1. Quantity: From a sequence containing $l$ methylation loci there are $l - \text{m} + 1$ m-tuples, provided that we restrict ourselves to those m-tuples with $NIL = 0$. In contrast, if we allow $NIL \geq 0$ then there are $\binom{l}{\text{m}} \sim$ m-tuples. Obviously, $\binom{l}{\text{m}} \geq l - \text{m} + 1$, with strict inequality if $m \neq 1, l$.
+2. Interpretability: Results for m-tuples with $NIL = 0$ are simpler to interpret than when allowing $NIL \geq 0$. This is discussed in Chapter \ref{chap:co-methylation}
+3. Measurability: We cannot observe m-tuples where the methylation loci are far apart due to the read length limitations of the Illumina sequencing technology. This is true even when $NIL = 0$ but is more of an issue if we allow $NIL \geq 0$.
+
+[^adjacent]: Two methylation loci are adjacent if there is no methylation loci in between the pair. For example, `CGCG` and `CGTTACG` both contain two adjacent CpGs (the intervening `TTA` in the second sequence does not include a CpG). In contrast, the first and last CpG in the sequence `CGTCGTCG` are __not__ adjacent, since the intervening sequencing, `TCGT` include a CpG. Note that in situations where we are only interested in studying CpGs, we define 'methylation loci' to mean 'CpGs'. Therefore the sequence `CGTCTTCG` contains two adjacent methylation loci; while there is a `C` in the intervening sequence, `TCTT`, it is a CHH not a CpG.
+
+Generally, when referring to m-tuples I implicitly mean $NIL = 0$; I will explicitly use the notation $NIL \geq 0$ when I wish to make clear that there may be intervening methylation loci in the m-tuple. The default option of `methtuple` is to produce m-tuples with $NIL = 0$ unless the `--all-combination` flag is set[^nil0].
+
+[^nil0]: Actually, while `methtuple` tries to produce m-tuples with $NIL = 0$ it can't guarantee this because it would require parsing the reference genome sequence. This is only really an issue with paired-end sequencing and is made clear in the example. Some _post-hoc_ filtering of the m-tuples will generally be required in order to remove those m-tuples with $NIL > 0$.
+
+Just as each methylation call at a 1-tuple comes from a single read, each methylation call at an m-tuple comes from a single read. For an m-tuple there are $2^{m}$ possible methylations calls. For example, at a 1-tuple there are $2^{1}$ possible methylation calls -- $M$ or $U$; at a 3-tuple there are $2^{3} = 8$ possible methylation calls -- $MMM, MMU, MUM, MUU, UMM, UMU, UUM$ or $UUU$.
+
+For each m-tuple, I also define the intra-pair distance (_IPD_) as the vector containing the $m - 1$ pair-wise distances (measured in bp) between methylation loci in the m-tuple. For example, the 2-tuple (chr7:+:145, chr7:+:163) has $IPD = (163 - 145) = (18)$. The 5-tuple (chr2:-:560, chr2:-:570, chr2:-:572, chr2:-:588, chr2:-:612) has $IPD = (570 - 560, 572 - 570, 588 - 572, 612 - 588) = (10, 2, 16, 24)$. The IPD vector of a 1-tuple is undefined. In Chapter \ref{chap:co-methylation} I use the IPDs, along with other features such as the genomic context, to define 'similar' m-tuples.
+
+To illustrate several of the above-mentioned concepts, suppose we sequence a region of the genome containing five methylation loci with three paired-end reads (`A`, `B` and `C`):
+
+```
+ref: 1    2   3 4 5
+A_1: |----->
+A_2:         <------|
+B_1:
+B_2: |----->   <----|
+C_1:    |----->
+C_2:      <------|
+```
+
+If we are interested in 1-tuples, then we would obtain the following from each read by running `methtuple`:
+
+```
+A: {1}, {2}, {3}, {4}, {5}
+B: {1}, {2}, {4}, {5}
+C: {2}, {3}, {4}
+```
+
+The result is identical regardless of whether the `--all-combinations` flag is set.
+
+If we are interested in 3-tuples, then we would obtain the following from each read by running `methtuple` in its default mode:
+
+```
+A: {1, 2, 3}, {2, 3, 4}, {3, 4, 5}
+B: {1, 2, 4}, {2, 4, 5}
+C: {2, 3, 4}
+```
+
+Things to note:
+
+- Read-pair `A` sequences all three (= 5 - 3 + 1) adjacent 3-tuples
+- Read-pair `B` sequences none of the adjacent 3-tuples but does 'erroneously' construct two 3-tuples with $NIL > 0$. This happens because m-tuples are created independently from each read-pair; effectively, read-pair `B` is unaware of methylation locus `3`. Depending on the downstream analysis, you may want to _post-hoc_ filter out these m-tuples with $NIL > 0$.
+- The twice-sequenced methylation loci, `2` and `3`, in read-pair `C` are not double counted.
+
+However, if we were to run `methtuple` with `--all-combinations` then we would obtain:
+
+```
+A: {1, 2, 3}, {2, 3, 4}, {3, 4, 5}, {1, 2, 4}, {1, 2, 5}, {1, 3, 4}, {1, 3, 5}, {1, 4, 5}, {2, 3, 5}, {2, 4, 5}
+B: {1, 2, 4}, {2, 4, 5}, {1, 2, 5}, {1, 4, 5}
+C: {2, 3, 4}
+```
+
+\subsection{Motivation}
+
+`methtuple` ([https://github.com/PeteHaitch/methtuple](https://github.com/PeteHaitch/methtuple)) is software to perform methylation calling at m-tuples from bisulfite-sequencing data. Table \ref{tab:other_m-tuple_methylation_callers} lists other software that can perform methylation calling at m-tuples. However, none of these existed when I started writing `methtuple` nor do any of them do exactly what I require. To the best of my knowledge, `methtuple` is the only software that can perform methylation calling at m-tuples from whole-genome data.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Software           & Reference                                & Input                                              & Designed for targeted sequencing & Other limitations                                                                \\ \midrule
+\code\{methclone\} & \cite\{Li:2014ei\}                       & Bismark BAM files                                  & No, although example uses eRRBS  & \textbf\{TODO: Try installing. Suspect you can't get actual methylation calls.\} \\
+\code\{methpat\}   & \url\{https://github.com/bjpop/methpat\} & Output of \code\{bismark\_methylation\_extractor\} & Yes (amplicons)                  &                                                                                  \\
+\code\{DMEAS\}     & \cite\{He:2013cj\}                       & Output of \code\{bismark\_methylation\_extractor\} &                                  & Windows operating system only. Perl code only available as PDF file.             \\ \bottomrule
+\end{tabular}
+\caption{My caption}
+\label{tab:other_m-tuple_methylation_callers}
+\end{table}
+
+\subsection{Methods}
+
+`methtuple` performs methylation calling for a single `BAM` file generated by `Bismark`. The user is required to specify the size of the tuples (`--m`), and the methylation type (`--methylationType`) for each run of the program. There are many useful options to filter reads and read-positions. Apart from the standard quality filters, `methtuple` is careful when processing paired-end reads to only count the base from one of the reads in any overlapping paired-end reads to avoid double-counting these overlapping bases. `methtuple` also allows the user to filter out specific read positions rather than wholesale filtering of the ends of reads. This is particularly useful for samples where there is a 'spike' in the M-bias plot, such as that shown in Figure \ref{fig:E18VA}. Such a 'spike' can be filtered out without also being forced to also filter out additional upstream read-positions that are not affected by M-bias.
+
+`methtuple` is written in Python and uses the `pysam` ([https://github.com/pysam-developers/pysam/](https://github.com/pysam-developers/pysam/)) module to parse the `BAM` file. It is compatible with both Python2 and Python3.
+
+`methtuple` is currently limited to processing files produced by `Bismark` due to its reliance on the `Bismark`-specific tags `XM`, the "methylation call string",  `XR`, the "read conversion state for the alignment", and `XG`, the "genome conversion state for the alignment" ([http://www.bioinformatics.bbsrc.ac.uk/projects/bismark/Bismark_User_Guide_v0.13.0.pdf](http://www.bioinformatics.bbsrc.ac.uk/projects/bismark/Bismark_User_Guide_v0.13.0.pdf)). It could be extended to work with other bisulfite-sequencing aligners. However, due to the eccentricities of each aligner, such an extension would have to be aligner-specific and therefore a considerable undertaking. Each extension would require that tags analogous to the `XR`, `XG` and `XM` tags can be generated from the given `BAM` file. In the case of the `XM` tag, this would likely require that the reference genome is parsed in parallel with the `BAM` file, adding considerable computational overhead. Perhaps the easiest option would be to add a script that 'Bismark-ifies' the original `BAM` file. Since all my data are aligned with Bismark, or were converted to Bismark's `BAM` format, I have not yet had need to pursue this line of work.
+
+\subsection{Performance}
+
+I have used `methtuple` to perform methylation calling at CpG m-tuples, $m = 1, \ldots, 8$, for over 50 whole-genome bisulfite-sequencing samples from the EPISCOPE, Lister, Seisenberger and Ziller datasets. To improve the performance I process split each sample by chromosome and process each chromosome in parallel. This is implemented in a helper script ([https://github.com/PeteHaitch/methtuple/blob/master/helper_scripts/run_methtuple.sh](https://github.com/PeteHaitch/methtuple/blob/master/helper_scripts/run_methtuple.sh)) that makes extensive use of `GNU parallel` \citep{Tange:2011ty}.
+
+Figure \ref{fig:methtuple_runtime} shows the distribution of running times and Figure \ref{fig:methtuple_memory} the maximum memory usage across all the samples from the EPISCOPE, Lister and Ziller datasets. For each sample, each chromosome was processed using a single core on one of the shared-use servers in the Bioinformatics Division (see __APPENDIX__ for details of these machines).
+
+The running time of \texttt{methtuple} is proportional to the number of reads mapped to the chromosome, which is proportional to the length of the chromosome and its ploidy. The running time is largely independent of the tuple size (\texttt{-m}). The variation in running times within a chromosome is due to the number of reads generated per sample and the length of the reads, where the length of a paired-end read is defined as the sum of the mates' lengths. Samples with more reads take longer to process and samples sequenced with longer reads take longer because these contain more m-tuples.
+
+The maximum memory usage is not strictly proportional to chromosome length. It is instead driven by the number and density of CpGs on the chromosome.  For example, \texttt{chr19}, which has the highest CpG density of all the autosomes in the human genome, requires far more memory than \texttt{chr18}, which has less than half the CpG density of \texttt{chr19} (see __APPENDIX__). The relationship between the maximum memory usage and the tuple size (\texttt{-m}) is complex; more data have to be retained as \texttt{-m} increases, thus increasing the memory usage, but fewer reads contain tuples of that size and so there aren't as many m-tuples or observations on these to count and retain. Therefore, memory usage is relatively constant across values of \texttt{-m} for a given chromosome. The obvious exception is for tuple size \texttt{2ac}, which used the \texttt{--all-combinations} flag. This means that all 2-tuples with $NIL \geq 0$ were computed and there are many, many more CpG 2-tuples with $NIL \geq 0$ than there are with $NIL = 0$, hence the enormous increase in memory usage.
+
+```{r methtuple_runtime, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:methtuple_runtime", fig.cap = "The running times are the 'User time' reported by \code{GNU time} converted from seconds to minutes. The suffix 'ac' on the tuple size means that the option \texttt{--all-combinations} was set.", fig.width = 8, dev = "pdf"}
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(gridExtra)
+
+# facet_wrap_labeller() from http://stackoverflow.com/a/19298442
+facet_wrap_labeller <- function(gg.plot, labels = NULL) {
+  #works with R 3.0.1 and ggplot2 0.9.3.1
+
+  g <- ggplotGrob(gg.plot)
+  gg <- g$grobs      
+  strips <- grep("strip_t", names(gg))
+
+  for(ii in seq_along(labels))  {
+    modgrob <- getGrob(gg[[strips[ii]]], "strip.text", 
+                       grep=TRUE, global=TRUE)
+    gg[[strips[ii]]]$children[[modgrob$name]] <- editGrob(modgrob, 
+                                                          label = labels[ii])
+  }
+
+  g$grobs <- gg
+  class(g) = c("arrange", "ggplot",class(g)) 
+  g
+}
+thesis_theme <- theme_classic(base_size = 12)
+thesis_theme <- theme_bw(base_size = 12)
+# Time
+time <- lapply(paste0("../data/methtuple_performance/time/", 
+                      list.files("../data/methtuple_performance/time/")), 
+               read.table)
+names(time) <- gsub(".time", "", 
+                    list.files("../data/methtuple_performance/time/"))
+n <- str_split(names(time), "\\.")
+time <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1), 
+                                             times = sapply(time, nrow)),
+                                         levels = 
+                                           paste0("chr", 
+                                                  c(1:22, "X", "Y", "M", "L"))),
+                   "Tuple" = rep(sapply(n, "[", 2),
+                                      times = sapply(time, nrow)),
+                   "Time" = unlist(time))
+
+gg_time <- time %>%
+  ggplot(aes(x = Chromosome, y = Time / 60)) + geom_boxplot() +
+  facet_wrap( ~ Tuple, ncol = 3) + thesis_theme +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ylab("Running time (minutes)") + 
+  ggtitle("Running time of methtuple across 49 samples")
+facet_wrap_labeller(gg_time, paste0("Tuple size: ", unique(time$Tuple)))
+```
+
+```{r methtuple_memory, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:methtuple_memory", fig.cap = "; the suffix 'ac' means that the option \texttt{--all-combinations} was set. This option creates all tuples with $NIL \geq 0$ which is far greater than the equivalent tuples with $NIL = 0$. The maximum memory usage is the 'Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865})", fig.width = 8, dev = "pdf"}
+# Memory
+memory <- lapply(paste0("../data/methtuple_performance/memory/", 
+                      list.files("../data/methtuple_performance/memory/")), 
+               read.table)
+names(memory) <- gsub(".memory", "", 
+                    list.files("../data/methtuple_performance/memory/"))
+n <- str_split(names(memory), "\\.")
+# NB: Need to divide reported memory usage by 4 due to bug in 'time'
+# (https://bugzilla.redhat.com/show_bug.cgi?id=703865)
+memory <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1), 
+                                             times = sapply(memory, nrow)),
+                                         levels = 
+                                           paste0("chr", 
+                                                  c(1:22, "X", "Y", "M", "L"))),
+                   "Tuple" = rep(sapply(n, "[", 2),
+                                      times = sapply(memory, nrow)),
+                   "Memory" = unlist(memory) / 4)
+gg_memory <- memory %>%
+  ggplot(aes(x = Chromosome, y = Memory / 10^6)) + geom_boxplot() +
+  facet_wrap( ~ Tuple, ncol = 3) + thesis_theme +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ylab("Memory usage (GB)") + 
+  ggtitle("Maximum memory usage of methtuple across 49 samples")
+facet_wrap_labeller(gg_memory, paste0("Tuple size: ", unique(memory$Tuple)))
+```
+
+\subsection{Availability}
+
+`methtuple` is open-source software release under the MIT licence and available from [https://github.com/PeteHaitch/methtuple](https://github.com/PeteHaitch/methtuple).
