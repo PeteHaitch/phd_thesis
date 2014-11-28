@@ -462,6 +462,8 @@ B: {1, 2, 4}, {2, 4, 5}, {1, 2, 5}, {1, 4, 5}
 C: {2, 3, 4}
 ```
 
+__TODO: Size of m-tuples histogram__
+
 \subsection{Motivation}
 
 `methtuple` ([https://github.com/PeteHaitch/methtuple](https://github.com/PeteHaitch/methtuple)) is software to perform methylation calling at m-tuples from bisulfite-sequencing data. Table \ref{tab:other_m-tuple_methylation_callers} lists other software that can perform methylation calling at m-tuples. However, none of these existed when I started writing `methtuple` nor do any of them do exactly what I require. To the best of my knowledge, `methtuple` is the only software that can perform methylation calling at m-tuples from whole-genome data.
@@ -508,33 +510,33 @@ facet_wrap_labeller <- function(gg.plot, labels = NULL) {
   #works with R 3.0.1 and ggplot2 0.9.3.1
 
   g <- ggplotGrob(gg.plot)
-  gg <- g$grobs      
+  gg <- g$grobs
   strips <- grep("strip_t", names(gg))
 
   for(ii in seq_along(labels))  {
-    modgrob <- getGrob(gg[[strips[ii]]], "strip.text", 
+    modgrob <- getGrob(gg[[strips[ii]]], "strip.text",
                        grep=TRUE, global=TRUE)
-    gg[[strips[ii]]]$children[[modgrob$name]] <- editGrob(modgrob, 
+    gg[[strips[ii]]]$children[[modgrob$name]] <- editGrob(modgrob,
                                                           label = labels[ii])
   }
 
   g$grobs <- gg
-  class(g) = c("arrange", "ggplot",class(g)) 
+  class(g) = c("arrange", "ggplot",class(g))
   g
 }
 thesis_theme <- theme_classic(base_size = 12)
 thesis_theme <- theme_bw(base_size = 12)
 # Time
-time <- lapply(paste0("../data/methtuple_performance/time/", 
-                      list.files("../data/methtuple_performance/time/")), 
+time <- lapply(paste0("../data/methtuple_performance/time/",
+                      list.files("../data/methtuple_performance/time/")),
                read.table)
-names(time) <- gsub(".time", "", 
+names(time) <- gsub(".time", "",
                     list.files("../data/methtuple_performance/time/"))
 n <- str_split(names(time), "\\.")
-time <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1), 
+time <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1),
                                              times = sapply(time, nrow)),
-                                         levels = 
-                                           paste0("chr", 
+                                         levels =
+                                           paste0("chr",
                                                   c(1:22, "X", "Y", "M", "L"))),
                    "Tuple" = rep(sapply(n, "[", 2),
                                       times = sapply(time, nrow)),
@@ -543,25 +545,25 @@ time <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1),
 gg_time <- time %>%
   ggplot(aes(x = Chromosome, y = Time / 60)) + geom_boxplot() +
   facet_wrap( ~ Tuple, ncol = 3) + thesis_theme +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ylab("Running time (minutes)") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ylab("Running time (minutes)") +
   ggtitle("Running time of methtuple across 49 samples")
 facet_wrap_labeller(gg_time, paste0("Tuple size: ", unique(time$Tuple)))
 ```
 
 ```{r methtuple_memory, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:methtuple_memory", fig.cap = "; the suffix 'ac' means that the option \texttt{--all-combinations} was set. This option creates all tuples with $NIL \geq 0$ which is far greater than the equivalent tuples with $NIL = 0$. The maximum memory usage is the 'Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865})", fig.width = 8, dev = "pdf"}
 # Memory
-memory <- lapply(paste0("../data/methtuple_performance/memory/", 
-                      list.files("../data/methtuple_performance/memory/")), 
+memory <- lapply(paste0("../data/methtuple_performance/memory/",
+                      list.files("../data/methtuple_performance/memory/")),
                read.table)
-names(memory) <- gsub(".memory", "", 
+names(memory) <- gsub(".memory", "",
                     list.files("../data/methtuple_performance/memory/"))
 n <- str_split(names(memory), "\\.")
 # NB: Need to divide reported memory usage by 4 due to bug in 'time'
 # (https://bugzilla.redhat.com/show_bug.cgi?id=703865)
-memory <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1), 
+memory <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1),
                                              times = sapply(memory, nrow)),
-                                         levels = 
-                                           paste0("chr", 
+                                         levels =
+                                           paste0("chr",
                                                   c(1:22, "X", "Y", "M", "L"))),
                    "Tuple" = rep(sapply(n, "[", 2),
                                       times = sapply(memory, nrow)),
@@ -569,7 +571,7 @@ memory <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1),
 gg_memory <- memory %>%
   ggplot(aes(x = Chromosome, y = Memory / 10^6)) + geom_boxplot() +
   facet_wrap( ~ Tuple, ncol = 3) + thesis_theme +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ylab("Memory usage (GB)") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ylab("Memory usage (GB)") +
   ggtitle("Maximum memory usage of methtuple across 49 samples")
 facet_wrap_labeller(gg_memory, paste0("Tuple size: ", unique(memory$Tuple)))
 ```
