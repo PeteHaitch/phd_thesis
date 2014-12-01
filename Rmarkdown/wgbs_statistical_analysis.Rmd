@@ -293,7 +293,7 @@ Under a Binomial model for the number of methylated reads at the $i^{th}$ locus 
 
 Recently, more sophisticated methods have been proposed to estimate or model the average methylation level. These methods, which are based on $m_{i, j}$ and $u_{i, j}$, include beta-binomial models \citet{Feng:2014iq, Sun:2014fk, Dolzhenko:2014bo}, and smoothing-methods \cite{Hansen:2011gu, Hansen:2012gr, Hebestreit:2013ko}.
 
-\subsubsection{Beta-binomial models}
+\subsubsection{Beta-binomial models}\label{sec:beta-binomial_models}
 
 Several papers have proposed the beta-binomial distribution since, as noted by \cite{Dolzhenko:2014bo}, it is "a natural model for describing methylation levels of an individual site across replicates" . The 'beta' component of the distribution models the underlying methylation level, $B_{i, j}$, while the 'binomial' component models the sampling of reads by sequencing. Another way to think of this is that the 'beta' component models the biological variability of the data, while the 'binomial' component models the sampling variability of sequencing. This separation of biological and technical variability has proven successful in detecting differential gene expression from RNA-seq data. For example, the `edgeR` software \cite{Robinson:2010cw} uses the negative binomial distribution, which can be thought of as a gamma-poisson mixture distribution, to account for both the biological and sampling variability.
 
@@ -494,7 +494,7 @@ The natural interpretation of $\beta_{i, j}$ as the average level of methylation
 
 Lab-based solutions to overcome these biases exist for targeted bisulfite-sequencing, but are technically difficult and expensive to extend to whole-genome studies. \cite{Ji:2014fq} propose potential computational corrections for these biases but as yet these have not been implemented.
 
-\subsection{Transformations}
+\subsection{Transformations}\label{sec:transformations}
 
 $\beta$-values are the _de facto_ standard unit for reporting methylation levels due to their natural interpretation as an estimate of the average level of methylation at the locus. However, they are not necessarily the best unit for statistical inference. This is because a $\beta$-value is an estimate of a proportion and there are a well-known challenges when working with proportion data, such as:
 
@@ -601,91 +601,40 @@ $Sample_{5}$ & $44$ & $46$ \\ \bottomrule
 \label{tab:one-group_example}
 \end{table}
 
-We could analyse this table using a simple stand-alone test, such as Pearson's $\chi^{2}$ test. Alternatively, we could frame this as a generalised linear model, either a log-linear model or a logistic regression. The hypothesis is then tested by computing the deviance of the model[^deviance]
+We could analyse this table using a simple stand-alone test, such as Pearson's $\chi^{2}$ test. Alternatively, we could frame this as a generalised linear model, either a log-linear model or a logistic regression. The equivalence of these methods is shown in the Appendix.
 
-[^deviance]: The deviance is the log-likelihood ratio statistic comparing the current model within a saturated model.
+A key advantage of using either of the generalised linear models is the capability to include additional covariates in the model, such as the sex of each sample or terms to account for batch effects. More complex regression analyses are also possible, such as empirical Bayes or fully Bayesian models.
 
+\subsubsection{Multi-group experiments}\label{sec:two_group_dmcs}
 
+Due to the cost of whole-genome bisulfite-sequencing, early experiments using this technology to study differential methylation compared one sample against another \citep[e.g.,]{Lister:2009hy, Berman:2012ga}. While this might be considered a two-group experiment, one without replicates, I believe this is better thought of as a one-group experiment with two samples. Indeed, the analysis of such an experiment uses techniques from Section \label{sec:one_group_dmcs}, e.g., Pearson's $\chi^{2}$ test or Fisher's exact test, which is better suited to the small sample sizes routinely seen in each $2 \times 2$ table.
 
-assessing the goodness-of-fit of the 'no interaction' model (equivalently, comparing the saturated model to . The following R code shows the equivalence of these approaches for a CpG where the fifth sample is differentially methylated.
+The more interesting experiment is one that includes replicates within each group, since we can then estimate the within-group variation. Unfortunately, some authors have still used Fisher's exact test to analyse such experiments. For example, \cite{Lister:2009hy} test for differential methylation between the _H1_ and _IMR90_ samples using Fisher's exact test by first pooling data the two replicates they have for each sample. This is incorrect, because such an analysis effectievly ignores all within-group variability \citep{Hansen:2012gr}. Instead, a test that incorporates the within-group variability should be used.
 
-```{r}
-# The data
-x <- cbind(M = c(38, 79, 59, 69, 44), U = c(1, 2, 1, 2, 46))
-names(dimnames(x)) <- c("sample", "meth_state")
-x
+In a two-group experiment this might be a t-test comparing the the average methylation level in the first group, $\bar{\beta_{i}^{(1)}}$, to that in the second group, $\bar{\beta_{i}^{(2)}}$. More generally, we can use a regression model to allow for multiple groups (i.e., ANOVA) and to incorporate additional covariates.
 
-# Using Pearson's chi-square test
-chisq.test(x)
+Several software packages are now available for identifying DMCs, although some are limited to the two-group experiment. Rather than directly analysing the raw $\beta$-values, these software generally make additional modelling assumptions, such as the beta-binomial model (Section \ref{sec:beta-binomial_model}), and/or perform some transformation, such as smoothing of the $\beta$-values (Section \ref{transformation}).
 
-# Fitting a log-linear model to perform iterative proportional fitting to the
-# contingency table.
-loglin(x, margin = list("sample", "meth_state"))
-# An alternative formulation using loglm(), a convenient wrapper of loglin(),
-# from the MASS package.
-library(MASS)
-loglm(formula =  ~ sample + meth_state, data = x)
+`DSS` \citep{Feng:2014iq}, `BiSeq` \citep{Hebestreit:2013ko}, `MOABS` \citep{Sun:2014fk} `methylSig` \citep{Park:2014ho} and `RADmeth` \citep{Dolzhenko:2014bo} are software packages that all use a Beta-Binomial hierarchical model of DNA methylation, although the exact details differ considerably between packages. `DSS` and `MOABS` use empirical Bayes methods to estimate parameters whereas `methylSig`, `BiSeq` and `RADmeth` use maximum likelihood estimation. `BiSeq` and `methlySig` also perform spatial smoothing of the data.
 
-# Fitting a generalised linear model with a binomial link using two different
-# formulations
-# (1) Using the array of frequencies
-glm(x ~ 1, family = binomial)
-# (2) Using relative frequencies (i.e., the beta-values) and weights (i.e.,
-# the sequencing coverage).
-glm(x[,1] / (x[, 1] + x[, 2]) ~ 1, family = binomial, weights = x[, 1] + x[, 2])
-```
+The test used to identify DMCs in these regression models is variously a Wald test (`BiSeq`, `DSS`), a likelihood ratio test (`methlySig`, `RADmeth`) or based on the credible interval (Bayesian confidence interval) of the difference in methylation between the two groups (`MOABS`).
 
-A key advantage of using either of the generalised linear models is the option to include additional covariates in the model, such as the sex of each sample or terms to account for batch effects. More complex regression analyses are also possible, such as empirical Bayes or fully Bayesian models.
+Not all methods for identifying differential methylation are designed for identifying DMCs. Both `bsseq` \citep{Hansen:2012gr} and `Aclust` \citep{Sofer:2013bk} are methods explicitly designed for identifying DMRs rather than DMCs and, in the case of `bsseq`.
 
-\subsubsection{Two-group experiments}\label{sec:two_group_dmcs}
+\subsection{DMRs}
+
+There are two very different strategies for identifying differentially methylated regions:
+
+1. Usinb regions that are defined _a priori_, which are then tested for differential methylation. Such regions might be CpG islands (__CITE__), MspI restriction fragments (__CITE__) gene promoters (__CITE__) or predefined bins (e.g. 3bp tiles [Bing Ren] or 100bp tiles \citep{Park:2014ho}).
+2. Using data-driven regions, e.g., defined from an analysis of DMCs, which are then tested for differential methylation.
+
+The former is simple to analyse but is limited in its ability to discover new differentially methylated regions. The latter offers the opportunity to identify previously unknown regions but valid statistical inference of these regions is __very challenging__.
 
 __UP TO HERE__
 
 \section{Dump from previous chapter}
 
-\subsubsection{Two-group experiments}\label{sec:two_group_dmcs}
 
-In a two group experiment, for each methylation locus we are testing the hypothesis that the average methylation level in the first group, $\bar{\beta_{i}^{(1)}}$, is different to that in the second group, $\bar{\beta_{i}^{(2)}}$.
-
-If there are no replicates in either group[^2x2] then we have a $2 \times 2$ contingency table:
-
-[^2x2]: I'd argue that this is a two-sample experiment rather than a two-group experiment since each group has $n = 1$.
-
-(__TODO: Prettify table with `booktabs`__)
-
-\begin{table}[h]
-\centering
-\caption{$2 \times 2$ contingency table summarising the methylation evidence for the $i^{th}$ methylation locus in a two-group experiment with no replicates in either group.}
-\label{my-label}
-\begin{tabular}{c c c}
-\hline
-& m          & u          \\ \hline
-$Group_{1}$ & $m_{i, 1}$ & $u_{i, 1}$ \\
-$Group_{2}$ & $m_{i, 2}$ & $u_{i, 2}$ \\
-\end{tabular}
-\end{table}
-
-This $2 \times 2$ table is then tested for independence of the rows and columns. As the sample size for each table is often small, Fisher's exact test is generally preferable since, unlike Pearson's $\chi^{2}$ test, the P-values are _exact_, meaning they do not rely on large-sample approximations (__CITE: Agresti__). Fisher's exact test is a _conditional_ test because the null distribution (a hypergeometric distribution) is derived by conditioning on both the marginal totals. __CITE: Agresti__ discusses the arguments for and against conditional and unconditional tests of independence in the $2 \times 2$ table.
-
-The more interesting experiment is one that includes replicates within each group, since we can then estimate the within-group variation. Unfortunately, some authors have used Fisher's exact test to analyse experiments including replicates (__TODO: Highlight papers that have inappropriately used Fisher's exact test; does Lister 2013 inappropriately pool then test?). This is incorrect because it effectively aggregates all the counts within each group and so ignores all within-group biological variability \citep{Hansen:2012gr}.
-
-Instead, a test that incorporates the within-group variability should be used.  For example, we could use a t-test to compare the average methylation level in the first group, $\bar{\beta_{i}^{(1)}}$, to that in the second group, $\bar{\beta_{i}^{(2)}}$. Several methods have been proposed for testing for DMCs. These methods differ considerably in how they model and transform the data as well as what test statistic is used to identify DMCs.
-
-\paragraph{Transforming}\label{sec:transforming}
-
-- [x] DELETE ME. This is covered elsewhere. Make sure all points in the below are addressed in the above.
-
-Smoothing of the $\beta$-values has been used advocated by several authors to remove variation due to low sequencing coverage and to exploit the spatial correlation of DNA methylation \citep{Hansen:2011gu, Hebestreit:2013ko, Gokhman:2014c}. Both `BSmooth` \citep{Hansen:2012gr} and `BiSeq` \citep{Hebestreit:2013ko} smooth the $\beta$-values using a binomial local likelihood smoother. \citet{Lister:2011kg, Gokhman:2014cp} used a simpler moving average in windows along the genome.
-
-\paragraph{Modeling}\label{sec:modeling}
-
-`DSS` \citep{Feng:2014iq}, `BiSeq` \citep{Hebestreit:2013ko}, `MOABS` \citep{Sun:2014fk} `methylSig` \citep{Park:2014ho} and `RADmeth` \citep{Dolzhenko:2014bo} are software packages that all use a Beta-Binomial hierarchical model of DNA methylation, although the exact details differ considerably between packages. Broadly, under the Beta-Binomial model the "true" methylation level at the $i^{th}$ methylation locus in the $k^{th}$ group is modeled as a Beta random variable, $B_{i, k} = Beta(\mu_{i, k}, \theta_{i, k})$. The observed number of methylated reads at the $i^{th}$ methylation locus, in the $j^{th}$ sample is modeled as a Binomial random variable, $M_{i, j, k} | B_{i, k}, n_{i, j, k} = Binomial(n_{i, j, k}, B_{i, k}), which is conditional on the unobserved $B_{i, k}$ and the observed sequencing coverage, $n_{i, j, k}$.
-
-\paragraph{Estimating and testing}\label{sec:estimating_and_testing}
-
-`DSS` and `MOABS` use empirical Bayes methods to estimate parameters whereas `methylSig`, `BiSeq` and `RADmeth` use maximum likelihood estimation. The test used to identify DMCs is variously a Wald test (`BiSeq`, `DSS`), likelihood ratio test (`methlySig`, `RADmeth`) or based on the credible interval (Bayesian confidence interval) of the difference in methylation between the two groups (`MOABS`).
-
-\subsubsection{Multi-group experiments}\label{sec:multigroup_dmcs}
 
 \subsection{DMRs}
 
