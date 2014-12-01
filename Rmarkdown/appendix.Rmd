@@ -15,7 +15,7 @@ bibliography: ../latex/phd_thesis.bib
 
 ## CpGs are underrepresented in the human genome (hg19)
 
-Firstly, the frequency of each nucleotide is computed. Secondly, the expected frequency of each dinucleotide is computed under the _independence model_. Under the independence model, the frequency of each dinucleotide is simply the product of the respective observed nucleotide frequencies. Finally, these expected frequencies are compared to the observed values from the respective reference genomes. 
+Firstly, the frequency of each nucleotide is computed. Secondly, the expected frequency of each dinucleotide is computed under the _independence model_. Under the independence model, the frequency of each dinucleotide is simply the product of the respective observed nucleotide frequencies. Finally, these expected frequencies are compared to the observed values from the respective reference genomes.
 
 I only use the autosomes, sex chromosomes and mitochondrial chromosome in all analyses, that is, I do not consider the "random", "unplaced" and "alternate haplotype" contigs in the reference genomes.
 
@@ -27,21 +27,21 @@ All results are computed at the chromosome-level as well as being summarised gen
 library(BSgenome.Hsapiens.UCSC.hg19)
 library(knitr)
 # Nucleotide frequencies
-nf <- bsapply(new("BSParams", X = Hsapiens, FUN = letterFrequency, 
-            exclude = c("rand", "Un", "hap"), simplify = TRUE), 
+nf <- bsapply(new("BSParams", X = Hsapiens, FUN = letterFrequency,
+            exclude = c("rand", "Un", "hap"), simplify = TRUE),
             letters = c("A", "C", "G", "T"))
 # Pretty print the results
-kable(data.frame(percentage = round(100 * rowSums(nf) / 
+kable(data.frame(percentage = round(100 * rowSums(nf) /
                                       sum(as.numeric(nf)), 1)))
 
 # GC-percentage
 round(100 * sum(nf[c("C", "G"), ]) / sum(as.numeric(nf)), 1)
 
 # Dinucleotide frequencies
-df <- bsapply(new("BSParams", X = Hsapiens, FUN = dinucleotideFrequency, 
+df <- bsapply(new("BSParams", X = Hsapiens, FUN = dinucleotideFrequency,
             exclude = c("rand", "Un", "hap"), simplify = TRUE))
 # Pretty print the results
-kable(data.frame(percentage = round(100 * rowSums(df) / 
+kable(data.frame(percentage = round(100 * rowSums(df) /
                                       sum(as.numeric(df)), 1)))
 
 # CpG percentage
@@ -56,13 +56,13 @@ thesis_theme <- theme_classic(base_size = 12)
 thesis_theme <- theme_bw(base_size = 12)
 edf <- nf %*% t(nf) / (sum(nf %*% t(nf))) * 100
 x <- data.frame(Dinucleotide = names(rowSums(df)),
-                Observed = as.vector(100 * rowSums(df) / sum(as.numeric(df))), 
+                Observed = as.vector(100 * rowSums(df) / sum(as.numeric(df))),
                 Expected = as.vector(edf))
-ggplot(x, aes(x = Dinucleotide, y = Observed / Expected)) + 
-  geom_point(size = 5) + coord_cartesian(ylim = c(0, 1.5)) + 
-  ggtitle("CpGs are underrepresented in human reference genome (hg19)") + 
+ggplot(x, aes(x = Dinucleotide, y = Observed / Expected)) +
+  geom_point(size = 5) + coord_cartesian(ylim = c(0, 1.5)) +
+  ggtitle("CpGs are underrepresented in human reference genome (hg19)") +
   thesis_theme +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   geom_hline(yintercept = 1, linetype = 2)
 ```
 
@@ -84,7 +84,7 @@ library(BSgenome.Hsapiens.UCSC.hg19)
 set.seed(666)
 
 # Observed IPDs
-cpgs <- bsapply(new("BSParams", X = Hsapiens, FUN = matchPattern, 
+cpgs <- bsapply(new("BSParams", X = Hsapiens, FUN = matchPattern,
                     exclude = c("rand", "Un", "hap"), simplify = TRUE),
                 pattern = "CG")
 d <- unlist(lapply(cpgs, start), use.names = FALSE)
@@ -102,8 +102,8 @@ ipd_sim <- diff(unlist(d_sim, use.names = FALSE))
 ipd_sim <- ipd_sim[ipd_sim > 0]
 
 # Drop negative values, which are due to CpGs being on different chromosomes
-ipd_df <- data.frame(IPD = c(ipd, ipd_sim), 
-                  Source = c(rep("Observed", length(ipd)), 
+ipd_df <- data.frame(IPD = c(ipd, ipd_sim),
+                  Source = c(rep("Observed", length(ipd)),
                              rep("Expected", length(ipd_sim))))
 ```
 
@@ -114,9 +114,9 @@ library(ggplot2)
 thesis_theme <- theme_classic(base_size = 12)
 thesis_theme <- theme_bw(base_size = 12)
 
-ggplot(aes(x = IPD, colour = Source), data = ipd_df) + stat_ecdf() + thesis_theme + 
-  coord_cartesian(xlim = c(0, 1000)) + 
-  xlab("Distance between CpGs (bp)\n(Axis truncated at 1000)") + 
+ggplot(aes(x = IPD, colour = Source), data = ipd_df) + stat_ecdf() + thesis_theme +
+  coord_cartesian(xlim = c(0, 1000)) +
+  xlab("Distance between CpGs (bp)\n(Axis truncated at 1000)") +
   ggtitle("Human reference genome (hg19)")
 ```
 
@@ -130,27 +130,72 @@ thesis_theme <- theme_bw(base_size = 12)
 
 ipd_table <- table(ipd)
 ipd_sim_table <- table(ipd_sim)
-ipd_table_df <- data.frame(IPD = c(as.numeric(names(ipd_table)), 
-                                   as.numeric(names(ipd_sim_table))), 
-                           Count = c(ipd_table, ipd_sim_table), 
-                           Source = c(rep("Observed", length(ipd_table)), 
+ipd_table_df <- data.frame(IPD = c(as.numeric(names(ipd_table)),
+                                   as.numeric(names(ipd_sim_table))),
+                           Count = c(ipd_table, ipd_sim_table),
+                           Source = c(rep("Observed", length(ipd_table)),
                                       rep("Expected", length(ipd_sim_table))))
 
-ggplot(aes(x = IPD, y = Count), 
-       data = subset(ipd_table_df, Source == "Observed")) + 
-  geom_line() + coord_cartesian(xlim = c(0, 300)) + 
-  xlab("Distance between CpGs (bp)\n (Axis truncated at 300)") + 
-  ggtitle("Human reference genome (hg19)") + 
+ggplot(aes(x = IPD, y = Count),
+       data = subset(ipd_table_df, Source == "Observed")) +
+  geom_line() + coord_cartesian(xlim = c(0, 300)) +
+  xlab("Distance between CpGs (bp)\n (Axis truncated at 300)") +
+  ggtitle("Human reference genome (hg19)") +
   scale_y_continuous(labels = comma)
 ```
 
+## Equivalence of tests to identify DMCs in a one-group experiment
+
+The computational equivalence of these approaches are shown in the following R code:
+
+```{r}
+# The data
+x <- cbind(M = c(38, 79, 59, 69, 44), U = c(1, 2, 1, 2, 46))
+names(dimnames(x)) <- c("sample", "meth_state")
+x
+
+# Using Pearson's chi-square test
+chisq.test(x)
+
+# Fitting a log-linear model to perform iterative proportional fitting to the
+# contingency table.
+loglin(x, margin = list("sample", "meth_state"))
+# An alternative formulation using loglm(), a convenient wrapper of loglin(),
+# from the MASS package.
+library(MASS)
+loglm(formula =  ~ sample + meth_state, data = x)
+
+# Fitting a generalised linear model with a binomial link using two different
+# formulations
+# (1) Using the array of frequencies
+glm(x ~ 1, family = binomial)
+# (2) Using relative frequencies (i.e., the beta-values) and weights (i.e.,
+  # the sequencing coverage).
+  glm(x[,1] / (x[, 1] + x[, 2]) ~ 1, family = binomial, weights = x[, 1] + x[, 2])
+```
+
+The saturated log-linear model can be written as $\log(F_{a, b}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{a, b}^{meth_state,sample}$, where $F_{a, b}$ is the value of the $(a, b)$ element in the $n \times 2$ contingency table. The null hypothesis that the cytosine is not a DMC is then tested by testing for an association between `sample` and `meth_state`, i.e., whether the parameter $\lambda_{a, b}^{meth_state, sample}$ is significantly different from zero.
+
+This log-linear model can be reformulated as a logistic regression by noting that the log-odds (logits) for each row are $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \log(F_{a, 1}) - \log(F_{a, 2})$. Therefore,
+
+\begin{align*}
+\log(\frac{F_{a, 1}}{F_{a, 2}}) &= \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{1}^{sample} + \lambda_{a, 1} \\
+&- (\lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{2}^{sample} + \lambda_{a, 2}) \\
+&= \underbrace{(\lambda_{1}^{sample} - \lambda_{2}^{sample})}_{\alpha} + \underbrace{(\lambda_{a, 1} - \lambda_{a, 2})}_{\gamma_{i}}
+\end{align*}
+
+The expression $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \alpha + \gamma_{i}$ is a logistic regression model. We can test the null hypothesis that the cytosine is not a DMC by testing for a `sample`-effect on the log-odds, i.e., whether the parameter $\gamma_{i}$ is significantly different from zero.
+
+Regardless of whether we use the log-linear model or the logistic model, to test the null hypothesis that the cytosine is not a DMC we can compute the deviance[^deviance] of the reduced model and compare it to a $\chi^{2}$ random variable with $(2 - 1) \times (n - 1)$ degrees of freedom. For the log-linear regression the reduced model is $\log(F_{a, b}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample}$ and for the logistric regression the reduced model is $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \alpha$.
+
+[^deviance]: The deviance is the log-likelihood ratio statistic comparing the current model within a saturated model.
 
 ## The probability that two dependent Bernoulli random variables are identical
 
-\cite{Lindqvist:1978fm} wrote a brief note on Bernoulli trials with dependence. 
-Building on earlier work by \cite{Klotz:1973if}, Lindqvist parameterises the 
-Bernoulli process $X_{1}, X_{2}, \ldots$ on $\{0, 1\}$ by the parameters 
-$p = Pr(X_{i} = 1)$ and $c = cor(X_{i - 1}, X_{i})$ and shows that the 
+\cite{Lindqvist:1978fm} wrote a brief note on Bernoulli trials with dependence.
+Building on earlier work by \cite{Klotz:1973if}, Lindqvist parameterises the
+Bernoulli process $X_{1}, X_{2}, \ldots$ on $\{0, 1\}$ by the parameters
+$p = Pr(X_{i} = 1)$ and $c = cor(X_{i - 1}, X_{i})$ and shows that the
 transition matrix is given by
 
 \begin{equation*}
@@ -162,7 +207,7 @@ transition matrix is given by
  \end{pmatrix}
 \end{equation*}
 
-provided that $max(1 - \frac{1}{p}, 1 - \frac{1}{1 - p}) \leq c \leq 1$. 
+provided that $max(1 - \frac{1}{p}, 1 - \frac{1}{1 - p}) \leq c \leq 1$.
 
 From this we can compute the joint distribution,
 
@@ -170,17 +215,17 @@ From this we can compute the joint distribution,
 Pr(X_{1} = x_{1}, \ldots, X_{n} = x_{n}) = Pr(X_{1} = x_{1}) Pr(X_{2} = x_{2} | X_{2} = x_{2}) \cdots Pr(X_{n} = x_{n} | X_{n - 1} = x_{n - 1})
 \end{equation*}
 
-In particular, in the case $n = 2$ we can compute the probability that two 
-dependent but identically distributed Bernoulli random variables are equal. 
+In particular, in the case $n = 2$ we can compute the probability that two
+dependent but identically distributed Bernoulli random variables are equal.
 
-To extend the above result to the probability that two dependent and 
-__non-identically__ distributed Bernoulli random variables are equal, simply 
-requires that we derive the appropriate transition matrix. Switching notation 
-to that used in Chapter \ref{chap:co-methylation_review}, let 
-$Z_{h, i} \eqd Bernoulli(p_{h})$ and $Z_{h', i'} \eqd Bernoulli(p_{h'})$. The 
-transition matrix, 
-$\Pi = \bigl(\begin{smallmatrix} 
-Pr(Z_{h', i'} = z_{h', i'} | Z_{h, i} = z_{h, i}) 
+To extend the above result to the probability that two dependent and
+__non-identically__ distributed Bernoulli random variables are equal, simply
+requires that we derive the appropriate transition matrix. Switching notation
+to that used in Chapter \ref{chap:co-methylation_review}, let
+$Z_{h, i} \eqd Bernoulli(p_{h})$ and $Z_{h', i'} \eqd Bernoulli(p_{h'})$. The
+transition matrix,
+$\Pi = \bigl(\begin{smallmatrix}
+Pr(Z_{h', i'} = z_{h', i'} | Z_{h, i} = z_{h, i})
 \end{smallmatrix} \bigr)$, is given by
 
 \begin{equation*}
@@ -230,7 +275,7 @@ x <- mapply(function(f, d) {
     download.file(url = paste0(url, f), d)
     gunzip(filename = d, overwrite = TRUE)
     }
-  fread(gsub(pattern = '.gz', replacement = '', x = d), sep = '\t', 
+  fread(gsub(pattern = '.gz', replacement = '', x = d), sep = '\t',
         verbose = FALSE)
   }, files, dests, SIMPLIFY = FALSE)
 ```
