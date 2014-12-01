@@ -14,21 +14,82 @@ bibliography: ../latex/phd_thesis.bib
 
 \section{Chapter overview}\label{sec:statmodel_chapter_overview}
 
-- [x] DONE
-
-I set out a statistical framework for analysing bisulfite-sequencing data. I begin by explaining the various levels of stochasticity in a methylC-seq experiment. Following this, I define the mathematical notation that I use throughout my thesis. I describe key variables, common estimators of these and their statistical properties. The ideas here are simple, although when extended to their full generality there are several subtleties that must be kept in mind.
+I set out a statistical framework for analysing bisulfite-sequencing data. I begin by explaining the various levels of stochasticity and then define the mathematical notation that I use throughout my thesis. I describe key variables, common estimators of these and their statistical properties. The ideas here are simple, although when extended to their full generality there are several subtleties that must be kept in mind.
 
 In the second half of the chapter I use this framework to discuss downstream analyses of whole-genome bisulfite-sequencing data.
 
+- Chapter overview
+  - One sample
+    - Pre-sequencing
+    - Post-sequencing
+    - Some complications for a single sample
+      - What is $\mathcal{I}$?
+      - Genetic heterozygosity at a methylation locus
+  - Multiple samples
+    - Some complications with multiple samples
+      - What is $\mathcal{I}$?
+  - Parameter estimation
+    - Estimating $M$, $U$
+    - Estimating $B$
+      - Beta-binomial models
+      - Smoothing
+    - Statistical properties of $\beta$-values
+      - Empirical distributions
+      * Write a function(s) to do the following and apply it to the EPISCOPE, Lister, Seisenberger and Ziller datasets:
+        - Genome-wide distribution of CpG $\beta$-values
+        * Kernel density estimates
+        * Stratify by CGI status, genic, intragenic, repeats
+        * Correlation across strands
+        * Effect of sequencing coverage threshold (`min_cov`)
+      - What is the genome-wide methylation level?
+        * Various figures get bandied about; what's a good summary?
+        - A criticism of ``identifying methylcytosines''
+      - Correlations
+      - Biases
+      - Transformations
+  - Downstream analyses
+    - Differential methylation
+      - Experimental design considerations
+      - DMCs: Identify $\bar{B_{i}^{(1)}} \neq \bar{B_{i}^{(2)}}$
+        - One-group experiments
+        - Two-group experiments
+        - Multi-group experiments
+      - DMRs: Identify runs of DMCs
+        - A priori vs. data-driven regions
+        - One-group experiments
+        - Two-group experiments
+        - Multi-group experiments
+    - Differential variability
+      - DVCs: Identify $\sigma(B_{i}^{(1)}) \neq \sigma(B_{i}^{(2)})$
+      - DVRs: Identify runs of DVCs
+    - Allele-specific methylation
+    - Methylation entropy
+    - Epipolymorphism
+    - Epiallele detection
+    - Integrating DNA methylation data with other genomes data
+
 \section{One sample}\label{sec:one_sample}
 
-Even with only a single sample, there are several levels of variation to consider in a bisulfite-sequencing experiment. This variation has a hierarchical structure, which is illustrated in __FIGURE__ and can be separated into pre-sequencing and post-sequencing sources of variation.
+Even with only a single sample, there are several levels of variation to consider in a bisulfite-sequencing experiment. I find it convenient to separate these into:
+
+1. Pre-sequencing sources of variation
+2. Sequencing and post-sequencing sources of variation.
+
+I describe these sources of variation, which are illustrated in Figure \ref{fig:bs-seq_protocol}.
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{../figures/bs-seq_protocol.pdf}
+\caption{A schematic illustrating several sources of variation in a bisulfite-sequencing experiment. Each sample starts as a population of cells, with potentially different methylation patterns. Each DNA fragment is coloured by its originating cell, although this is unknown in practice. Illustrated are PCR amplication bias (unequal representation of DNA from each cell following PCR amplification), sampling variation (not all DNA fragments are sequenced), alignment errors (not all sequenced fragments are mapped or may be mapped to the wrong location, as is the case for the green fragment), and filtering during methylation calling (not reads are used, the blue read, and reads may have read-positions removed, the black reads).}
+\label{fig:bs-seq_protocol}
+\end{figure}
 
 \subsection{Pre-sequencing}\label{sec:one_sample_pre_sequencing}
 
-A methylation locus is a single cytosine, that is, a CpG, CHG or CHH. The set of these loci is labelled $\mathcal{I} = \{pos_{i}: i = 1, \ldots, N_{loci} \}$, where $pos_{i}$ is the genomic co-ordinates of the $i^{th}$ locus with respect to the forward strand, e.g. chr1:+:666. I frequently refer to loci by the subscript $i$ rather than by $pos_{i}$. This means that the distance between the $i^{th}$ and $(i + 1)^{th}$ methylation loci varies along the genome and, for a small number of instances, that the $i^{th}$ and $(i + 1)^{th}$ methylation loci are on separate chromosomes. Generally, the number of methylation loci, $N_{loci}$, is not known, although estimates may be made based from the sample or a reference genome. Not knowing the exact value of $N_{loci}$ is no great concern.
+A methylation locus is a single cytosine, that is, a CpG, CHG or CHH. The set of these loci is labelled $\mathcal{I} = \{pos_{i}: i = 1, \ldots, N_{loci} \}$, where $pos_{i}$ is the genomic co-ordinates of the $i^{th}$ locus, e.g., chr1:+:666. Generally, the number of methylation loci, $N_{loci}$, is not known, although estimates may be made based from the sample or a reference genome. Not knowing the exact value of $N_{loci}$ is no great concern.
 
-The methylation state of a locus can vary within a sample due to cell-to-cell variability of the methylation state. As discussed, a sample in a bisulfite-sequencing experiment contains DNA that is extracted from hundreds or thousands of cells and each cell can have a slightly different methylation profile. Furthermore, within a diploid cell there are two copies of each chromosome, and therefore two copies of each methylation locus, and these two copies can have different methylation states. Therefore, it is also necessary to consider the next level down in the hierarchy; the DNA fragments within the sample.
+It is sometimes convenient to refer to loci by the subscript $i$ rather than by $pos_{i}$. It is important to remember that the number of base pairs between the $i^{th}$ and $(i + 1)^{th}$ methylation loci varies along the genome. Also, depending on whether the data are stranded, a pair of loci may be on opposite strands. In a small number of instances the $i^{th}$ and $(i + 1)^{th}$ methylation loci are on separate chromosomes, e.g., the last CpG on chromosome 1 and the first CpG on chromosome 2.
+
+The methylation state of a locus can vary within a sample due to cell-to-cell variability of the methylation state. As discussed, a sample in a bisulfite-sequencing experiment contains DNA that is extracted from hundreds or thousands of cells and each cell can have a slightly different methylation profile. Furthermore, within a diploid cell there are two copies of each chromosome, and therefore two copies of each methylation locus, and these two copies can have different methylation states. Therefore, it is also necessary to consider not just the genomic co-ordinates of the locus but from which DNA fragment the methylation state originated.
 
 Suppose that in the pool of DNA fragments for the sample that there are $H_{i}$ fragments containing the $i^{th}$ methylation locus. In general, $H_{i}$ is unknown and will vary from locus to locus within a sample[^H_i]. Note that the value of $H_{i}$ is determined following the library preparation, including PCR amplification of the DNA; therefore, it can give a grossly distorted picture of the true representation of the cells. I denote by $\mathcal{H}_{i}$ the set of all fragments containing the $i^{th}$ locus.
 
@@ -57,7 +118,7 @@ From these we can compute the proportion of fragments that methylated at the $i^
   B_{i} = \frac{M_{i}}{M_{i} + U_{i}}
 \end{equation*}
 
-The above definitions can be extended to individual methylation loci, 1-tuples, to m-tuples. Mathematically, an m-tuple is denoted by a sequence of methylation loci, $(i, i + 1, \ldots, i + m - 1)$.
+The above definitions can be extended from individual methylation loci, 1-tuples, to m-tuples. Mathematically, an m-tuple is denoted by a sequence of methylation loci, $(i, i + 1, \ldots, i + m - 1)$.
 
 I denote by the vector of indicator random variables, $Z_{h, (i, i + 1, \ldots, i + \text{m} - 1)}$, the methylation pattern of the m-tuple $(i, i + 1, \ldots, i + m - 1)$ on the $h^{th}$ DNA fragment containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$:
 
@@ -208,7 +269,7 @@ We can define this fourth level using a design matrix $X = [X_{j}]$. For example
 
 In addition to the complications of the Section \ref{sec:one_sample_complications}, we now have sample-to-sample variation that must be addressed by this framework.
 
-\subsubsection{$\mathcal{I}$}
+\subsubsection{What is $\mathcal{I}$?}
 
 Each sample has their own set of methylation loci, that is, $\mathcal{I}_{j}$ differs between $j$. Furthermore, sequencing coverage varies from sample-to-sample. This means that even if the samples have exactly the same $\mathcal{I}_{j}$, i.e., the samples are genetically identical, each sample will have a different set of loci with 'sufficient' sequencing coverage. Loci without sufficient sequencing coverage are effectively missing data.
 
@@ -222,21 +283,19 @@ The main parameter of interest for each sample is the vector of methylation leve
 
 \subsection{Estimating $M$, $U$}\label{sec:estimating_m_and_u}
 
-The simplest and most commonly used estimators of $M_{i}$ and $U_{i}$ are $m_{i}$ and $u_{i}$, that is, the number of reads that are methylated and unmethylated at the $i^{th}$ locus, subject to some filtering of the reads and read-positions \citep[e.g.,]{Cokus:2008fc, Lister:2008bh, Lister:2009hy, Lister:2011kg, Hansen:2011gu}). $M_{i}$ and $U_{i}$ may be estimated per-strand or aggregated across strands in the case of palindromic methylation loci. CpG methylation is typically aggregated across strands.
-
-`methtuple` uses this simple method to estimate $MM_{(i, i + 1)}$, $MU_{(i, i + 1)}$, etc., that is, the frequency of methylation patterns at m-tuples.
+It is rare to need direct estimates of $M_{i}$ or $U_{i}$. In order to estimate $M_{i}$ and $U_{i}$, the absolute number of methylated and unmethylated DNA fragments at the $i^{th}$ locus, we would also require an estimate of $|\mathcal{H}_{i}|$, the number of DNA fragments containing the $i^{th}$ locus. Rather, we are generally interested in estimating the proportion of reads that are methylated, $B_{i} = \frac{M_{i}}{M_{i} + U_{i}}$.
 
 \subsection{Estimating $B$}\label{sec:estimating_B}
 
-Most analyses of bisulfite-sequencing data have focused on estimating the average methylation level at individual methylation loci, $B_{i}$. The simplest estimator is $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$, which has been widely used \citep[e.g.,]{Cokus:2008fc, Lister:2008bh, Lister:2009hy, Lister:2011kg}).
+The simplest estimator of $B_{i}$ is $\beta_{i} = \frac{m_{i}}{m_{i} + u_{i}}$, which has been widely used \citep[e.g.,]{Cokus:2008fc, Lister:2008bh, Lister:2009hy, Lister:2011kg}). The values of $m_{i}$ and $u_{i}$ are obtained by methylation calling (see Section \ref{sec:methylation_calling}).
 
-Under a Binomial model for the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample, $M_{i, j} | n_{i, j} \eqd Binomial(n_{i, j}, B_{i, j})$, $\beta_{i, j}$ is the maximum likelihood estimator of $B_{i, j}$. It should be noted that this is conditional on the observed sequencing coverage, $n_{i, j}$.
+Under a Binomial model for the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample, $M_{i, j} | n_{i, j} \eqd Binomial(n_{i, j}, B_{i, j})$, $\beta_{i, j}$ is the maximum likelihood estimator of $B_{i, j}$.
 
-Recently, more sophisticated methods have been proposed to estimate or model the average methylation level. These methods, which are based on $m_{i, j}$ and $u_{i, j}$, include beta-binomial models \citet{Feng:2014iq, Sun:2014fk, Dolzhenko:2014bo}, and the smoothing-methods proposed by \cite{Hansen:2011gu, Hansen:2012gr, Hebestreit:2013ko}. The aim of these methods isn't necessarily to estimate $B_{i, j}$ - rather, it is typically a step along the way to identify differential methylation - but estimates of $B_{i, j}$ can be obtained if so desired.
+Recently, more sophisticated methods have been proposed to estimate or model the average methylation level. These methods, which are based on $m_{i, j}$ and $u_{i, j}$, include beta-binomial models \citet{Feng:2014iq, Sun:2014fk, Dolzhenko:2014bo}, and smoothing-methods \cite{Hansen:2011gu, Hansen:2012gr, Hebestreit:2013ko}.
 
 \subsubsection{Beta-binomial models}
 
-Several papers have proposed the beta-binomial distribution as a natural model "for describing methylation levels of an individual site across replicates" \cite{Dolzhenko:2014bo}. The 'beta' component of the distribution models the underlying methylation level, $B_{i, j}$, while the 'binomial' component models the sampling of reads by sequencing. Another way to think of this is that the 'beta' component models the biological variability of the data, while the 'binomial' component models the sampling variability of sequencing. This separation of biological and technical variability has proven successful in detecting differential gene expression from RNA-seq data. For example, the `edgeR` software \cite{Robinson:2010cw} uses the negative binomial distribution, which can be thought of as a gamma-poisson mixture distribution, to account for both the biological and sampling variability.
+Several papers have proposed the beta-binomial distribution since, as noted by \cite{Dolzhenko:2014bo}, it is "a natural model for describing methylation levels of an individual site across replicates" . The 'beta' component of the distribution models the underlying methylation level, $B_{i, j}$, while the 'binomial' component models the sampling of reads by sequencing. Another way to think of this is that the 'beta' component models the biological variability of the data, while the 'binomial' component models the sampling variability of sequencing. This separation of biological and technical variability has proven successful in detecting differential gene expression from RNA-seq data. For example, the `edgeR` software \cite{Robinson:2010cw} uses the negative binomial distribution, which can be thought of as a gamma-poisson mixture distribution, to account for both the biological and sampling variability.
 
 An attractive feature of the beta-binomial distribution is that it can be motivated by, and analysed with, Bayesian methods, including empirical Bayes methods, or frequentist techniques such as maximum likelihood. For example, the software `DSS` \cite{Feng:2014iq} and `MOABS` \citet{Sun:2014fk} both use the beta-binomial distribution in an empirical Bayes analysis of differential methylation from bisulfite-sequencing data. In contrast, `RADmeth` \cite{Dolzhenko:2014bo} uses the beta-binomial model in a maximum likelihood framework to address the same problem.
 
@@ -264,86 +323,178 @@ Another 'parameter' choice when smoothing is the choice of kernel, although this
 
 Under the binomial model, ($M_{i, j} | n_{i, j}) \eqd Bin(n_{i, j}, B_{i, j})$, $\beta_{i, j} = \frac{m_{i, j}}{m_{i, j} + u_{i, j}}$ is an unbiased estimator of $B_{i, j}$ with standard error $se(\beta_{i, j}) = \sqrt(\frac{\beta_{i, j}(1 - \beta_{i, j})}{n_{i, j}})$ \citep{Hansen:2012gr}. The natural interpretation of $\beta_{i, j}$ is then as an estimator of the average level of methylation at the $i^{th}$ locus in the $j^{th}$ sample. In this section I discuss this interpretation and statistical properties of this estimator.
 
-\subsection{Distributions}
+\subsection{Empirical distributions}
+
+- TODO: Lots of figures and discussion. See chapter plan.
 
 In a study involving multiple samples, the set of $\beta$-values can be summarised as a matrix where each row is a locus and each column is a sample. Some values will be missing, either because there was insufficient sequencing coverage to estimate a $\beta$-value or because that locus is not a cytosine for that sample. This matrix might be visualised to learn about the distribution of methylation levels, either row-wise, to learn about the variability across samples, or column-wise, to learn about the variability within samples.
 
-Restricting our attention to CpGs, __FIGURE__ shows the column-wise summaries of the EPISCOPE data, that is, the genome-wide distributions of $\beta$-values for each sample. What is immediately clear is that these distributions are bimodal. This bimodality is driven by the fact that CpGs in CpG islands are generally unmethylated whereas those outside of CpG islands are generally methylated, which we can see when we stratify CpGs by their CpG island status.
+\subsubsection{Genome-wide distribution of $\beta$-values}
 
-__UP TO HERE__
+Restricting our attention to CpGs, Figure \ref{fig:EPISCOPE_beta_distribution} shows the genome-wide distributions of $\beta$-values, that is, the column-wise summaries, for each EPISCOPE sample. What is immediately clear is that these distributions are bimodal. Figure \ref{fig:EPISCOPE_beta_distribution_CGI_stratified} shows that this bimodality is largely driven by the fact that CpGs in CpG islands are mostly unmethylated whereas those outside of CpG islands are generally methylated. Intermediate $\beta$-values, those between $0.2-0.8$, are evidence of heterogeneity.
 
-__TODO: Using the EPISCOPE data create the following:__
+Both Figures \ref{fig:EPISCOPE_beta_distribution} and  \ref{fig:EPISCOPE_beta_distribution_CGI_stratified} also reveal that the genome-wide distributions of $\beta$-values for a given tissue are very similar between the three individuals. The three adipose-derived tissues, _SA_, _VA_ and _VAT_, have similar genome-wide profiles while the blood-derived tissue, _BUF_, has more intermediate $\beta$-values, potentially indicating more cellular heterogeneity.
 
-- [ ] Genome-wide density
-  - [ ] Stratified by CGI
-- [ ] Differences (or correlations) of $\beta$-values between strands
-
-
-
-```{r, eval = FALSE, echo = FALSE}
+```{r EPISCOPE_genome_wide_beta-value_distributions, eval = FALSE, echo = FALSE}
 # Run on one of the unices
 setwd("/wehisan/home/allstaff/h/hickey/methylation_m-tuples/analyses/processed_data/EPISCOPE")
 library(MethylationTuples)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-thesis_theme <- theme_classic(base_size = 12)
-thesis_theme <- theme_bw(base_size = 12)
+thesis_theme <- theme_classic(base_size = 20)
+thesis_theme <- theme_bw(base_size = 20)
 
-x <- readRDS('EPISCOPE_1_tuples_strand_collapsed.rds')
+x <- readRDS("EPISCOPE_1_tuples_strand_collapsed.rds")
 
-cgi <- read.table('~/methylation_m-tuples/CGI/model-based-cpg-islands-hg19.txt', header = TRUE, stringsAsFactors = FALSE)
+cgi <- read.table("~/methylation_m-tuples/CGI/model-based-cpg-islands-hg19.txt",
+                  header = TRUE, stringsAsFactors = FALSE)
 cgi <- GRanges(seqnames = cgi$chr, IRanges(cgi$start, cgi$end))
 cgi_status <- overlapsAny(x, cgi)
 
 beta <- methLevel(x, min_cov = 10L)
 
 cn <- colnames(beta)
-beta <- data_frame(Individual = rep(substr(cn, 1, 3), each = nrow(beta)),
-           Tissue = rep(substr(cn, 4, 6), each = nrow(beta)),
-           beta = as.vector(beta),
-           CGI = rep(cgi_status, ncol(beta)))
+beta <- data.frame(Individual = rep(substr(cn, 1, 3), each = nrow(beta)),
+                   Tissue = rep(substr(cn, 4, 6), each = nrow(beta)),
+                   beta = as.vector(beta),
+                   CGI = rep(cgi_status, times = ncol(beta)),
+                   stringsAsFactors = FALSE)
+beta <- tbl_df(beta)
 
-a <- beta[sample(nrow(beta), 100000), ]
+#a <- beta[sample(nrow(beta), 100000), ]
 
-ggplot(aes(x = beta), data = a) + 
-  geom_density(aes(linetype = Tissue)) + 
-  facet_grid(. ~ Individual) +
-  thesis_theme
+g <- ggplot(aes(x = beta), data = beta) +
+  geom_density(size = 1.5) +
+  facet_grid(Tissue ~ Individual, labeller = label_both) +
+  thesis_theme + scale_colour_brewer(palette = "Dark2") +
+  ggtitle(expression(paste("EPISCOPE: Distribution of ", beta, "-values", sep = ""))) +
+  xlab(expression(paste(beta, "-values", sep = "")))
+ggsave("EPISCOPE_beta_distribution.pdf", g, height = 9, width = 16)
 
-ggplot(aes(x = beta), data = a) + 
-  geom_density(aes(linetype = Tissue)) + 
-  facet_grid(CGI ~ Individual) +
-  thesis_theme
-
-
-
+g <- ggplot(aes(x = beta), data = beta) +
+  geom_density(aes(colour = CGI), size = 2) +
+  facet_grid(Tissue ~ Individual, labeller = label_both) +
+  thesis_theme + scale_colour_brewer(palette = "Dark2") +
+  ggtitle(expression(paste("EPISCOPE: Distribution of ", beta, "-values", sep = ""))) +
+  xlab(expression(paste(beta, "-values", sep = "")))
+ggsave("EPISCOPE_beta_distribution_CGI_stratified.pdf", g, height = 9,
+       width = 16)
 ```
 
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_beta_distribution.pdf}
+\caption{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the EPISCOPE data. Observations have been combined across strands and only CpGs with at least $10\times$ sequencing coverage are included. Most CpGs are highly unmethylated or highly methylated, with the buffy coat samples being the most extreme example of this bimodality. 'Spikes' in the density estimate are due to the discreteness of $\beta$-values. Abbreviations: _BUF_ = buffy coat; _SA_ = subcutaneous adipose; _VA_ = visceral adipose; _VAT_ = adipocytes derived from visceral adipose.}
+\label{fig:EPISCOPE_beta_distribution}
+\end{figure}
 
-To do the same plots for the row-wise summaries would be rather tedious since there are many, many more rows (loci) than columns (samples) in the matrix of $\beta$-values. However, a few examples are shown in __FIGURE__. These row-wise summaries are often modelled by the beta distribution \cite[e.g.,]{Hebestreit:2013ko, Lacey:2013iy}. The Beta distribution is a flexible 2-parameter distribution on $[0, 1]$. It can be unimodal, "U"-shaped or "J"-shaped, depending on the choice of parameters. The Beta distribution also includes the Uniform and arcsine distributions as special cases (__TODO: better source than wikipedia__).
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_beta_distribution_CGI_stratified.pdf}
+\caption{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the EPISCOPE data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10\times$ sequencing coverage are included. Most CpGs outside of CpG islands are methylated whereas most CpGs within CpG islands are unmethylated. Spikes' in the density estimate are due to the discreteness of $\beta$-values. Abbreviations: _BUF_ = buffy coat; _SA_ = subcutaneous adipose; _VA_ = visceral adipose; _VAT_ = adipocytes derived from visceral adipose; _CGI_ = CpG island.}
+\label{fig:EPISCOPE_beta_distribution_CGI_stratified}
+\end{figure}
 
-The analysis of the row-wise distributions leads to the analysis of differential methylation and differential variability, which are discussed in __SECTION__.
+\subsubsection{Strand-specific summaries}
+
+CpG $\beta$-values are often computed by aggregating the $m$ and $u$ counts across the forward and reverse strands. This assumes that the two strands are indeed symmetrically methylated. To investigate this, for each CpG we can compute the $\beta$-values using only the forward-strand reads, $\beta^{+}$, and only the reverse-strand reads, $\beta^{-}$.
+
+```{r EPISCOPE_strand_specific_beta-value_distributions, eval = FALSE, echo = FALSE}
+# Run on one of the unices
+setwd("/wehisan/home/allstaff/h/hickey/methylation_m-tuples/analyses/processed_data/EPISCOPE")
+library(MethylationTuples)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(RColorBrewer)
+
+thesis_theme <- theme_classic(base_size = 20)
+thesis_theme <- theme_bw(base_size = 20)
+
+y <- readRDS("EPISCOPE_1_tuples.rds")
+y_fwd <- y[strand(y) == "+"]
+y_rev <- y[strand(y) == "-"]
+
+ol <- findOverlaps(unstrand(y_fwd), shift(unstrand(y_rev), -1L), type = "equal")
+beta_fwd <- methLevel(y_fwd, min_cov = 5L)[queryHits(ol), ]
+beta_rev <- methLevel(y_rev, min_cov = 5L)[subjectHits(ol), ]
+
+cors <- matrix(unlist(mclapply(1:10, function(min_cov, y_fwd, y_rev, ol) {
+  beta_fwd <- methLevel(y_fwd, min_cov = min_cov)[queryHits(ol), ]
+  beta_rev <- methLevel(y_rev, min_cov = min_cov)[subjectHits(ol), ]
+  sapply(seq_len(ncol(y)), function(i, x, y) {
+    cor(x[, i], y[, i], use = "complete.obs")
+    }, x = beta_fwd, y = beta_rev)
+  }, y_fwd = y_fwd, y_rev = y_rev, ol = ol, mc.cores = 10)), ncol = 10)
+
+beta_pairs <- data.frame(Individual = rep(substr(cn, 1, 3),
+                                          each = nrow(beta_fwd)),
+                         Tissue = rep(substr(cn, 4, 6), each = nrow(beta_fwd)),
+                         beta_fwd = as.vector(beta_fwd),
+                         beta_rev = as.vector(beta_rev),
+                         stringsAsFactors = FALSE)
+beta_pairs <- tbl_df(beta_pairs)
+
+beta_pairs %>% group_by(Individual, Tissue) %>%
+  summarise(cor(beta_fwd, beta_rev, use = "complete.obs"))
+
+mypar <- function(a = 1, b = 1, brewer.n = 8, brewer.name = "Dark2",
+                  cex.lab = 2, cex.main = 2, cex.axis = 1.5,
+                  mar = c(5.1, 5.1, 3.5, 2.1), mgp = c(3, 1, 0), ...) {
+    par(mar = mar, mgp = mgp, cex.lab = cex.lab, cex.main = cex.main,
+        cex.axis = cex.axis)
+    par(mfrow = c(a, b), ...)
+    palette(brewer.pal(brewer.n, brewer.name))
+}
+pdf("EPISCOPE_beta_correlations_across_strand.pdf", width = 16, height = 9)
+mypar(4, 3)
+sapply(seq_len(ncol(beta_fwd)), function(i, x, y, ns) {
+  smoothScatter(x[, i], y[, i],
+                xlab = expression(beta["+"]),
+                ylab = expression(beta["-"]),
+                main = paste0(ns[i], ": cor = ", round(cor(x[, i], y[, i],
+                                                        use = "complete.obs"),
+                                                    2)))
+  }, x = beta_fwd, y = beta_rev, ns = colnames(beta_fwd))
+dev.off()
+```
+
+\subsection{Interpretation}
+
+In papers about DNA methylation there is often a sentence like the following (given by \cite{Laird:2003kw}): "About 70% of the CpG dinucleotides in the mammalian genome are methylated". In the context of a whole-genome bisulfite-sequencing experiment, this can be interpreted as the expected $\beta$-value of a randomly selected CpG. However, as can be seen from __FIGURE__, the extreme bimodality of the $\beta$-value distribution means that the expected value is not a particularly useful estimate of the methylation level of a particular CpG. To make a useful statement about the methylation level of a particular CpG really requires that we know whether it is within a CpG island.
+
+The "$70\%$" statement can also be interpreted as an estimate of the probability that a cytosine randomly sampled from a haploid copy of a mammalian genome is a methylcytosine. Because in a whole-genome bisulfite-sequencing experiment we measure methylation from a pool of cells, not a single haploid copy of the genome, I do not think it makes sense to describe a particular cytosine in the genome as being a 'methylcytosine'. That is, it only makes sense to describe an observation of a cytosine, $z_{i}$, as being methylated or unmethylated and not to describe a cytosine, $i$, as being a methylated or unmethylated. However, several important whole-genome bisulfite-sequencing papers, \citet{Lister:2008bh, Lister:2009hy, Lister:2011kg}[^Lister_2013], have sought to use the latter definition, which I believe to be an unnecessary source of confusion.
+
+[^Lister_2013]: It is worth noting that this concept was not used in more recent paper from the same group \citep{Lister:2013et}.
+
+\citet{Lister:2008bh} introduced a method "to identify the presence of a methylated cytosine" (detailed in the supplementary material). In the language of these papers, a 'methylcytosine' is a cytosine in the reference genome where "at least s [sic; I believe this should be "a"] subset of the genomes within the sample were methylated" \citep[supplementary material]{Lister:2009hy}. This amounts to testing the hypothesis $H_{0}: \beta_{i, j} = 0$ against the one-sided alternative $H_{1}: \beta_{i, j} > 0$. This can be thought of as testing the null hypothesis that the observed number of methylated reads at the $i^{th}$ cytosine were simply due to 'error', where the 'error' is a combination of the estimated sequencing error and the estimated bisulfite-converstion error.
+
+Although the exact procedure is not particularly well described in any of \citet{Lister:2008bh, Lister:2009hy, Lister:2011kg}[^mathematical_description], nor is any code made available, I believe the method is as follows. For each cytosine compute a P-value, $P_{i} = \sum_{k = m_{i} + 1}^{k = m_{i} + u_{i}} Prob(X = k)$, where $X = Binom(u_{i} + m_{i}, \epsilon))$ and $\epsilon$ is the estimated 'error'. Any site with an FDR-adjusted P-value below a threshold was declared a 'methylcytosine'[^fdr]
+
+[^mathematical_description]: The earliest of these papers, \citet{Lister:2008bh}, includes a short non-mathematical description, while the most detailed description is given in the supplementary material of \citet{Lister:2009hy}. \citet{Lister:2011kg} simply refers to \citet{Lister:2009hy}
+
+[^fdr]: \citet{Lister:2008bh} used an FDR-adjusted P-value cutoff of $0.05$; \citet{Lister:2009hy} used an FDR-adjusted P-value cutoff of $0.01$. I presume the FDR-adjustment to be based on the Benjamini-Hochberg procedure \citep{Benjamini:1995ws}, although this is not explicitly stated. This procedure was performed separately for each methylation context in \citet{Lister:2009hy}, but it is not clear if this is the case for \citet{Lister:2008bh} (a study of _A. thaliani_, which has large amounts of non-CG methylation) or \citet{Lister:2011kg} (a study that includes pluripotent human cell lines that have non-negligible levels of non-CG methylation). This  affects the false discovery rate correction since the number of tests is far greater if all cytosines are simultaneously corrected compared to a separate correction for each context.
+
+The $\epsilon$ are estimated on a per-sample basis, with bisulfite-conversion error rates estimated from the unmethylated chloroplast genome \citep{Lister:2008bh} or from the genome of the lambda phage spike-in control \citep{Lister:2009hy, Lister:2011kg}. It is not clear how the sequencing error rate was estimated, particularly given that the base qualities are not included in the data available from the website.
+
+The proportion of cytosines that are identified by this procedure as 'methylcytosines' is a poor estimator of the probability that a cytosine randomly sampled from a haploid genome is methylated, unless the sample is incredibly homogeneous. For example, suppose we had a sample where the true methylation level of every CpG, $B_{i}$, was $0.2$. Given sufficient sequencing coverage, every CpG in the genome would be declared a 'methylcytosine' when in fact for any haploid copy of the genome only $20\%$ of CpGs would be expected to be methylcytosines.
+
+Furthermore, referring to CpGs as 'methylcytosines' results in a loss of information since two 'methylcytosines' may have very different $\beta$-values. For example, in \citet[supplementary figure 2a]{Lister:2009hy} the authors use a Venn diagram to compare the number of 'methylcytosines' called in two biological replicates to summarise the concordance between the two biological replicates. A far better summary of the biological replicability is to plot the $\beta$-values from each replicate against one another as a scatter plot, as this includes the magnitude of the $\beta$-values and not just whether they are statistically different from zero.
+
+In summary, for bisulfite-sequencing experiments where the DNA for each sample comes from multiple cells I do not think it makes sense, nor is it useful, to refer to individual cytosines, $i$, as being methylated or unmethylated. Instead, it is better to summarise the methylation level at a CpG by a $\beta$-value since this has a natural interpretation as the estimated proportion of haploid genomes in the sample that are methylated at that CpG. Unfortunately, $\beta$-values are not without their own issues, as discussed below.
 
 \subsection{Correlations}
 
-- [x] DONE
-
 Many researchers have observed that DNA methylation is spatially correlated along the genome, \cite[e.g.,]{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Hansen:2011gu, Hebestreit:2013ko, Wang:2011cw, Pedersen:2012vl, Lacey:2013iy, Sofer:2013bk, Liu:dy, Lyko:2010dr, Landan:2012kp, Lister:2009hy}). I call this correlation of methylation levels _co-methylation_.
 
-Just as we can explore the distribution of DNA methylation levels within a sample or between samples, so too can we explore co-methylation within a sample or between samples. I examine this in detail in Chapter \ref{chap:co-methylation}
+Just as we can explore the distribution of DNA methylation levels within a sample or between samples, so too can we explore co-methylation within a sample or between samples. I examine this in detail in Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}.
 
 \subsection{Biases}
-
-- [x] DONE
 
 The natural interpretation of $\beta_{i, j}$ as the average level of methylation at the $i^{th}$ locus in the $j^{th}$ sample will be biased if the probability of sequencing a fragment with a methylated site is different from the probability of sequencing a fragment with an unmethylated site. In fact, it has been shown that methylated DNA is overrepresented in bisulfite-sequencing data due, with the problem exacerbated by higher rounds of PCR amplification and dependent on the bisulfite-conversion protocol \cite{Ji:2014fq}. PCR amplification can result in overreprestation of one of the DNA strands in bisulfite-sequencing data \cite{Warnecke:1997eh}.
 
 Lab-based solutions to overcome these biases exist for targeted bisulfite-sequencing, but are technically difficult and expensive to extend to whole-genome studies. \cite{Ji:2014fq} propose potential computational corrections for these biases but as yet these have not been implemented.
 
 \subsection{Transformations}
-
-- [x] DONE
 
 $\beta$-values are the _de facto_ standard unit for reporting methylation levels due to their natural interpretation as an estimate of the average level of methylation at the locus. However, they are not necessarily the best unit for statistical inference. This is because a $\beta$-value is an estimate of a proportion and there are a well-known challenges when working with proportion data, such as:
 
@@ -364,163 +515,133 @@ One transformation that remains popular, at least in the analysis of DNA methyla
 
 As with $\beta$-values, $\mathcal{M}$-values derived from bisulfite-sequencing data generally cannot be directly analysed due to the variable sequencing coverage across loci. However, the variable sequencing coverage can be accounted for using the afore-mentioned beta-binomial models and related regression models, which are discussed in the next section.
 
+\section{Downstream analyses}\label{sec:downstream_analyses}
 
-\section{Downstream analyses}\label{sec:downstream}
+As is clear from the length of Chapter \ref{chap:wgbs_bioinformatics_analysis} alone, there is a considerable amount of bioinformatics work before we even consider analysing the data to address the biological question of interest. I call these the 'downstream' analyses, and there are many that might be considered. Using the above statistical framework, I explain the most commonly asked questions.
 
-- [ ] DONE
+\subsection{Differential methylation}
 
-- Don't rehash the details of Chapter WGBS analysis. Rather summarise these questions as statistical problems in the framework I outline in this chapter.
-- DMC: Identify $\bar{B_{i}^{(1)}} \neq \bar{B_{i}^{(2)}}$
-- DMR: Identify runs of DMCs
-- DVC: Identify $\sigma(B_{i}^{(1)}) \neq \sigma(B_{i}^{(2)})$
-- DVR: Identify runs of DVCs
-
-\subsection{What is the genome-wide methylation level?}
-
-This is a simple question with a somewhat complex answer.
-
-- Average (weighted) $\beta$-values.
-- Lister's method
-
-\subsubsection{A criticism of ``identifying methylcytosines''}{sec:criticism_of_methylcytosines}
-
-__TODO: Simplify and shorten__
-
-\citet{Lister:2008bh}, one of the first papers to include WGBS data, introduced a method "to identify the presence of a methylated cytosine" (detailed in the supplementary material). This idea was also used in subsequent publications from the same group \citep{Lister:2009hy, Lister:2011kg}[^Lister_2013] with similarly high profiles. I believe that this definition of a "methylcytosine" is an unnecessary source of confusion, as I will explain.
-
-[^Lister_2013]: It is worth noting that this idea was not used in the analysis of WGBS data from more recent paper from the same group \citep{Lister:2013et}.
-
-It is necessary to use scare quotes to distinguish the term 'methylcytosine', as used by \citet{Lister:2008bh, Lister:2009hy, Lister:2011kg}, from the standard definition meaning a 5-methylcytosine. A 'methylcytosine' is a cytosine in the reference genome where "at least s [sic; I believe this should be "a"] subset of the genomes within the sample were methylated" \citep[supplementary material]{Lister:2009hy}. Thus, the idea of identifying 'methylcytosines' is to determine whether each cytosine in the reference genome displays any evidence of methylation in the sample.
-
-The exact procedure is not mathematically described in any of \citet{Lister:2008bh, Lister:2009hy, Lister:2011kg}. The earliest of these papers, \citet{Lister:2008bh}, includes a short non-mathematical description, while the most detailed description is given in the supplementary material of \citet{Lister:2009hy}. \citet{Lister:2011kg} simply refers to \citet{Lister:2009hy}. Because the written descriptions are unclear, and no code is provided to implement the idea, I am unable to determine exactly what was done. What follows is my interpretation based on what is described in \citet{Lister:2008bh, Lister:2009hy, Lister:2011kg}.
-
-The idea is to test the null hypothesis that the observed number of methylated reads at the $i^{th}$ cytosine were simply due to 'error', where the 'error' is a combination of the estimated sequencing error and the estimated bisulfite-converstion error. Effectively, \citeauthor{Lister:2008bh} are testing the null hypothesis that $\beta_{i, j} = 0$ against the one-side alternative, $\beta_{i, j} > 0$. Any site where the null hypothesis is rejected is declared a 'methylcytosine'. For each cytosine compute a P-value, $P_{i} = \sum_{k = m_{i} + 1}^{k = m_{i} + u_{i}} Prob(X = k)$, where $X = Binom(u_{i} + m_{i}, \epsilon))$ and $\epsilon$ is the estimated 'error'. Then, apply a false discovery rate correction to the resulting $P_{i}$ and declare all cytosines with a FDR-adjusted $P_{i}$ less than some nominal value[^nominal_fdr] to be "methylcytosines".
-
-[^nominal_fdr]: \citet{Lister:2008bh} used an FDR-adjusted P-value cutoff of $0.05$; \citet{Lister:2009hy} used an FDR-adjusted P-value cutoff of $0.01$. I presume the FDR-adjustment to be based on the Benjamini-Hochberg procedure \citep{Benjamini:1995ws}, although this is not explicitly stated.
-
-The $\epsilon$ are estimated on a per-sample basis, with bisulfite-conversion error estimated from the unmethylated chloroplast genome \citep{Lister:2008bh} or from the genome of the lambda phage spike-in control \citep{Lister:2009hy, Lister:2011kg}. It is not clear how the sequencing error rate was estimated, particularly given that the base qualities are not included in the data available from the website.
-
-This procedure was performed separately for each methylation context in \citet{Lister:2009hy}, but it is not clear if this is the case for \citet{Lister:2008bh} (a study of _A. thaliani_, which has large amounts of non-CG methylation) or \citet{Lister:2011kg} (a study that includes pluripotent human cell lines that have non-negligible levels of non-CG methylation). This  affects the false discovery rate correction since the number of tests is far greater if all cytosines are simultaneously corrected compared to a separate correction for each context.
-
-Now to why I don't think this is a very useful procedure. Firstly, this isn't actually estimating the number of methylcytosines in the sample; it is estimating the number of "methylcytosines", which are cytosines in the reference genome that appear to be methylated in at least some subset of the sample. These are two different things. If you want to estimate the number of methylcytosines then a better estimator is based on $\frac{1}{N_{loci}} \sum_{i = 1}^{N_{loci}} \beta_{i}$. A simple example makes this clear.
-
-Suppose we have ten cytosines in our reference sequence, each with a true methylation level of $B_{i} = 0.4$ in our sample, which contains multiple cells of known ploidy. Then the true number of methylcytosines is $0.4$ multiplied by the number of cells in our sample multiplied by the ploidy. We can estimate this by computing the average $\beta_{i}$ (an estimate of the average $B_{i}$) and multiplying it by an estimate of the number of molecules and the (known) ploidy. From this system we could easily generate sequencing data where the observed $\beta$-values are all "significantly" non-zero and thus, according to Lister et al.'s procedure, every cytosine is classified as a "methylcytosine".
-
-Secondly, \citet{Lister:2008bh, Lister:2009hy, Lister:2011kg} use only those cytosines that are classified as "methylcytosines" in many downstream analyses or use the 0-1 classification rather than the actual $\beta$-values. For example, in \citet[supplementary figure 2a]{Lister:2009hy} they use a Venn diagram to compare the number of "methylcytosines" called in two biological replicates to summarise the concordance between the two biological replicates. A far better summary of the biological replicability is to plot the $\beta$-values from each replicate against one another as a scatter plot, as this includes the magnitude of the $\beta$-values and not just whether they are "non-zero".
-
-Another example is that only cytosines identified as "methylcytosines" in at least one sample were used in differential methylation analyses \citep{Lister:2009hy, Lister:2011kg}. While there are often good reasons for screening loci prior to differential testing \citep[e.g.]{Bourgon:2010cr}, this could potentially bias results when looking for regions of differential methylation. For example, suppose there are ten cytosines in a row where the first three and last three are differentially methylated. If we ignore the four intervening cytosines, which are not differentially methylated, then we falsely conclude that the entire region is differentially methylated rather than it being two smaller DMRs.
-
-
-
-\section{Dump from previous chapter}
-
-\section{Identifying differential methylation}\label{sec:identifying_differential_methylation}
-
-Identifying differential methylation means to discover sites (differentially methylated cytosines or _DMC_s) or regions (differentially methylated regions or _DMR_s) in the genome that have different levels of methylation between two or more conditions. Much of the methodology for identifying differential methylation has focused on two-group experiments and a somewhat restricted definition: differential methylation is the difference in __average__ methylation between __two__ groups. This is analogous to identifying differential gene expression, which focuses on identifying genes that have different __average__ expression levels between two groups.
-
-While bisulfite-sequencing experiments with multiple groups have been performed and analysed \citep[e.g.,]{Lister:2009hy, Hansen:2011gu, Hansen:2013eo}), these have typically been done using a series of pair-wise comparisons or by comparing each sample in turn against some 'baseline' sample. This is because the analysis of a pair-wise comparison is relatively simple and because it is also generally easier to interpret a two-group comparison than a multi-group comparison. However, as the number of groups increases it becomes more difficult to interpret multiple pair-wise comparisons.
-
-Like when trying to answer any scientific question, the experimental design is very important in order to reliably infer differential methylation. Identifying DMCs is relatively straightforward statistical problem, since it amounts to the well-studied problem of testing the difference of means. However, identifying DMRs, which may or may not build upon an initial scan for DMCs, is a far more challenging statistical problem owing to the high spatial dependence of methylation at neighbouring cytosines (discussed in Chapter \ref{chap:co-methylation}) and the uneven spacing of cytosines throughout the genome.
+A common downstream analysis is the identification of differential methylation, for which many methods have been proposed \citep[e.g.,]{Akalin:2012cmChen:2013eh, Chen:2014jb, Dolzhenko:2014bo, Gokhman:2014cp, Jaffe:2012gx, Lacey:2013iy, Lister:2009hy, Rijlaarsdam:2014hp, Sofer:2013bk, Xie:2014ez, Feng:2014iq, Hebestreit:2013ko, Sun:2014fk, Park:2014ho, Hansen:2012gr}. This includes the identification of differentially methylated cytosines (DMCs) and differentially methylated regions (DMRs).
 
 \subsection{Experimental design}\label{sec:experimental_design}
 
-In any experiment of differential methylation we want the DMCs and DMRs to be both _biologically_ and _statistically_ significant; it's no good if all the differences are simply due to technical artefacts or random fluctuations. Key to ensuring biological relevance is good experimental design, such as the use of _replicates_ in each experimental group. A distinction is often made between _technical replicates_ and _biological replicates_. Briefly, biological replicates are experimental units that all undergo the same treatment and are used to estimate the within-group variability of the treatment. Technical replicates are repeated measurements of the same experimental unit, perhaps with slight variations in the sample preparation, and are used to estimate the variability of the sample preparation and measurement process.
+In any analysis of differential methylation we want the DMCs and DMRs to be both _biologically_ and _statistically_ significant; it's no good if all the differences are simply due to technical artefacts or random fluctuations. Key to ensuring biological relevance is good experimental design, such as the use of _replicates_ in each experimental group. A distinction is often made between _technical replicates_ and _biological replicates_. Briefly, biological replicates are experimental units that all undergo the same treatment and are used to estimate the within-group variability of the treatment. Technical replicates are repeated measurements of the same experimental unit, perhaps with slight variations in the sample preparation, and are used to estimate the variability of the sample preparation and measurement process.
 
 As is clear from this definition, the boundary between biological and technical replication is often a fuzzy one. For example, \cite{Lister:2009hy} state that, "_For each cell type, two __biological__ replicates were performed with cells of different passage number_" (emphasis mine). I contend that these are better defined as technical replicates since each replicate came from the same cell line, underwent passaging under near-identical conditions and differ only by the number of cell passages in each media[^cell_passaging].
 
 [^cell_passaging]: In the case of IMR90 cell line, the first replicate, IMR90_r1, underwent 4 cell passages and the second replicate, IMR90_r2, underwent 5 cell passages. In the case of the H1 cell line, the first replicate, H1_r1, underwent 25 passages in the first media and 9 passages in the second media, and the second replicate, H1_r2, underwent 27 passages in the first media and 5 passages in the second media.
 
-Unfortunately, early experiments with whole-genome bisulfite-sequencing frequently had no replicates of any kind, as is the case of the H9 and IMR90-iPSC cell lines in \cite{Lister:2009hy}. Moreover, even when replicates were performed they were frequently pooled pooled prior to analysis, thus ignoring all within-group variability.
+Unfortunately, early experiments with whole-genome bisulfite-sequencing rarely had replicates of any kind, or pooled the replicates prior to analysis, thus ignoring all within-group variability, as is the case of the H1 and IMR90 cell lines in \cite{Lister:2009hy}.
 
-Ideally, variability between technical replicates should be orthogonal to the biological question, but this rarely occurs. Indeed, high-throughput sequencing experiments are particularly susceptible to batch effects, and other sources of unwanted variation, that can swamp the biological variation of interest \citep{Leek:2010jq}. Again, this emphasises the importance of good experimental design.
+Ideally, technical variability is orthogonal to the biological variability, but this rarely occurs. Indeed, high-throughput sequencing experiments are particularly susceptible to batch effects, and other sources of unwanted variation, that can swamp the biological variation of interest \citep{Leek:2010jq}. Again, this emphasises the importance of good experimental design such as randomisation, replication and the use of control, both positive and negative.
 
 \subsection{DMCs}\label{sec:dmcs}
 
-There have been reports of differential methylation at individual CpGs resulting in a phenotypic difference \cite{Furst:2012gh}. However, with approximately 25 million CpGs in the human genome, not to mention the many, many more non-CpG cytosines, it is an optimist who aims for the reliable detection of DMCs from WGBS experiments with sample sizes you can count on one or two hands and average sequencing depth of $10-30\times$.
+There have been reports of differential methylation at individual CpGs resulting in a phenotypic difference \citep[e.g.,]{Furst:2012gh}. However, with approximately 25 million CpGs in the human genome, not to mention the many, many more non-CpG cytosines, it is an optimist who aims for the reliable detection of DMCs from whole-genome experiments with sample sizes you can count on one or two hands and an average sequencing depth of $10-30\times$. Nonetheless, identifying DMCs, even if not an end in itself, is an important step in identifying DMRs.
 
-Identifying DMCs boils down to identifying differences in means. As such, it can be readily framed as a 'stand-alone' test, such as a t-test, or cast into a regression framework. There is an enormous body of statistical literature on testing for differences in means.
+Identifying DMCs boils down to identifying differences in the mean level of methylation, for which there is an enormous body of statistical literature. The problem can be viewed as a 'stand-alone' test, such as a t-test, or framed as a regression problem to allow for the inclusion of additional covariates.
 
-Regardless of the test used, all attempts to identify DMCs from whole-genome bisulfite-sequencing data must pay a large multiple-hypothesis testing penalty. Correcting for multiple hypothesis testing is standard practice in the analysis of genomics data. but the sheer number of tests, in this case approximately 25 million, is at least an order of magnitude greater than commonly tested in other genomics experiments (e.g., approximately 1 million tests in genome-wide association studies and 20,000 tests in studies of differential gene expression).
-
-However, when identifying DMCs, the _effective_ number of tests is generally fewer due to the high degree of dependence of methylation at neighbouring methylation loci, which ensures a high degree of dependence amongst the tests.
-
-__TODO: What techniques can be used to do FDR, multiple hypothesis testing? Are standard tools applicable in such high-dependence settings?__
-
-\subsubsection{One-group tests}\label{sec:one_group_dmcs}
-
-The one-group WGBS experiment is uncommon and the $A^{vy}$ experiment described in Chapter \ref{chap:Avy} is the only example that I know of. In a one-group experiment a DMC is one where at least one of the samples has a different methylation level to the group average. Mathematically, we wish to test the null hypothesis  $H_{0}: \beta_{i, j} = \beta_{i, 0}$ for $j = 1, \ldots, n$ against the alternative that $H_{A}: \beta_{i, j} \neq \beta_{i, 0}$ for some $j$, where $\beta_{i, 0}$ may be pre-specified or estimated from the data by, for example, the group average $\frac{1}{n} \sum_{j = 1}^{n} \beta_{i, j}$). This can be tested in a number of ways as I will demonstrate.
-
-The data for the $i^{th}$ methylation locus can be summarised by a $2 \times n$ contingency table, as shown below (__TODO: Prettify table with `booktabs`__)
+Regardless of the test used, all attempts to identify DMCs from whole-genome bisulfite-sequencing data must pay a large multiple-hypothesis testing penalty. Correcting for multiple hypothesis testing is standard practice in the analysis of genomics data. but the sheer number of tests, in this case approximately 25 million, is at least an order of magnitude greater than commonly tested in other genomics experiments (e.g., approximately 1 million tests in genome-wide association studies and 20,000 tests in studies of differential gene expression). Various methods have been used to correct for this multiple testing, as illustrated in Table \ref{tab:multiple_testing}.
 
 \begin{table}[h]
 \centering
-\caption{$2 \times n$ contingency table summarising the methylation evidence for the $i^{th}$ methylation locus in a one-group experiment.}
-\label{my-label}
-\begin{tabular}{c c c}
-\hline
-& m          & u          \\ \hline
-$Sample_{1}$ & $m_{i, 1}$ & $u_{i, 1}$ \\
-$\vdots$     & $\vdots$   & $\vdots$   \\
-$Sample_{n}$ & $m_{i, n}$ & $u_{i, n}$ \\
+\begin{tabular}{@{}ll@{}}
+\toprule
+Method                                       & Used by                                                                            \\ \midrule
+\cite{Benjamini:1995ws}                      & \cite{Akalin:2012cm, Jaffe:2012gx, Lacey:2013iy, Rijlaarsdam:2014hp, Sofer:2013bk} \\
+\cite{Wang:2011cw}                           & \cite{Akalin:2012cm}                                                               \\
+"False discovery rate correction/adjustment" & \cite{Dolzhenko:2014bo, Gokhman:2014cp, Lister:2009hy, Xie:2014ez}                 \\
+\cite{Storey:2007cp}                         & \cite{Jaffe:2012gx}                                                                \\
+\cite{Benjamini:2001ho}                      & \cite{Sofer:2013bk, Hebestreit:2013ko}                                             \\
+"Bonferonni adjustment"                      & \cite{Feng:2014iq}                                                                 \\ \bottomrule
 \end{tabular}
+\caption{Methods proposed for adjusting for the multiple hypothesis testing performed in an analysis of DMCs. Several papers use describe their analysing as performing a "false discovery rate adjustment" or "false discovery rate correction" without explicitly stating what they are doing or citing a reference. One paper uses an ultra-conservative Bonferonni correction.}
+\label{tab:multiple_testing}
 \end{table}
 
-Such contingency tables can be analysed in many different ways. Here I apply a few methods to highlight their similarities and differences. Firstly, here are some example data for a single CpG:
+One thing to note, however, is that the _effective_ number of tests is fewer than the actual number of tests. This is because the methylation levels at neighbouring loci are correlated (see Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}), which means that tests of differential methylation are generally positively correlated, thus reducing the effective number of independent tests. The classical Benjamini-Hochberg procedure also controls the false discovery rate under certain forms of positive dependence \citep{Benjamini:2001ho}. (__TODO: Do these techniques work in the high-dependence setting of DMC testing?__)
+
+\subsubsection{One-group experiments}
+
+While an uncommon design, I did work on a one-group whole-genome bisulfite-sequencing experiment during my PhD. The data, courtesy of Harry Oey and Emma Whitelaw (La Trobe University), came from whole-genome bisulfite-sequencing of five _isogenic_ mice, meaning that these mice were genetically identical (or close to it).
+
+In a one-group experiment a DMC is a cytosine where at least one of the samples has a different methylation level to the group average. The data for the $i^{th}$ methylation locus can be summarised by a $2 \times n$ contingency table, as shown in Table \ref{tab:one-group_dmc_testing}.
+
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+  \begin{tabular}{@{}lll@{}}
+  \toprule
+  & m          & u          \\ \midrule
+  $Sample_{1}$ & $m_{i, 1}$ & $u_{i, 1}$ \\
+  $\vdots$     & $\vdots$   & $\vdots$   \\
+  $Sample_{n}$ & $m_{i, n}$ &            \\ \bottomrule
+  \end{tabular}
+}
+\caption{$2 \times n$ contingency table summarising the methylation evidence for the $i^{th}$ methylation locus in a one-group experiment.}
+\label{tab:one-group_dmc_testing}
+\end{table}
+
+Such a contingency table can be analysed in many different ways. Mathematically, to test whether this cytosine is a DMC we wish to test the null hypothesis  $H_{0}: \beta_{i, j} = \beta_{i, 0}$ for $j = 1, \ldots, n$ against the alternative that $H_{A}: \beta_{i, j} \neq \beta_{i, 0}$ for some $j. $\beta_{i, 0}$ may be pre-specified or estimated from the data by, for example, the group average $\frac{1}{n} \sum_{j = 1}^{n} \beta_{i, j}$).
+
+To the best of my knowledge, none of the software specifically written for analysing differential methylation analyses is able to test this hypothesis. This is because these software are almost all designed for two-group experiments. However, this hypothesis is readily testing using routine statistical methods. As an example, consider the following data:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+& m    & u    \\ \midrule
+$Sample_{1}$ & $38$ & $1$  \\
+$Sample_{2}$ & $79$ & $2$  \\
+$Sample_{3}$ & $59$ & $1$  \\
+$Sample_{4}$ & $69$ & $2$  \\
+$Sample_{5}$ & $44$ & $46$ \\ \bottomrule
+\end{tabular}
+\caption{An example of a differentially methylated cytosine in a one-group experiment.}
+\label{tab:one-group_example}
+\end{table}
+
+We could analyse this table using a simple stand-alone test, such as Pearson's $\chi^{2}$ test. Alternatively, we could frame this as a generalised linear model, either a log-linear model or a logistic regression. The hypothesis is then tested by computing the deviance of the model[^deviance]
+
+[^deviance]: The deviance is the log-likelihood ratio statistic comparing the current model within a saturated model.
+
+
+
+assessing the goodness-of-fit of the 'no interaction' model (equivalently, comparing the saturated model to . The following R code shows the equivalence of these approaches for a CpG where the fifth sample is differentially methylated.
 
 ```{r}
+# The data
 x <- cbind(M = c(38, 79, 59, 69, 44), U = c(1, 2, 1, 2, 46))
 names(dimnames(x)) <- c("sample", "meth_state")
 x
-```
 
-We see that while `sample_1, ..., sample_4` are nearly completely methylated at this CpG, `sample_5` has approximately $50\%$ methylation, which may be indicative of allele-specific methylation.
-
-In my analysis of the $A^{vy}$ experiment I used the `prop.test` function in R. As documented in the help page for `prop.test`:
-
-> `prop.test` can be used for testing the null that the proportions (probabilities of success) in several groups are the same
-
-in R to test the equality of the proportions ($\beta$-values) across the five mice.
-
-```{r}
-prop.test(x)
-```
-
-As expected, this test returns a very small P-value, `r print(format.pval(prop.test(x)$p.value), quote = FALSE)`.
-
-What might not be clear from its name is that `prop.test(x)` is just performing Pearson's $\chi^{2}$-test of the null hypothesis that the joint distribution of the cell counts in the $2 \times n$ contingency table is the product of the row and column marginals. This can be seen by examining the source code or by comparing the output to `chisq.test(x)`: (__TODO: Check by hand__)
-
-```{r}
+# Using Pearson's chi-square test
 chisq.test(x)
-```
 
-Instead of using the "stand-alone" tests, `prop.test` and `chisq.test`, we could explicitly frame this as a log-linear model and test the goodness-of-fit of the "no interaction" model using either the likelihood ratio statistic (`lrt`) or the Pearson's $\chi^{2}$ test statistic (`pearson`). Formally, the regression model is (__TODO: Write down the regression model__):
-
-This model can be fit using the `loglin` function in R or using the arguably more user-friendly `loglm` (from the `MASS` package) or `glm` functions:
-
-```{r}
-# Using loglin
-loglin(x, margin = list(1, 2))
-# Using loglm
+# Fitting a log-linear model to perform iterative proportional fitting to the
+# contingency table.
+loglin(x, margin = list("sample", "meth_state"))
+# An alternative formulation using loglm(), a convenient wrapper of loglin(),
+# from the MASS package.
 library(MASS)
 loglm(formula =  ~ sample + meth_state, data = x)
-# Using glm (1)
+
+# Fitting a generalised linear model with a binomial link using two different
+# formulations
+# (1) Using the array of frequencies
 glm(x ~ 1, family = binomial)
-# Using glm (2)
-glm(x[,1] / (x[, 1] + x[, 2]) ~ 1, family = binomial, weights = x[,1] + x[, 2])
-# TODO: Write sentence summarising output.
+# (2) Using relative frequencies (i.e., the beta-values) and weights (i.e.,
+# the sequencing coverage).
+glm(x[,1] / (x[, 1] + x[, 2]) ~ 1, family = binomial, weights = x[, 1] + x[, 2])
 ```
 
-A key advantage of using regression is the option to include additional covariates in the model, such as the sex of each sample or terms to account for batch effects. __TODO: How to do this using `loglin`?__
+A key advantage of using either of the generalised linear models is the option to include additional covariates in the model, such as the sex of each sample or terms to account for batch effects. More complex regression analyses are also possible, such as empirical Bayes or fully Bayesian models.
 
-More complex regression analyses are possible, such as empirical Bayes or fully Bayesian models. I describe these in more detail in discussing two-group and multi-group experiments, but they may also be applied to one-group experiments.
+\subsubsection{Two-group experiments}\label{sec:two_group_dmcs}
 
-A proper software implementation needs to take care of issues such as incomplete tables and non-convergence of the iterative proportional scaling algorithm used by `loglin`. Speed is also important when performing this many tests and the regression based approaches are much slower, at least when naively applied, due to additional checks they make of the data:
+__UP TO HERE__
 
-```{r}
-# Basic benchmarking
-library(microbenchmark)
-print(microbenchmark(prop.test(x), chisq.test(x), loglin(x, margin = list("sample", "meth_state")), loglm(formula = ~ sample + meth_state, data = x), glm(x ~ 1, family = binomial), glm(x[,1] / (x[, 1] + x[, 2]) ~ 1, family = binomial, weights = x[,1] + x[, 2]), glm.fit(x = matrix(, nrow(x), 0L), y = x, family = binomial()), times = 100), order = "median")
-```
+\section{Dump from previous chapter}
 
 \subsubsection{Two-group experiments}\label{sec:two_group_dmcs}
 
@@ -552,6 +673,8 @@ Instead, a test that incorporates the within-group variability should be used.  
 
 \paragraph{Transforming}\label{sec:transforming}
 
+- [x] DELETE ME. This is covered elsewhere. Make sure all points in the below are addressed in the above.
+
 Smoothing of the $\beta$-values has been used advocated by several authors to remove variation due to low sequencing coverage and to exploit the spatial correlation of DNA methylation \citep{Hansen:2011gu, Hebestreit:2013ko, Gokhman:2014c}. Both `BSmooth` \citep{Hansen:2012gr} and `BiSeq` \citep{Hebestreit:2013ko} smooth the $\beta$-values using a binomial local likelihood smoother. \citet{Lister:2011kg, Gokhman:2014cp} used a simpler moving average in windows along the genome.
 
 \paragraph{Modeling}\label{sec:modeling}
@@ -564,8 +687,9 @@ Smoothing of the $\beta$-values has been used advocated by several authors to re
 
 \subsubsection{Multi-group experiments}\label{sec:multigroup_dmcs}
 
-
 \subsection{DMRs}
+
+__TODO: FDRs of region__
 
 There are two very different strategies for identifying differentially methylated regions:
 
