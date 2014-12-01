@@ -101,7 +101,7 @@ The analysis of 5mC used a different strategy to that of \cite{Lister:2009hy, Li
 ## \cite{Li:2010fb}
 \cite{Li:2010fb} report the methylome of a single sample. They used WGBS to study 5mC from peripheral blood mononuclear cells (PBMCs) from an Asian man whose genome had also been used to create the Han Chinese reference genome.
 
-The authors used the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering of the reads. The authors used the Binomial model from \cite{Lister:2008bh} to identify methylcytosines. As they only had the one sample, many of the analyses were descriptive. For example, they looked at the distribution of $\beta$-values 20 different genomic elements such as CGIs, UTRs and repetive sequences.
+The authors used the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering of the reads. The authors used the Binomial model from \cite{Lister:2008bh} to identify methylcytosines. As they only had the one sample, many of the analyses were descriptive. For example, they looked at the distribution of $\beta$-values 20 different genomic elements such as CGIs, UTRs and repetitive sequences.
 
 The authors looked at the autocorrelation of $\beta$-values across a range of genomic elements. They reported a $~170$nt periodicity in the autocorrelation plot of CpG methylation, similar to that found by \cite{Cokus:2008fc} in _Arabidopsis_. They did not find evidence of any smaller periodicities such as the 8-10 bp periodicity reported by \cite{Cokus:2008fc} and \cite{Lister:2009hy}.
 
@@ -267,7 +267,7 @@ The result of steps 1-4 are significantly differentially methylated CpGs. While 
 __NOTE TO SELF: I like the FDR procedure but I'm not convince beta regression is necessary. Perhaps we can get away with the cheaper linear/logistic regression but make use of the cluster + FDR approach?__
 
 ## \citet{Akalin:2012cm}
-\citet{Akalin:2012cm} developed `methylKit`, an `R` package for processing bisulfite-sequencing data (__LINK TO SOFTWARE__). The methods describedin the paper are applicable to WGBS, although all examples in the paper use RRBS data and the accompanying website for the software suggests that WGBS data might be too large for the software to handle [`v0.9.2` https://code.google.com/p/methylkit/](https://code.google.com/p/methylkit/). `methylKit` contains many useful utility functions for processing and visualising bisulfite-sequencing data.
+\citet{Akalin:2012cm} developed `methylKit`, an `R` package for processing bisulfite-sequencing data (__LINK TO SOFTWARE__). The methods described in the paper are applicable to WGBS, although all examples in the paper use RRBS data and the accompanying website for the software suggests that WGBS data might be too large for the software to handle [`v0.9.2` https://code.google.com/p/methylkit/](https://code.google.com/p/methylkit/). `methylKit` contains many useful utility functions for processing and visualising bisulfite-sequencing data.
 
 \citet{Akalin:2012cm} does not describe a method for _identifying_ DMRs, rather it describes two methods for _testing_ pre-defined regions
 
