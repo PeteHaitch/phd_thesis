@@ -89,3 +89,8 @@ __TODO: Table of datasets__
 ## CpG islands
 
 I have used CpG island definitions from the hidden Markov model proposed by \cite{@Wu:2010do}. These predicted CpG islands were downloaded from [http://rafalab.jhsph.edu/CGI/](http://rafalab.jhsph.edu/CGI/) on 29/10/2014.
+
+## Misc. notes
+
+- `Bis-SNP` run without `--trim5` and `--trim5` flags. This is a bit unfortunate but it was because the `bissnp_easy_usage.pl` script, which I used to run `Bis-SNP`, didn't support these. To re-genotype all samples would have taken too long and it shouldn't greatly affect my analyses.
+- Percentage of CpGs that are in Rafa's CGIs
