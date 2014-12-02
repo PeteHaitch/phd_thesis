@@ -138,7 +138,7 @@ There are $2^{\text{m}}$ possible methylation patterns at an m-tuple. Rather tha
 
 Analogous to the definition of $M_{i}$ and $U_{i}$ for 1-tuples ($\text{m} = 1$), we have when $\text{m} = 2$:
 
-  \begin{align*}
+\begin{align*}
   MM_{(i, i + 1)} &= |\{Z: Z \in \mathcal{H}_{(i, i + 1)}, Z = (1, 1)\}| \\
   MU_{(i, i + 1)} &= |\{Z: Z \in \mathcal{H}_{(i, i + 1)}, Z = (1, 0)\}| \\
   UM_{(i, i + 1)} &= |\{Z: Z \in \mathcal{H}_{(i, i + 1)}, Z = (0, 1)\}| \\
@@ -249,7 +249,7 @@ As mentioned in Chapter \ref{chap:wgbs_bioinformatics_analysis}, studies using b
 1. $\mathcal{I}^{ref}$: Defined by the set of methylation loci in the reference genome. This ignore all genetic variation between the sample and the reference.
 2. $\mathcal{I}^{refFilter}$: Defined by filtering out problematic loci from $\mathcal{I}^{ref}$. A conservative approach that removes many sites of genetic variation between the sample and the reference as well as sites that do not display genetic variation between the sample and the reference. This approach cannot identify sample-specific methylation loci.
 3. $\mathcal{I}^{Bis-SNP}$: Defined by calling genetic variants from the bisulfite-sequencing data using `Bis-SNP` \cite{Liu:2012ge}. Identifies sample-specific methylation loci and removes reference-specific methylation loci. This is the best approach if only bisulfite-sequencing data are available.
-4. $\mathcal{I}^{WGS}$: Defined by identifying all methylation loci from _whole-genome sequencing_ (WGS) of the sample's genome. The gold standard. All methylation loci are defined with respect to the sample's genome. The only differences between $\mathcal{I}^{WGS}$ and $\mathcal{I}^{truth} are due to sequencing errors, incomplete sequencing coverage of the sample's genome and variant calling errors from the WGS data.
+4. $\mathcal{I}^{WGS}$: Defined by identifying all methylation loci from _whole-genome sequencing_ (WGS) of the sample's genome. The gold standard. All methylation loci are defined with respect to the sample's genome. The only differences between $\mathcal{I}^{WGS}$ and $\mathcal{I}^{truth}$ are due to sequencing errors, incomplete sequencing coverage of the sample's genome and variant calling errors from the WGS data.
 
 \subsubsection{Genetic heterozygosity at a methylation locus}\label{sec:heterozygosity}
 
@@ -305,7 +305,7 @@ An attractive feature of the beta-binomial distribution is that it can be motiva
 
 Smoothing is particularly powerful for loci with low sequencing coverage, where the denominator $m_{i, j} + u_{i, j}$ is small and the corresponding standard error of $\beta_{i, j}$ is large. The smoothed $\beta$-values, rather than the raw $\beta$-values, are then generally used in all downstream analyses.
 
-Both `bsseq` and `BiSeq` use a binomial local likelihood smoother. In each case this smoother was chosen because `BSmooth` and `BiSeq` model the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample by ($M_{i, j} | n_{i, j}$ \eqd Binom(n_{i, j}, B_{i, j})$. The smoothing is 'local' to exploit co-methylation, which is a local phenomenon.
+Both `bsseq` and `BiSeq` use a binomial local likelihood smoother. In each case this smoother was chosen because `BSmooth` and `BiSeq` model the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample by ($M_{i, j} | n_{i, j} \eqd Binom(n_{i, j}, B_{i, j})$. The smoothing is 'local' to exploit co-methylation, which is a local phenomenon.
 
 In both `bsseq` and `BiSeq` the raw $\beta$-values are weighted according to the binomial likelihood and a kernel function. The binomial likelihood weights points inversely to their standard error, $se(\beta_{i, j})$, and the kernel gives greater weight to those $\beta_{i, j}$ near the centre of the window. \citet{Lacey:2013iy} note that loci with very high sequencing coverage will strongly influence the smoother, potentially biasing estimates at neighbouring loci with lower coverage.
 
@@ -523,7 +523,7 @@ As is clear from the length of Chapter \ref{chap:wgbs_bioinformatics_analysis} a
 
 A common downstream analysis is the identification of differential methylation, for which many methods have been proposed \citep[e.g.,]{Akalin:2012cmChen:2013eh, Chen:2014jb, Dolzhenko:2014bo, Gokhman:2014cp, Jaffe:2012gx, Lacey:2013iy, Lister:2009hy, Rijlaarsdam:2014hp, Sofer:2013bk, Xie:2014ez, Feng:2014iq, Hebestreit:2013ko, Sun:2014fk, Park:2014ho, Hansen:2012gr}. This includes the identification of differentially methylated cytosines (DMCs) and differentially methylated regions (DMRs).
 
-\subsection{Experimental design}\label{sec:experimental_design}
+\subsubsection{Experimental design}\label{sec:experimental_design}
 
 In any analysis of differential methylation we want the DMCs and DMRs to be both _biologically_ and _statistically_ significant; it's no good if all the differences are simply due to technical artefacts or random fluctuations. Key to ensuring biological relevance is good experimental design, such as the use of _replicates_ in each experimental group. A distinction is often made between _technical replicates_ and _biological replicates_. Briefly, biological replicates are experimental units that all undergo the same treatment and are used to estimate the within-group variability of the treatment. Technical replicates are repeated measurements of the same experimental unit, perhaps with slight variations in the sample preparation, and are used to estimate the variability of the sample preparation and measurement process.
 
@@ -535,7 +535,7 @@ Unfortunately, early experiments with whole-genome bisulfite-sequencing rarely h
 
 Ideally, technical variability is orthogonal to the biological variability, but this rarely occurs. Indeed, high-throughput sequencing experiments are particularly susceptible to batch effects, and other sources of unwanted variation, that can swamp the biological variation of interest \citep{Leek:2010jq}. Again, this emphasises the importance of good experimental design such as randomisation, replication and the use of control, both positive and negative.
 
-\subsection{DMCs}\label{sec:dmcs}
+\subsubsection{DMCs}\label{sec:dmcs}
 
 There have been reports of differential methylation at individual CpGs resulting in a phenotypic difference \citep[e.g.,]{Furst:2012gh}. However, with approximately 25 million CpGs in the human genome, not to mention the many, many more non-CpG cytosines, it is an optimist who aims for the reliable detection of DMCs from whole-genome experiments with sample sizes you can count on one or two hands and an average sequencing depth of $10-30\times$. Nonetheless, identifying DMCs, even if not an end in itself, is an important step in identifying DMRs.
 
@@ -561,7 +561,7 @@ Method                                       & Used by                          
 
 One thing to note, however, is that the _effective_ number of tests is fewer than the actual number of tests. This is because the methylation levels at neighbouring loci are correlated (see Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}), which means that tests of differential methylation are generally positively correlated, thus reducing the effective number of independent tests. The classical Benjamini-Hochberg procedure also controls the false discovery rate under certain forms of positive dependence \citep{Benjamini:2001ho}. (__TODO: Do these techniques work in the high-dependence setting of DMC testing?__)
 
-\subsubsection{One-group experiments}
+\paragraph{One-group experiments}\label{sec:one_group_dmcs}
 
 While an uncommon design, I did work on a one-group whole-genome bisulfite-sequencing experiment during my PhD. The data, courtesy of Harry Oey and Emma Whitelaw (La Trobe University), came from whole-genome bisulfite-sequencing of five _isogenic_ mice, meaning that these mice were genetically identical (or close to it).
 
@@ -605,7 +605,7 @@ We could analyse this table using a simple stand-alone test, such as Pearson's $
 
 A key advantage of using either of the generalised linear models is the capability to include additional covariates in the model, such as the sex of each sample or terms to account for batch effects. More complex regression analyses are also possible, such as empirical Bayes or fully Bayesian models.
 
-\subsubsection{Multi-group experiments}\label{sec:two_group_dmcs}
+\paragraph{Multi-group experiments}\label{sec:two_group_dmcs}
 
 Due to the cost of whole-genome bisulfite-sequencing, early experiments using this technology to study differential methylation compared one sample against another \citep[e.g.,]{Lister:2009hy, Berman:2012ga}. While this might be considered a two-group experiment, one without replicates, I believe this is better thought of as a one-group experiment with two samples. Indeed, the analysis of such an experiment uses techniques from Section \label{sec:one_group_dmcs}, e.g., Pearson's $\chi^{2}$ test or Fisher's exact test, which is better suited to the small sample sizes routinely seen in each $2 \times 2$ table.
 
@@ -621,70 +621,94 @@ The test used to identify DMCs in these regression models is variously a Wald te
 
 Not all methods for identifying differential methylation are designed for identifying DMCs. Both `bsseq` \citep{Hansen:2012gr} and `Aclust` \citep{Sofer:2013bk} are methods explicitly designed for identifying DMRs rather than DMCs and, in the case of `bsseq`.
 
-\subsection{DMRs}
+\subsubsection{DMRs}
+
+A differentially methylated region is a region of the genome where there are multiple cytosines with evidence of differential methylation. Importantly, not all cytosines in the region must be genome-wide significant DMCs. Rather, the idea is that a DMR might capture a weaker but broader difference in methylation. Such a signal may well have a clearer biological interpretation and, indeed, might be expected such as in differences in methylation at a gene promoter.
+
+__UP TO HERE: Take care of TODOs and then move onto other downstream analyses.__
+
 
 There are two very different strategies for identifying differentially methylated regions:
 
-1. Usinb regions that are defined _a priori_, which are then tested for differential methylation. Such regions might be CpG islands (__CITE__), MspI restriction fragments (__CITE__) gene promoters (__CITE__) or predefined bins (e.g. 3bp tiles [Bing Ren] or 100bp tiles \citep{Park:2014ho}).
+1. Using regions that are defined _a priori_, which are then tested for differential methylation. Such regions might be CpG islands (__CITE__), MspI restriction fragments (__CITE__), gene promoters (__CITE__) or predefined bins \citep[e.g., 100 bp bins]{Park:2014ho}.
 2. Using data-driven regions, e.g., defined from an analysis of DMCs, which are then tested for differential methylation.
 
-The former is simple to analyse but is limited in its ability to discover new differentially methylated regions. The latter offers the opportunity to identify previously unknown regions but valid statistical inference of these regions is __very challenging__.
+The former is much simpler to analyse but is limited in its ability to discover new differentially methylated regions. The latter offers the opportunity to identify previously unknown regions but valid statistical inference of these regions is very challenging.
 
-__UP TO HERE__
+__TODO: Further cons of a priori regions__
 
-\section{Dump from previous chapter}
-
-
-
-\subsection{DMRs}
-
-__TODO: FDRs of region__
-
-There are two very different strategies for identifying differentially methylated regions:
-
-1. Use regions that are defined _a priori_, which are then tested for differential methylation. Such regions might be CpG islands (__CITE__), MspI restriction fragments (__CITE__) gene promoters (__CITE__) or predefined bins (e.g. 3bp tiles [Bing Ren] or 100bp tiles \citep{Park:2014ho}).
-2. Use regions that are defined based on the data, which are then tested for differential methylation. Valid statistical inference of such regions is __very challenging__.
-
-\subsubsection{Using _a priori_ regions}\label{sec:a_prior_regions}
-
-The methylation level is summarised at the region level and then compared across groups. For example, the average of the $\beta$-values across the region may be compared between groups using a t-test.
-
-__TODO: Describe the above mathematically__
-
-This is qualitatively similar to identifying differentially methylated cytosines.
-
-__PROS__
-
-* Simple to implement
-* Valid statistical properties
-
-__CONS__
 
 * Doesn't account for differential CpG density across regions
 * What is the right "unit" - the CGI, the promoter, a tile???
 * Doesn't account for spatial correlation of methylation
 
 
-\subsubsection{Using data-driven regions}\label{sec:data_driven_regions}
-
-
-__PROS__
+__TODO: Further pros of data-driven regions__
 
 * Can discover the right "unit".
 * Might account for spatial correlation of methylation
 
-__CONS__
 
-* Loss of statistical properties in testing, e.g. FDR control
-* Bloody hard
 
-\section{Other downstream analyses}\label{sec:other_downstream_analyses}
+The most common type of algorithm for identifying data-driven DMRs is based on detecting clusters of DMCs (__CITE: e.g., Lister, Hansen, DSS?, Berman?, etc.). This initial identification of DMCs will typically use a relaxed statistical significance threshold. For example, \cite{Hansen:2011gu} use all CpGs with a P-value in the lowest $5\%$ and declare putative DMRs to be contiguous runs of such CpGs that are within a given distance of one another and with "all differences in the same direction". This latter requirement is what I call the _consistency_ of the DMR (see Section \ref{sec:consistency_of_dmrs}).
 
-Bisulfite-sequencing data are used to address a variety of questions apart from identifying differential methylation. Not all these analyses require statistical inference. For example, if we are interested in knowing whether the promoter of a particular gene is methylated in our sample then it may be sufficient to simply plot the level of methylation at each CpG in the region.
+[^a_prior]: In contrast, DMR analyses using _a priori_ regions do not need to first test for DMCs, although this single-locus analysis may still be performed.
 
-However, once we move to experiments with multiple samples, multiple regions and more complex questions then statistical methods are generally required to distinguish the signal from the noise. In this section I briefly describe other
+__TODO: Other data-driven DMR detection strategies__
+- bump-hunting
+- Mixed effect model
+- GEE, i.e., `Aclust` distinguishes itself by using data-driven regions to identify DMRs but without first scanning the genome for DMCs.
+- probe aggregation, e.g., `comb-P`
 
-__TODO: Any other important downstream analyses worth mentioning?__
+Finally, __TODO: Do these methods actually test for differential methylation at these regions? If they do, then a test of a DMR requires a statistic that summarises the evidence that the region is differentially methylated. What about FDRs?__
+
+For each sample, the region-wise methylation level is some summary of the methylation level at each loci in that region. For example, the weighted average of $\beta$-values for all loci in the region, where the weights are proportional to the sequencing coverage. These averages are then compared between samples.
+
+\paragraph{One-group experiments}\label{sec:one_group_dmrs}
+
+For a region containing $c$ methylation loci, construct the $n \times 2 \times c$ contingency table, i.e., each 'slice' of the table is a $n \times 2$ table containing the data for a single locus. Simply aggregating the counts across loci and testing the resulting $n \times 2$ table would be incorrect, since such an aggregating could introduce spurious differences in the proportions (__CITE: http://www.biostathandbook.com/cmh.html__). Instead, we could fit the log-linear model with `sample`, `meth_type` and `locus` as the set of factors. The saturated model is
+
+\begin{equation*}
+\log(F_{a, b, c}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} + \lambda_{a, b}^{meth_state, sample} + \lambda_{a, c}^{meth_state, locus} + \lambda_{b, c}^{sample, locus} + \lambda_{a, b, c}^{meth_state, sample, locus}
+\end{equation*}
+
+We would first need to test whether there is a significant three-way interaction between `meth_type`, `sample` and `locus` by computing the deviance of the model without the three-way interaction
+
+\begin{equation*}
+\log(F_{a, b, c}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} + \lambda_{a, b}^{meth_state, sample} + \lambda_{a, c}^{meth_state, locus} + \lambda_{b, c}^{sample, locus}
+\end{equation*}
+
+On the one hand, if there is no three-way interaction, then we can test for an interaction between `meth_type` and `sample`, i.e., test for a difference in methylation level across the loci, by comparing the model
+
+\begin{equation*}
+\log(F_{a, b, c}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} + \lambda_{a, b}^{meth_state, sample} + \lambda_{a, c}^{meth_state, locus} + \lambda_{b, c}^{sample, locus}
+\end{equation*}
+
+to the model
+
+\begin{equation*}
+\log(F_{a, b, c}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} + \lambda_{a, c}^{meth_state, locus} + \lambda_{b, c}^{sample, locus}
+\end{equation*}
+
+This test is analogous to the generalised Cochran-Mantel-Haenszel test \citep{Landis:1978vk,MANTEL:1978iv,Birch:1965uj} of the $n \times 2 \times c$ table \citep[p231]{agresti1990categorical}. The advantage of the Cochran-Mantel-Haenszel is its applicability for sparse datasets for which the asymptotic theory does not hold for the test based on the log-linear regression  \citep[p232]{agresti1990categorical}.
+
+On the other hand, if there is a significant three-way interaction between `meth_type`, `sample` and `locus` then this requires more careful modelling to determine the nature of this interaction and whether the region is a consistent DMR.
+
+\paragraph{Multi-group experiments}\label{sec:multi_group_dmrs}
+
+__TODO__
+
+\paragraph{Consistency of DMRs}\label{sec:consistency_of_dmrs}
+
+While not often explicitly stated, it is desirable that a DMR is _consistent_. The definition of consistency is best illustrated by a pathological example describing a region that is inconsistent. Suppose we have a one-group experiment with five samples[^one_by_five] and are studying a region with five CpGs, all of which are DMCs. However, the first CpG is differentially methylated in the first sample, the second CpG is differentially methylated in the second sample, etc. While the entire region is 'differentially methylated', the difference is not observed consistently in any one sample. A consistent region is therefore one where the differences are 'in the same direction'.
+
+[^one_by_five]: Equivalently, a five group experiment without replicates.
+
+Consistent DMRs are most easily identified in two-group experiments, where we can use the sign of the test statistic to determine the 'direction' of the signal. This is exactly what is done by, for example, \cite{Hansen:2011gu}.
+
+In one-group experiments, the idea of consistency is similar to testing the homogeneity of odds ratios for all $n \times 2$ contigency tables in the region. However, __TODO. What about a region that is consistent but the odds ratios increases across the region__
+
+\section{Dump from previous chapter}
 
 \subsection{Variably methylated regions and differential variability}\label{sec:vmrs}
 
@@ -698,14 +722,6 @@ __TODO: Any other important downstream analyses worth mentioning?__
 
 \subsection{Integrating DNA methylation data with other genomes data}\label{sec:data_integration}
 
-\subsection{General computational considerations}
-
-- Using integers instead of floats/doubles
-
-
-
 \section{General TODOs}
 
-* Autocorrelation or correlation?
 * Discuss distribution of coverage? Perhaps in context of sequencing bias?
-* See https://github.com/brentp/clustermodel/README.md for a nice, brief summary of the main DMR calling approaches.
