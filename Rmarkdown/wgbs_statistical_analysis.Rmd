@@ -18,56 +18,6 @@ I set out a statistical framework for analysing bisulfite-sequencing data. I beg
 
 As is clear from the length of Chapter \ref{chap:wgbs_bioinformatics_analysis} alone, there is a considerable amount of bioinformatics work before we even consider analysing the data to address the biological question of interest. I call these the 'downstream' analyses, and there are many that might be considered. Using the above statistical framework, I explain the statistical question of identifying differential methylation. I also discuss other downstream analyses.
 
-- Chapter overview
-  - One sample
-    - Pre-sequencing
-    - Post-sequencing
-    - Some complications for a single sample
-      - What is $\mathcal{I}$?
-      - Genetic heterozygosity at a methylation locus
-  - Multiple samples
-    - Some complications with multiple samples
-      - What is $\mathcal{I}$?
-  - Parameter estimation
-    - Estimating $M$, $U$
-    - Estimating $B$
-      - Beta-binomial models
-      - Smoothing
-    - Statistical properties of $\beta$-values
-      - Empirical distributions
-      * Write a function(s) to do the following and apply it to the EPISCOPE, Lister, Seisenberger and Ziller datasets:
-        - Genome-wide distribution of CpG $\beta$-values
-        * Kernel density estimates
-        * Stratify by CGI status, genic, intragenic, repeats
-        * Correlation across strands
-        * Effect of sequencing coverage threshold (`min_cov`)
-      - What is the genome-wide methylation level?
-        * Various figures get bandied about; what's a good summary?
-        - A criticism of ``identifying methylcytosines''
-      - Correlations
-      - Biases
-      - Transformations
-  - Downstream analyses
-    - Differential methylation
-      - Experimental design considerations
-      - DMCs: Identify $\bar{B_{i}^{(1)}} \neq \bar{B_{i}^{(2)}}$
-        - One-group experiments
-        - Two-group experiments
-        - Multi-group experiments
-      - DMRs: Identify runs of DMCs
-        - A priori vs. data-driven regions
-        - One-group experiments
-        - Two-group experiments
-        - Multi-group experiments
-    - Differential variability
-      - DVCs: Identify $\sigma(B_{i}^{(1)}) \neq \sigma(B_{i}^{(2)})$
-      - DVRs: Identify runs of DVCs
-    - Allele-specific methylation
-    - Methylation entropy
-    - Epipolymorphism
-    - Epiallele detection
-    - Integrating DNA methylation data with other genomes data
-
 \section{One sample}\label{sec:one_sample}
 
 Even with only a single sample, there are several levels of variation to consider in a bisulfite-sequencing experiment. I find it convenient to separate these into:
@@ -517,7 +467,9 @@ As with $\beta$-values, $\mathcal{M}$-values derived from bisulfite-sequencing d
 
 \section{Differential methylation}
 
-A common downstream analysis is the identification of differential methylation, for which many methods have been proposed \citep[e.g.,]{Akalin:2012cmChen:2013eh, Chen:2014jb, Dolzhenko:2014bo, Gokhman:2014cp, Jaffe:2012gx, Lacey:2013iy, Lister:2009hy, Rijlaarsdam:2014hp, Sofer:2013bk, Xie:2014ez, Feng:2014iq, Hebestreit:2013ko, Sun:2014fk, Park:2014ho, Hansen:2012gr}. This includes the identification of differentially methylated cytosines (DMCs) and differentially methylated regions (DMRs).
+A common downstream analysis is the identification of differential methylation. This includes the identification of differentially methylated cytosines (DMCs) and differentially methylated regions (DMRs). Many methods have been proposed \citep[e.g.,]{Akalin:2012cmChen:2013eh, Chen:2014jb, Dolzhenko:2014bo, Gokhman:2014cp, Jaffe:2012gx, Lacey:2013iy, Lister:2009hy, Rijlaarsdam:2014hp, Sofer:2013bk, Xie:2014ez, Feng:2014iq, Hebestreit:2013ko, Sun:2014fk, Park:2014ho, Hansen:2012gr}. All of these methods are designed for two-group experiments, with some being general enough to extend to multiple-group experiments[^multi-group_extension]. I describe in greater detail methods for identifying differential methylation in a one-group experiment, admitedly an unusual design but one that I faced during my PhD.
+
+[^multi-group_extension]: The extension to multiple-group experiments isn't always implemented in the software, even if discussed in the paper.
 
 \subsection{Experimental design}\label{sec:experimental_design}
 
@@ -537,7 +489,9 @@ There have been reports of differential methylation at individual CpGs resulting
 
 Identifying DMCs boils down to identifying differences in the mean level of methylation, for which there is an enormous body of statistical literature. The problem can be viewed as a 'stand-alone' test, such as a t-test, or framed as a regression problem to allow for the inclusion of additional covariates.
 
-Regardless of the test used, all attempts to identify DMCs from whole-genome bisulfite-sequencing data must pay a large multiple-hypothesis testing penalty. Correcting for multiple hypothesis testing is standard practice in the analysis of genomics data. but the sheer number of tests, in this case approximately 25 million, is at least an order of magnitude greater than commonly tested in other genomics experiments (e.g., approximately 1 million tests in genome-wide association studies and 20,000 tests in studies of differential gene expression). Various methods have been used to correct for this multiple testing, as illustrated in Table \ref{tab:multiple_testing}.
+Regardless of the test used, all attempts to identify DMCs from whole-genome bisulfite-sequencing data must pay a large multiple-hypothesis testing penalty. Correcting for multiple hypothesis testing is standard practice in the analysis of genomics data, but the sheer number of tests, in this case approximately 25 million, is at least an order of magnitude greater than commonly tested in other genomics experiments[^multiple_testing]. Various methods have been used to correct for this multiple testing, as illustrated in Table \ref{tab:multiple_testing}.
+
+[^multiple_testing]; For example, there are approximately 20,000 tests in studies of differential gene expression and one million tests in genome-wide association studies.
 
 \begin{table}[h]
 \centering
@@ -557,7 +511,7 @@ Method                                       & Used by                          
 
 One thing to note, however, is that the _effective_ number of tests is fewer than the actual number of tests. This is because the methylation levels at neighbouring loci are correlated (see Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}), which means that tests of differential methylation are generally positively correlated, thus reducing the effective number of independent tests. The classical Benjamini-Hochberg procedure also controls the false discovery rate under certain forms of positive dependence \citep{Benjamini:2001ho}. (__TODO: Do these techniques work in the high-dependence setting of DMC testing?__)
 
-\paragraph{One-group experiments}\label{sec:one_group_dmcs}
+\subsubsection{One-group experiments}\label{sec:one_group_dmcs}
 
 While an uncommon design, I did work on a one-group whole-genome bisulfite-sequencing experiment during my PhD. The data, courtesy of Harry Oey and Emma Whitelaw (La Trobe University), came from whole-genome bisulfite-sequencing of five _isogenic_ mice, meaning that these mice were genetically identical (or close to it).
 
@@ -601,7 +555,7 @@ We could analyse this table using a simple stand-alone test, such as Pearson's $
 
 A key advantage of using either of the generalised linear models is the capability to include additional covariates in the model, such as the sex of each sample or terms to account for batch effects. More complex regression analyses are also possible, such as empirical Bayes or fully Bayesian models.
 
-\paragraph{Multi-group experiments}\label{sec:two_group_dmcs}
+\subsubsection{Multi-group experiments}\label{sec:multi_group_dmcs}
 
 Due to the cost of whole-genome bisulfite-sequencing, early experiments using this technology to study differential methylation compared one sample against another \citep[e.g.,]{Lister:2009hy, Berman:2012ga}. While this might be considered a two-group experiment, one without replicates, I believe this is better thought of as a one-group experiment with two samples. Indeed, the analysis of such an experiment uses techniques from Section \label{sec:one_group_dmcs}, e.g., Pearson's $\chi^{2}$ test or Fisher's exact test, which is better suited to the small sample sizes routinely seen in each $2 \times 2$ table.
 
@@ -609,13 +563,13 @@ The more interesting experiment is one that includes replicates within each grou
 
 In a two-group experiment this might be a t-test comparing the the average methylation level in the first group, $\bar{\beta_{i}^{(1)}}$, to that in the second group, $\bar{\beta_{i}^{(2)}}$. More generally, we can use a regression model to allow for multiple groups (i.e., ANOVA) and to incorporate additional covariates.
 
-Several software packages are now available for identifying DMCs, although some are limited to the two-group experiment. Rather than directly analysing the raw $\beta$-values, these software generally make additional modelling assumptions, such as the beta-binomial model (Section \ref{sec:beta-binomial_model}), and/or perform some transformation, such as smoothing of the $\beta$-values (Section \ref{transformation}).
+Several software packages are now available for identifying DMCs, although some are limited to the two-group experiment. Rather than directly analysing the raw $\beta$-values, these software generally make additional modelling assumptions, such as the beta-binomial model (see Section \ref{sec:beta-binomial_model}), and/or perform some transformation of the data, such as smoothing of the $\beta$-values (see Section \ref{transformation}).
 
 `DSS` \citep{Feng:2014iq}, `BiSeq` \citep{Hebestreit:2013ko}, `MOABS` \citep{Sun:2014fk} `methylSig` \citep{Park:2014ho} and `RADmeth` \citep{Dolzhenko:2014bo} are software packages that all use a Beta-Binomial hierarchical model of DNA methylation, although the exact details differ considerably between packages. `DSS` and `MOABS` use empirical Bayes methods to estimate parameters whereas `methylSig`, `BiSeq` and `RADmeth` use maximum likelihood estimation. `BiSeq` and `methlySig` also perform spatial smoothing of the data.
 
 The test used to identify DMCs in these regression models is variously a Wald test (`BiSeq`, `DSS`), a likelihood ratio test (`methlySig`, `RADmeth`) or based on the credible interval (Bayesian confidence interval) of the difference in methylation between the two groups (`MOABS`).
 
-Not all methods for identifying differential methylation are designed for identifying DMCs. Both `bsseq` \citep{Hansen:2012gr} and `Aclust` \citep{Sofer:2013bk} are methods explicitly designed for identifying DMRs rather than DMCs and, in the case of `bsseq`.
+Not all methods for identifying differential methylation are designed for identifying DMCs. Both `bsseq` \citep{Hansen:2012gr} and `Aclust` \citep{Sofer:2013bk} are methods explicitly designed for identifying DMRs rather than DMCs.
 
 \subsection{DMRs}
 
@@ -634,7 +588,7 @@ The latter offers the opportunity to identify previously unknown regions that ar
 
 \subsection{Using _a priori_ regions}
 
-The idea of testing for differential methylation is relatively straightforward. For each sample, the region-wise methylation level is some summary of the methylation level at each loci in that region, for example, the weighted average of $\beta$-values for all loci in the region, where the weights are proportional to the sequencing coverage. These averages are then compared between samples. I describe basic implementations of this for both one-group and multi-group experiments, and then detail a more sophisticated analysis implemented in `BiSeq` \citep{Hebestreit:2013ko}.
+The idea of testing for differential methylation is relatively straightforward. For each sample, the region-wise methylation level is some summary of the methylation level at each loci in that region, for example, the weighted average of $\beta$-values for all loci in the region, where the weights are proportional to the sequencing coverage. These averages are then compared between samples. I describe a basic implementation of this for a one-group experiment and then detail a more sophisticated method that is implemented in `BiSeq` \citep{Hebestreit:2013ko}.
 
 \subsubsection{One-group experiments}\label{sec:one_group_dmrs}
 
@@ -666,11 +620,7 @@ This test is analogous to the generalised Cochran-Mantel-Haenszel test \citep{La
 
 On the other hand, if there is a significant three-way interaction between `meth_type`, `sample` and `locus` then this requires more careful modelling to determine the nature of this interaction and whether the region is a consistent DMR.
 
-\subsubsection{Multi-group experiments}\label{sec:multi_group_dmrs}
-
-__TODO__
-
-\subsubsection{A more complex example}\label{sec:a_more_complex_example}
+\subsubsection{A more sophisticated multi-group analysis}\label{sec:a_more_complex_example}
 
 `BiSeq` is designed for RRBS data and tests for differential methylation at "CpG clusters". These CpG clusters are based on an initical scan of the genome looking for CpGs that are within a given distance of one another and that have sufficient sequencing coverage across the set of samples. While there is clearly a data-dependent component to these cluster definitions, I reserve the use of 'data-driven regions' for those which are based on the methylation levels of loci rather than their genomic co-ordinates. \citep{Hebestreit:2013ko} alternatively recommend using the target regions of the assay, such as MspI fragments in the case of RRBS, instead of creating these CpG clusters.
 
@@ -682,7 +632,7 @@ Based on my understanding of this procedure, only cytosines within differentiall
 
 \subsection{Using data-driven regions}
 
-The most common type of algorithm for identifying data-driven DMRs, and arguably also the most _ad hoc_, is based on detecting clusters of DMCs \citep[e.g.,]{Lister:2009hy, Lister:2011kg, Hansen:2011gu, Feng:2014iq}. The initial identification of DMCs will typically use a relaxed statistical significance threshold. For example, \cite{Hansen:2011gu} use all CpGs with a P-value in the lowest $5\%$ and declare putative DMRs to be contiguous runs of such CpGs that are within a given distance of one another and with "all differences in the same direction". This latter requirement is what I call the _consistency_ of the DMR (see Section \ref{sec:consistency_of_dmrs}).
+The most common type of algorithm for identifying data-driven DMRs, also arguably the most _ad hoc_, is based on detecting clusters of DMCs \citep[e.g.,]{Lister:2009hy, Lister:2011kg, Hansen:2011gu, Feng:2014iq}. The initial identification of DMCs will typically use a relaxed statistical significance threshold. For example, \cite{Hansen:2011gu} use all CpGs with a P-value in the lowest $5\%$ and declare putative DMRs to be contiguous runs of such CpGs that are within a given distance of one another and with "all differences in the same direction". This latter requirement is what I call the _consistency_ of the DMR (see Section \ref{sec:consistency_of_dmrs}).
 
 These putative DMRs may be subject to further filtering, such as requiring that they contain a minimum number of CpGs and span a minimum number of bases, and the merging of nearby putative DMRs into a single putative DMR \citep{Hansen:2011gu}. Notably, many of these methods do not include a formal statistical test of differential methylation at the region-level \citep[e.g.,]{Lister:2009hy, Lister:2011kg, Hansen:2011gu, Feng:2014iq}.
 
@@ -708,15 +658,26 @@ In one-group experiments, the idea of consistency is similar to testing the homo
 
 \section{Other downstream analyses}
 
-\subsection{PMDs}
+There are many other questions that can be addressed using bisulfite-sequencing data. Like differential methylation, some of these might be also be tackled with other methylation assays, such as microarrays. However, as we will see, some can only be answered by assays that have single nucleotide resolution, which is where bisulfite-sequencing can prove particularly powerful.
 
-- Lister
-- Berman
+\subsection{Partially methylated domains}
+
+Partially methylated domains, PMDs, are long stretches of the genome where the average methylation level, $B_{i}$, is away from the extremes of $0$ and $1$, typically in the range $0.20 - 0.70$. An example of such a region is shown in __FIGURE__ (__TODO: Find a PMD and plot it__).
+
+PMDs were first identified in the IMR90 genome by \citet{Lister:2009hy}. Using a simple sliding window algorithm, \citeauthors{Lister:2009hy} unexpectedly found that approximately $40\%$ of every autosome was a PMD and that the average length of these PMDs was a large 153 kb. They also showed that these PMDs were not simply due to a methylated population and an unmethylated subpopulation of cells in the sample. This did this by showing that inidividual reads mapped to these PMDs contained both methylated and unmethylated bases.
+
+A subsequent study found that PMDs are a common feature of somatic cell lines and that they comprise $> 30\%$ of the genome \citep{Lister:2011kg}. Perhaps even more intriguingly, across four somatic cell lines profiled with whole-genome bisulfite-sequencing, \citeauthor{Lister:2011kg} found a large amount of these genomes ($664$ Mb) comprised shared PMDs.
+
+PMDs have also been identified within tumour methylomes \citep{Berman:2012ga, Hansen:2011gu} and \citet{Hansen:2011gu} found that these overlap with other important genomic features called large organized chromatin lysine modifications (_LOCKs_) and lamina associated domains (_LADs_). However, PMDs are conspicuous by their absence in pluripotent cell lines, including both embryonic stem cells and induced pluripotent stem cells \citep{Lister:2011kg}. Their absence in the induced pluripotent cell lines may reflect the fact that the methylome is 'reset' upon induction of pluripotency \citep{Lister:2011kg}.
+
+More sophisticated methods have also been proposed to identify these PMDs. `methylSeekR` \citep{Burger:2013kq} is one such algorithm. It uses a hidden Markov model of the $\beta$-values to segment the genome into unmethylated, lowly methylated and partially methylayed regions. While `methylSeekR` is based on $\beta$-values and does not make use of individual reads to identify PMDs, it does require the high spatial resolution of $\beta$-values that methylation microarrays cannot provide.
 
 \subsection{Variably methylated regions and differential variability}\label{sec:vmrs}
 
 - Belinda
 - Jaffe
+- DVCs: Identify $\sigma(B_{i}^{(1)}) \neq \sigma(B_{i}^{(2)})$
+- DVRs: Identify runs of DVCs
 
 \subsection{Allele-specific methylation}\label{sec:asm}
 
