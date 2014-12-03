@@ -559,7 +559,7 @@ A key advantage of using either of the generalised linear models is the capabili
 
 Due to the cost of whole-genome bisulfite-sequencing, early experiments using this technology to study differential methylation compared one sample against another \citep[e.g.,]{Lister:2009hy, Berman:2012ga}. While this might be considered a two-group experiment, one without replicates, I believe this is better thought of as a one-group experiment with two samples. Indeed, the analysis of such an experiment uses techniques from Section \label{sec:one_group_dmcs}, e.g., Pearson's $\chi^{2}$ test or Fisher's exact test, which is better suited to the small sample sizes routinely seen in each $2 \times 2$ table.
 
-The more interesting experiment is one that includes replicates within each group, since we can then estimate the within-group variation. Unfortunately, some authors have still used Fisher's exact test to analyse such experiments. For example, \cite{Lister:2009hy} test for differential methylation between the _H1_ and _IMR90_ samples using Fisher's exact test by first pooling data the two replicates they have for each sample. This is incorrect, because such an analysis effectievly ignores all within-group variability \citep{Hansen:2012gr}. Instead, a test that incorporates the within-group variability should be used.
+The more interesting experiment is one that includes replicates within each group, since we can then estimate the within-group variation. Unfortunately, some authors have still used Fisher's exact test \citep{Fisher:1922bx} to analyse such experiments. For example, \cite{Lister:2009hy} test for differential methylation between the _H1_ and _IMR90_ samples using Fisher's exact test by first pooling data the two replicates they have for each sample. This is incorrect, because such an analysis effectievly ignores all within-group variability \citep{Hansen:2012gr}. Instead, a test that incorporates the within-group variability should be used.
 
 In a two-group experiment this might be a t-test comparing the the average methylation level in the first group, $\bar{\beta_{i}^{(1)}}$, to that in the second group, $\bar{\beta_{i}^{(2)}}$. More generally, we can use a regression model to allow for multiple groups (i.e., ANOVA) and to incorporate additional covariates.
 
@@ -681,6 +681,28 @@ In a one-group experiment, a variably methylated region is one that has increase
 Statistical tests of variations are known to be more difficult than tests of means and require larger sample sizes. A more subtle difficulty is in dealing with outliers. An outlier in one group will greatly increase the variation in that same group, but this does not necessarily mean that the locus is differentially methylated. It is not hard to envisage an example where the two groups in fact have very similar variability once the outlier is excluded. Tests of differential variability that are based on the F-test \citep[e.g.,]{Hansen:2011gu} or Bartlett's test \citep[e.g.,]{Teschendorff:2012hea} will be susceptible to calling such loci as differentially variable. By contrast, \citet{Phipson:2014ji} designed `DiffVar` to test for differential variability that is deliberately robust to such outliers by using Levene's test \citep{Olkin:1960uu}. Which approach is preferable will depend on the user's perspective as to whether such loci with outliers should be called as variably methylated.
 
 \subsection{Allele-specific methylation}\label{sec:asm}
+
+In a diploid cell, allele-specific methylation occurs when only one of the parental chromosomes is methylated at a particular locus, where the locus may be an individual cytosine or a broader region. One particular form of allele-specific methylation occurs at imprinted genes where the silenced copy of the gene is heavily methylated and the active copy is lightly methylated \citep{Shoemaker:2010jz}. However, it is now apparent that allele-specific methylation is far more prevalent than at just these imprinted regions \citep{Tycko:2010hc, Shoemaker:2010jz}.
+
+The obvious method to detect allele-specific methylation from bisulfite-sequencing relies on the read containing a heterozygous genetic variant, such as a single nucleotide polymorphism, along with at least one methylation locus. The heterozygous variant allows the reads to be separated by the observed allele[^phase], which can then be used to test for allele-specific methylation. For example, \citet{Shoemaker:2010jz} construct a $2 \times 2$ contingency table, like that shown in Table \ref{tab:asm}, and test for an association between the allele and the methylation state using Fisher's exact test \citep{Fisher:1922bx}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+& Allele 1 & Allele 2 \\ \midrule
+m &          &          \\
+u &          &          \\ \bottomrule
+\end{tabular}
+\caption{$2 \times 2$ table used to test for allele-specific methylation.}
+\label{tab:asm}
+\end{table}
+
+Such an approach, while straightforward, is also obviously limited to a subset of the available methylation loci. Both \citet{Fang:2012ci} and \cite{Peng:2012dh} published methods to detect allele-specfic methylation that do not require nearby heterozygous genetic variants nearby to the methylation locus of interest. These methods rely on the probabilistic assignment of reads to alleles, which are treated as missing data. Unfortunately, there is no publicly available software implementing the method proposed by \cite{Peng:2012dh} and so I do not discuss it further.
+
+\citet{Fang:2012ci} uses reads containing multiple methylation loci and looks for regions of the genome where there are two distinct methylation patterns at the read-level that occur at roughly equal proportions, indicating one pattern comes from one allele and the other pattern from the other allele. The likelihood of allele-specific methylation is computed using an expectation-maximisation algorithm, which assigns reads to one of the two possible alleles. Neighbouring regions displaying allele-specific methylation are then joined together. While not mentioned in the paper, the proposed method is now available in the `MethPipe` software ([http://smithlabresearch.org/software/methpipe/](http://smithlabresearch.org/software/methpipe/)).
+
+[^phase]: This does not give parent-specificity unless the phase of the genotype is also known.
 
 \subsection{Methylation entropy}\label{sec:methylation_entropy}
 
