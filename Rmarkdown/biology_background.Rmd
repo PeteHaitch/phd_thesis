@@ -279,6 +279,8 @@ Affinity enrichment assays compare measurements between an 'enriched' version an
 
 These are all low resolution assays since they are based on the enrichment of regional differences between the enriched and input samples. Furthermore, the bioinformatic analysis of data from these assays is complicated by the varying CpG density along the genome, which leads to different enrichment affinities for different regions of the genome. However, these assays are can provide a relatively cheap and efficient genome-wide assessment of DNA methylation \cite{Laird:2010iv}.
 
+__TODO: Describe CHARM \citep{Irizarry:2008hg}, although not yet sure which sub-section it should appear in__.
+
 \subsection{Sodium bisulfite conversion assays}\label{sec:bs_assays}
 
 In the 1980s, two research groups independently discovered that when DNA is treated with sodium bisulfite ($NaHSO_{3}$), unmethylated cytosines deaminate to uracils much faster than do methylated cytosines \cite{Shapiro:1970im, Hayatsu:1970jv}. The methylated cytosines are said to be 'protected' from conversion to uracils. This discovery led to the development of assays for studying studying cytosine methylation based on the pre-treatment of DNA with sodium bisulfite \cite{Frommer:1992wq, Clark:1994wc}, which are referred to as bisulfite-conversion assays.
@@ -298,7 +300,6 @@ Microarrays contain thousands, even millions, of short _oligonucleotide_ probes.
 - The reduced complexity of bisulfite-converted DNA (from a 4-base alphabet to a largely 3-base alphabet) leads to decreased hybridisation specificity
 - Sequences containing multiple cytosines require multiple probe versions in order to assay all possible methylation patterns
 - This approach requires the design of organism-specific microarrays
-
 
 The Illumina Infinium HumanMethylation450 BeadChip (_Illumina 450k_) provides a modern implementation of this type of assay for studying human DNA. This array assays $482,422$ cytosines, $99.3\%$ of these CpGs, across a wide variety of genomic features \cite{Stirzaker:2014cu}. There are well-established methods and software for analysing Illumina 450k data, which were recently reviewed in \cite{Dedeurwaerder:2014bt}.
 
