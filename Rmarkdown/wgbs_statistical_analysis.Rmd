@@ -674,10 +674,11 @@ More sophisticated methods have also been proposed to identify these PMDs. `meth
 
 \subsection{Variably methylated regions and differential variability}\label{sec:vmrs}
 
-- Belinda
-- Jaffe
-- DVCs: Identify $\sigma(B_{i}^{(1)}) \neq \sigma(B_{i}^{(2)})$
-- DVRs: Identify runs of DVCs
+Differential methylation is an analysis of the difference in means and seeks to identify differentially methylated regions (DMRs). Analogously, we can analyse differences in the variability of methylation profiles, which is known as differential variability, and those regions known as variably methylated regions (VMRs). It has been hypothesised that increased variability in DNA methylation indicates an epigentic _plasticity_ that may be highly relevant to common diseases, in particular, cancer \citep{Feinberg:2010dy}.
+
+In a one-group experiment, a variably methylated region is one that has increased variability compared to 'similar' regions elsewhere in the genome. In a two-group experiment, a differentially variable locus is one where the variation in one group is significantly larger than that in the other group. \citet{Jaffe:2011hy} first developed formal statistical tests for both the one-group and two-group experiments. These methods were developed for us with data from the CHARM array (see __SECTION__).
+
+Statistical tests of variations are known to be more difficult than tests of means and require larger sample sizes. A more subtle difficulty is in dealing with outliers. An outlier in one group will greatly increase the variation in that same group, but this does not necessarily mean that the locus is differentially methylated. It is not hard to envisage an example where the two groups in fact have very similar variability once the outlier is excluded. Tests of differential variability that are based on the F-test \citep[e.g.,]{Hansen:2011gu} or Bartlett's test \citep[e.g.,]{Teschendorff:2012hea} will be susceptible to calling such loci as differentially variable. By contrast, \citet{Phipson:2014ji} designed `DiffVar` to test for differential variability that is deliberately robust to such outliers by using Levene's test \citep{Olkin:1960uu}. Which approach is preferable will depend on the user's perspective as to whether such loci with outliers should be called as variably methylated.
 
 \subsection{Allele-specific methylation}\label{sec:asm}
 
