@@ -473,9 +473,9 @@ __TODO: Size of m-tuples histogram__
 \begin{tabular}{@{}lllll@{}}
 \toprule
 Software           & Reference                                & Input                                              & Designed for targeted sequencing & Other limitations                                                                \\ \midrule
-\code\{methclone\} & \cite\{Li:2014ei\}                       & Bismark BAM files                                  & No, although example uses eRRBS  & \textbf\{TODO: Try installing. Suspect you can't get actual methylation calls.\} \\
-\code\{methpat\}   & \url\{https://github.com/bjpop/methpat\} & Output of \code\{bismark\_methylation\_extractor\} & Yes (amplicons)                  &                                                                                  \\
-\code\{DMEAS\}     & \cite\{He:2013cj\}                       & Output of \code\{bismark\_methylation\_extractor\} &                                  & Windows operating system only. Perl code only available as PDF file.             \\ \bottomrule
+\texttt\{methclone\} & \cite\{Li:2014ei\}                       & Bismark BAM files                                  & No, although example uses eRRBS  & \textbf\{TODO: Try installing. Suspect you can't get actual methylation calls.\} \\
+\texttt\{methpat\}   & \url\{https://github.com/bjpop/methpat\} & Output of \texttt\{bismark\_methylation\_extractor\} & Yes (amplicons)                  &                                                                                  \\
+\texttt\{DMEAS\}     & \cite\{He:2013cj\}                       & Output of \texttt\{bismark\_methylation\_extractor\} &                                  & Windows operating system only. Perl code only available as PDF file.             \\ \bottomrule
 \end{tabular}
 \caption{My caption}
 \label{tab:other_m-tuple_methylation_callers}
@@ -499,7 +499,7 @@ The running time of \texttt{methtuple} is proportional to the number of reads ma
 
 The maximum memory usage is not strictly proportional to chromosome length. It is instead driven by the number and density of CpGs on the chromosome.  For example, \texttt{chr19}, which has the highest CpG density of all the autosomes in the human genome, requires far more memory than \texttt{chr18}, which has less than half the CpG density of \texttt{chr19} (see __APPENDIX__). The relationship between the maximum memory usage and the tuple size (\texttt{-m}) is complex; more data have to be retained as \texttt{-m} increases, thus increasing the memory usage, but fewer reads contain tuples of that size and so there aren't as many m-tuples or observations on these to count and retain. Therefore, memory usage is relatively constant across values of \texttt{-m} for a given chromosome. The obvious exception is for tuple size \texttt{2ac}, which used the \texttt{--all-combinations} flag. This means that all 2-tuples with $NIL \geq 0$ were computed and there are many, many more CpG 2-tuples with $NIL \geq 0$ than there are with $NIL = 0$, hence the enormous increase in memory usage.
 
-```{r methtuple_runtime, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:methtuple_runtime", fig.cap = "The running times are the 'User time' reported by \code{GNU time} converted from seconds to minutes. The suffix 'ac' on the tuple size means that the option \texttt{--all-combinations} was set.", fig.width = 8, dev = "pdf"}
+```{r methtuple_runtime, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:methtuple_runtime", fig.cap = "The running times are the 'User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix 'ac' on the tuple size means that the option \texttt{--all-combinations} was set.", fig.width = 8, dev = "pdf"}
 library(dplyr)
 library(ggplot2)
 library(stringr)
@@ -550,7 +550,7 @@ gg_time <- time %>%
 facet_wrap_labeller(gg_time, paste0("Tuple size: ", unique(time$Tuple)))
 ```
 
-```{r methtuple_memory, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:methtuple_memory", fig.cap = "; the suffix 'ac' means that the option \texttt{--all-combinations} was set. This option creates all tuples with $NIL \geq 0$ which is far greater than the equivalent tuples with $NIL = 0$. The maximum memory usage is the 'Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865})", fig.width = 8, dev = "pdf"}
+```{r methtuple_memory, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:methtuple_memory", fig.cap = "The maximum memory usage is the 'Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix 'ac' means that the option \texttt{--all-combinations} was set.", fig.width = 8, dev = "pdf"}
 # Memory
 memory <- lapply(paste0("../data/methtuple_performance/memory/",
                       list.files("../data/methtuple_performance/memory/")),
