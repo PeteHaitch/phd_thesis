@@ -21,7 +21,9 @@ The second half of the chapter reviews downstream analyses that are based on met
 
 \section{Differential methylation}\label{sec:differential_methylation}
 
-A common downstream analysis is the identification of differential methylation. This includes the identification of differentially methylated cytosines (DMCs) and differentially methylated regions (DMRs). Many methods have been proposed \citep[e.g.,]{Akalin:2012cmChen:2013eh, Chen:2014jb, Dolzhenko:2014bo, Gokhman:2014cp, Jaffe:2012gx, Lacey:2013iy, Lister:2009hy, Rijlaarsdam:2014hp, Sofer:2013bk, Xie:2014ez, Feng:2014iq, Hebestreit:2013ko, Sun:2014fk, Park:2014ho, Hansen:2012gr}. All of these methods are designed for two-group experiments, with some being general enough to extend to multiple-group experiments[^multi-group_extension]. I describe in greater detail methods for identifying differential methylation in a one-group experiment, admitedly an unusual design but one that I faced during my PhD.
+A common downstream analysis is the identification of differential methylation. This includes the identification of differentially methylated cytosines (DMCs) and differentially methylated regions (DMRs). Many methods have been proposed \citep[e.g.,]{Akalin:2012cmChen:2013eh, Chen:2014jb, Dolzhenko:2014bo, Gokhman:2014cp, Jaffe:2012gx, Lacey:2013iy, Lister:2009hy, Rijlaarsdam:2014hp, Sofer:2013bk, Xie:2014ez, Feng:2014iq, Hebestreit:2013ko, Sun:2014fk, Park:2014ho, Hansen:2012gr}.
+
+During my PhD I needed to analyse data from one-group experiment for differential methylation, admittedly an unusual design. Almost all these existing methods are designed for two-group experiments, with some being general enough to extend to multiple-group experiments[^multi-group_extension]. Since I spent time working on the one-group cases, and also because a review article for the two-group case was recently published \citep{Robinson:2014jz}, I pay somewhat disproportianate attention to the one-group scenario in what follows.
 
 [^multi-group_extension]: The extension to multiple-group experiments isn't always implemented in the software, even if discussed in the paper.
 
@@ -274,20 +276,55 @@ Such an approach, while straightforward, is also obviously limited to a subset o
 
 [^phase]: This does not give parent-specificity unless the phase of the genotype is also known.
 
-\subsection{Epipolymorphism}\label{sec:epipolymorphism}
+\subsection{Epialleles and epipolymorphism}\label{sec:epialleles_and_epipolymorphism}
 
-__UP TO HERE__
+A DNA sequence may have multiple epigenetic states. For example, the cytosine in the sequence `TCGA` may be methylated or unmethylated; each of the methylated and unmethylated versions of that sequence is an _epiallele_. Restricting our attention to CpG methylation, a sequence with $m$ CpGs has $2^{m}$ potential epialleles. Therefore, an epiallele is just a methylation pattern at an m-tuple, with the additional constraint that the underlying DNA sequence also be identical[^epiallele_definition]. An epiallele may also be described as an _epimutation_, if it sufficiently rare.
 
-\subsection{Epiallele detection}\label{sec:epialleles}
+[^epiallele_definition]\cite{Rakyan:2002wz} impose a very strict requirement that in order for the methylation pattern to be called an epiallele it must "[result] in different phenotypes". While most would agree that is those methylation patterns that confer a difference in phenotype that are most interesting, limiting the definition of 'epiallele' to such methylation patterns seems unduly restrictive. After all, we refer to alternate forms of a genetic sequence as alleles regardless of whether we know of a phenotypic consequence of the variant.
 
-- methclone
-- Conrad (MPFE)
-- How it differs to Emma Whitelaw's definition
+Epipolymorphism, analogous to genetic polymorphism, is the presence of multiple epialleles in a population. However, unlike genetic polymorphism, where the population is typically a set of chromosomes from multiple individuals, the population here is often within an individual, even within a tissue within an individual. The 'epipolymorphism' of a locus has also been defined as the probability that two epialleles randomly sampled from the locus are different from one another \citep{Landan:2012kp}.
+
+\subsubsection{Examples}
+
+Most of the examples of epialleles with a phenotypic consequence come from the plant kingdom. Even then, the number of such epialleles is small --- a review from 2012 put the number at "about a dozen" \citep{Weigel:2012fj}.
+
+In mammals, the study of epialleles has focused on identifying _metastable_ epialleles, which are epialleles that are mitotically heritable \cite{Rakyan:2002wz}. The poster child for the potential important of epialleles in mammals is the Agouti viable yellow ($A^{vy}$) allele \citep{Morgan:1999ds}.  Mice with an unmethylated version of the allele have a yellow coat, are obese, diabetic and have an increased suscpetibility to tumours compared to those mice with a methylated version of the allele, which have a _pseudoagouti[^pseudoagouti_vs_agouti]_ (brown) coat and none of the associated health defects.
+
+[^pseudoagouti_vs_agouti]: These mice are properly described as _pseudoagouti_ rather than agouti. They are heterozygous for the wildtype agouti allele ($A^{vy}/a$) but are phenotypically indistinguishable from true agouti mice, which are homozygous for the wildtype gene ($a/a$).
+
+In humans, there have been several interesting studies using epialleles to infer the clonality and evolution of cancer \citep{Siegmund:2009kk, Li:2014ei}, as well as the evolution of methylation dynamics and the epipolymorphism of various loci in an immortalised cell line \citep{Landan:2012kp}.
+
+Finally, although there is much interest, if not outright hype, surrounding transgenerational epialleles, these are difficult to prove outside of very controlled experimental conditions \cite{Daxinger:2012kl}.
+
+Regardless of where you draw the line as to what constituted an epiallele, it has become clear that the occurrence of multiple methylation patterns at an m-tuple is the norm rather than the exception when performing bisulfite-sequencing. For example, __FIGURE__ shows the number of methylation patterns observed at 4-tuples with a frequency greater than __WHAT__ from the __WHICH__ sample. There has been some progress in developing software to extract and analyse these epialleles, which I now describe.
+
+\subsubsection{Methods}
+
+The obvious challenge in estimating the frequency of an epiallele is in distinguishing a _real_ epiallele from a spurious one, perhaps caused by incomplete bisulfite-conversion, sequencing error or mapping error. Another difficulty, perhaps unavoidable with the present technology, is the effect of PCR amplification bias, which will bias estimates of the relative abundance of each epiallele.
+
+__UP TO HERE: Read the `methclone` paper and say somethign intelligent about it. Then, finish the Methods section and move onto the `MethylationTuples` section.__
+
+`methclone` \citep{Li:2014ei}
+
+- `methclone`
+- `MPFE`
+- `methpat`
+- ASM-methods are arguably epiallele detection methods
+- Methods based solely on methylation patterns don't check that the sequence is identical.
 
 \section{`MethylationTuples`}\label{sec:MethylationTuples}
 
-A common thread in Section \ref{sec:downstream_analyses_of_m-tuples} is that while interesting methods have been proposed to address these questions, the software implementations are rather lacking. `MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples.  While initially developed to support my research into co-methylation (Chapter \ref{chap:co-methylation}), `MethylationTuples`, in conjunction with `methtuple`, can also be used to do many of the above analyses.
+A common thread in Section \ref{sec:downstream_analyses_of_m-tuples} is that while interesting methods have been proposed to address these questions, the software implementations are rather lacking or, at the least, very much tailored toward a particular analysis. What has been lacking is a general method for extracting methylation patterns at m-tuples and software for manipulating, analysing and visualising the results. I have made significant progress towards the first goal with `methtuple` (see Section \ref{sec:methtuple}) and now introduce `MethylationTuples` ([https://github.com/PeteHaitch/MethylationTuples](https://github.com/PeteHaitch/MethylationTuples)) to address the second missing link.
 
-- I'm using it to address co-methylation
-- Could be used for entropy, epipolymorphism and epialleles.
-- Could implement Fang or Peng's method for ASM, but less readily the "heterozygous SNP" method
+`MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples.  While initially developed to support my research into co-methylation (Chapter \ref{chap:co-methylation}), the data structures developed in `MethylationTuples` are also well suited to analysing methylation entropy, allele-specific methylation, epialleles and epipolymorphism
+
+- Could implement Fang or Peng's method for ASM, but less readily the "heterozygous SNP" method (could have a different `sample` for each parental chromosome)
+
+__TODO: Things to mention__
+- `GenomicTuples`
+  - Package build on existing class-leading infrastructure
+- Describe utility functions, e.g., `collapseStrand`
+- Analytical methods currently implemented in the package
+- Compatability with other packages, e.g., `bsseq`.
+- Challenges
+- Future directions
