@@ -240,14 +240,15 @@ The above-described analyses do not specifically exploit the fact that bisulfite
 
 \subsection{Methylation entropy}\label{sec:methylation_entropy}
 
-__UP TO HERE__
+There are several definitions and uses of _methylation entropy_ in the literature. \citet{Xie:2011cy} introduced the concept for bisulfite-sequencing data as a way of quantifying the variability of methylation patterns at an m-tuple. For a given 4-tuple, $(i, \ldots, i + 3)$, \citet{Xie:2011cy} analyse the set of reads aligned to it, $\{z: z \in \mathcal{R}_{(i, \ldots, i + 3} \}$, to compute the methylatione entropy. On the one hand, if we only observe a single unique methylation pattern then the m-tuple has the minimum methylation entropy of zero. On the other hand, if we observe all possible $2^{4} = 16$ methylation patterns then the m-tuple has the maximum methylation entropy of 1. Depending on the frequency of the patterns, we obtain intermediate methylation values ($0 < \text{methylation entropy} < 1)$. Of course, methylation entropy need not be limited to 4-tuples. The choice of the size of the tuples depends on the regions of interest, the read lengths and the sequencing coverage.
 
+The natural interpretation of methylation entropy as a measure of 'disorder' allows us to quantify how heterogeneous DNA methylation is at a locus \citep{Xie:2011cy, He:2013cj}[^other_definitions]. These methylation entropies can be analysed to identify heterogeneous regions of the genome or perhaps tested for an association with a phenotype.
 
-- `QDMR` \citep{Zhang:2011dp} and `CpG_MPs` \citep{Su:2012hl}, developed by the same research group, are methods for identifying DMRs using a form of methylation entropy from MeDIP-chip and BS-seq, respectively.
-- \citet{Xie:2011cy} introduced the concept of methylation entropy for BS-seq.
+[^other_definitions]: This is closely related to the idea of identifying epialleles, for which methylation entropy has also played a role \citep{Li:2014ei} and which I discuss in Section \ref{sec:epialleles}. Methylation entropy has also been used to identify differential methylation, however, I do not discuss this further since this uses a different definition that is not based on analysing methylation patterns at m-tuples \citep{Zhang:2011dp, Su:2012hl}.
 
+While \citet{Xie:2011cy} do not provide software implementing the method, a subsequent paper from some of the same researchers introduces the `DMEAS` software to do so \cite{He:2013cj} . Unfortunately, `DMEAS` is only available as a Windows binary or as a Perl script that itself is only available as PDF file, greatly limiting its usefulness.
 
-While mathematically based on the idea of Shannon entropy \citep{Shannon:IH1_srIe}, the interpretation of methylation entropy has much in common with the physical concept of "disordered/heterogeneity"
+While I have not yet done so, it is not difficult to add the calculation of methylation entropies to the `MethylationTuples` software. The input for such an analysis of methylation entropy is a list of m-tuples and the associated frequencies of each methylation pattern, exactly what `methtuple` produces. The formula for computing methylation entropies is a simple sum of ratios and log-ratios, easily implemented in R, which `MethylationTuples` is written in.
 
 \subsection{Allele-specific methylation}\label{sec:asm}
 
@@ -275,12 +276,18 @@ Such an approach, while straightforward, is also obviously limited to a subset o
 
 \subsection{Epipolymorphism}\label{sec:epipolymorphism}
 
+__UP TO HERE__
+
 \subsection{Epiallele detection}\label{sec:epialleles}
+
+- methclone
+- Conrad (MPFE)
+- How it differs to Emma Whitelaw's definition
 
 \section{`MethylationTuples`}\label{sec:MethylationTuples}
 
-A common thread in Section \ref{sec:downstream_analyses_of_m-tuples} is that while interesting methods have been proposed to address these questions, the software implementations are somewhat lacking. This in part motivated me to begin developing `MethylationTuples`, an R package for managing, analysing and visualising methylation patterns at m-tuples.
+A common thread in Section \ref{sec:downstream_analyses_of_m-tuples} is that while interesting methods have been proposed to address these questions, the software implementations are rather lacking. `MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples.  While initially developed to support my research into co-methylation (Chapter \ref{chap:co-methylation}), `MethylationTuples`, in conjunction with `methtuple`, can also be used to do many of the above analyses.
 
-- I'm using to address co-methylation
+- I'm using it to address co-methylation
 - Could be used for entropy, epipolymorphism and epialleles.
-- Could implement Fang or Peng's method for ASM
+- Could implement Fang or Peng's method for ASM, but less readily the "heterozygous SNP" method
