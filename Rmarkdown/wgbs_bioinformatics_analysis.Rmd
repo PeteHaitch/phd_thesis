@@ -14,18 +14,18 @@ bibliography: ../latex/phd_thesis.bib
 
 \section{Chapter overview}\label{sec:wgbs_analysis_chapter_overview}
 
-This chapter and the next describe the analysis of a whole-genome bisulfite-sequencing dataset, including the many computational and statistical challenges. There are four fundamental steps in the analysis of whole-genome bisulfite-sequencing data:
+This chapter and the next describe the analysis of a whole-genome bisulfite-sequencing dataset, including the many computational and statistical challenges. I concentrate on the methylC-seq protocol, which is a directional protocol and the standard whole-genome bisulfite-sequencing assay. All data used in my thesis were generated using this protocol. Other bisulfite-sequencing assays, particularly targeted assays such as RRBS and Methyl-Seq, require some further customised processing.
+
+There are four fundamental steps in the analysis of whole-genome bisulfite-sequencing data:
 
 1. Data quality control checks
 2. Read mapping and post-processing of mapped reads
 3. Methylation calling
 4. Downstream analyses
 
-Steps 1 and 2 will be familiar to anyone who has analysed high-throughput sequencing data, but each requires a twist to work with bisulfite-sequencing data. Step 3 is obviously unique to assays of DNA methylation, but there are similarities to variant calling from DNA-seq. There are a wide variety of analyses that might be performed at step 4 and these have the greatest need for careful statistical analysis.
+Steps 1 and 2 will be familiar to anyone who has analysed high-throughput sequencing data, but each requires a twist to work with bisulfite-sequencing data. Step 3 is obviously unique to assays of DNA methylation, but there are similarities to variant calling from DNA-seq. There are a wide variety of analyses that might be performed at step 4 and these have the greatest need for careful statistical analysis. This chapter focuses on steps 1-3, with step 4 addressed in Chapter \ref{chap:downstream_analyses}.
 
-This chapter focuses on steps 1-3 and concludes with a description of my methylation calling software, `methtuple`, which uniquely can call methylation events at tuples of loci from whole-genome bisulfite-sequencing data. The following chapter addresses step 4.
-
-In this chapter I concentrate on the methylC-seq protocol, which is a directional protocol and the standard whole-genome bisulfite-sequencing assay. All data used in my thesis were generated using this protocol. Other bisulfite-sequencing assays, particularly targeted assays such as RRBS and Methyl-Seq, require some further customised processing.
+The chapter concludes with a description of my methylation calling software, `methtuple`, which uniquely can call methylation events at tuples of loci from whole-genome bisulfite-sequencing data.
 
 \section{Data quality control checks}\label{sec:data_qc}
 
@@ -194,8 +194,8 @@ read.mbias <- function(file) {
 
 #files <- paste0("../M-bias/", list.files("../M-bias/"))
 # ADS
-files <- "../M-bias/ADS.M-bias.txt"
-sample_names <- gsub("../M-bias/", "", gsub(".M-bias.txt", "", files))
+files <- "../data/M-bias/ADS.M-bias.txt"
+sample_names <- gsub("../data/M-bias/", "", gsub(".M-bias.txt", "", files))
 mbias <- lapply(files, read.mbias)
 mbias <- tbl_df(cbind(sample = rep(sample_names, sapply(mbias, nrow)),
                       do.call("rbind", mbias)))
@@ -239,8 +239,8 @@ For example, suppose we performed $100$ bp single-end sequencing and pre-trimmed
 ```{r M-bias_spike, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:E18VA_M-bias", fig.cap = "M-bias plot for the E18VA sample from the EPISCOPE dataset. Each of read 1 (R1) and read 2 (R2) are plotted separately. For CpGs in read 1, we see noise at the start of the read, followed by a downward slope in the M-bias, which ends with a spike. For CpGs in read 2, we see a downward spike at the start of the read following by a gradual increase in the M-bias curve, with a spike at read-position 101 and a spike at the last read positions for all methylation types. The spike at read-position 101 is also evidence, albeit to a lesser extent, in read 1. This position should be ignored in downstream analyses but we do not necessarily also want to ignore read-positions $102-150$ since this would remove one-third of the data.", fig.width = 8, dev = "pdf"}
 #files <- paste0("../M-bias/", list.files("../M-bias/"))
 # E18VA
-files <- "../M-bias/E18VA.M-bias.txt"
-sample_names <- gsub("../M-bias/", "", gsub(".M-bias.txt", "", files))
+files <- "../data/M-bias/E18VA.M-bias.txt"
+sample_names <- gsub("../data/M-bias/", "", gsub(".M-bias.txt", "", files))
 mbias <- lapply(files, read.mbias)
 mbias <- tbl_df(cbind(sample = rep(sample_names, sapply(mbias, nrow)),
                       do.call("rbind", mbias)))
@@ -473,9 +473,9 @@ __TODO: Size of m-tuples histogram__
 \begin{tabular}{@{}lllll@{}}
 \toprule
 Software           & Reference                                & Input                                              & Designed for targeted sequencing & Other limitations                                                                \\ \midrule
-\texttt\{methclone\} & \cite\{Li:2014ei\}                       & Bismark BAM files                                  & No, although example uses eRRBS  & \textbf\{TODO: Try installing. Suspect you can't get actual methylation calls.\} \\
-\texttt\{methpat\}   & \url\{https://github.com/bjpop/methpat\} & Output of \texttt\{bismark\_methylation\_extractor\} & Yes (amplicons)                  &                                                                                  \\
-\texttt\{DMEAS\}     & \cite\{He:2013cj\}                       & Output of \texttt\{bismark\_methylation\_extractor\} &                                  & Windows operating system only. Perl code only available as PDF file.             \\ \bottomrule
+\texttt{methclone} & \cite{Li:2014ei}                       & Bismark BAM files                                  & No, although example uses eRRBS  & \textbf{TODO: Try installing. Suspect you can't get actual methylation calls.} \\
+\texttt{methpat}  & \url{https://github.com/bjpop/methpat} & Output of \texttt{bismark\_methylation\_extractor} & Yes (amplicons)                  &                                                                                  \\
+\texttt{DMEAS}     & \cite{He:2013cj}                       & Output of \texttt{bismark\_methylation\_extractor} &                                  & Windows operating system only. Perl code only available as PDF file.             \\ \bottomrule
 \end{tabular}
 \caption{My caption}
 \label{tab:other_m-tuple_methylation_callers}
