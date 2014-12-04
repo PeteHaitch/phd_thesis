@@ -44,16 +44,27 @@ wgbs_bioinformatics_analysis.pdf:
 	mkdir -p pdf
 	Rscript -e "rmarkdown::render('Rmarkdown/wgbs_bioinformatics_analysis.Rmd', output_format = 'pdf_document', output_file = '../wgbs_bioinformatics_analysis.pdf', output_dir = '../pdf')"
 
-markdown/wgbs_statistical_analysis.md:
-	Rscript -e "knitr::knit('Rmarkdown/wgbs_statistical_analysis.Rmd', 'markdown/wgbs_statistical_analysis.md')"
+markdown/wgbs_statistical_framework.md:
+	Rscript -e "knitr::knit('Rmarkdown/wgbs_statistical_framework.Rmd', 'markdown/wgbs_statistical_framework.md')"
 
-latex/wgbs_statistical_analysis.tex: markdown/wgbs_statistical_analysis.md
+latex/wgbs_statistical_framework.tex: markdown/wgbs_statistical_framework.md
 	mkdir -p latex
-	pandoc -o latex/wgbs_statistical_analysis.tex markdown/wgbs_statistical_analysis.md
+	pandoc -o latex/wgbs_statistical_framework.tex markdown/wgbs_statistical_framework.md
 
-wgbs_statistical_analysis.pdf:
+wgbs_statistical_framework.pdf:
 	mkdir -p pdf
-	Rscript -e "rmarkdown::render('Rmarkdown/wgbs_statistical_analysis.Rmd', output_format = 'pdf_document', output_file = '../wgbs_statistical_analysis.pdf', output_dir = '../pdf')"
+	Rscript -e "rmarkdown::render('Rmarkdown/wgbs_statistical_framework.Rmd', output_format = 'pdf_document', output_file = '../wgbs_statistical_framework.pdf', output_dir = '../pdf')"
+
+markdown/wgbs_downstream_analyses.md:
+	Rscript -e "knitr::knit('Rmarkdown/wgbs_downstream_analyses.Rmd', 'markdown/wgbs_downstream_analyses.md')"
+
+latex/wgbs_downstream_analyses.tex: markdown/wgbs_downstream_analyses.md
+	mkdir -p latex
+	pandoc -o latex/wgbs_downstream_analyses.tex markdown/wgbs_downstream_analyses.md
+
+wgbs_downstream_analyses.pdf:
+	mkdir -p pdf
+	Rscript -e "rmarkdown::render('Rmarkdown/wgbs_downstream_analyses.Rmd', output_format = 'pdf_document', output_file = '../wgbs_downstream_analyses.pdf', output_dir = '../pdf')"
 
 markdown/datasets.md:
 	Rscript -e "knitr::knit('Rmarkdown/datasets.Rmd', 'markdown/datasets.md')"
