@@ -3,7 +3,6 @@ title: "Downstream analyses of whole-genome bisulfite-sequencing data"
 output:
   pdf_document:
     fig_caption: yes
-    keep_tex: yes
     includes:
       in_header: ../latex/header.tex
   html_document:
@@ -302,7 +301,7 @@ Regardless of where you draw the line as to what constituted an epiallele, it ha
 
 \subsubsection{Methods}
 
-`methclone` \citep{Li:2014ei} is software to estimate the frequency of epialleles at m-tuples and to identify "shifts" in these distributions between two samples. `methclone` is limited to pairwise comparisons. The input is a pair of `BAM` files created with the `Bismark` aligner, one for each sample. __TODO: Can you get output files with the frequency of each methylation pattern at each m-tuple?__ For each m-tuple (4-tuples in the example in the paper) with sufficient sequencing coverage ($\60 \times$ in the example in the paper) a form of methylation entropy, called combinatorial entropy, is computed based on the set of mapped reads for the pair of samples. The "foreground" combinatorial entropy, $S$, is based on the observed frequency of epialleles in the two samples while the "background" combinatorial entropy, $\tilde{S}$, is the expected frequency of epialleles in the two samples if "all patterns of epialleles are uniformly mixed between the two stages [samples]". The difference in these combinatorial entropies, $\delta S = S - \tilde{S}$, a kind of observed-to-expected log-ratio, is used to identify shifts in the epiallele distribution between a pair of samples. A $\delta S = 0$ corresponds to no change and a $\delta S = -144$ corresponds to maximal difference in entropy. It isn't clear whether the range of $\delta S$ depends on the size of the m-tuples nor is it clear how to choose the threshold at which to declare a significant shift in the distribution of epialleles. The example in the paper shows results for a threshold of $-60, -70$ and $-80$, but these choices appear somewhat arbitrary.
+`methclone` \citep{Li:2014ei} is software to estimate the frequency of epialleles at m-tuples and to identify "shifts" in these distributions between two samples. `methclone` is limited to pairwise comparisons. The input is a pair of `BAM` files created with the `Bismark` aligner, one for each sample. __TODO: Can you get output files with the frequency of each methylation pattern at each m-tuple?__ For each m-tuple (4-tuples in the example in the paper) with sufficient sequencing coverage ($60 \times$ in the example in the paper) a form of methylation entropy, called combinatorial entropy, is computed based on the set of mapped reads for the pair of samples. The "foreground" combinatorial entropy, $S$, is based on the observed frequency of epialleles in the two samples while the "background" combinatorial entropy, $\tilde{S}$, is the expected frequency of epialleles in the two samples if "all patterns of epialleles are uniformly mixed between the two stages [samples]". The difference in these combinatorial entropies, $\delta S = S - \tilde{S}$, a kind of observed-to-expected log-ratio, is used to identify shifts in the epiallele distribution between a pair of samples. A $\delta S = 0$ corresponds to no change and a $\delta S = -144$ corresponds to maximal difference in entropy. It isn't clear whether the range of $\delta S$ depends on the size of the m-tuples nor is it clear how to choose the threshold at which to declare a significant shift in the distribution of epialleles. The example in the paper shows results for a threshold of $-60, -70$ and $-80$, but these choices appear somewhat arbitrary.
 
 The obvious challenge in estimating the frequency of an epiallele is in distinguishing a _real_ epiallele from a spurious one, perhaps caused by incomplete bisulfite-conversion, sequencing error or mapping error. Another difficulty, perhaps unavoidable with the present technology, is the effect of PCR amplification bias, which will bias estimates of the relative abundance of each epiallele. `methclone` uses the observed frequencies of methylation patterns as being unbiased estimates of the true epiallele frequencies, which does not attempt to account for these potential sources of bias. In contrast, `MPFE` ([http://www.bioconductor.org/packages/release/bioc/html/MPFE.html](http://www.bioconductor.org/packages/release/bioc/html/MPFE.html), [http://f1000.com/posters/browse/summary/1097258](http://f1000.com/posters/browse/summary/1097258)), an R/Bioconductor package for "[estimating] the distribution of methylation patterns [epialleles]" at m-tuples, uses a probabilistic model to account for some of these biases.
 
@@ -321,7 +320,9 @@ I have made significant progress towards the first goal with `methtuple` (see Se
 
 \subsection{Design}
 
-`MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples released under a Artistic-2.0 licence. While initially developed to support my research into co-methylation (Chapter \ref{chap:co-methylation}), the data structures developed in `MethylationTuples` are also well-suited to analysing methylation entropy, allele-specific methylation, epialleles and epipolymorphism.
+`MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples released under a Artistic-2.0 licence. R is a very popular language for analysing data, particularly in bioinformatics, and is my computational mother tongue, hence my choice of R as the language. To improve the performance of the package are written in `C++`, making use of the wonderful `Rcpp` package \cite{Eddelbuettel:2011to,Eddelbuettel:2013if},
+
+While initially developed to support my research into co-methylation (Chapter \ref{chap:co-methylation}), the data structures developed in `MethylationTuples` are also well-suited to analysing methylation entropy, allele-specific methylation, epialleles and epipolymorphism.
 
 `MethylationTuples` is written to work with the Bioconductor project \citep{Gentleman:2004ju}[^bioc]. Bioconductor makes extensive use of R's S4 object system and encourages developers to re-use existing Bioconductor infrastructure. From a developer's perspective, this avoids the need to re-invent the wheel. And from the user's perspective, it helps avoid multiple versions of the 'wheel', each that acts slightly differently and that may not be as well-tested.
 
@@ -331,19 +332,45 @@ Bioconductor has excellent support for working with data defined on genomic rang
 
 [^tuples_vs_ranges]: The difference between a genomic range and a genomic tuple  can be thought of as the difference between an interval and a set. Namely, an interval includes the co-ordinates in between the start and end whereas a set only includes those co-ordinates listed in the set. For example, the genomic interval `chr3:+:[10, 12]` includes the co-ordinates `chr3:10`, `chr3:11` and `chr3:12` on the forward strand, whereas the genomic 2-tuple `chr3:+:{10, 12}` only includes the co-ordinates `chr3:10` and `chr3:12` on the forward strand.
 
-In the `MethylationTuples` package, I define the `MethPat` class to store the genomic co-ordinates of m-tuples and the associated frequencies of the methylation patterns. The `MethPat` class extends the `SummarizedExperiment` class, also defined in the `GenomicRanges` package, but makes use of classes defined in the `GenomicTuples` package to store the genomic co-ordinates of the m-tuples. A `MethPat` object is as a matrix-like object, where rows represent m-tuples of interest and columns represent samples. Data from multiple samples can be stored in a single `MethPat` object. Currently, it is a requirement that all m-tuples in a `MethPat` object have the same size ($\text{m}$). __FIGURE__ is an schematic of the `MethPat` class.
+In the `MethylationTuples` package, I define the `MethPat` class to store the genomic co-ordinates of m-tuples and the associated frequencies of the methylation patterns. The `MethPat` class extends the `SummarizedExperiment` class, also defined in the `GenomicRanges` package, but makes use of classes defined in the `GenomicTuples` package to store the genomic co-ordinates of the m-tuples. A `MethPat` object is as a matrix-like object, where rows represent m-tuples of interest and columns represent samples. Currently, it is a requirement that all m-tuples in a `MethPat` object have the same size ($\text{m}$). Figure \ref{fig:MethPat} is a schematic of a `MethPat` object storing data on $n$ samples for 3-tuples.
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{../figures/MethPat.pdf}
+\caption{Schematic of the \texttt{MethPat} class, shown here for 3-tuples. Each row represents a 3-tuple to which the genomic co-ordinates of the tuples (green box) and the frequencies of the methylation patterns (grey box) are aligned. The frequencies of each methylation pattern --- $MMM, MMU, \ldots, UUU$ --- are stored as separate matrices where the columns represent samples --- $S_{1}, \ldots, $S_{n}$. Some sample may have now have any sequencing coverage for a particular m-tuple, in which case the corresponding frequencies are recorded as \texttt{NA}.}
+\label{fig:MethPat}
+\end{figure}
 
 \subsection{Available methods}
 
-- Describe utility functions, e.g., `collapseStrand`
-- Analytical methods currently implemented in the package
-- Could implement Fang or Peng's method for ASM, but less readily the "heterozygous SNP" method (could have a different `sample` for each parental chromosome)
+The similarities to the output format of `methtuple` are clear[^methtuple_output], with the added advantage that a single `MethPat` object can contain data from multiple samples. A `MethPat` object can be constructed using the `MethPat` constructor function or from the output files of `methtuple` via the `readMethtuple` function.
+
+[^methtuple_output]: See Section \ref{sec:methtuple_methods} for example of the `methtuple` output format.
+
+The `MethPat` object provides fast subsetting by rows (m-tuples), including subsetting based on overlaps of m-tuples with genomic features via the `findOverlaps` methods. Several other useful utility functions are (__TODO: Update list of implemented methods__):
+
+- `collapseStrand`: Collapse strand-specific data by aggregating the counts. Only applicable to CpG methylation loci.
+- `combine`: Combine multiple `MethPat` objects into one.
+- `filterOutVariants`: Remove m-tuples that contain a known variant. Variants must be provided as a VCF.
+- `getCoverage`: Compute the sequencing coverage of the m-tuples in each sample.
+- `IPD`: Compute the IPD vector for each m-tuple.
+- `methLevel`: Compute $\beta$-values or $\mathcal{M}$-values. Only applicable to 1-tuples.
+- `plotBetaDensity`: Plot the kernel density of the $\beta$-values for each sample, optionally stratified by a genomic feature, e.g., CpG islands.
+- `tuples`: Extract the $pos_{1}, \ldots, pos_{m}$ of the m-tuples.
+
+These are in addition to the many useful utility functions inherited from the `SummarizedExperiment` class.
+
+In the `MethPat` class, its associated methods and other utility functions, the `MethylationTuples` package provides a toolbox for manipulating methylation patterns at m-tuples. Aside from providing the necessary infrastructure to analyse methylation patterns at m-tuples, `MethylationTuples` currently includes specific methods to analyse and visualise co-methylation (Chapter \ref{chap:co-methylation}) with the `cometh` and `methLevelCor` functions. I also plan to add methods for estimating epialleles and epipolymorphism. And it is my hope that `MethylationTuples` will provide a useful foundation on which others can implement their own methods for analysing methylation patterns at m-tuples.
 
 \subsection{Compatability with other Bioconductor packages}
 
-- e.g., `bsseq`, `GenomicRanges`, `BiSeq`, `methyVisual`
+Being based on core Bioconductor functionality, `MethylationTuples` is highly compatible with existing packages. In particular, `MethPat` objects containing 1-tuples are readily coerced for use in differential methylation calling packages, e.g., `bsseq` and `BiSeq`, or to identify partially methylated domains with `MethylSeekR`. I also make extensive use of `MethylationTuples` in my `methsim` software (Chapter \ref{chap:methsim})
 
+\subsection{Computational challenges and future directions}
 
-\subsection{Computational challenges}
+The challenges of working with large datasets in R are well-known (__CITE__). These are in large part due to R being designed as an 'in-memory' application (__CITE__). More generally with large datasets, there is often a trade-off to be made between storage efficiency and algorithm simplicity - a more efficient way of storing the data may be less convenient to work with and _vice versa_.
 
-\subsection{Future directions}
+I have used the `MethylationTuples` package to analyses datasets containing up to 19 whole-genome bisulfite-sequencing samples (the Ziller data), albeit using a server with $512$ Gb of (shared) memory. I have found the `MethPat` class to be a very convenient representation of the data, but one that does not coincide with the most efficient storage. This is particularly true as the size of the m-tuples increases and the data become sparser. However, for values of $m < 5$, and particularly for 'dense' data, such as RRBS, this is far less of an issue. Shown in __TABLE__ is the size of the `MethPat` objects in memory for the EPISCOPE whole-genome bisulfite-sequencing data with various sized m-tuples.
+
+The main inefficiency with the `MethPat` class is that the matrices storing the frequencies of each methylation pattern grow increasingly sparse as the size of the tuples increases. It may be possible to improve this by using a different approach to the internal storage of the data. For example, it may be possible to create an index so that the matrices storing the frequencies of methylation patterns can be re-ordered and stored as run-length encodings, a very space-efficient storage scheme.
+
+In the short term, my aim for `MethylationTuples` is to release a version to Bioconductor with the core infrastructure for manipulating data of methylation patterns at m-tuples. In the longer term, I would like to extend the set of downstream analyses of m-tuples that are available in the package and for other users to do the same with their own methods.
