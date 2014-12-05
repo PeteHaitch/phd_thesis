@@ -977,6 +977,26 @@ People already knew that differences in agouti expression resulted in phenotypic
 
 > In viable yellow (Avy/a) mice, transcription originating in an intra-cisternal A particle (IAP) retrotransposon inserted upstream of the agouti gene (A) causes ectopic expression of agouti protein, resulting in yellow fur, obesity, diabetes and increased susceptibility to tumours (Neomorphic agouti mutations in obese yellow mice, 1994).
 
+## `methclone` \citep{Li:2014ei}
+
+- Landan = changes at a global scale, methclone = changes between or within samples (at a locus?)
+- Re Landan's epipolymorphism: "the change in epipolymorphism of a sample or locus does not reveal the underlying clonality."
+- "Methclone calculates the combinatorial entropy (ΔS) change of epialleles at one locus and out- puts the loci with a ranked list of epiallele changes de- fined by the entropy change (Figure 1), from no change (0) to maximum difference in entropy (-144)."
+- Can `methclone` output the counts of methylation at epialleles?
+- __TODO: Try installing on my own machine__
+- Used 4-tuples in the paper and applied to eRRBS data. Required > 60 reads per-locus, per-sample.
+- Don't really like the colour scheme. There's no obvious relationship between colour and methylation pattern.
+- The problem of looking for epiallele shifts is that of looking for chances in the probability vector of a multinomial distribution.
+- In the definition of $\delta S$, is there any sense of a $0000$ pattern being more divergent than a $1110$ pattern from a $1111$ pattern?
+- The $\delta S$ cutoffs seem arbitrarily chosen?
+- "Interestingly, this indi- cates that the number of different epialleles (eloci) between unrelated individuals are rather stable, whereas the number of eloci are much more dynamic within the same person during a tumor’s treatment and progression."
+- Investigated various sized m-tuples, $m = 1, \ldots, 10$. 4-tuples were the best in the sense that there was sufficient data to estimate these.
+- Uses "combinatorial entropy" (defined in cited papers).
+- Can be used to compare the shift at two time points. Does not allow for replicates.
+- The number of epialleles is normalised by the library size, i.e., not the sequencing coverage at that loci, and further normalised by a constant (200) to "control the entropy dynamic range".
+- Entropy is minimal if there is only one pattern
+- Entropy is maximal if there are all $2^{m}$ possible patterns and these all occur with equal frequency.
+
 # Review of simulation methods
 
 ### \cite{Feng:2014iq}
