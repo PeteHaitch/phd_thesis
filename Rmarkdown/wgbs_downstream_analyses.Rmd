@@ -282,7 +282,9 @@ A DNA sequence may have multiple epigenetic states. For example, the cytosine in
 
 [^epiallele_definition]\cite{Rakyan:2002wz} impose a very strict requirement that in order for the methylation pattern to be called an epiallele it must "[result] in different phenotypes". While most would agree that is those methylation patterns that confer a difference in phenotype that are most interesting, limiting the definition of 'epiallele' to such methylation patterns seems unduly restrictive. After all, we refer to alternate forms of a genetic sequence as alleles regardless of whether we know of a phenotypic consequence of the variant.
 
-Epipolymorphism, analogous to genetic polymorphism, is the presence of multiple epialleles in a population. However, unlike genetic polymorphism, where the population is typically a set of chromosomes from multiple individuals, the population here is often within an individual, even within a tissue within an individual. The 'epipolymorphism' of a locus has also been defined as the probability that two epialleles randomly sampled from the locus are different from one another \citep{Landan:2012kp}.
+Epipolymorphism, analogous to genetic polymorphism, is the presence of multiple epialleles in a population. However, unlike genetic polymorphism, where the population is typically a set of chromosomes from multiple individuals, the population here is often within an individual, even within a tissue within an individual. The 'epipolymorphism' of a locus has also been defined as the probability that two epialleles randomly sampled from the locus are different from one another \citep{Landan:2012kp}. \citeauthor{Landan:2012kp} the epipolymorphism of an m-tuple as $1 - \sum_{p = 1}^{p = 2^{m}} (f_{p}^{2})$, where $f_{p}$ is the estimated frequency of the $p^{th}$ methylation pattern, i.e., the number of times the $p^{th}$ pattern is observed divided by the total number of reads mapped to that m-tuple[^sampling_with_replacement].
+
+[^sampling_with_replacement]: Strictly speaking, this is in fact an estimate of the epipolymorphism under a model that assumes sampling with replacement or, equivalently, an infinite population size. While neither assumption is true, the correction for sampling without replacement from a finite population will not substantially affect the results.
 
 \subsubsection{Examples}
 
@@ -300,31 +302,48 @@ Regardless of where you draw the line as to what constituted an epiallele, it ha
 
 \subsubsection{Methods}
 
-The obvious challenge in estimating the frequency of an epiallele is in distinguishing a _real_ epiallele from a spurious one, perhaps caused by incomplete bisulfite-conversion, sequencing error or mapping error. Another difficulty, perhaps unavoidable with the present technology, is the effect of PCR amplification bias, which will bias estimates of the relative abundance of each epiallele.
+`methclone` \citep{Li:2014ei} is software to estimate the frequency of epialleles at m-tuples and to identify "shifts" in these distributions between two samples. `methclone` is limited to pairwise comparisons. The input is a pair of `BAM` files created with the `Bismark` aligner, one for each sample. __TODO: Can you get output files with the frequency of each methylation pattern at each m-tuple?__ For each m-tuple (4-tuples in the example in the paper) with sufficient sequencing coverage ($\60 \times$ in the example in the paper) a form of methylation entropy, called combinatorial entropy, is computed based on the set of mapped reads for the pair of samples. The "foreground" combinatorial entropy, $S$, is based on the observed frequency of epialleles in the two samples while the "background" combinatorial entropy, $\tilde{S}$, is the expected frequency of epialleles in the two samples if "all patterns of epialleles are uniformly mixed between the two stages [samples]". The difference in these combinatorial entropies, $\delta S = S - \tilde{S}$, a kind of observed-to-expected log-ratio, is used to identify shifts in the epiallele distribution between a pair of samples. A $\delta S = 0$ corresponds to no change and a $\delta S = -144$ corresponds to maximal difference in entropy. It isn't clear whether the range of $\delta S$ depends on the size of the m-tuples nor is it clear how to choose the threshold at which to declare a significant shift in the distribution of epialleles. The example in the paper shows results for a threshold of $-60, -70$ and $-80$, but these choices appear somewhat arbitrary.
 
-__UP TO HERE: Read the `methclone` paper and say somethign intelligent about it. Then, finish the Methods section and move onto the `MethylationTuples` section.__
+The obvious challenge in estimating the frequency of an epiallele is in distinguishing a _real_ epiallele from a spurious one, perhaps caused by incomplete bisulfite-conversion, sequencing error or mapping error. Another difficulty, perhaps unavoidable with the present technology, is the effect of PCR amplification bias, which will bias estimates of the relative abundance of each epiallele. `methclone` uses the observed frequencies of methylation patterns as being unbiased estimates of the true epiallele frequencies, which does not attempt to account for these potential sources of bias. In contrast, `MPFE` ([http://www.bioconductor.org/packages/release/bioc/html/MPFE.html](http://www.bioconductor.org/packages/release/bioc/html/MPFE.html), [http://f1000.com/posters/browse/summary/1097258](http://f1000.com/posters/browse/summary/1097258)), an R/Bioconductor package for "[estimating] the distribution of methylation patterns [epialleles]" at m-tuples, uses a probabilistic model to account for some of these biases.
 
-`methclone` \citep{Li:2014ei}
+`MPFE` is designed to estimate the frequency of epialleles by maximising a multinomial likelihood that includes error terms for both incomplete bisulfite-conversion and sequencing error. The maximisation of this likelihood is computatationally demanding, as evidenced by the need for a "fast" algorithm that approximates the likelihood. `MPFE` is designed for amplicon bisulfite-sequencing and may not scale to whole-genome data. The input is a file containing the number of times each methylation pattern was observed at that m-tuple. Unfortunately, `MPFE` does not provide a way to create this table.
 
-- `methclone`
-- `MPFE`
-- `methpat`
-- ASM-methods are arguably epiallele detection methods
-- Methods based solely on methylation patterns don't check that the sequence is identical.
+Methods designed to detect allele-specific methylation, specifically those that are based on the observed methylation patterns \citep[e.g.,]{Fang:2012ciPeng:2012dh}, might also adapted to identify epialleles and their associated frequencies. It is worth emphasising that since all of the methods described in this section are based entirely on the observed methylation patterns, none of these actually check that the underlying DNA sequencing is identical, which strictly speaking is a requirement for the m-tuple to be an epipolymorphic locus.
 
 \section{`MethylationTuples`}\label{sec:MethylationTuples}
 
-A common thread in Section \ref{sec:downstream_analyses_of_m-tuples} is that while interesting methods have been proposed to address these questions, the software implementations are rather lacking or, at the least, very much tailored toward a particular analysis. What has been lacking is a general method for extracting methylation patterns at m-tuples and software for manipulating, analysing and visualising the results. I have made significant progress towards the first goal with `methtuple` (see Section \ref{sec:methtuple}) and now introduce `MethylationTuples` ([https://github.com/PeteHaitch/MethylationTuples](https://github.com/PeteHaitch/MethylationTuples)) to address the second missing link.
+A common thread in Section \ref{sec:downstream_analyses_of_m-tuples} is that while interesting methods have been proposed to address these questions, the software implementations are often lacking or very much tailored toward a particular analysis. What has been lacking is:
 
-`MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples.  While initially developed to support my research into co-methylation (Chapter \ref{chap:co-methylation}), the data structures developed in `MethylationTuples` are also well suited to analysing methylation entropy, allele-specific methylation, epialleles and epipolymorphism
+1. A general method for extracting methylation patterns at m-tuples,
+2. Software for manipulating, analysing and visualising these methylatoin patterns.
 
-- Could implement Fang or Peng's method for ASM, but less readily the "heterozygous SNP" method (could have a different `sample` for each parental chromosome)
+I have made significant progress towards the first goal with `methtuple` (see Section \ref{sec:methtuple}) and now introduce `MethylationTuples` ([https://github.com/PeteHaitch/MethylationTuples](https://github.com/PeteHaitch/MethylationTuples)) to address the second missing link.
 
-__TODO: Things to mention__
-- `GenomicTuples`
-  - Package build on existing class-leading infrastructure
+\subsection{Design}
+
+`MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples released under a Artistic-2.0 licence. While initially developed to support my research into co-methylation (Chapter \ref{chap:co-methylation}), the data structures developed in `MethylationTuples` are also well-suited to analysing methylation entropy, allele-specific methylation, epialleles and epipolymorphism.
+
+`MethylationTuples` is written to work with the Bioconductor project \citep{Gentleman:2004ju}[^bioc]. Bioconductor makes extensive use of R's S4 object system and encourages developers to re-use existing Bioconductor infrastructure. From a developer's perspective, this avoids the need to re-invent the wheel. And from the user's perspective, it helps avoid multiple versions of the 'wheel', each that acts slightly differently and that may not be as well-tested.
+
+[^bioc]: `MethylationTuples` has not yet been submitted to Bioconductor but its development is being published to [https://github.com/PeteHaitch/MethylationTuples](https://github.com/PeteHaitch/MethylationTuples).
+
+Bioconductor has excellent support for working with data defined on genomic ranges via the `IRanges` and `GenomicRanges` packages \cite{Lawrence:2013hi, Lawrence:2014gy}. However, genomic tuples, such as the co-ordinates of an m-tuples, do not naturally fit into this framework[^tuples_vs_ranges]. Therefore, I wrote a Bioconductor package for working with genomic tuples, rather unimaginatively called `GenomicTuples`, first released as part of Bioconductor version 3.0 ([http://www.bioconductor.org/packages/3.0/bioc/html/GenomicTuples.html](http://www.bioconductor.org/packages/3.0/bioc/html/GenomicTuples.html)). In fact, `GenomicTuples` is heavily based on the `GenomicRanges` package, with modifications for tuple-specific operations. For example, there is a tuple-specific method for the `findOverlaps` generic function to identify genomic tuples with equal co-ordinates (i.e., `type = 'equal'`). Since the classes in `GenomicTuples` extend those defined in `GenomicRanges`, these have excellent interoperability with existing Bioconductor infrastructure.
+
+[^tuples_vs_ranges]: The difference between a genomic range and a genomic tuple  can be thought of as the difference between an interval and a set. Namely, an interval includes the co-ordinates in between the start and end whereas a set only includes those co-ordinates listed in the set. For example, the genomic interval `chr3:+:[10, 12]` includes the co-ordinates `chr3:10`, `chr3:11` and `chr3:12` on the forward strand, whereas the genomic 2-tuple `chr3:+:{10, 12}` only includes the co-ordinates `chr3:10` and `chr3:12` on the forward strand.
+
+In the `MethylationTuples` package, I define the `MethPat` class to store the genomic co-ordinates of m-tuples and the associated frequencies of the methylation patterns. The `MethPat` class extends the `SummarizedExperiment` class, also defined in the `GenomicRanges` package, but makes use of classes defined in the `GenomicTuples` package to store the genomic co-ordinates of the m-tuples. A `MethPat` object is as a matrix-like object, where rows represent m-tuples of interest and columns represent samples. Data from multiple samples can be stored in a single `MethPat` object. Currently, it is a requirement that all m-tuples in a `MethPat` object have the same size ($\text{m}$). __FIGURE__ is an schematic of the `MethPat` class.
+
+\subsection{Available methods}
+
 - Describe utility functions, e.g., `collapseStrand`
 - Analytical methods currently implemented in the package
-- Compatability with other packages, e.g., `bsseq`.
-- Challenges
-- Future directions
+- Could implement Fang or Peng's method for ASM, but less readily the "heterozygous SNP" method (could have a different `sample` for each parental chromosome)
+
+\subsection{Compatability with other Bioconductor packages}
+
+- e.g., `bsseq`, `GenomicRanges`, `BiSeq`, `methyVisual`
+
+
+\subsection{Computational challenges}
+
+\subsection{Future directions}
