@@ -915,6 +915,16 @@ __No correlations of methylation levels in simulation.__
 
 A Bayesian test to replace the "Lister method" of identifying methylcytosines. I still don't think identifying methylcytosines is particularly useful.
 
+## \cite{Zheng:2014ii}
+
+`MethylPurify`
+
+> It relies on the following characteristics of the DNA methylome data: (1) all CpG cytosines within a short genomic interval (approximately 300 bp) in a pure cell population share similar methylation levels which are either mostly methylated or mostly unmethylated [36]; (2) the number of bisulfite reads mapped to each genomic interval to tumor and normal cells are in accordance with their relative compositions in the mixture, subject to standard sampling noise.
+
+Then uses a mixture model to estimate tumour and normal components.
+
+
+
 ### Simulation
 
 They use the [`BSsim`](http://122.228.158.106/BSSim) software for simulation.
