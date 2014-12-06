@@ -3,7 +3,7 @@
 # TODO: Conclusion
 # TODO: Fix missing figures
 
-phd_thesis.pdf: latex/introduction.tex latex/biology_background.tex latex/wgbs_bioinformatics_analysis.tex latex/wgbs_statistical_analysis.tex latex/datasets.tex latex/Avy_epialleles.tex latex/comethylation_review.tex latex/comethylation.tex latex/methsim.tex latex/appendix.tex
+phd_thesis.pdf: latex/introduction.tex latex/biology_background.tex latex/wgbs_bioinformatics_analysis.tex latex/wgbs_statistical_framework.tex latex/datasets.tex latex/wgbs_downstream_analyses.tex latex/comethylation_review.tex latex/comethylation.tex latex/methsim.tex latex/appendix.tex
 	mkdir -p pdf
 	cd latex; pdflatex phd_thesis; \
 	bibtex phd_thesis; \
@@ -141,7 +141,7 @@ paper_reviews.pdf: latex/phd_thesis.bib markdown/paper_reviews.md markdown/bibli
 	mv latex/paper_reviews_sc.pdf pdf/paper_reviews.pdf
 	rm latex/paper_reviews_sc*
 
-phd_thesis.html: markdown/introduction.md markdown/biology_background.md markdown/wgbs_bioinformatics_analysis.md markdown/wgbs_statistical_analysis.md markdown/datasets.md markdown/Avy_epialleles.md markdown/comethylation_review.md markdown/comethylation.md markdown/methsim.md
+phd_thesis.html: markdown/introduction.md markdown/biology_background.md markdown/wgbs_bioinformatics_analysis.md markdown/wgbs_statistical_framework.md markdown/datasets.md markdown/Avy_epialleles.md markdown/comethylation_review.md markdown/comethylation.md markdown/methsim.md
 	echo "Citations aren't yet supported!"
 	mkdir -p html
 	pandoc -s --mathjax --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o html/phd_thesis.html  markdown/introduction.md markdown/biology_background.md markdown/wgbs_bioinformatics_analysis.md markdown/wgbs_statistical_analysis.md markdown/Avy_epialleles.md markdown/comethylation_review.md markdown/comethylation.md markdown/methsim.md

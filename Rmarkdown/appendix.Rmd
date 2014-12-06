@@ -23,7 +23,7 @@ All results are computed at the chromosome-level as well as being summarised gen
 
 ### Compute the nucleotide and dinucleotide frequencies
 
-```{r, cache = TRUE}
+```{r, cache = TRUE, message = FALSE}
 library(BSgenome.Hsapiens.UCSC.hg19)
 library(knitr)
 # Nucleotide frequencies
@@ -50,7 +50,7 @@ round(100 * rowSums(df) / sum(as.numeric(df)), 1)["CG"]
 
 ### Plot the observed:expected ratio for each dinucleotide
 
-```{r dinucleotide_distribution, fig.lp = "fig:dinuclotide_distribution", dev = "pdf"}
+```{r dinucleotide_distribution, fig.lp = "fig:dinuclotide_distribution", dev = "pdf", message = FALSE}
 library(ggplot2)
 thesis_theme <- theme_classic(base_size = 12)
 thesis_theme <- theme_bw(base_size = 12)
@@ -79,7 +79,7 @@ I extract the co-ordinates of all CpGs in the human reference genome (hg19) and 
 
 I only use the autosomes, sex chromosomes and mitochondrial chromosome in all analyses, that is, I do not consider the "random", "unplaced" and "alternate haplotype" contigs in the reference genomes.
 
-```{r cpg_ipds, cache = TRUE}
+```{r cpg_ipds, cache = FALSE, message = FALSE}
 library(BSgenome.Hsapiens.UCSC.hg19)
 set.seed(666)
 
@@ -109,7 +109,7 @@ ipd_df <- data.frame(IPD = c(ipd, ipd_sim),
 
 ### Empirical cumulative distribution plot
 
-```{r cpg_ipds_cdf, dev = "pdf"}
+```{r cpg_ipds_cdf, dev = "pdf", message = FALSE}
 library(ggplot2)
 thesis_theme <- theme_classic(base_size = 12)
 thesis_theme <- theme_bw(base_size = 12)

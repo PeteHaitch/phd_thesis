@@ -87,7 +87,7 @@ In a one-group experiment a DMC is a cytosine where at least one of the samples 
 \label{tab:one-group_dmc_testing}
 \end{table}
 
-Such a contingency table can be analysed in many different ways. Mathematically, to test whether this cytosine is a DMC we wish to test the null hypothesis  $H_{0}: \beta_{i, j} = \beta_{i, 0}$ for $j = 1, \ldots, n$ against the alternative that $H_{A}: \beta_{i, j} \neq \beta_{i, 0}$ for some $j. $\beta_{i, 0}$ may be pre-specified or estimated from the data by, for example, the group average $\frac{1}{n} \sum_{j = 1}^{n} \beta_{i, j}$).
+Such a contingency table can be analysed in many different ways. Mathematically, to test whether this cytosine is a DMC we wish to test the null hypothesis  $H_{0}: \beta_{i, j} = \beta_{i, 0}$ for $j = 1, \ldots, n$ against the alternative that $H_{A}: \beta_{i, j} \neq \beta_{i, 0}$ for some $j$. $\beta_{i, 0}$ may be pre-specified or estimated from the data by, for example, the group average $\frac{1}{n} \sum_{j = 1}^{n} \beta_{i, j}$).
 
 To the best of my knowledge, none of the software specifically written for analysing differential methylation analyses is able to test this hypothesis. This is because these software are almost all designed for two-group experiments. However, this hypothesis is readily testing using routine statistical methods. As an example, consider the following data:
 
@@ -336,7 +336,7 @@ In the `MethylationTuples` package, I define the `MethPat` class to store the ge
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/MethPat.pdf}
-\caption{Schematic of the \texttt{MethPat} class, shown here for 3-tuples. Each row represents a 3-tuple to which the genomic co-ordinates of the tuples (green box) and the frequencies of the methylation patterns (grey box) are aligned. The frequencies of each methylation pattern --- $MMM, MMU, \ldots, UUU$ --- are stored as separate matrices where the columns represent samples --- $S_{1}, \ldots, $S_{n}$. Some sample may have now have any sequencing coverage for a particular m-tuple, in which case the corresponding frequencies are recorded as \texttt{NA}.}
+\caption{Schematic of the \texttt{MethPat} class, shown here for 3-tuples. Each row represents a 3-tuple to which the genomic co-ordinates of the tuples (green box) and the frequencies of the methylation patterns (grey box) are aligned. The frequencies of each methylation pattern --- $MMM, MMU, \ldots, UUU$ --- are stored as separate matrices where the columns represent samples --- $S_{1}, \ldots, S_{n}$. Some sample may have now have any sequencing coverage for a particular m-tuple, in which case the corresponding frequencies are recorded as \texttt{NA}.}
 \label{fig:MethPat}
 \end{figure}
 
@@ -376,14 +376,14 @@ I have used the `MethylationTuples` package to analyses datasets containing up t
 \centering
 \begin{tabular}{@{}lllll@{}}
 \toprule
-& \texttt\{pryr::object\_size(x)\} & \texttt\{nrow\} & Number of assays & Percentage of \texttt\{NA\} and $0$ values \\ \midrule
+& \texttt{pryr::object\_size(x)} & \texttt{nrow} & Number of assays & Percentage of \texttt{NA} and $0$ values \\ \midrule
 1-tuples                                 & $5.9$ GB                        & $56,348,522$    & $2$              & $28\%$                                     \\
 2-tuples                                 & $20.1$ GB                        & $100,586,237$   & $4$              & $80\%$                                     \\
-2-tuples (\texttt\{--all-combinations\}) & $60.0$ GB                          & $299,814,999$   & $4$              & $78\%$                                     \\
+2-tuples (\texttt{--all-combinations}) & $60.0$ GB                          & $299,814,999$   & $4$              & $78\%$                                     \\
 3-tuples                                 & $43.3$ GB                        & $109,376,348$   & $8$              & $93\%$                                     \\
 4-tuples                                 & $80.5$ GB                        & $102,625,758$   & $16$             &                                            \\ \bottomrule
 \end{tabular}
-\caption{Size of \texttt{MethPat} objects for the \em{EPISCOPE} data. All m-tuples are stranded. The size of the \code{MethPat} object is computed using the \texttt{object_size} function in the \texttt{pryr} package (\url{http://cran.r-project.org/web/packages/pryr/index.html}). The number of rows (\texttt{nrow}) corresponds to the number of m-tuples in the object. The number of assays is $2^{\text{m}}$, where $m$ is the size of the m-tuples. The final column is a measure of how sparse the data are --- a $0$ values means that particular methylation pattern was not observed in that particular sample and an `NA` value means that that m-tuple was not observed in that particular sample.}
+\caption{Size of \texttt{MethPat} objects for the \em{EPISCOPE} data. All m-tuples are stranded. The size of the \texttt{MethPat} object is computed using the \texttt{object\_size} function in the \texttt{pryr} package (\url{http://cran.r-project.org/web/packages/pryr/index.html}). The number of rows (\texttt{nrow}) corresponds to the number of m-tuples in the object. The number of assays is $2^{\text{m}}$, where $m$ is the size of the m-tuples. The final column is a measure of how sparse the data are --- a $0$ values means that particular methylation pattern was not observed in that particular sample and an \texttt{NA} value means that that m-tuple was not observed in that particular sample.}
 \label{tab:methpat_sparsity}
 \end{table}
 
