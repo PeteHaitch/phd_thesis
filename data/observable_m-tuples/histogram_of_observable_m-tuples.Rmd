@@ -1,0 +1,121 @@
+---
+title: "Observable m-tuples"
+author: "Peter Hickey"
+date: "12/6/2014"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(scales)
+thesis_theme <- theme_classic(base_size = 20)
+thesis_theme <- theme_bw(base_size = 20)
+```
+
+# EPISCOPE
+
+```{r}
+dataset <- "EPISCOPE"
+hist <- lapply(paste0(dataset, "/",
+                      list.files(dataset, "\\.CG\\_per\\_read\\.hist")), 
+               read.table, header = TRUE)
+sn <- gsub("\\.CG\\_per\\_read\\.hist", "", 
+           list.files(dataset, "\\.CG\\_per\\_read\\.hist"))
+hist_df <- bind_rows(hist) %>% 
+  mutate(Sample = rep(sn, sapply(hist, nrow))) %>%
+  group_by(Sample) %>%
+  mutate(Proportion = count / sum(as.numeric(count)))
+g <- hist_df %>%
+  ggplot(aes(x = n, y = Proportion * 100)) + 
+  geom_bar(stat = "identity") + 
+  facet_wrap(~ Sample, ncol = 4, nrow = 3) +
+  coord_cartesian(xlim = c(-1, 8.5)) + 
+  scale_y_continuous(label = comma) + 
+  xlab("Number of CpGs per read\n(Axis truncated at 8)") + 
+  ylab("Percentage of total reads") + 
+  ggtitle(paste0(dataset, ": Number of CpGs per read")) +
+  thesis_theme
+ggsave(paste0(dataset, "_CpGs_per_read.pdf"), g, width = 16, height = 9)
+```
+
+# Lister
+
+```{r}
+dataset <- "Lister"
+hist <- lapply(paste0(dataset, "/",
+                      list.files(dataset, "\\.CG\\_per\\_read\\.hist")), 
+               read.table, header = TRUE)
+sn <- gsub("\\.CG\\_per\\_read\\.hist", "", 
+           list.files(dataset, "\\.CG\\_per\\_read\\.hist"))
+sn <- gsub("DM\\_", "", sn)
+hist_df <- bind_rows(hist) %>% 
+  mutate(Sample = rep(sn, sapply(hist, nrow))) %>%
+  group_by(Sample) %>%
+  mutate(Proportion = count / sum(as.numeric(count)))
+g <- hist_df %>%
+  ggplot(aes(x = n, y = Proportion * 100)) + 
+  geom_bar(stat = "identity") + 
+  facet_wrap(~ Sample, ncol = 5, nrow = 4) +
+  coord_cartesian(xlim = c(-1, 8.5)) + 
+  scale_y_continuous(label = comma) + 
+  xlab("Number of CpGs per read\n(Axis truncated at 8)") + 
+  ylab("Percentage of total reads") + 
+  ggtitle(paste0(dataset, ": Number of CpGs per read")) +
+  thesis_theme
+ggsave(paste0(dataset, "_CpGs_per_read.pdf"), g, width = 16, height = 9)
+```
+
+# Seisenberger
+
+```{r}
+dataset <- "Seisenberger"
+hist <- lapply(paste0(dataset, "/",
+                      list.files(dataset, "\\.CG\\_per\\_read\\.hist")), 
+               read.table, header = TRUE)
+sn <- gsub("\\.CG\\_per\\_read\\.hist", "", 
+           list.files(dataset, "\\.CG\\_per\\_read\\.hist"))
+sn <- gsub("DM\\_", "", sn)
+hist_df <- bind_rows(hist) %>% 
+  mutate(Sample = rep(sn, sapply(hist, nrow))) %>%
+  group_by(Sample) %>%
+  mutate(Proportion = count / sum(as.numeric(count)))
+g <- hist_df %>%
+  ggplot(aes(x = n, y = Proportion * 100)) + 
+  geom_bar(stat = "identity") + 
+  facet_wrap(~ Sample, ncol = 3, nrow = 1) +
+  coord_cartesian(xlim = c(-1, 8.5)) + 
+  scale_y_continuous(label = comma) + 
+  xlab("Number of CpGs per read\n(Axis truncated at 8)") + 
+  ylab("Percentage of total reads") + 
+  ggtitle(paste0(dataset, ": Number of CpGs per read")) +
+  thesis_theme
+ggsave(paste0(dataset, "_CpGs_per_read.pdf"), g, width = 16, height = 9)
+```
+
+# Ziller
+
+```{r}
+dataset <- "Ziller"
+hist <- lapply(paste0(dataset, "/",
+                      list.files(dataset, "\\.CG\\_per\\_read\\.hist")), 
+               read.table, header = TRUE)
+sn <- gsub("\\.CG\\_per\\_read\\.hist", "", 
+           list.files(dataset, "\\.CG\\_per\\_read\\.hist"))
+sn <- gsub("\\.rmdup", "", sn)
+hist_df <- bind_rows(hist) %>% 
+  mutate(Sample = rep(sn, sapply(hist, nrow))) %>%
+  group_by(Sample) %>%
+  mutate(Proportion = count / sum(as.numeric(count)))
+g <- hist_df %>%
+  ggplot(aes(x = n, y = Proportion * 100)) + 
+  geom_bar(stat = "identity") + 
+  facet_wrap(~ Sample, ncol = 5, nrow = 4) +
+  coord_cartesian(xlim = c(-1, 8.5)) + 
+  scale_y_continuous(label = comma) + 
+  xlab("Number of CpGs per read\n(Axis truncated at 8)") + 
+  ylab("Percentage of total reads") + 
+  ggtitle(paste0(dataset, ": Number of CpGs per read")) +
+  thesis_theme
+ggsave(paste0(dataset, "_CpGs_per_read.pdf"), g, width = 16, height = 9)
+```
