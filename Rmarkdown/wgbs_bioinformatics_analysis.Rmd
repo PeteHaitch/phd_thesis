@@ -38,20 +38,20 @@ More important is the identification and removal of contaminating sequences. `Fa
 1. Reads containing adapter contamination will generally not map to the reference genome, meaning these reads go to waste.
 2. If they do map, then this will result incorrect inferences - the 'garbage in, garbage out' maxim.
 
-Using a tool such as `Trim Galore!` ([http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/](http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)) or `cutadapt` \cite{Martin:2011va}, the reads can be _trimmed_ to remove these contaminants. Reads might also be trimmed to remove low quality positions, which are common at the 3' end of reads, although this isn't as essential as trimming to remove contaminants.
+Using a tool such as `Trim Galore!` ([http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/](http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)) or `cutadapt` \citep{Martin:2011va}, the reads can be _trimmed_ to remove these contaminants. Reads might also be trimmed to remove low quality positions, which are common at the 3' end of reads, although this isn't as essential as trimming to remove contaminants.
 
 \section{Read mapping and post-processing of mapped reads}\label{sec:mapping_and_post-processing}
 
-Read mapping is complicated by the bisulfite-treatment of the DNA. Following bisulfite-treatment, the DNA fragments are now mostly composed of three bases rather than four, which means there are many more sequence mismatches between a read and its true mapping location. Simply using standard read mapping software and allowing for more mismatches would result in many reads mapping to multiple locations in the reference genome. Instead, a field of read mapping software dedicated to bisulfite-sequencing data has developed. Several review articles have tried to summarise and compare the various approaches \cite{Chatterjee:2012ft, Krueger:2012ks, KundeRamamoorthy:2014fj}.
+Read mapping is complicated by the bisulfite-treatment of the DNA. Following bisulfite-treatment, the DNA fragments are now mostly composed of three bases rather than four, which means there are many more sequence mismatches between a read and its true mapping location. Simply using standard read mapping software and allowing for more mismatches would result in many reads mapping to multiple locations in the reference genome. Instead, a field of read mapping software dedicated to bisulfite-sequencing data has developed. Several review articles have tried to summarise and compare the various approaches \citep{Chatterjee:2012ft, Krueger:2012ks, KundeRamamoorthy:2014fj}.
 
 These bisulfite-sequencing read mappers take one of two approaches:
 
 1. Methylation-aware mismatch penalties.
 2. _In silico_ bisulfite-conversion of reads and reference genomes.
 
-While methylation-aware mappers provide the highest efficiency, these suffer from a bias whereby methylated reads are preferentially mapped over unmethylated reads \cite{Krueger:2012ks}. This biases downstream inference and means that these mappers are generally less popular. I will instead focus on the _in silico_ bisulfite-conversion mappers, called as such because of a key step taken by these in the mapping process.
+While methylation-aware mappers provide the highest efficiency, these suffer from a bias whereby methylated reads are preferentially mapped over unmethylated reads \citep{Krueger:2012ks}. This biases downstream inference and means that these mappers are generally less popular. I will instead focus on the _in silico_ bisulfite-conversion mappers, called as such because of a key step taken by these in the mapping process.
 
-_In silico_ bisulfite-conversion mappers convert all cytosines to thymines (resp. guanines to adenines) of the forward (resp. reverse) strand from the reference genome. They then take each read and create two _in silico_ bisulfite-converted versions of it[^2_reads]: the CT-read replaces all residual thymines with cytosines and the GA-read replaces all residual guanines with adenines. The CT-read is mapped against the CT-genome and the GA-read is mapped against the GA-genome using a standard mapping tools such as `Bowtie1` \cite{Langmead:2009fv}, `Bowtie2` \cite{Langmead:2012jh} or `bwa`  \cite{Li:2009fi, Li:2010bl}[^non_directional].
+_In silico_ bisulfite-conversion mappers convert all cytosines to thymines (resp. guanines to adenines) of the forward (resp. reverse) strand from the reference genome. They then take each read and create two _in silico_ bisulfite-converted versions of it[^2_reads]: the CT-read replaces all residual thymines with cytosines and the GA-read replaces all residual guanines with adenines. The CT-read is mapped against the CT-genome and the GA-read is mapped against the GA-genome using a standard mapping tools such as `Bowtie1` \citep{Langmead:2009fv}, `Bowtie2` \citep{Langmead:2012jh} or `bwa`  \citep{Li:2009fi, Li:2010bl}[^non_directional].
 
 [^2_reads]: Two versions are made because we don't know _a priori_ from which of the two strands the read originated.
 
@@ -59,7 +59,7 @@ _In silico_ bisulfite-conversion mappers convert all cytosines to thymines (resp
 
 Depending on the exact settings used, the mapper reports the 'best' location of each read with respect to the two reference genomes. It reports the original sequence of the read in the output file so that the methylation status of each position can be inferred by comparing it to the corresponding reference sequence.
 
-_In silico_ bisulfite-conversion mappers avoid the bias inherent in the methylation-aware mappers because all reads, regardless of methylation status, 'look the same' to the mapper. However, they do suffer from a slight loss in mapping efficiency \cite{Krueger:2012ks}.
+_In silico_ bisulfite-conversion mappers avoid the bias inherent in the methylation-aware mappers because all reads, regardless of methylation status, 'look the same' to the mapper. However, they do suffer from a slight loss in mapping efficiency \citep{Krueger:2012ks}.
 
 Table \ref{tab:bs-seq_mappers} list some popular bisulfite-sequencing read mappers, which have been selected to highlight the variety of back-ends used by these software.
 
@@ -68,28 +68,28 @@ Table \ref{tab:bs-seq_mappers} list some popular bisulfite-sequencing read mappe
 \begin{tabular}{@{}lll@{}}
 \toprule
 Name      & Reference                                            & Underlying mapping software \\ \midrule
-Bismark   & \cite{Krueger:2011eb}                              & Bowtie1 or Bowtie2          \\
-bwa-meth  & \cite{Pedersen:2014wt}                             & bwa-mem                     \\
-BSMAP     & \cite{Xi:2009bd}                                   & SOAP                        \\
+Bismark   & \citet{Krueger:2011eb}                              & Bowtie1 or Bowtie2          \\
+bwa-meth  & \citet{Pedersen:2014wt}                             & bwa-mem                     \\
+BSMAP     & \citet{Xi:2009bd}                                   & SOAP                        \\
 Novoalign & \url{http://www.novocraft.com/products/novoalign/} & Novoalign                   \\ \bottomrule
 \end{tabular}
 \caption{Four popular bisulfite-sequencing read mappers, selected to highlight the variety of back-ends used by these software.}
 \label{tab:bs-seq_mappers}
 \end{table}
 
-Each of these aligners can report the output in the standard Sequence Alignment/Map format (`SAM`) or it's binary equivalent, `BAM` \cite{Li:2009ka}. However, there is no agreed upon standard in the `SAM` specification for encoding the data specific to bisulfite-sequencing, which means that each mapper does this in a slightly different way. This makes it difficult to develop downstream analysis tools.
+Each of these aligners can report the output in the standard Sequence Alignment/Map format (`SAM`) or it's binary equivalent, `BAM` \citep{Li:2009ka}. However, there is no agreed upon standard in the `SAM` specification for encoding the data specific to bisulfite-sequencing, which means that each mapper does this in a slightly different way. This makes it difficult to develop downstream analysis tools.
 
 Read mapping is not perfect and produces both false positive and false negative results. False positives are due to reads mapped to the wrong location and reads mapped to multiple locations with equal mapping scores. False negatives are reads that are not mapped to any location; these reads are effectively lost from any downstream analysis. The parameter settings used by the mapping software determine the false positive and false negative rates.
 
 There are biological and technical reasons why mapping against a reference genome can produce these errors. Biologically, if the sample contains sequences that are too genetically divergent from the reference genome then these sequences will be difficult, even impossible, to map. A particularly problematic class of sequences are those from repetitive regions of the genome. These repetitive sequences will map to multiple locations in the reference genome equally well. Furthermore, the number of times these repetitive sequences occur differs between the reference genome and sample's genome.
 
-Technically, reads from Illumina sequencing are often too short to resolve the mapping location of these repetitive sequences. Resolving the mapping location of repetitive sequences can be achieved by using other sequencing technologies, such as Pacific Biosciences SMRT technology \cite{Flusberg:2010hra}, which produces longer reads.
+Technically, reads from Illumina sequencing are often too short to resolve the mapping location of these repetitive sequences. Resolving the mapping location of repetitive sequences can be achieved by using other sequencing technologies, such as Pacific Biosciences SMRT technology \citep{Flusberg:2010hra}, which produces longer reads.
 
 Another source of technical error in read mapping is really due to sequencing error. A sequencing error can transform a uniquely mapping read to one that maps equally well to multiple locations or, worse still, a read that maps uniquely to a single, but incorrect, location. Sequencing errors can also corrupt a read so badly that it no longer can be mapped, which leads to that read being a false negative. In practice, most people try to mitigate these problems through their choice of parameters used by the read mapping software.
 
-Ideally, mapping software assigns the degree of confidence it has that the read is correctly mapped via a mapping quality score (`mapQ`). In theory, reads might be down-weighted in downstream analyses based on the mapping quality score. However, these mapping quality scores are often poorly calibrated, particularly for methylC-seq data, which makes them less useful. `Bismark` \cite{Krueger:2011eb}, a popular bisulfite-sequencing mapping software, only recently introduced mapping quality scores (`v0.12.1` released in April 2014).
+Ideally, mapping software assigns the degree of confidence it has that the read is correctly mapped via a mapping quality score (`mapQ`). In theory, reads might be down-weighted in downstream analyses based on the mapping quality score. However, these mapping quality scores are often poorly calibrated, particularly for methylC-seq data, which makes them less useful. `Bismark` \citep{Krueger:2011eb}, a popular bisulfite-sequencing mapping software, only recently introduced mapping quality scores (`v0.12.1` released in April 2014).
 
-The above problems are general challenges of read mapping and are not specific to bisulfite-sequencing data, although the reduced complexity of bisulfite-sequencing reads exacerbates these issues. The difficulty of mapping to repetitive regions of the genome is a particularly frustrating one for  bisulfite-sequencing data. Repetitive sequences, such as LINEs and SINEs, are frequently methylated to prevent transcription and so are of interest to researchers studying DNA methylation. The low mapping efficiencies of these regions means that there is often limited data of these elements from bisulfite-sequencing data (__TODO: CHECK IN MY DATA AND REPORT COVERAGE__).
+The above problems are general challenges of read mapping and are not specific to bisulfite-sequencing data, although the reduced complexity of bisulfite-sequencing reads exacerbates these issues. The difficulty of mapping to repetitive regions of the genome is a particularly frustrating one for  bisulfite-sequencing data. Repetitive sequences, such as LINEs and SINEs, are typically methylated in order to prevent transcription and are often of interest to researchers studying DNA methylation. The low mapping efficiencies of these regions means that there is often limited or less reliable data for these elements from bisulfite-sequencing data.
 
 \subsection{PCR duplicates}\label{sec:pcr_duplicates}
 
@@ -97,7 +97,7 @@ PCR amplification of the input DNA is a common step in creating a library for hi
 
 In bisulfite-sequencing data, PCR duplicates containing the a methylation locus can result in a biased estimate of the methylation level at that locus. This is because the sequenced reads do not accurately represent the true methylation levels of the sample.
 
-Generally, there is no way to tell based on sequencing data if a read is truly a PCR duplicate. However, it is relatively easy to identify suspected PCR duplicates (which are almost always inaccurately referred to as "PCR duplicates"[^pcr_dup]). Software to identify PCR duplicates include the `MarkDuplicates` function that is a part of the `Picard` software ([http://broadinstitute.github.io/picard/](http://broadinstitute.github.io/picard/)), the `rmdup` function that is a part of the `SAMtools` software \cite{Li:2009ka} and `SAMBLASTER` \citep{Faust:2014hf}. These software use mapped reads from a `SAM/BAM` file as input. There are subtle differences in how each method calls PCR duplicates. As an example, this is how `Picard`'s `MarkDuplicates` function works:
+Generally, there is no way to tell based on sequencing data if a read is truly a PCR duplicate. However, it is relatively easy to identify suspected PCR duplicates (which are almost always inaccurately referred to as "PCR duplicates"[^pcr_dup]). Software to identify PCR duplicates include the `MarkDuplicates` function that is a part of the `Picard` software ([http://broadinstitute.github.io/picard/](http://broadinstitute.github.io/picard/)), the `rmdup` function that is a part of the `SAMtools` software \citep{Li:2009ka} and `SAMBLASTER` \citep{Faust:2014hf}. These software use mapped reads from a `SAM/BAM` file as input. There are subtle differences in how each method calls PCR duplicates. As an example, this is how `Picard`'s `MarkDuplicates` function works:
 
 [^pcr_dup]: The distinction between suspected PCR duplicates and true PCR duplicates is rarely made, probably because the phrase is so clunky. Suspected PCR duplicates are almost always referred to as PCR duplicates with the implicit assumption that the reader is aware that these very likely include false positive calls. Consistent with the literature, I will use the term PCR duplicates when I refer to reads identified as PCR duplicates by some software. I will use _true_ PCR duplicates when I need to distinguish the two concepts.
 
@@ -134,63 +134,63 @@ read.mbias <- function(file) {
   header_lines <- sapply(X = x, function(xx) {
     grepl(pattern = 'context', x = xx)
     })
-    y <- vector(mode = "list", length = sum(header_lines))
-    names(y) <- x[header_lines]
+  y <- vector(mode = "list", length = sum(header_lines))
+  names(y) <- x[header_lines]
 
-    # z indexes the lines containing M-bias values.
-    z <- sapply(X = x, function(xx) {
-      grep(pattern = "context|^=|position", x= xx, invert = TRUE)
-      })
-      dz <- diff(z)
-      next_context_idx <- c(which(dz > 1), nrow(z))
-      colnames_idx <- sapply(X = x, function(xx) {
-        grep(pattern = "position", x = xx)
-        })[1]
-        colnames <- strsplit(x = x[colnames_idx, ], split = "\t")[[1]]
+  # z indexes the lines containing M-bias values.
+  z <- sapply(X = x, function(xx) {
+    grep(pattern = "context|^=|position", x= xx, invert = TRUE)
+    })
+  dz <- diff(z)
+  next_context_idx <- c(which(dz > 1), nrow(z))
+  colnames_idx <- sapply(X = x, function(xx) {
+    grep(pattern = "position", x = xx)
+    })[1]
+  colnames <- strsplit(x = x[colnames_idx, ], split = "\t")[[1]]
 
-        # Loop over the lines in the file.
-        for (i in seq_along(next_context_idx)) {
-          # Note the "+4" to skip the intermediate 'header' rows
-          start_idx <- ifelse(i == 1, 4, z[next_context_idx[i - 1]] + 4)
-          end_idx <- z[next_context_idx[i]]  
-          yy <- x[seq(from = start_idx, to = end_idx, by = 1), ]
-          y[[i]] <- do.call("rbind", lapply(yy, function(yyy, colnames) {
-            tmp <- strsplit(yyy, split = "\t")
-            val <- data.frame(as.integer(tmp[[1]][1]),
-            as.integer(tmp[[1]][2]),
-            as.integer(tmp[[1]][3]),
-            as.numeric(tmp[[1]][4]),
-            as.integer(tmp[[1]][5]))
-            colnames(val) <- colnames
-            return(val)
-            }, colnames = colnames))
-          }
-          y <- do.call("rbind", y)
-          y$Context <- strtrim(rownames(y), width = 3)
+  # Loop over the lines in the file.
+  for (i in seq_along(next_context_idx)) {
+    # Note the "+4" to skip the intermediate 'header' rows
+    start_idx <- ifelse(i == 1, 4, z[next_context_idx[i - 1]] + 4)
+    end_idx <- z[next_context_idx[i]]  
+    yy <- x[seq(from = start_idx, to = end_idx, by = 1), ]
+    y[[i]] <- do.call("rbind", lapply(yy, function(yyy, colnames) {
+      tmp <- strsplit(yyy, split = "\t")
+      val <- data.frame(as.integer(tmp[[1]][1]),
+                        as.integer(tmp[[1]][2]),
+                        as.integer(tmp[[1]][3]),
+                        as.numeric(tmp[[1]][4]),
+                        as.integer(tmp[[1]][5]))
+      colnames(val) <- colnames
+      return(val)
+      }, colnames = colnames))
+    }
+  y <- do.call("rbind", y)
+  y$Context <- strtrim(rownames(y), width = 3)
 
-          # Add R1/R2 annotation if paired-end data
-          if (grepl(pattern = "R1", x = rownames(y)[1])){
-            y$Read <- ifelse(grepl(pattern = "R1", x = rownames(y)), "R1", "R2")
-            } else{
-              y$Read <- "SE"
-            }
-            rownames(y) <- NULL
+  # Add R1/R2 annotation if paired-end data
+  if (grepl(pattern = "R1", x = rownames(y)[1])){
+    y$Read <- ifelse(grepl(pattern = "R1", x = rownames(y)), "R1", "R2")
+    } else{
+      y$Read <- "SE"
+      }
+  rownames(y) <- NULL
 
-            # Simplify column names
-            colnames(y) <- c('read_pos', 'M', 'U', 'perc_M', 'total',
-            'methylation_type', 'read')
+  # Simplify column names
+  colnames(y) <- c('read_pos', 'M', 'U', 'perc_M', 'total',
+                   'methylation_type', 'read')
 
-            # Re-order columns
-            y <- y[, c('read', 'read_pos', 'methylation_type', 'M', 'U', 'total',
-            'perc_M')]
+  # Re-order columns
+  y <- y[, c('read', 'read_pos', 'methylation_type', 'M', 'U', 'total',
+             'perc_M')]
 
-            # Replace CpG with CG
-            y$methylation_type <- ifelse(y$methylation_type == 'CpG', 'CG',
-            y$methylation_type)
+  # Replace CpG with CG
+  y$methylation_type <- ifelse(y$methylation_type == 'CpG', 'CG',
+                               y$methylation_type)
 
-            # Convert to an MBias object.
-            return(y)
-          }
+  # Convert to an MBias object.
+  return(y)
+  }
 
 #files <- paste0("../M-bias/", list.files("../M-bias/"))
 # ADS
@@ -254,13 +254,13 @@ mbias %>%
   scale_color_discrete(guide = guide_legend(title = "Methylation type"))
 ```
 
-The loss of the one-to-one relationship between sequencing cycle and read-position cannot be avoided if reads are pre-trimmed because the trimming information is not preserved. \cite{Hansen:2012gr} suggest a separate M-bias plot for each read-length, which will help mitigate the effect of confounding between read-position and sequencing-cycle[^read_trimming]. However, if trimming is performed during the alignment then all the necessary information is retained and the x-axis of M-bias plots would be 'sequencing cycle' rather than 'read-position', thus avoiding the issue entirely.
+The loss of the one-to-one relationship between sequencing cycle and read-position cannot be avoided if reads are pre-trimmed because the trimming information is not preserved. \citet{Hansen:2012gr} suggest a separate M-bias plot for each read-length, which will help mitigate the effect of confounding between read-position and sequencing-cycle[^read_trimming]. However, if trimming is performed during the alignment then all the necessary information is retained and the x-axis of M-bias plots would be 'sequencing cycle' rather than 'read-position', thus avoiding the issue entirely.
 
 [^read_trimming]: Generally, this would also require that methylation calling is performed separately on each read length because most methylation callers are unable to deal with different M-bias profiles for different read lengths.
 
 \subsubsection{Identifying M-bias}\label{sec:identifying_m-bias}
 
-In practice, the M-bias curves for each sample are visually inspected to look for evidence of M-bias, i.e., read-positions whose methylation levels are 'too far away' from the vast majority of read-positions. A minor problem with this approach is that the user may (unconsciously) use a different cutoff for each sample. For example, it is more difficult to determine an appropriate cutoff when there is a gradual slope in the M-bias plot than when there is a clear jump (__TODO: An example where there last few read-positions are more than `cutoff` from the median but due to a gradual slope vs. an example where a single position is more than `cutoff` from the median due to a spike__). This motivated me to include functionality in my `MethylationTuples` R package ([https://github.com/PeteHaitch/MethylationTuples](https://github.com/PeteHaitch/MethylationTuples))  to perform more systematic processing of M-bias results. These are implemented in the `MBias` class, its associated methods, `trim` and `plot`, and the helper function `readMBias`.
+In practice, the M-bias curves for each sample are visually inspected to look for evidence of M-bias, i.e., read-positions whose methylation levels are 'too far away' from the vast majority of read-positions. It is rather a subjective decision to make. Two problems that I found were in maintaining consistency across samples and in determining where to draw the line when there is no dramatic 'spike' in the M-bias. For example, in Figure \ref{fig:E18VA_M-bias} it is clear that there are problems at the start and end of both read 1 and read 2, as well as a big problem at read-position 101 in read 2. What is less clear is where to draw the line on the gradual decay downwards toward the end of read 1 and towards the start of read 2. This motivated me to write a few simple functions to do perform more systematic processing of M-bias results. These are included in the `MethylationTuples` R package, described in Section \ref{sec:MethylationTuples}, with the `MBias` class, its associated methods, `trim` and `plot`, and the helper function `readMBias`.
 
 For each sample, M-bias is computed separately for each methylation type because the level of methylation varies widely between CG and non-CG methylation types. For paired-end sequencing experiments, it is also done separately for each of _read 1_ and _read 2_ because M-bias is very different for these two mates and also because _read 2_ often has a slightly lower average level of methylation than does _read 1_ (e.g., see Figure \ref{fig:ADS_M-bias}).
 
@@ -288,7 +288,7 @@ One idea is to weight methylation calls by the level of M-bias. A downside to th
 
 There are several other sources of bias when making methylation calls. Some are what I call technical biases - those driven by the sequencing protocol and processing of the data - while others I call biological biases - those driven by measuring something other than what you thought you were measuring.
 
-Apart from M-bias, technical biases include sequencing and alignment errors, which can both give rise to spurious or otherwise incorrect methylation calls in obvious ways. Biological biases include cellular heterogeneity and sequence variation at or nearby to methylation loci. I discuss the latter in __TODO: WHERE???__
+Apart from M-bias, technical biases include sequencing and alignment errors, which can both give rise to spurious or otherwise incorrect methylation calls in obvious ways. Biological biases include cellular heterogeneity and sequence variation at or nearby to methylation loci.
 
 \subsubsection{Cellular heterogeneity}\label{sec:cellular_heterogeneity}
 
@@ -350,7 +350,7 @@ Certain variants, in particular (heterozygous) $C>T$ SNPs, are more difficult to
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/Bis-SNP.pdf}
-\caption{`Bis-SNP` is able to distinguish unmethylated cytosines (site 1), from cytosine to thymine genetic variants (site 2) and thymine to (unmethylated) cytosine genetic variants (site 3) by examining the reads mapped to the reverse strand. For all three loci, the reads mapped to the forward strand contain a thymine. However, it is the base on the reverse strand that reveal the true genotype. When combined with the reference genome it can be inferred whether the sample's genome, which isn't directly observed, has a genetic variant at that location. This is only possible with bisulfite-data generated using the directional protocol. This figure is adapted from \cite{Liu:2012ge}.}
+\caption{`Bis-SNP` is able to distinguish unmethylated cytosines (site 1), from cytosine to thymine genetic variants (site 2) and thymine to (unmethylated) cytosine genetic variants (site 3) by examining the reads mapped to the reverse strand. For all three loci, the reads mapped to the forward strand contain a thymine. However, it is the base on the reverse strand that reveal the true genotype. When combined with the reference genome it can be inferred whether the sample's genome, which isn't directly observed, has a genetic variant at that location. This is only possible with bisulfite-data generated using the directional protocol. This figure is adapted from \citet{Liu:2012ge}.}
 \label{fig:Bis-SNP}
 \end{figure}
 
@@ -462,7 +462,38 @@ B: {1, 2, 4}, {2, 4, 5}, {1, 2, 5}, {1, 4, 5}
 C: {2, 3, 4}
 ```
 
-__TODO: Size of m-tuples histogram__
+The number of CpGs per read for the Lister data is shown in Figure \ref{fig:Lister_cpgs_per_read}. Longer reads, and paired-end reads, contain more methylation loci and so are more informative for analyses using m-tuples. This can be seen by comparing, for example, the _ADS_ and _HSF1_ samples. Samples sequenced more deeply will have more reads per m-tuple, although this can't be seen in these plots since they are normalised by sequencing depth.
+
+```{r cpgs_per_read, fig.lp = "fig:Lister_cpgs_per_read", dev = "pdf", eval = TRUE, echo = FALSE, message = FALSE, fig.cap = "Number of CpGs per read for the Lister data."}
+library(dplyr)
+library(ggplot2)
+library(scales)
+thesis_theme <- theme_classic(base_size = 20)
+thesis_theme <- theme_bw(base_size = 20)
+dataset <- "Lister"
+hist <- lapply(paste0("../data/observable_m-tuples/", dataset, "/",
+                      list.files(paste0("../data/observable_m-tuples/",
+                                        dataset), "\\.CG\\_per\\_read\\.hist")),
+               read.table, header = TRUE)
+sn <- gsub("\\.CG\\_per\\_read\\.hist", "",
+           list.files(paste0("../data/observable_m-tuples/",
+                             dataset), "\\.CG\\_per\\_read\\.hist"))
+sn <- gsub("DM\\_", "", sn)
+hist_df <- bind_rows(hist) %>%
+  mutate(Sample = rep(sn, sapply(hist, nrow))) %>%
+  group_by(Sample) %>%
+  mutate(Proportion = count / sum(as.numeric(count)))
+hist_df %>%
+  ggplot(aes(x = n, y = Proportion * 100)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~ Sample, ncol = 5, nrow = 4) +
+  coord_cartesian(xlim = c(-1, 8.5)) +
+  scale_y_continuous(label = comma) +
+  xlab("Number of CpGs per read\n(Axis truncated at 8)") +
+  ylab("Percentage of total reads") +
+  ggtitle(paste0(dataset, ": Number of CpGs per read")) +
+  thesis_theme
+```
 
 \subsection{Motivation}
 
@@ -473,9 +504,9 @@ __TODO: Size of m-tuples histogram__
 \begin{tabular}{@{}lllll@{}}
 \toprule
 Software           & Reference                                & Input                                              & Designed for targeted sequencing & Other limitations                                                                \\ \midrule
-\texttt{methclone} & \cite{Li:2014ei}                       & Bismark BAM files                                  & No, although example uses eRRBS  & \textbf{TODO: Try installing. Suspect you can't get actual methylation calls.} \\
+\texttt{methclone} & \citet{Li:2014ei}                       & Bismark BAM files                                  & No, although example uses eRRBS  & \textbf{TODO: Try installing. Suspect you can't get actual methylation calls.} \\
 \texttt{methpat}  & \url{https://github.com/bjpop/methpat} & Output of \texttt{bismark\_methylation\_extractor} & Yes (amplicons)                  &                                                                                  \\
-\texttt{DMEAS}     & \cite{He:2013cj}                       & Output of \texttt{bismark\_methylation\_extractor} &                                  & Windows operating system only. Perl code only available as PDF file.             \\ \bottomrule
+\texttt{DMEAS}     & \citet{He:2013cj}                       & Output of \texttt{bismark\_methylation\_extractor} &                                  & Windows operating system only. Perl code only available as PDF file.             \\ \bottomrule
 \end{tabular}
 \caption{My caption}
 \label{tab:other_m-tuple_methylation_callers}
@@ -498,13 +529,11 @@ chr1    +       471     484     489     1       0       0       0       2       
 
 ```
 
-__TODO: Show example of `methtuple` output__
-
 \subsection{Performance}
 
 I have used `methtuple` to perform methylation calling at CpG m-tuples, $m = 1, \ldots, 8$, for over 50 whole-genome bisulfite-sequencing samples from the EPISCOPE, Lister, Seisenberger and Ziller datasets. To improve the performance I process split each sample by chromosome and process each chromosome in parallel. This is implemented in a helper script ([https://github.com/PeteHaitch/methtuple/blob/master/helper_scripts/run_methtuple.sh](https://github.com/PeteHaitch/methtuple/blob/master/helper_scripts/run_methtuple.sh)) that makes extensive use of `GNU parallel` \citep{Tange:2011ty}.
 
-Figure \ref{fig:methtuple_runtime} shows the distribution of running times and Figure \ref{fig:methtuple_memory} the maximum memory usage across all the samples from the EPISCOPE, Lister and Ziller datasets. For each sample, each chromosome was processed using a single core on one of the shared-use servers in the Bioinformatics Division (see __APPENDIX__ for details of these machines).
+Figure \ref{fig:methtuple_runtime} shows the distribution of running times and Figure \ref{fig:methtuple_memory} the maximum memory usage across all the samples from the EPISCOPE, Lister and Ziller datasets. For each sample, each chromosome was processed using a single core on one of the shared-use servers in the Bioinformatics Division (see Table \ref{tab:unices} in the Appendix for details of these machines).
 
 The running time of \texttt{methtuple} is proportional to the number of reads mapped to the chromosome, which is proportional to the length of the chromosome and its ploidy. The running time is largely independent of the tuple size (\texttt{-m}). The variation in running times within a chromosome is due to the number of reads generated per sample and the length of the reads, where the length of a paired-end read is defined as the sum of the mates' lengths. Samples with more reads take longer to process and samples sequenced with longer reads take longer because these contain more m-tuples.
 
@@ -529,12 +558,12 @@ facet_wrap_labeller <- function(gg.plot, labels = NULL) {
                        grep=TRUE, global=TRUE)
     gg[[strips[ii]]]$children[[modgrob$name]] <- editGrob(modgrob,
                                                           label = labels[ii])
-  }
+    }
 
   g$grobs <- gg
   class(g) = c("arrange", "ggplot",class(g))
   g
-}
+  }
 thesis_theme <- theme_classic(base_size = 12)
 thesis_theme <- theme_bw(base_size = 12)
 # Time
@@ -550,7 +579,7 @@ time <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1),
                                            paste0("chr",
                                                   c(1:22, "X", "Y", "M", "L"))),
                    "Tuple" = rep(sapply(n, "[", 2),
-                                      times = sapply(time, nrow)),
+                                 times = sapply(time, nrow)),
                    "Time" = unlist(time))
 
 gg_time <- time %>%
@@ -564,21 +593,21 @@ facet_wrap_labeller(gg_time, paste0("Tuple size: ", unique(time$Tuple)))
 ```{r methtuple_memory, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:methtuple_memory", fig.cap = "The maximum memory usage is the 'Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix 'ac' means that the option \texttt{--all-combinations} was set.", fig.width = 8, dev = "pdf"}
 # Memory
 memory <- lapply(paste0("../data/methtuple_performance/memory/",
-                      list.files("../data/methtuple_performance/memory/")),
-               read.table)
+                        list.files("../data/methtuple_performance/memory/")),
+                 read.table)
 names(memory) <- gsub(".memory", "",
-                    list.files("../data/methtuple_performance/memory/"))
+                      list.files("../data/methtuple_performance/memory/"))
 n <- str_split(names(memory), "\\.")
 # NB: Need to divide reported memory usage by 4 due to bug in 'time'
 # (https://bugzilla.redhat.com/show_bug.cgi?id=703865)
 memory <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1),
-                                             times = sapply(memory, nrow)),
-                                         levels =
-                                           paste0("chr",
-                                                  c(1:22, "X", "Y", "M", "L"))),
-                   "Tuple" = rep(sapply(n, "[", 2),
-                                      times = sapply(memory, nrow)),
-                   "Memory" = unlist(memory) / 4)
+                                               times = sapply(memory, nrow)),
+                                           levels =
+                                             paste0("chr",
+                                                    c(1:22, "X", "Y", "M", "L"))),
+                     "Tuple" = rep(sapply(n, "[", 2),
+                                   times = sapply(memory, nrow)),
+                     "Memory" = unlist(memory) / 4)
 gg_memory <- memory %>%
   ggplot(aes(x = Chromosome, y = Memory / 10^6)) + geom_boxplot() +
   facet_wrap( ~ Tuple, ncol = 3) + thesis_theme +
