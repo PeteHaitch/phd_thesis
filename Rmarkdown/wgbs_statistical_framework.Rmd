@@ -287,7 +287,10 @@ What is immediately clear is that these distributions are bimodal. The exception
 
 Almost all the samples with significant intermediate methylation are either somatic cell lines --- _ADS_, _ADS-adipose_, _FF_, _IMR90\_r1_ and _IMR90\_r2_ from the Lister dataset; _SRR949208_ and _SRR949209_ from the Ziller dataset --- or cancer cells lines and tissue --- _SRR949206_, _SRR949207_, _SRR949210_, _SRR949211_, _SRR949212_, _SRR949213_ and _SRR949215_ from the Ziller dataset. Aside from the aforementioned _E16.5\_male\_1_, the _E6.5\_epiblast\_1_ sample from the Seisenberger dataset also displays greater levels of intermediate methylation. This sample was also created by pooling DNA from multiple mice, which may explain the extra variability in the $\beta$-value distribution.
 
-It has been previously observed that cancer samples have highly variable DNA methylation \citep{Hansen:2011gu}, which, combined with the possibility of multiple sub-clones, explains these intermediate $\beta$-values in the cancer samples. The explanation for the somatic cell lines is less clear. Notably, all of the 12 EPISCOPE samples, which are somatic tissue samples rather than cell lines, have relatively low levels of intermediate methylation. This raises the question as to whether the widespread partial methylation observed in the somatic samples from the Lister dataset is in fact a feature of somatic cell lines rather than somatic cells _per se_. Naively, a cell line is a 'pure' cell population, however, the DNA methylation data clearly reveal widespread differences between cells in these populations.
+
+It has been previously observed that cancer samples have highly variable DNA methylation \citep{Hansen:2011gu}, which, combined with the possibility of multiple sub-clones, explains these intermediate $\beta$-values in the cancer samples.
+
+The explanation for the somatic cell lines is less clear. Notably, all of the 12 EPISCOPE samples, which are somatic tissue samples rather than cell lines, have relatively low levels of intermediate methylation. Likewise, the various frontal cortex samples in the Ziller dataset --- _SRR949193_, _SRR949194_, _SRR949195_, _SRR949196_, _SRR949197_, _SRR949198_, _SRR949199_, _SRR949201_, _SRR949202_, _SRR949203_ and _SRR949205_ --- which includes both 'normal' and Alzheimer's samples, have very low levels of intermediate methylation. This raises the question as to whether the widespread partial methylation observed in the somatic samples from the Lister dataset is in fact a feature of somatic cell lines rather than somatic cells _per se_. Naively, a cell line is a 'pure' cell population, however, the DNA methylation data clearly reveal widespread differences between cells in these populations.
 
 \begin{figure}[htbp]
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_plotBetaDensity.pdf}
@@ -337,53 +340,57 @@ It has been previously observed that cancer samples have highly variable DNA met
 \label{fig:Ziller_plotBetaFreqPoly}
 \end{figure}
 
-__TODO: DESCRIBE CGI FIGURES__
+The bimodality of the genome-wide $\beta$-value distributions is driven by the fact that most CpGs is CpG islands are unmethylated whereas those outside of the islands are mostly methylated. Figures \ref{fig:EPISCOPE_plotBetaDensity_CGI, fig:Lister_plotBetaDensity_CGI, fig:Seisenberger_plotBetaDensity_CGI, fig:Ziller_plotBetaDensity_CGI} show the kernel density plots of the $\beta$-value distributions stratified by CpG island status for the EPISCOPE, Lister, Seisenberger and Ziller datasets, respectively. These distributions are normalised so that each density has a maximum value of 1.
+
+These plots show that CpG islands have a more strictly bimodal distribution than do the non-islands. While the majority of CpGs in CpG islands are unmethylated, there are a subset of methylated CpGs in CpG islands in each sample, except for the _E16.5\_male\_1_ sample. The _H1\_r1_ and _H1\_r2_ samples, replicates of an embryonic stem cell line, stand out for having CpGs in CpG islands being more methylated than unmethylated. Theseplots also show that most of the intermediate methylation occurs outside of the CpG islands.
+
+Because these densities are normalised, these plots don't show the proportion of CpGs in CpG islands. Therefore, Figures \ref{fig:EPISCOPE_plotBetaFreqPoly_CGI, fig:Lister_plotBetaFreqPoly_CGI, fig:Seisenberger_plotBetaFreqPoly_CGI, fig:Ziller_plotBetaFreqPoly_CGI} show the same data but with $\beta$-values grouped into $0.01$-width bins and plotted against the percentage of total CpGs in each bin. These plots highlight that the majority of unmethylated CpGs occur in CpG islands and that most of the intermediate methylation occurs outside of CpG islands, owing to most CpGs being outside of an island.
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_plotBetaDensity_CGI.pdf}
-\caption{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the EPISCOPE data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10\times$ sequencing coverage are included. Spikes' in the density estimate are due to the discreteness of $\beta$-values. Abbreviations: \em{CGI} = CpG island.}
+\caption{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the EPISCOPE data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10\times$ sequencing coverage are included. Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:EPISCOPE_plotBetaDensity_CGI}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/Lister_plotBetaDensity_CGI.pdf}
-\caption{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the Lister data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10\times$ sequencing coverage are included. Spikes' in the density estimate are due to the discreteness of $\beta$-values. Abbreviations: \em{CGI} = CpG island.}
+\caption{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the Lister data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10\times$ sequencing coverage are included. Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:Lister_plotBetaDensity_CGI}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/Seisenberger_plotBetaDensity_CGI.pdf}
-\caption{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the Seisenberger data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10\times$ sequencing coverage are included. Spikes' in the density estimate are due to the discreteness of $\beta$-values. Abbreviations: \em{CGI} = CpG island.}
+\caption{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the Seisenberger data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10\times$ sequencing coverage are included. Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:Seisenberger_plotBetaDensity_CGI}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/Ziller_plotBetaDensity_CGI.pdf}
-\caption{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the Ziller data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10\times$ sequencing coverage are included. Spikes' in the density estimate are due to the discreteness of $\beta$-values. Abbreviations: \em{CGI} = CpG island.}
+\caption{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the Ziller data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10\times$ sequencing coverage are included. Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:Ziller_plotBetaDensity_CGI}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_plotBetaFreqPoly_CGI.pdf}
-\caption{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the EPISCOPE data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10\times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status. Abbreviations: \em{CGI} = CpG island.}
+\caption{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the EPISCOPE data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10\times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
 \label{fig:EPISCOPE_plotBetaFreqPoly_CGI}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/Lister_plotBetaFreqPoly_CGI.pdf}
-\caption{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the Lister data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10\times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status. Abbreviations: \em{CGI} = CpG island.}
+\caption{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the Lister data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10\times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
 \label{fig:Lister_plotBetaFreqPoly_CGI}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/Seisenberger_plotBetaFreqPoly_CGI.pdf}
-\caption{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the Seisenberger data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10\times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status. Abbreviations: \em{CGI} = CpG island.}
+\caption{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the Seisenberger data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10\times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
 \label{fig:Seisenberger_plotBetaFreqPoly_CGI}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/Ziller_plotBetaFreqPoly_CGI.pdf}
-\caption{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the Zilelr data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10\times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status. Abbreviations: \em{CGI} = CpG island.}
+\caption{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the Zilelr data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10\times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
 \label{fig:Ziller_plotBetaFreqPoly_CGI}
 \end{figure}
 
