@@ -144,6 +144,6 @@ paper_reviews.pdf: latex/phd_thesis.bib markdown/paper_reviews.md markdown/bibli
 phd_thesis.html: markdown/introduction.md markdown/biology_background.md markdown/wgbs_bioinformatics_analysis.md markdown/wgbs_statistical_framework.md markdown/datasets.md markdown/Avy_epialleles.md markdown/comethylation_review.md markdown/comethylation.md markdown/methsim.md
 	echo "Citations aren't yet supported!"
 	mkdir -p html
-	pandoc -s --mathjax --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o html/phd_thesis.html  markdown/introduction.md markdown/biology_background.md markdown/wgbs_bioinformatics_analysis.md markdown/wgbs_statistical_analysis.md markdown/Avy_epialleles.md markdown/comethylation_review.md markdown/comethylation.md markdown/methsim.md
+	pandoc -s --mathjax --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o html/phd_thesis.html  markdown/introduction.md markdown/biology_background.md markdown/wgbs_bioinformatics_analysis.md markdown/wgbs_statistical_framework.md markdown/Avy_epialleles.md markdown/comethylation_review.md markdown/comethylation.md markdown/methsim.md
 
 all: phd_thesis.pdf phd_thesis.html

@@ -299,7 +299,7 @@ Microarrays contain thousands, even millions, of short _oligonucleotide_ probes.
 - Sequences containing multiple cytosines require multiple probe versions in order to assay all possible methylation patterns
 - This approach requires the design of organism-specific microarrays
 
-The Illumina Infinium HumanMethylation450 BeadChip (_Illumina 450k_) provides a modern implementation of this type of assay for studying human DNA. This array assays $482,422$ cytosines, $99.3\%$ of these CpGs, across a wide variety of genomic features \citep{Stirzaker:2014cu}. There are well-established methods and software for analysing Illumina 450k data, which were recently reviewed by \citey{Dedeurwaerder:2014bt}.
+The Illumina Infinium HumanMethylation450 BeadChip (_Illumina 450k_) provides a modern implementation of this type of assay for studying human DNA. This array assays $482,422$ cytosines, $99.3\%$ of these CpGs, across a wide variety of genomic features \citep{Stirzaker:2014cu}. There are well-established methods and software for analysing Illumina 450k data, which were recently reviewed by \citet{Dedeurwaerder:2014bt}.
 
 Genomics research was revolutionised by the development of cheap high-throughput sequencing technology, and the study of DNA methylation was no exception. In 2008, two papers were published describing methods for whole-genome shotgun sequencing of bisulfite-converted DNA using the nascent Illumina sequencing technology \citep{Cokus:2008fc, Lister:2008bh}. Whole-genome bisulfite-sequencing is the gold-standard for analysing genome-wide DNA methylation data.
 
