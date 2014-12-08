@@ -35,9 +35,7 @@ The WGBS libraries from the \cite{Lister:2009hy} paper were the first published 
 
 The WGBS libraries from the \cite{Lister:2011kg} include some created and published by other groups (see Table \ref{tab:Lister_dataset}). These samples include cell lines from differentiated cell lines, embryonic stem cell lines, pluripotent stem cell lines and _in vitro_ differentiated from pluripotent stem cells. There are no replicates for any of the 2011 samples.
 
-\begin{table}[h]
-\centering
-\begin{tabular}{@{}cccccc@{}}
+\begin{longtable}{@{}cccccc@{}}
 \toprule
 Sample              & Tissue type             & Sequencing & Read length & Ave. coverage & First published             \\ \midrule
 ADS                 & Adipose                 & PE         & $75$ bp     & $23\times$    & \citet{Lister:2011kg}       \\
@@ -57,10 +55,9 @@ H1+BMP4             & IVD from H1             & SE         & $85$ bp     & $33\t
 H9                  & ESC                     & SE         & $85$ bp     & $9\times$     & \citet{Lister:2011kg}       \\
 H9\_Laurent         & ESC                     & PE         & $75$ bp     & $8\times$     & \citet{Laurent:2010iw}      \\
 HSF1                & ESC                     & SE         & $47$        & $5\times$     & \citet{Chodavarapu:2010iqa} \\ \bottomrule
-\end{tabular}
 \caption{Samples in Lister dataset. The reported read lengths are prior to any trimming of the reads. Abbreviations: \em{iPSC} = induced pluripotent stem cell; \em{ESC} = embryonic stem cell; \em{IVD} = \em{in vitro} differentiated from pluripotent cell line \em{PE} = single-end sequencing; \em{PE} = paired-end sequencing.}
 \label{tab:Lister_dataset}
-\end{table}
+\end{longtable}
 
 There are a four 'mini datasets' within the Lister data that I make some use of in my thesis. The first I refer to as the _Lister-ADS_ data and includes samples _ADS_, _ADS-adipose_ and _ADS-iPSC_, all from the 2011 paper. The _ADS_ sample, a human adipose tissue cell line, is the 'founder' of this mini dataset. The _ADS-adipose_ and _ADS-iPSC_ are both derived from the _ADS_ cell line. The _ADS-adipose_ sample are "adipocytes derived from the `ADS` cells through adipogenic differentiation conditions". The _ADS-iPSC_ cell line is an induced pluripotent stem cell line derived from _ADS_.
 
@@ -91,9 +88,7 @@ The data are from three human donors across four different tissues, for a total 
 
 The data are summarised in Table \ref{tab:EPISCOPE_dataset}.
 
-\begin{table}[h]
-\centering
-\begin{tabular}{@{}cccc@{}}
+\begin{longtable}{@{}cccc@{}}
 \toprule
 Sample & Sequencing & Read length & Ave. coverage \\ \midrule
 E13BUF & PE         & $101$ bp    & $8\times$     \\
@@ -108,10 +103,9 @@ E23BUF & PE         & $101$ bp    & $12\times$    \\
 E23SA  & PE         & $101$ bp    & $29\times$    \\
 E23VA  & PE         & $101$ bp    & $32\times$    \\
 E23VAT & PE         & $101$ bp    & $31\times$    \\ \bottomrule
-\end{tabular}
 \caption{Samples in EPISCOPE dataset. The reported read lengths are prior to any trimming of the reads.}
 \label{tab:EPISCOPE_dataset}
-\end{table}
+\end{longtable}
 
 \subsection{Creation of \texttt{BAM} files}
 
@@ -133,18 +127,15 @@ I have the data for only three samples from the original publication, detailed i
 
 I believe that the samples I received labelled _J1\_1_ and _E16.5\_male\_1_  in fact correspond to _J1\_2_ and _E16.5\_male\_2_, respectively, i.e., the second  replicate rather than the first. The data I received are all $100$ bp paired-end sequences, which matches replicate 2 rather than replicate 1 for both of these samples \citet[Supplementary Table 1 of]{Seisenberger:2012ko}.
 
-\begin{table}[h]
-\centering
-\begin{tabular}{@{}clcccl@{}}
+\begin{longtable}{@{}clcccl@{}}
 \toprule
 Sample            & Tissue                     & Sequencing & Read length & Ave. coverage & First published             \\ \midrule
 J1\_1             & ESC                        & PE         & $100$ bp    & $12\times$    & \citet{Seisenberger:2012ko} \\
 E6.5\_epiblast\_1 & Epiblast                   & PE         & $101$ bp    & $13\times$    & \citet{Seisenberger:2012ko} \\
 E16.5\_male\_1    & Male progenitor germ cells & PE         & $150$ bp    & $12\times$    & \citet{Seisenberger:2012ko} \\ \bottomrule
-\end{tabular}
 \caption{Samples in Seisenberger dataset. The reported read lengths are prior to any trimming of the reads.}
 \label{tab:Seisenberger_dataset}
-\end{table}
+\end{longtable}
 
 \subsection{Creation of \texttt{BAM} files}
 
@@ -154,13 +145,11 @@ The sequencing data for these 3 samples were processed and aligned by Felix Krue
 
 The Ziller are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 19 (__TODO: Check final numbers__) WGBS libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research), who already had aligned and processed BAM files for these 19 libraries. These libraries in fact represent 19 sequencing runs of eight biological samples, which I was not aware of until the data had already been processed. Therefore, I have _post hoc_ merged these sequencing runs. This unfortunately reduces the power to detect genetic variants since the coverage of individual sequencing runs is lower than merged data, but does not adversely affect methylation calling since the number of methylated and unmethylated reads can be summed across sequencing runs.
 
-The eight biological samples are as follows: frontal cortex from two 'normal' women donors (_Frontal\_cortex\_normal\_1_ and Frontal\_cortex\_normal\_2_) and from two women who had Alzheimer's disease (_Frontal\_cortex\_AD\_1_ and _Frontal\_cortex\_AD\_2_); a sample from a human liver carcinoma cell line (\HepG2\_cell\_line_); a new sample from the _IMR90_ lung fibroblast cell line (_IMR90\_cell\_line_); and samples from a colon cancer matched tumour-normal pair (_Colon\_Tumor\_Primary_ and _Colon\_Primary\_Normal_).
+The eight biological samples are as follows: frontal cortex from two 'normal' women donors (_Frontal\_cortex\_normal\_1_ and Frontal\_cortex\_normal\_2_) and from two women who had Alzheimer's disease (_Frontal\_cortex\_AD\_1_ and _Frontal\_cortex\_AD\_2_); a sample from a human liver carcinoma cell line (HepG2\_cell\_line_); a new sample from the _IMR90_ lung fibroblast cell line (_IMR90\_cell\_line_); and samples from a colon cancer matched tumour-normal pair (_Colon\_Tumor\_Primary_ and _Colon\_Primary\_Normal_).
 
 Table \ref{tab:Ziller_dataset_sequencing_runs} summarises the data for the 19 sequencing runs and __TABLE__ summarises the data for the _post hoc_ merged data.
 
-\begin{table}[h]
-\centering
-\begin{tabular}{@{}cccccc@{}}
+\begin{longtable}{@{}cccccc@{}}
 \toprule
 Sample    & Tissue                     & Sequencing & Read length & Ave. coverage & First published       \\ \midrule
 SRR949193 & Frontal\_cortex\_normal\_1 & PE         & 101         & $10\times$    & \citet{Ziller:2013fs} \\
@@ -182,10 +171,9 @@ SRR949211 & Colon\_Tumor\_Primary      & PE         & 101         & $8\times$   
 SRR949212 & Colon\_Tumor\_Primary      & PE         & 101         & $9\times$     & \citet{Ziller:2013fs} \\
 SRR949213 & Colon\_Tumor\_Primary      & PE         & 101         & $8\times$     & \citet{Ziller:2013fs} \\
 SRR949215 & Colon\_Primary\_Normal     & PE         & 101         & $8\times$     & \citet{Ziller:2013fs} \\ \bottomrule
-\end{tabular}
 \caption{Sequencing runs in Ziller dataset. The reported read lengths are prior to any trimming of the reads.}
 \label{tab:Ziller_dataset_sequencing_runs}
-\end{table}
+\end{longtable}
 
 __TODO: Table after post-hoc merge__
 
