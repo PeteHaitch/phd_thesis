@@ -537,7 +537,7 @@ Figure \ref{fig:methtuple_runtime} shows the distribution of running times and F
 
 The running time of \texttt{methtuple} is proportional to the number of reads mapped to the chromosome, which is proportional to the length of the chromosome and its ploidy. The running time is largely independent of the tuple size (\texttt{-m}). The variation in running times within a chromosome is due to the number of reads generated per sample and the length of the reads, where the length of a paired-end read is defined as the sum of the mates' lengths. Samples with more reads take longer to process and samples sequenced with longer reads take longer because these contain more m-tuples.
 
-The maximum memory usage is not strictly proportional to chromosome length. It is instead driven by the number and density of CpGs on the chromosome.  For example, \texttt{chr19}, which has the highest CpG density of all the autosomes in the human genome, requires far more memory than \texttt{chr18}, which has less than half the CpG density of \texttt{chr19} (see __APPENDIX__). The relationship between the maximum memory usage and the tuple size (\texttt{-m}) is complex; more data have to be retained as \texttt{-m} increases, thus increasing the memory usage, but fewer reads contain tuples of that size and so there aren't as many m-tuples or observations on these to count and retain. Therefore, memory usage is relatively constant across values of \texttt{-m} for a given chromosome. The obvious exception is for tuple size \texttt{2ac}, which used the \texttt{--all-combinations} flag. This means that all 2-tuples with $NIL \geq 0$ were computed and there are many, many more CpG 2-tuples with $NIL \geq 0$ than there are with $NIL = 0$, hence the enormous increase in memory usage.
+The maximum memory usage is not strictly proportional to chromosome length. It is instead driven by the number and density of CpGs on the chromosome.  For example, \texttt{chr19}, which has the highest CpG density of all the autosomes in the human genome, requires far more memory than \texttt{chr18}, which has less than half the CpG density of \texttt{chr19} (see Table \ref{tab:cpg_density_hg19}). The relationship between the maximum memory usage and the tuple size (\texttt{-m}) is complex; more data have to be retained as \texttt{-m} increases, thus increasing the memory usage, but fewer reads contain tuples of that size and so there aren't as many m-tuples or observations on these to count and retain. Therefore, memory usage is relatively constant across values of \texttt{-m} for a given chromosome. The obvious exception is for tuple size \texttt{2ac}, which used the \texttt{--all-combinations} flag. This means that all 2-tuples with $NIL \geq 0$ were computed and there are many, many more CpG 2-tuples with $NIL \geq 0$ than there are with $NIL = 0$, hence the enormous increase in memory usage.
 
 ```{r methtuple_runtime, eval = TRUE, echo = FALSE, message = FALSE, fig.lp = "fig:methtuple_runtime", fig.cap = "The running times are the 'User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix 'ac' on the tuple size means that the option \texttt{--all-combinations} was set.", dev = "pdf", outwidth = "0.8\\linewidth"}
 library(dplyr)
@@ -615,6 +615,17 @@ gg_memory <- memory %>%
   ggtitle("Maximum memory usage of methtuple across 49 samples")
 facet_wrap_labeller(gg_memory, paste0("Tuple size: ", unique(memory$Tuple)))
 ```
+
+```{r autosomal_cpg_density_hg19, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
+library(xtable)
+x <- read.table("../data/wgbs_bioinformatics_analysis/CpG_density_hg19.txt",
+                header = TRUE, stringsAsFactors = FALSE)
+xt <- xtable(x, caption = "Percentage of CpGs per chromosome in the human reference genome (hg19).", label = "tab:cpg_density_hg19")
+align(xt) <- rep("c", ncol(x) + 1)
+digits(xt) <- 2
+print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, include.rownames = FALSE)
+```
+
 
 \subsection{Availability}
 
