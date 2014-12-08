@@ -16,81 +16,180 @@ bibliography: ../latex/phd_thesis.bib
 
 \section{Chapter overview}
 
-I have analysed more than 50 whole-genome bisulfite-sequencing datasets during the course of my PhD studies. This short chapter documents those that I use in my thesis.
+This chapter briefly documents the 51 whole-genome bisulfite-sequencing samples that I use in my thesis. The `BAM` files for each sample underwent the same basic processing:
 
-__TODO: Describe processing of data__
+1. Genetic variants were called using `Bis-SNP (v0.82.2)` via the `bissnp_easy_usage.pl` script.
+2. M-bias was estimated using `bismark_methylation_extractor` with the `--mbias_only` flag set. These output files were then analysed using the  `MethylationTuples` R package (see section \ref{sec:MethylationTuples}) and all read-positions with an average CpG $\beta$-value more than $0.03$ away from the median were excluded from methylation calling (read 1 and read 2 analysed separately).
+3. CpG methylation calling was performed using `methtuple (v1.4.0)` for m-tuples $\text{m} = 1, \ldots, 8$. CpG 2-tuples were called both with and without the `--all-combinations` flag; all other tuple sizes were called without the `--all-combinations` flag.
+4. A `MethPat` object was created for each of the EPISCOPE, Lister, Seisenberger and Ziller datasets for 1-tuples, 2-tuples, 2ac-tuples, 3-tuples and 4-tuples. I did not create `MethPat` objects for m-tuples with $\text{m} > 4$ because the data are too sparse at this large sizes to be generally useful.
 
-## Lister data
+__TODO__: I'd like to make available all the data and scripts necessary to reproduce my analyses, i.e., going from a `BAM` file to a `MethPat` objects, but it's a little daunting --- the folder containing __just the processed data__ (`/home/users/lab0605/hickey/methylation_m-tuples`) is $275$ GB alone.
 
-The _Lister data_ refer to whole-genome bisulfite-sequencing libraries used in \cite{Lister:2009hy} and \cite{Lister:2011kg}. The Lister data were the largest publicly available human WGBS datasets until quite recently.
+\section{Lister dataset}\label{sec:Lister_dataset}
+
+The _Lister data_ refers to whole-genome bisulfite-sequencing libraries used in \cite{Lister:2009hy} and \cite{Lister:2011kg}. The Lister data were the largest publicly available human WGBS datasets until quite recently. All samples are of human DNA.
+
+\subsection{Sample descriptions}
 
 The WGBS libraries from the \cite{Lister:2009hy} paper were the first published WGBS libraries from mammalian DNA. A focus of this paper was comparing DNA methylation levels in a somatic tissue, fetal lung fibroblasts (`IMR90`), with those from a pluripotent tissue, embryonic stem cells (`H1`). Each tissue was run in duplicate. While \cite{Lister:2009hy} refer to these "biological" replicates I believe that these are better described technical replicates since each replicate is from the same cell line; what distinguishes the replicates are the number of cell passages and the subsequent library preparations and sequencing. In any case, the published analyses pool these duplicates, which ignores all between-replicate variability.
 
-The WGBS libraries from the \cite{Lister:2011kg} include some created and published by other groups (see __TABLE__). These samples include cell lines from differentiated cell lines, embryonic stem cell lines, pluripotent stem cell lines and _in vitro_ differentiated from pluripotent stem cells. There are no replicates for any of these samples.
+The WGBS libraries from the \cite{Lister:2011kg} include some created and published by other groups (see Table \ref{tab:Lister_dataset}). These samples include cell lines from differentiated cell lines, embryonic stem cell lines, pluripotent stem cell lines and _in vitro_ differentiated from pluripotent stem cells. There are no replicates for any of the 2011 samples.
 
-__TODO: Table of datasets__
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}cccccc@{}}
+\toprule
+Sample              & Tissue type             & Sequencing & Read length & Ave. coverage & First published             \\ \midrule
+ADS                 & Adipose                 & PE         & $75$ bp     & $23\times$    & \citet{Lister:2011kg}       \\
+ADS-adipose         & Adipocytes from ADS     & PE         & $75$ bp     & $24\times$    & \citet{Lister:2011kg}       \\
+ADS-iPSC            & iPSC from ADS           & PE         & $75$ bp     & $26\times$    & \citet{Lister:2011kg}       \\
+FF                  & Foreskin fibroblasts    & SE         & $85$ bp     & $16\times$    & \citet{Lister:2011kg}       \\
+FF-iPSC\_6.9        & iPSC from FF            & SE         & $85$ bp     & $10\times$    & \citet{Lister:2011kg}       \\
+FF-iPSC\_19.7       & iPSC from FF            & SE         & $85$ bp     & $9\times$     & \citet{Lister:2011kg}       \\
+FF-iPSC\_19.11      & iPSC from FF            & SE         & $85$ bp     & $8\times$     & \citet{Lister:2011kg}       \\
+FF-iPSC\_19.11+BMP4 & IVD from FF-iPSC\_19.11 & SE         & $85$ bp     & $17\times$    & \citet{Lister:2011kg}       \\
+IMR90\_r1           & Lung fibroblasts        & SE         & $87$ bp     & $14\times$    & \citet{Lister:2009hy}       \\
+IMR90\_r2           & Lung fibroblasts        & SE         & $87$ bp     & $15\times$    & \citet{Lister:2009hy}       \\
+IMR90-iPSC          & iPSC from IMR90         & SE         & $85$ bp     & $9\times$     & \citet{Lister:2011kg}       \\
+H1\_r1              & ESC                     & SE         & $85$ bp     & $15\times$    & \citet{Lister:2009hy}       \\
+H1\_r2              & ESC                     & SE         & $85$ bp     & $14\times$    & \citet{Lister:2009hy}       \\
+H1+BMP4             & IVD from H1             & SE         & $85$ bp     & $33\times$    & \citet{Lister:2011kg}       \\
+H9                  & ESC                     & SE         & $85$ bp     & $9\times$     & \citet{Lister:2011kg}       \\
+H9\_Laurent         & ESC                     & PE         & $75$ bp     & $8\times$     & \citet{Laurent:2010iw}      \\
+HSF1                & ESC                     & SE         & $47$        & $5\times$     & \citet{Chodavarapu:2010iqa} \\ \bottomrule
+\end{tabular}
+\caption{Samples in Lister dataset. The reported read lengths are prior to any trimming of the reads. Abbreviations: \em{iPSC} = induced pluripotent stem cell; \em{ESC} = embryonic stem cell; \em{IVD} = \em{in vitro} differentiated from pluripotent cell line \em{PE} = single-end sequencing; \em{PE} = paired-end sequencing.}
+\label{tab:Lister_dataset}
+\end{table}
 
-There are a four "mini datasets" within the Lister data that I make some use of in my thesis. These are described below and illustrated in __FIGURE__.
+There are a four 'mini datasets' within the Lister data that I make some use of in my thesis. The first I refer to as the _Lister-ADS_ data and includes samples _ADS_, _ADS-adipose_ and _ADS-iPSC_, all from the 2011 paper. The _ADS_ sample, a human adipose tissue cell line, is the 'founder' of this mini dataset. The _ADS-adipose_ and _ADS-iPSC_ are both derived from the _ADS_ cell line. The _ADS-adipose_ sample are "adipocytes derived from the `ADS` cells through adipogenic differentiation conditions". The _ADS-iPSC_ cell line is an induced pluripotent stem cell line derived from _ADS_.
 
-The first I refer to as the _Lister-ADS_ data and includes samples `ADS`, `ADS-adipose` and `ADS-iPSC`, all from the 2011 paper. The `ADS` sample, a human adipose tissue cell line, is the "founder" of this mini dataset. The `ADS-adipose` and `ADS-iPSC` are both derived from the `ADS` cell line. The `ADS-adipose` sample are "adipocytes derived from the `ADS` cells through adipogenic differentiation conditions". The `ADS-iPSC` cell line is an induced pluripotent stem cell line derived from `ADS`.
+The second mini dataset I refer to as the _Lister-FF_ data and includes samples _FF_, _FF-iPSC\_6.9_, _FF-iPSC\_19.7_, _FF-iPSC\_19.11_ and _FF-iPSC\_11.11+BMP4_, all from the 2011 paper. The _FF_ sample, a foreskin fibroblast cell line, is the 'founder' of this this mini dataset. The _FF-iPSC\_6.9_, _FF-iPSC\_19.7_ and _FF-iPSC\_19.11_ are all induced pluripotent stem cell lines derived from `FF`. In fact, _FF-iPSC\_19.7_ and _FF-iPSC\_19.11_ are subclones derived from _FF-iPSC\_19_, whose methylome was not sequenced. I believe _FF-iPSC\_6.9_ is an independently derived iPSC cell line from _FF_, although this isn't made clear in the original publication. The _FF-iPSC\_19.11+BMP4_ sample is a trophoblast cell line derived by _in vitro_ differentiating the _FF-iPSC\_19.11_ by growing a clone of it in bone morphogenic protein 4 (_BMP4_).
 
-The second mini dataset I refer to as the _Lister-FF_ data and includes samples `FF`, `FF-iPSC\_6.9`, `FF-iPSC\_19.7`, `FF-iPSC\_19.11` and `FF-iPSC\_11.11+BMP4`, all from the 2011 paper. The `FF` sample, a foreskin fibroblast cell line, is the "founder" of this this mini dataset. The `FF-iPSC\_6.9`, `FF-iPSC\_19.7` and `FF-iPSC\_19.11` are all induced pluripotent stem cell lines derived from `FF`. In fact, `FF-iPSC\_19.7` and `FF-iPSC\_19.11` are subclones derived from `FF-iPSC\_19`, whose methylome was not sequenced. I believe `FF-iPSC\_6.9` is an independently derived iPSC cell line from `FF`, although this isn't made clear in the original publication. The `FF-iPSC\_19.11+BMP4` sample is a trophoblast cell line derived by _in vitro_ differentiating the `FF-iPSC\_19.11` by growing a clone of it in bone morphogenic protein 4 (_BMP4_).
+The third mini dataset I refer to as the _Lister-IMR90_ data and includes samples _IMR90\_r1_ (2009), _IMR90\_r2_ (2009) and _IMR90-iPSC_ (2011). The _IMR90-iPSC_ sample is an induced pluripotent stem cell line derived from the _IMR90_cell line.
 
-The third mini dataset I refer to as the _Lister-IMR90_ data and includes samples `IMR90\_r1` (2009), `IMR90\_r2` (2009) and `IMR90-iPSC` (2011). The `IMR90-iPSC` sample is an induced pluripotent stem cell line derived from the `IMR90` cell line.
+The final mini dataset I refer to as the _Lister-H1_ data and includes samples _H1\_r1_ (2009), _H1\_r2_ (2009) and _H1+BMP4_ (2011). The _H1+BMP4_ sample is a trophoblast cell line derived by _in vitro_ differentiating the _H1_ by growing a clone of it in bone morphogenic protein 4 (BMP4).
 
-The final mini dataset I refer to as the _Lister-H1_ data and includes samples `H1\_r1` (2009), `H1\_r2` (2009) and `H1+BMP4` (2011). The `H1+BMP4` sample is a trophoblast cell line derived by _in vitro_ differentiating the `H1` by growing a clone of it in bone morphogenic protein 4 (BMP4).
+\subsection{Creation of \texttt{BAM} files}
 
-The aligned reads for the \cite{Lister:2009hy} data were downloaded from [http://neomorph.salk.edu/human_methylome/](http://neomorph.salk.edu/human_methylome/). The aligned reads for the \cite{Lister:2011kg} data were downloaded from [http://neomorph.salk.edu/ips_methylomes/](http://neomorph.salk.edu/ips_methylomes/). I wrote Python scripts to convert these files to `SAM` files, these scripts are available from [https://github.com/PeteHaitch/Lister2BAM](https://github.com/PeteHaitch/Lister2BAM). These `SAM` files were then converted to `BAM` files and duplicate reads were marked using Picard's `MarkDuplictes` routine [http://broadinstitute.github.io/picard/](http://broadinstitute.github.io/picard/).
+The aligned reads for the \cite{Lister:2009hy} data were downloaded from [http://neomorph.salk.edu/human_methylome/](http://neomorph.salk.edu/human_methylome/). The aligned reads for the \cite{Lister:2011kg} data were downloaded from [http://neomorph.salk.edu/ips_methylomes/](http://neomorph.salk.edu/ips_methylomes/). These samples were aligned against the hg18 build of the human reference genome.
 
-## EPISCOPE data
+I wrote Python scripts to convert these files to `SAM` files. These scripts are available from [https://github.com/PeteHaitch/Lister2BAM](https://github.com/PeteHaitch/Lister2BAM). These `SAM` files were then converted to `BAM` files with `SAMtools` \citep{Li:2009ka} and duplicate reads were marked using Picard's `MarkDuplicates` routine [http://broadinstitute.github.io/picard/](http://broadinstitute.github.io/picard/).
 
-The EPISCOPE data were kindly provided to me by Professor Susan Clark (Garvan Institute of Medical Research, Sydney) and Dr Peter Molloy (CSIRO Animal, Food and Health Sciences). The data are from three human donors across four different tissues, for a total of 12 whole-genome bisulfite-sequencing libraries.
+\section{EPISCOPE dataset}\label{sec:EPISCOPE_dataset}
 
-The four tissues are:
+The EPISCOPE data were kindly provided to me by Professor Susan Clark (Garvan Institute of Medical Research, Sydney) and Dr Peter Molloy (CSIRO Animal, Food and Health Sciences). This dataset is not yet published.
 
-* BUF: Buffy coat layer, which are leukocytes and platelets derived by centrifugation of a whole blood sample.
-* SA: Subcutaneous adidose tissue, which is fat found just below the skin. Unlike visceral fat, "subcutaneous fat is not related to many of the classic obesity-related pathologies, such as heart disease, cancer, and stroke" (__TODO: Get better reference than wikipedia__).
-* VA: Visceral adipose tissue, which is located inside the abdominal cavity, packed between the organs (stomach, liver, intestines, kidneys, etc.) (__TODO: Get better reference than wikipedia__).
-* VAT: Visceral adipocytes, which are derived from the VA tissue.
+\subsection{Sample descriptions}
 
-The data are summarised in __TABLE__
+The data are from three human donors across four different tissues, for a total of 12 whole-genome bisulfite-sequencing libraries. The four tissues are:
 
-__TODO: Table of datasets__
-__TODO: Get age of donors__
+- BUF: Buffy coat layer, which are leukocytes and platelets derived by centrifugation of a whole blood sample.
+- SA: Subcutaneous adidose tissue, which is fat found just below the skin. Unlike visceral fat, "subcutaneous fat is not related to many of the classic obesity-related pathologies, such as heart disease, cancer, and stroke" (__TODO: Get better reference than wikipedia__).
+- VA: Visceral adipose tissue, which is located inside the abdominal cavity, packed between the organs (stomach, liver, intestines, kidneys, etc.) (__TODO: Get better reference than wikipedia__).
+- VAT: Visceral adipocytes, which are derived from the VA tissue.
+
+The data are summarised in Table \ref{tab:EPISCOPE_dataset}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}cccc@{}}
+\toprule
+Sample & Sequencing & Read length & Ave. coverage \\ \midrule
+E13BUF & PE         & $101$ bp    & $8\times$     \\
+E13SA  & PE         & $101$ bp    & $28\times$    \\
+E13VA  & PE         & $150$ bp    & $27\times$    \\
+E13VAT & PE         & $101$ bp    & $25\times$    \\
+E18BUF & PE         & $101$ bp    & $21\times$    \\
+E18SA  & PE         & $101$ bp    & $25\times$    \\
+E18VA  & PE         & $150$ bp    & $36\times$    \\
+E18VAT & PE         & $101$ bp    & $26\times$    \\
+E23BUF & PE         & $101$ bp    & $12\times$    \\
+E23SA  & PE         & $101$ bp    & $29\times$    \\
+E23VA  & PE         & $101$ bp    & $32\times$    \\
+E23VAT & PE         & $101$ bp    & $31\times$    \\ \bottomrule
+\end{tabular}
+\caption{Samples in EPISCOPE dataset. The reported read lengths are prior to any trimming of the reads.}
+\label{tab:EPISCOPE_dataset}
+\end{table}
+
+\subsection{Creation of \texttt{BAM} files}
 
 The sequencing data for these 12 samples were processed and aligned by Aaron Statham (Garvan Institute of Medical Research). Each sample was aligned to the human reference genome (hg19) using Bismark (v0.8.3) with the Bowtie2 backend. The default alignment options were used, except that the maximum insert size for valid paired-end alignments was set to 1000 instead of 500 (`-X 1000`). An example command is shown below:
 
 ```
-bismark -p 4 --bowtie2 -X 1000 --unmapped --ambiguous --gzip --bam -o SAMPLE_NAME  REF_GENOME -1 READ_1.fq -2 READ_2.fq
+bismark -p 4 --bowtie2 -X 1000 --unmapped --ambiguous --gzip --bam -o SAMPLE_NAME REF_GENOME -1 READ_1.fq -2 READ_2.fq
 ```
 
-Duplicate reads had been removed from the `BAM` files that I received.
+Duplicate reads had already been removed from the `BAM` files that I received.
 
-## Whitelaw data
+\section{Seisenberger dataset}\label{sec:Seisenberger_dataset}
 
-I describe this dataset in detail in Chapter \ref{chap:avy}.
+The Seisenberger data are from a study of the dynamics of DNA methylation reprogramming in mouse primordial germ cells \cite{Seisenberger:2012ko}. These were a convenience sample provided to me by a colleague. I thank Felix Krueger (Babraham Institute) who processed and aligned the reads, and sent me the `BAM` files.
 
-## Ziller data
+\subsection{Sample descriptions}
 
-The Ziller are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 21 (__TODO: Check final numbers__) WGBS libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research), who already had aligned and processed BAM files for this subset of samples.
+I have the data for only three samples from the original publication, detailed in Table \ref{tab:Seisenberger_dataset}. The _J1\_1_ sample is from an embryonic stem cell line while both the _E6.5\_epiblast\_1_ and _E16.5\_male\_1_ samples are from a pool of $10-30$ embryos. Developmentally, the samples are ordered _J1\_1_ (embryonic stem cell), _E6.5\_epiblast\_1_ (embryonic day 6.5 epiblast) and _E16.5\_male\_1_ (embryonic day 16.5 male progenitor germ cells).
 
-There are samples from the frontal cortex from two "normal" women (`Frontal_cortex_normal_1` and `Frontal_cortex_normal_2`) and from two women who had Alzheimer's disease (`Frontal_cortex_AD_1` and `Frontal_cortex_AD_2`); a sample from a human liver carcinoma cell line (`HepG2_cell_line`); a new sample from the IMR90 lung fibroblast cell line (`IMR90_cell_line`); and samples from a matched tumour-normal pair for colon cancer (`Colon_Tumor_Primary` and `Colon_Tumor_Primary`). Full details of the Ziller data used in my thesis are described in __TABLE__. Note that I consider the samples described as `replicates` to be technical replicates, since each replicate comes from the same biological sample.
+I believe that the samples I received labelled _J1\_1_ and _E16.5\_male\_1_  in fact correspond to _J1\_2_ and _E16.5\_male\_2_, respectively, i.e., the second  replicate rather than the first. The data I received are all $100$ bp paired-end sequences, which matches replicate 2 rather than replicate 1 for both of these samples \citet[Supplementary Table 1 of]{Seisenberger:2012ko}.
 
-__TODO: Table of datasets. Only include those samples with properly processed files (i.e., exclude truncated files)__
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}clcccl@{}}
+\toprule
+Sample            & Tissue                     & Sequencing & Read length & Ave. coverage & First published             \\ \midrule
+J1\_1             & ESC                        & PE         & $100$ bp    & $12\times$    & \citet{Seisenberger:2012ko} \\
+E6.5\_epiblast\_1 & Epiblast                   & PE         & $101$ bp    & $13\times$    & \citet{Seisenberger:2012ko} \\
+E16.5\_male\_1    & Male progenitor germ cells & PE         & $150$ bp    & $12\times$    & \citet{Seisenberger:2012ko} \\ \bottomrule
+\end{tabular}
+\caption{Samples in Seisenberger dataset. The reported read lengths are prior to any trimming of the reads.}
+\label{tab:Seisenberger_dataset}
+\end{table}
 
-## Seisenberger data
+\subsection{Creation of \texttt{BAM} files}
 
-The Seisenberger data are from a study of the dynamics of DNA methylation reprogramming in mouse primordial germ cells \cite{Seisenberger:2012ko}. Like the Ziller data, these were a convenience sample provided to me by a colleague. I thank Felix Krueger (Babraham Institute) who processed and aligned the reads, and sent me the `BAM` files.
+The sequencing data for these 3 samples were processed and aligned by Felix Krueger (Babraham Institute). Each sample was aligned to the mouse reference genome (GRCm38/mm10) using Bismark (v0.7.12) with the Bowtie1 backend. The default alignment options were used.
 
-I have the data for three samples, detailed in __TABLE__. Developmentally, the samples are ordered `J1_1`, `E6.5_epiblast_1` and `E16.5_male_1`. Both the `E6.5_epiblast_1` and `E16.5_male_1` samples are from a pool of $10-30$ embryos.
+\section{Ziller dataset}\label{sec:Ziller_dataset}
 
-__TODO: Table of datasets__
+The Ziller are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 19 (__TODO: Check final numbers__) WGBS libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research), who already had aligned and processed BAM files for these 19 libraries. These libraries in fact represent 19 sequencing runs of eight biological samples, which I was not aware of until the data had already been processed. Therefore, I have _post hoc_ merged these sequencing runs. This unfortunately reduces the power to detect genetic variants since the coverage of individual sequencing runs is lower than merged data, but does not adversely affect methylation calling since the number of methylated and unmethylated reads can be summed across sequencing runs.
 
-## CpG islands
+The eight biological samples are as follows: frontal cortex from two 'normal' women donors (_Frontal\_cortex\_normal\_1_ and Frontal\_cortex\_normal\_2_) and from two women who had Alzheimer's disease (_Frontal\_cortex\_AD\_1_ and _Frontal\_cortex\_AD\_2_); a sample from a human liver carcinoma cell line (\HepG2\_cell\_line_); a new sample from the _IMR90_ lung fibroblast cell line (_IMR90\_cell\_line_); and samples from a colon cancer matched tumour-normal pair (_Colon\_Tumor\_Primary_ and _Colon\_Primary\_Normal_).
 
-I have used CpG island definitions from the hidden Markov model proposed by \cite{@Wu:2010do}. These predicted CpG islands were downloaded from [http://rafalab.jhsph.edu/CGI/](http://rafalab.jhsph.edu/CGI/) on 29/10/2014.
+Table \ref{tab:Ziller_dataset_sequencing_runs} summarises the data for the 19 sequencing runs and __TABLE__ summarises the data for the _post hoc_ merged data.
 
-## Misc. notes
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}cccccc@{}}
+\toprule
+Sample    & Tissue                     & Sequencing & Read length & Ave. coverage & First published       \\ \midrule
+SRR949193 & Frontal\_cortex\_normal\_1 & PE         & 101         & $10\times$    & \citet{Ziller:2013fs} \\
+SRR949194 & Frontal\_cortex\_normal\_1 & PE         & 101         & $10\times$    & \citet{Ziller:2013fs} \\
+SRR949195 & Frontal\_cortex\_normal\_1 & PE         & 101         & $10\times$    & \citet{Ziller:2013fs} \\
+SRR949196 & Frontal\_cortex\_normal\_2 & PE         & 101         & $9\times$     & \citet{Ziller:2013fs} \\
+SRR949197 & Frontal\_cortex\_normal\_2 & PE         & 101         & $9\times$     & \citet{Ziller:2013fs} \\
+SRR949198 & Frontal\_cortex\_normal\_2 & PE         & 101         & $9\times$     & \citet{Ziller:2013fs} \\
+SRR949199 & Frontal\_cortex\_AD\_1     & PE         & 101         & $9\times$     & \citet{Ziller:2013fs} \\
+SRR949201 & Frontal\_cortex\_AD\_1     & PE         & 101         & $9\times$     & \citet{Ziller:2013fs} \\
+SRR949202 & Frontal\_cortex\_AD\_2     & PE         & 101         & $10\times$    & \citet{Ziller:2013fs} \\
+SRR949203 & Frontal\_cortex\_AD\_2     & PE         & 101         & $10\times$    & \citet{Ziller:2013fs} \\
+SRR949206 & HepG2\_cell\_line          & PE         & 101         & $2\times$     & \citet{Ziller:2013fs} \\
+SRR949207 & HepG2\_cell\_line          & PE         & 101         & $1\times$     & \citet{Ziller:2013fs} \\
+SRR949208 & IMR90\_cell\_line          & PE         & 101         & $1\times$     & \citet{Ziller:2013fs} \\
+SRR949209 & IMR90\_cell\_line          & PE         & 101         & $3\times$     & \citet{Ziller:2013fs} \\
+SRR949210 & Colon\_Tumor\_Primary      & PE         & 101         & $8\times$     & \citet{Ziller:2013fs} \\
+SRR949211 & Colon\_Tumor\_Primary      & PE         & 101         & $8\times$     & \citet{Ziller:2013fs} \\
+SRR949212 & Colon\_Tumor\_Primary      & PE         & 101         & $9\times$     & \citet{Ziller:2013fs} \\
+SRR949213 & Colon\_Tumor\_Primary      & PE         & 101         & $8\times$     & \citet{Ziller:2013fs} \\
+SRR949215 & Colon\_Primary\_Normal     & PE         & 101         & $8\times$     & \citet{Ziller:2013fs} \\ \bottomrule
+\end{tabular}
+\caption{Sequencing runs in Ziller dataset. The reported read lengths are prior to any trimming of the reads.}
+\label{tab:Ziller_dataset_sequencing_runs}
+\end{table}
 
-- `Bis-SNP` run without `--trim5` and `--trim5` flags. This is a bit unfortunate but it was because the `bissnp_easy_usage.pl` script, which I used to run `Bis-SNP`, didn't support these. To re-genotype all samples would have taken too long and it shouldn't greatly affect my analyses.
-- Percentage of CpGs that are in Rafa's CGIs
+__TODO: Table after post-hoc merge__
+
+
+\section{CpG islands}
+
+I have used the CpG island definition from the hidden Markov model proposed by \citet{Wu:2010do}. The predicted CpG islands for the human reference genome (both hg18 and hg19) were downloaded from [http://rafalab.jhsph.edu/CGI/](http://rafalab.jhsph.edu/CGI/) on 29/10/2014. I used the supplied software to create the predicted CpG islands for the mouse reference genome (mm10).
