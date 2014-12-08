@@ -168,9 +168,23 @@ One reason for this relative scarcity of CpGs is that methylated cytosines can s
 
 \subsection{CpG islands and other sandy metaphors}\label{sec:cpg_islands}
 
-One way to explore the distribution of CpGs in the human genome is to look at the distribution of distances from one CpG to the next, the _intra-pair distances_ (IPDs). __FIGURE__ is the empirical cumulative distribution function of CpG IPDs for the human reference genome (hg19). We see that approximately $70\%$ of CpGs are within 100 bp of the next CpG. __FIGURE__ also shows the expected IPD distribution under a model where CpGs are uniformly distributed along the genome with probability equal to the observed frequency of CpGs on each chromosome. By comparing the observed IPDs to the expected IPDs we see that the distribution of distances between CpGs has more "close" pairs and more "distant" pairs than we would expect by chance.
+One way to explore the distribution of CpGs in the human genome is to look at the distribution of distances from one CpG to the next, the _intra-pair distances_ (IPDs). Figure \ref{fig:IPD_ECDF_hg19} is a plot of the empirical cumulative distribution function of CpG IPDs for the human reference genome (hg19). We see that approximately $70\%$ of CpGs are within 100 bp of the next CpG. Figure \ref{fig:IPD_ECDF_hg19} also shows the expected IPD distribution under a model where CpGs are uniformly distributed along the genome with probability equal to the observed frequency of CpGs on each chromosome. By comparing the observed IPDs to the expected IPDs we see that the distribution of distances between CpGs has more 'close' pairs and more 'distant' pairs than we would expect by chance.
 
-__FIGURE OBSERVED VS EXPECTED__ also shows that there is a cluster of CpGs with $IPD < 10$. These largely correspond to CpGs that lie within what are called _CpG islands_ (CGIs). Within these CpG islands are the 20-40% of CpGs that are frequently unmethylated in mammalian genomes. CpG islands are important regulatory elements in the genome and are where most differences in DNA methylation between different cell types are found \citep{Wu:2010do}. The classical definition of a CpG island, given by \citep{GardinerGarden:1987we}, and used by, for example, the UCSC genome browser, is a region of the genome where:
+\begin{figure}[htbp]
+\includegraphics[width=\textwidth]{../figures/IPD_ECDF_hg19.pdf}
+\caption{Plot of the empirical cumulative distribution function of distance between adjacent CpGs in the human reference genome (hg19). The observed distances are contrasts with those under the 'expected' model whereby CpGs are distributed uniformly at random with probability equal to the observed frequency of Cpgs on each chromosome.}
+\label{fig:IPD_ECDF_hg19}
+\end{figure}
+
+Figure \ref{fig:IPD_frequency_polygon_hg19} is an alternative way to visualise these data, which plots the percentage of pairs of CpGs with a given IPD. Figure \ref{fig:IPD_frequency_polygon_hg19} shows that there is a cluster of CpGs with $IPD < 10$. These largely correspond to CpGs that lie within what are called _CpG islands_ (CGIs).
+
+\begin{figure}[htbp]
+\includegraphics[width=\textwidth]{../figures/IPD_frequency_polygon_hg19.pdf}
+\caption{The frequency of the observed distances between adjacent CpGs in the human reference genome (hg19).}
+\label{fig:IPD_frequency_polygon_hg19}
+\end{figure}
+
+CpG islands contain the 20-40% of CpGs that are frequently unmethylated in mammalian genomes. CpG islands are important regulatory elements in the genome and are where most differences in DNA methylation between different cell types are found \citep{Wu:2010do}. The classical definition of a CpG island, given by \citep{GardinerGarden:1987we}, and used by, for example, the UCSC genome browser, is a region of the genome where:
 
 1. The (moving) average of GC-content is greater than $50\%$, and
 2. The observed-to-expected ratio of CpGs is greater than $0.6$, and
@@ -180,7 +194,7 @@ This definition was refined by \citet{Takai:2002jb} to exclude _Alu_-repetitive 
 
 An alternative definition, and one that pre-dates the definition of \citet{GardinerGarden:1987we}, is based on the identification of unmethylated regions of the genome, which are typically CpG-dense. Such regions were previously called HpaII tiny fragment islands, or _HTF islands_, and named after the restriction enzyme used to identify them \citep{Cooper:1983ev, Bird:1985gj}.
 
-These "sandy/beachy" metaphors have been continued (i.e., stretched to breaking point) with various authors defining CpG island shores, CpG island shelves, CpGs in the "open sea", CpG deserts and CpG canyons. CpG island shores, shelves and the open sea are all defined with respect to CpG islands. Specifically,
+These 'sandy/beachy' metaphors have been continued (i.e., stretched to breaking point) with various authors defining CpG island shores, CpG island shelves, CpGs in the "open sea", CpG deserts and CpG canyons. CpG island shores, shelves and the open sea are all defined with respect to CpG islands. Specifically,
 
 - CpG island shores are regions within 2 kb of CpG islands and have been demonstrated to have an increased variability of CpG methylation \citep{Irizarry:2008hg}. Shelves have a comparatively low density of CpGs.
 - CpG island shelves are defined as regions within 2 kb of a CpG island shore \citep{Bibikova:2011fw}.
@@ -276,8 +290,6 @@ Assays based on restriction enzyme were some of the first developed for studying
 Affinity enrichment assays compare measurements between an 'enriched' version and an 'input' (control) version of the same sample to infer the presence or absence of DNA methylation. This may use antibody immunoprecipitation or methyl-binding proteins. Some examples of affinity enrichment assays for DNA methylation are the microarray-based MeDIP, mDIP and mCIP and their sequencing-based relatives, MeDIP-seq and mDIP-seq.
 
 These are all low resolution assays since they are based on the enrichment of regional differences between the enriched and input samples. Furthermore, the bioinformatic analysis of data from these assays is complicated by the varying CpG density along the genome, which leads to different enrichment affinities for different regions of the genome. However, these assays are can provide a relatively cheap and efficient genome-wide assessment of DNA methylation \citep{Laird:2010iv}.
-
-__TODO: Describe CHARM \citep{Irizarry:2008hg}, although not yet sure which sub-section it should appear in__.
 
 \subsection{Sodium bisulfite conversion assays}\label{sec:bs_assays}
 
