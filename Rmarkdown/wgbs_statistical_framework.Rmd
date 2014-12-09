@@ -446,7 +446,7 @@ align(xt) <- rep("c", ncol(x) + 1)
 digits(xt) <- 2
 print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE)
 ```
-\subsection{Interpretation}
+\subsection{Interpretation}\label{sec:beta-value_interpretation}
 
 In papers about DNA methylation there is often a sentence like this quote from \citet{Laird:2003kw}: "About 70% of the CpG dinucleotides in the mammalian genome are methylated". In the context of a whole-genome bisulfite-sequencing experiment, this can be interpreted as the expected $\beta$-value of a randomly selected CpG. However, as can be seen from Figures \ref{EPISCOPE_plotBetaFreqPoly, Lister_plotBetaFreqPoly, Seisenberger_plotBetaFreqPoly, Ziller_plotBetaFreqPoly}, the extreme bimodality of the $\beta$-value distributions means that the expected value is not a particularly useful estimate of the methylation level of a particular CpG. To make a useful statement about the methylation level of a particular CpG really requires that we know whether it is within a CpG island.
 
