@@ -13,7 +13,27 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
-## Equivalence of tests to identify DMCs in a one-group experiment
+\section{Equivalence of tests to identify DMCs in a one-group experiment}\label{app:one_group_equivalence}
+
+\subsection{Mathematical equivalence}
+
+The saturated log-linear model can be written as $\log(F_{a, b}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{a, b}^{meth_state,sample}$, where $F_{a, b}$ is the value of the $(a, b)$ element in the $n \times 2$ contingency table. The null hypothesis that the cytosine is not a DMC is then tested by testing for an association between `sample` and `meth_state`, i.e., whether the parameter $\lambda_{a, b}^{meth_state, sample}$ is significantly different from zero.
+
+This log-linear model can be reformulated as a logistic regression by noting that the log-odds (logits) for each row are $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \log(F_{a, 1}) - \log(F_{a, 2})$. Therefore,
+
+\begin{align*}
+\log(\frac{F_{a, 1}}{F_{a, 2}}) &= \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{1}^{sample} + \lambda_{a, 1} \\
+&- (\lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{2}^{sample} + \lambda_{a, 2}) \\
+&= \underbrace{(\lambda_{1}^{sample} - \lambda_{2}^{sample})}_{\alpha} + \underbrace{(\lambda_{a, 1} - \lambda_{a, 2})}_{\gamma_{i}}
+\end{align*}
+
+The expression $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \alpha + \gamma_{i}$ is a logistic regression model. We can test the null hypothesis that the cytosine is not a DMC by testing for a `sample`-effect on the log-odds, i.e., whether the parameter $\gamma_{i}$ is significantly different from zero.
+
+Regardless of whether we use the log-linear model or the logistic model, to test the null hypothesis that the cytosine is not a DMC we can compute the deviance[^deviance] of the reduced model and compare it to a $\chi^{2}$ random variable with $(2 - 1) \times (n - 1)$ degrees of freedom. For the log-linear regression the reduced model is $\log(F_{a, b}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample}$ and for the logistric regression the reduced model is $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \alpha$.
+
+[^deviance]: The deviance is the log-likelihood ratio statistic comparing the current model within a saturated model.
+
+\subsection{Computational equiavelence}
 
 The computational equivalence of using Pearson's $\chi^{2}$ test, the deviance of a log-linear model and the deviance of a logistic regression are shown in the following R code:
 
@@ -43,23 +63,7 @@ glm(x ~ 1, family = binomial)
   glm(x[,1] / (x[, 1] + x[, 2]) ~ 1, family = binomial, weights = x[, 1] + x[, 2])
 ```
 
-The saturated log-linear model can be written as $\log(F_{a, b}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{a, b}^{meth_state,sample}$, where $F_{a, b}$ is the value of the $(a, b)$ element in the $n \times 2$ contingency table. The null hypothesis that the cytosine is not a DMC is then tested by testing for an association between `sample` and `meth_state`, i.e., whether the parameter $\lambda_{a, b}^{meth_state, sample}$ is significantly different from zero.
-
-This log-linear model can be reformulated as a logistic regression by noting that the log-odds (logits) for each row are $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \log(F_{a, 1}) - \log(F_{a, 2})$. Therefore,
-
-\begin{align*}
-\log(\frac{F_{a, 1}}{F_{a, 2}}) &= \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{1}^{sample} + \lambda_{a, 1} \\
-&- (\lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{2}^{sample} + \lambda_{a, 2}) \\
-&= \underbrace{(\lambda_{1}^{sample} - \lambda_{2}^{sample})}_{\alpha} + \underbrace{(\lambda_{a, 1} - \lambda_{a, 2})}_{\gamma_{i}}
-\end{align*}
-
-The expression $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \alpha + \gamma_{i}$ is a logistic regression model. We can test the null hypothesis that the cytosine is not a DMC by testing for a `sample`-effect on the log-odds, i.e., whether the parameter $\gamma_{i}$ is significantly different from zero.
-
-Regardless of whether we use the log-linear model or the logistic model, to test the null hypothesis that the cytosine is not a DMC we can compute the deviance[^deviance] of the reduced model and compare it to a $\chi^{2}$ random variable with $(2 - 1) \times (n - 1)$ degrees of freedom. For the log-linear regression the reduced model is $\log(F_{a, b}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample}$ and for the logistric regression the reduced model is $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \alpha$.
-
-[^deviance]: The deviance is the log-likelihood ratio statistic comparing the current model within a saturated model.
-
-## The probability that two dependent Bernoulli random variables are identical
+\section{The probability that two dependent Bernoulli random variables are identical}\label{app:bernoulli_equal}
 
 \cite{Lindqvist:1978fm} wrote a brief note on Bernoulli trials with dependence.
 Building on earlier work by \cite{Klotz:1973if}, Lindqvist parameterises the
@@ -121,20 +125,17 @@ Pr(Z_{h, i} = Z_{h', i'}) &= Pr(Z_{h, i} = 0, Z_{h', i'} = 0) + Pr(Z_{h, i} = 1,
 
 __TODO: What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?__
 
-## Analysis of \cite{Lacey:2013iy}
+\section{Estimate of number of CpGs used by \citet{Lacey:2013iy}}\label{app:lacey}
 
-I want to estimate the number of CpGs used by \cite{Lacey:2013iy} to estimate the correlation of methylation levels. They used the chromosome 11 data from an RRBS experiment on a normal myotube cell line, MTCTL2. Unfortunately, the data are not publicly available. Instead, I use data from ENCODE of a skeletal muscle myotubes cell line that had RRBS performed in triplicate (HSMMtube).
+I want to estimate the number of CpGs used by \citet{Lacey:2013iy} to estimate the correlation of methylation levels. They used the chromosome 11 data from an RRBS experiment on a normal myotube cell line, _MTCTL2_. Unfortunately, there is no URL provided to these data. \citet{Lacey:2013iy} cite their data as having come from \citet{Tsumagari:2013gn}, which includes a sample "Normal Human Skeletal Muscle Myoblasts", _HSMM_ ([http://genome-mirror.duhs.duke.edu/ENCODE/cellTypes.html](http://genome-mirror.duhs.duke.edu/ENCODE/cellTypes.html), [http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/](http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/)). I believe this to be the same cell line. In any case, for my purposes I simply needed some comparable RRBS data, not necessarily the exact same sample as  _MTCTL2_.
+
+There are approximately $60,000$ CpGs on chromosome 11 in these comparable RRBS data. The following R code shows how I computed this using three RRBS replicates of the _HSMM_ sample.
 
 Firstly, I download the data and unzip it:
 ```{r, cache = FALSE, message = FALSE}
 library(R.utils)
 library(data.table)
-library(dplyr)
-print(getwd())
-```
-
-```{r, cache = FALSE, message = FALSE}
-dl_dir <- 'downloads/'
+dl_dir <- "../data/appendix/"
 url <- 'http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/'
 files <- paste0('wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep',
                 1:3, '.bed.gz')
@@ -149,19 +150,13 @@ x <- mapply(function(f, d) {
   }, files, dests, SIMPLIFY = FALSE)
 ```
 
-Then I count the number of CpGs on chromosome 11 in each sample:
+Then I count the number of CpGs on chromosome 11 in each replicate:
 ```{r}
-y <- lapply(x, function(xx) {
-  xx <- tbl_dt(xx)
-  xx %>%
-    group_by(V1) %>%
-    summarise(n())
-})
-
-rbind_all(y) %>% filter(V1 == 'chr11')
+y <- rbindlist(x)
+y[V1 == "chr11", .N, by = list(V4)]
 ```
 
-## Computing details
+\section{Computing details}\label{app:computing_details}
 
 All computational work was performed on one of the Bioinformatics Division's HP Blade servers. These are shared-use, shared-memory machines. The basic specifications are shown in Table \ref{tab:unices}.
 
