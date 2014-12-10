@@ -69,7 +69,7 @@ wgbs_downstream_analyses.pdf:
 markdown/datasets.md:
 	Rscript -e "knitr::knit('Rmarkdown/datasets.Rmd', 'markdown/datasets.md')"
 
-latex/datasets.tex:
+latex/datasets.tex: markdown/datasets.md
 	mkdir -p latex
 	pandoc -o latex/datasets.tex markdown/datasets.md
 
