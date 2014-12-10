@@ -72,7 +72,7 @@ PIM^{\ast} &= Pr(Z_{h, i} = Z_{h', i'}) \\
 
 This result is proven in Appendix \ref{app:bernoulli_equal}.
 
-In general, $PIM^{\ast} \in [0, 1]$ since it is a probability, which is already unlike a correlation coefficient that takes values in $\[-1, 1\]$. There are a few important special cases that are worth discussing:
+In general, $PIM^{\ast} \in {[0, 1]}$ since it is a probability, which is already unlike a correlation coefficient that takes values in ${[{-1}, 1]}$. There are a few important special cases that are worth discussing:
 
 1. $PIM^{\ast}_{inid} = (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'}$: Independent and non-identically distributed (_inid_), i.e., $Z_{h, i} \eqd Bernoulli(p_{h})$ and $Z_{h, i'} \eqd Bernoulli(p_{h'})$ and with $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.
 2. $PIM^{\ast}_{did} = (1 - p)^{2} + p^{2} + 2 c p ( 1 - p)$: Dependent and identically distributed (_did_), i.e., $Z_{h, i}, Z_{h', i'} \eqd Bernoulli(p)$ and $cor(Z_{h, i}, Z_{h', i'}) = c \neq 0$.
@@ -120,7 +120,7 @@ Figure \ref{fig:Li6} plots the "correlation" against "distance of CpG" ($0 - 100
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.8\textwidth]{../figures/journal.pbio.1000533.s006.eps}
+\includegraphics[width=0.8\textwidth]{../figures/{journal.pbio.1000533.s006}.pdf}
 \caption{Co-methylation patterns for different genomic features. A reproduction of Supplementary Figure 6 from \citet{Li:2010fb} under the Creative Common Attribution (CCBY) licence.}
 \label{fig:Li6}
 \end{figure}
@@ -129,7 +129,7 @@ The genome-wide analysis correlation plot contains a periodicity of approximatel
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.8\textwidth]{../figures/Figure_S7.eps}
+\includegraphics[width=0.8\textwidth]{../figures/Figure_S7.pdf}
 \caption{Transformation of methylation correlation at nearby CpG cytosines. A reproduction of Supplementary Figure 7 from \citet{Li:2010fb} under the Creative Common Attribution (CCBY) licence.}
 \label{fig:Li7}
 \end{figure}
@@ -180,7 +180,7 @@ All of this casts serious doubt on the validity and interpretation of the co-met
 
 \subsection{\citet{Lacey:2013iy}}\label{sec:lacey_2013}
 
-\citet{Lacey:2013iy} explore co-methylation in their paper on modelling and analysing reduced representation bisulfite-sequencing data (RRBS). To do so, \citeauthors{Lacey:2013iy} fit a Gaussian variogram model to the CpG $\beta$-values from chromosome 11 of a normal myotube cell line (_MTCTL2_). The empirical and fitted variograms asymptote for CpGs separated by around $3000$ bp (Figure 1d of \citet{Lacey:2013iy}, unable to be reproduced due to rights restrictions) and so they conclude that the methylation level of CpGs "show a strong correlation for sites in close proximity, decaying to near independence at distances beyond 3000 bp".
+\citet{Lacey:2013iy} explore co-methylation in their paper on modelling and analysing reduced representation bisulfite-sequencing data (RRBS). To do so, \citeauthor{Lacey:2013iy} fit a Gaussian variogram model to the CpG $\beta$-values from chromosome 11 of a normal myotube cell line (_MTCTL2_). The empirical and fitted variograms asymptote for CpGs separated by around $3000$ bp (Figure 1d of \citet{Lacey:2013iy}, unable to be reproduced due to rights restrictions) and so they conclude that the methylation level of CpGs "show a strong correlation for sites in close proximity, decaying to near independence at distances beyond 3000 bp".
 
 Caution is warranted in extrapolating these results to statements about genome-wide co-methylation. Firstly, this analysis uses only approximately $60,000$ CpGs[^ncpgs], far fewer than the $25$ million CpGs in the haploid human genome. Secondly, these data are from a single sample from a single tissue, which cannot capture the sample-to-sample nor tissue-to-tissue variability in co-methylation. Finally, RRBS targets CpG dense regions of the genome with low levels of methylation and so these data do not capture co-methylation outside of these regions, where the majority of the CpGs are found and which are highly methylated.
 
@@ -233,7 +233,7 @@ The sequencing technology at the time of this publication produced very short re
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/Cokus_2008_Sup_Fig_14.pdf}
-\caption{Within-read probability of additional methylation of CHH sites within a given distance from a methylated CHH site. Data were derived from individual BS-Seq reads. The x-axis indicates the distance between the two cytosines. The y-axis indicates the probability of methylation of CHH sites within the given distance from another methylated CHH site. Each point is the mean value from averaging the probability from each of the five Arabidopsis chromosomes, and the blue line is a running average of these mean values. Error bars represent 95% confidence intervals via critical values of Student $t$ distributions. Adapted by permission from from Macmillan Publishers Ltd: [Nature Genetics] (\citet{Cokus:2008fc}), copyright (2008)}
+\caption{Within-read probability of additional methylation of CHH sites within a given distance from a methylated CHH site. Data were derived from individual BS-Seq reads. The x-axis indicates the distance between the two cytosines. The y-axis indicates the probability of methylation of CHH sites within the given distance from another methylated CHH site. Each point is the mean value from averaging the probability from each of the five Arabidopsis chromosomes, and the blue line is a running average of these mean values. Error bars represent $95\%$ confidence intervals via critical values of Student $t$ distributions. Adapted by permission from from Macmillan Publishers Ltd: [Nature Genetics] (\citet{Cokus:2008fc}), copyright (2008)}
 \label{fig:Cokus_2008_Sup_Fig_14}
 \end{figure}
 
