@@ -348,7 +348,7 @@ The next best approach is that implemented in `Bis-SNP` \citep{Liu:2012ge}, whic
 
 Certain variants, in particular (heterozygous) $C>T$ SNPs, are more difficult to accurately genotype than others. Unfortunately, $C>T$ SNPs are also quite important because they are the most common SNPs in mammals \citep{Liu:2012ge}, mostly occur at CG dinucleotides and, as a result, are easily mis-called as unmethylated cytosines rather than as genetic variants. Fortunately, it is possible to distinguish such $C>T$ SNPs from unmethylated cytosines by examining the nucleotide on the opposing strand - if it is a $G$ then the position must be a $C$, if it is a $A$ then it must be a $T$ (see Figure \ref{fig:Bis-SNP}). Other base substitutions are more readily detected, and insertion and deletion events (indels) may also be called.
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \includegraphics[width=\textwidth]{../figures/Bis-SNP.pdf}
 \caption{texttt{Bis-SNP} is able to distinguish unmethylated cytosines (site 1), from cytosine to thymine genetic variants (site 2) and thymine to (unmethylated) cytosine genetic variants (site 3) by examining the reads mapped to the reverse strand. For all three loci, the reads mapped to the forward strand contain a thymine. However, it is the base on the reverse strand that reveal the true genotype. When combined with the reference genome it can be inferred whether the sample's genome, which isn't directly observed, has a genetic variant at that location. This is only possible with bisulfite-data generated using the directional protocol. This figure is adapted from \citet{Liu:2012ge}.}
 \label{fig:Bis-SNP}
@@ -410,7 +410,7 @@ I define an m-tuple to be a tuple of $m = 1, 2, \ldots$ methylation loci. I refe
 
 [^adjacent]: Two methylation loci are adjacent if there is no methylation loci in between the pair. For example, `CGCG` and `CGTTACG` both contain two adjacent CpGs (the intervening `TTA` in the second sequence does not include a CpG). In contrast, the first and last CpG in the sequence `CGTCGTCG` are __not__ adjacent, since the intervening sequencing, `TCGT` include a CpG. Note that in situations where we are only interested in studying CpGs, we define 'methylation loci' to mean 'CpGs'. Therefore the sequence `CGTCTTCG` contains two adjacent methylation loci; while there is a `C` in the intervening sequence, `TCTT`, it is a CHH not a CpG.
 
-Generally, when referring to m-tuples I implicitly mean $NIL = 0$; I will explicitly use the notation $NIL \geq 0$ when I wish to make clear that there may be intervening methylation loci in the m-tuple. The default option of `methtuple` is to produce m-tuples with $NIL = 0$ unless the `--all-combination` flag is set[^nil0].
+Generally, when referring to m-tuples I implicitly mean $NIL = 0$; I will explicitly use the notation $NIL \geq 0$ when I wish to make clear that there may be intervening methylation loci in the m-tuple. The default option of `methtuple` is to produce m-tuples with $NIL = 0$ unless the `--all-combinations` flag is set[^nil0].
 
 [^nil0]: Actually, while `methtuple` tries to produce m-tuples with $NIL = 0$ it can't guarantee this because it would require parsing the reference genome sequence. This is only really an issue with paired-end sequencing and is made clear in the example. Some _post-hoc_ filtering of the m-tuples will generally be required in order to remove those m-tuples with $NIL > 0$.
 
@@ -418,84 +418,49 @@ Just as each methylation call at a 1-tuple comes from a single read, each methyl
 
 For each m-tuple, I also define the intra-pair distance (_IPD_) as the vector containing the $m - 1$ pair-wise distances (measured in bp) between methylation loci in the m-tuple. For example, the 2-tuple (`chr7:+:145`, `chr7:+:163`) has $IPD = (163 - 145) = (18)$. The 5-tuple (`chr2:-:560`, `chr2:-:570`, `chr2:-:572`, `chr2:-:588`, `chr2:-:612`) has $IPD = (570 - 560, 572 - 570, 588 - 572, 612 - 588) = (10, 2, 16, 24)$. The IPD vector of a 1-tuple is undefined. In Chapter \ref{chap:co-methylation} I use the IPDs, along with other features such as the genomic context, to define 'similar' m-tuples.
 
-To illustrate several of the above-mentioned concepts, suppose we sequence a region of the genome containing five methylation loci with three paired-end reads (`A`, `B` and `C`):
+To illustrate several of the above-mentioned concepts, suppose we sequence a region of the genome containing five methylation loci with three paired-end reads (`A`, `B` and `C`), shown in Figure \ref{fig:methtuple_example1}.
 
-__TODO: Convert the following code chunks to figures in Illustrator__
+\begin{figure}[h!]
+\includegraphics[width=0.6\textwidth]{../figures/methtuple_example1.pdf}
+\caption{Diagram of three-paired end reads --- \texttt{A}, \texttt{B} and \texttt{C} --- mapping to a region containing five methylation loci --- \texttt{1} $-$ \texttt{5}.}
+\label{fig:methtuple_example1}
+\end{figure}
 
-```
-ref: 1    2   3 4 5
-A_1: |----->
-A_2:         <------|
-B_1:
-B_2: |----->   <----|
-C_1:    |----->
-C_2:      <------|
-```
+If we are interested in 1-tuples, Figure \ref{fig:methtuple_example2} shows what we would obtain from each read by running `methtuple`. The result is identical regardless of whether the `--all-combinations` flag is set.
 
-If we are interested in 1-tuples, then we would obtain the following from each read by running `methtuple`:
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../figures/methtuple_example2.pdf}
+\caption{1-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2}.}
+\label{fig:methtuple_example2}
+\end{figure}
 
-```
-A: {1}, {2}, {3}, {4}, {5}
-B: {1}, {2}, {4}, {5}
-C: {2}, {3}, {4}
-```
-
-The result is identical regardless of whether the `--all-combinations` flag is set.
-
-If we are interested in 3-tuples, then we would obtain the following from each read by running `methtuple` in its default mode:
-
-```
-A: {1, 2, 3}, {2, 3, 4}, {3, 4, 5}
-B: {1, 2, 4}, {2, 4, 5}
-C: {2, 3, 4}
-```
-
-Things to note:
+If we are interested in 3-tuples, Figure \ref{fig:methtuple_example3} shows what we would obtain from each read by running `methtuple` in its default mode. A few things to note:
 
 - Read-pair `A` sequences all three (= 5 - 3 + 1) adjacent 3-tuples
-- Read-pair `B` sequences none of the adjacent 3-tuples but does 'erroneously' construct two 3-tuples with $NIL > 0$. This happens because m-tuples are created independently from each read-pair; effectively, read-pair `B` is unaware of methylation locus `3`. Depending on the downstream analysis, you may want to _post-hoc_ filter out these m-tuples with $NIL > 0$.
-- The twice-sequenced methylation loci, `2` and `3`, in read-pair `C` are not double counted.
+- Read-pair `B` sequences none of the adjacent 3-tuples but does 'erroneously' construct two 3-tuples from pairs of non-adjacent loci. This happens because m-tuples are created independently from each read-pair; effectively, read-pair `B` is unaware of methylation locus `3`. Depending on the downstream analysis, you may want to _post-hoc_ filter out these m-tuples with non-adjacent loci.
+- The twice-sequenced methylation loci in read-pair `C`, `2` and `3`, are not double counted.
 
-However, if we were to run `methtuple` with `--all-combinations` then we would obtain:
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../figures/methtuple_example3.pdf}
+\caption{3-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2}.}
+\label{fig:methtuple_example3}
+\end{figure}
 
-```
-A: {1, 2, 3}, {2, 3, 4}, {3, 4, 5}, {1, 2, 4}, {1, 2, 5}, {1, 3, 4}, {1, 3, 5}, {1, 4, 5}, {2, 3, 5}, {2, 4, 5}
-B: {1, 2, 4}, {2, 4, 5}, {1, 2, 5}, {1, 4, 5}
-C: {2, 3, 4}
-```
+Finally, Figure \ref{fig:methtuple_example4} shows the output if we were to analyse 3-tuples but with the `--all-combinations` flag set.
 
-The number of CpGs per read for the Lister data is shown in Figure \ref{fig:Lister_cpgs_per_read}. Longer reads, and paired-end reads, contain more methylation loci and so are more informative for analyses using m-tuples. This can be seen by comparing, for example, the _ADS_ and _HSF1_ samples. Samples sequenced more deeply will have more reads per m-tuple, although this can't be seen in these plots since they are normalised by sequencing depth.
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../figures/methtuple_example4.pdf}
+\caption{3-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2} when the \texttt{--all-combinations} flag is set.}
+\label{fig:methtuple_example4}
+\end{figure}
 
-```{r Lister_cpgs_per_read, dev = "pdf", eval = TRUE, echo = FALSE, message = FALSE, fig.cap = "Number of CpGs per read for the Lister data.", out.width = "0.8\\linewidth"}
-library(dplyr)
-library(ggplot2)
-library(scales)
-thesis_theme <- theme_classic(base_size = 12)
-thesis_theme <- theme_bw(base_size = 12)
-dataset <- "Lister"
-hist <- lapply(paste0("../data/observable_m-tuples/", dataset, "/",
-                      list.files(paste0("../data/observable_m-tuples/",
-                                        dataset), "\\.CG\\_per\\_read\\.hist")),
-               read.table, header = TRUE)
-sn <- gsub("\\.CG\\_per\\_read\\.hist", "",
-           list.files(paste0("../data/observable_m-tuples/",
-                             dataset), "\\.CG\\_per\\_read\\.hist"))
-sn <- gsub("DM\\_", "", sn)
-hist_df <- bind_rows(hist) %>%
-  mutate(Sample = rep(sn, sapply(hist, nrow))) %>%
-  group_by(Sample) %>%
-  mutate(Proportion = count / sum(as.numeric(count)))
-hist_df %>%
-  ggplot(aes(x = n, y = Proportion * 100)) +
-  geom_bar(stat = "identity") +
-  facet_wrap(~ Sample, ncol = 5, nrow = 4) +
-  coord_cartesian(xlim = c(-1, 8.5)) +
-  scale_y_continuous(label = comma) +
-  xlab("Number of CpGs per read\n(Axis truncated at 8)") +
-  ylab("Percentage of total reads") +
-  ggtitle(paste0(dataset, ": Number of CpGs per read")) +
-  thesis_theme
-```
+With current sequencing technology we are limited to extracting m-tuples that span no more than $200-250$ bp. This obviously affects the size of m-tuples that we can study. Figure \ref{fig:Lister_CpGs_per_read} shows the number of CpGs per read for the Lister dataset (see Chapter \ref{chap:dataset} for a description of the Lister dataset). Longer reads, and paired-end reads, contain more methylation loci and so are more informative for analyses using m-tuples. This can be seen by comparing, for example, the _ADS_ and _HSF1_ samples. Samples sequenced more deeply will have more reads per m-tuple, although this can't be seen in these plots since they are normalised by sequencing depth.
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../figures/Lister_CpGs_per_read.pdf}
+\caption{Number of CpGs per read for the Lister dataset.}
+\label{fig:Lister_CpGs_per_read}
+\end{figure}
 
 \subsection{Motivation}
 
@@ -506,7 +471,7 @@ hist_df %>%
 \begin{tabulary}{\textwidth}{LLLLL}
 \toprule
 Software           & Reference                                & Input                                              & Designed for targeted sequencing & Other limitations                                                                \\ \midrule
-\texttt{methclone} & \citet{Li:2014ei}                       & Bismark BAM files                                  & No, although example uses eRRBS  & \textbf{TODO: Try installing. Suspect you can't get actual methylation calls.} \\
+\texttt{methclone} & \citet{Li:2014ei}                       & Bismark BAM files                                  & No, although example uses eRRBS  & \textbf{TODO: Suspect you can't get actual methylation calls.} \\
 \texttt{methpat}  & \url{https://github.com/bjpop/methpat} & Output of \texttt{bismark\_methylation\_extractor} & Yes (amplicons)                  &                                                                                  \\
 \texttt{DMEAS}     & \citet{He:2013cj}                       & Output of \texttt{bismark\_methylation\_extractor} &                                  & Windows operating system only. Perl code only available as PDF file.             \\ \bottomrule
 \end{tabulary}
@@ -522,14 +487,13 @@ Software           & Reference                                & Input           
 
 `methtuple` is currently limited to processing files produced by `Bismark` due to its reliance on the `Bismark`-specific tags `XM`, the "methylation call string",  `XR`, the "read conversion state for the alignment", and `XG`, the "genome conversion state for the alignment" ([http://www.bioinformatics.bbsrc.ac.uk/projects/bismark/Bismark_User_Guide_v0.13.0.pdf](http://www.bioinformatics.bbsrc.ac.uk/projects/bismark/Bismark_User_Guide_v0.13.0.pdf)). It could be extended to work with other bisulfite-sequencing aligners. However, due to the eccentricities of each aligner, such an extension would have to be aligner-specific and therefore a considerable undertaking. Each extension would require that tags analogous to the `XR`, `XG` and `XM` tags can be generated from the given `BAM` file. In the case of the `XM` tag, this would likely require that the reference genome is parsed in parallel with the `BAM` file, adding considerable computational overhead. Perhaps the easiest option would be to add a script that 'Bismark-ifies' the original `BAM` file. Since all my data are aligned with Bismark, or were converted to Bismark's `BAM` format, I have not yet had need to pursue this line of work.
 
-The output format of `methtuple` is tab-delimited plain text, optionally compressed with `gzip` or `bzip2`. An example of the output is shown below for 3-tuples:
+The output format of `methtuple` is tab-delimited plain text, optionally compressed with `gzip` or `bzip2`. Figure \ref{fig:3-tuples} shows an example of the output for 3-tuples.
 
-```{sh}
-chr     strand  pos1    pos2    pos3    MMM     MMU     MUM     MUU     UMM     UMU     UUM     UUU
-chr1    +       469     471     484     0       0       4       1       1       0       0       0
-chr1    +       471     484     489     1       0       0       0       2       2       1       0
-
-```
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../figures/3-tuples.pdf}
+\caption{Example output of \texttt{methtuple} for 3-tuples.}
+\label{fig:3-tuples}
+\end{figure}
 
 \subsection{Performance}
 
