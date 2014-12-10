@@ -13,9 +13,11 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
-\section{Equivalence of tests to identify DMCs in a one-group experiment}\label{app:one_group_equivalence}
+\section{Chapter \ref{chap:wgbs_downstream_analyses}}
 
-\subsection{Mathematical equivalence}
+\subsection{Equivalence of tests to identify DMCs in a one-group experiment}\label{app:one_group_equivalence}
+
+\subsubsection{Mathematical equivalence}
 
 The saturated log-linear model can be written as $\log(F_{a, b}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{a, b}^{meth_state,sample}$, where $F_{a, b}$ is the value of the $(a, b)$ element in the $n \times 2$ contingency table. The null hypothesis that the cytosine is not a DMC is then tested by testing for an association between `sample` and `meth_state`, i.e., whether the parameter $\lambda_{a, b}^{meth_state, sample}$ is significantly different from zero.
 
@@ -33,7 +35,7 @@ Regardless of whether we use the log-linear model or the logistic model, to test
 
 [^deviance]: The deviance is the log-likelihood ratio statistic comparing the current model within a saturated model.
 
-\subsection{Computational equiavelence}
+\subsubsection{Computational equiavelence}
 
 The computational equivalence of using Pearson's $\chi^{2}$ test, the deviance of a log-linear model and the deviance of a logistic regression are shown in the following R code:
 
@@ -62,8 +64,9 @@ glm(x ~ 1, family = binomial)
   # the sequencing coverage).
   glm(x[,1] / (x[, 1] + x[, 2]) ~ 1, family = binomial, weights = x[, 1] + x[, 2])
 ```
+\section{Chapter \ref{chap:co-methylation_review}}\label{app:co-methylation_review}
 
-\section{The probability that two dependent Bernoulli random variables are identical}\label{app:bernoulli_equal}
+\subsection{The probability that two dependent Bernoulli random variables are identical}\label{app:bernoulli_equal}
 
 \cite{Lindqvist:1978fm} wrote a brief note on Bernoulli trials with dependence.
 Building on earlier work by \cite{Klotz:1973if}, Lindqvist parameterises the
@@ -125,7 +128,7 @@ Pr(Z_{h, i} = Z_{h', i'}) &= Pr(Z_{h, i} = 0, Z_{h', i'} = 0) + Pr(Z_{h, i} = 1,
 
 __TODO: What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?__
 
-\section{Estimate of number of CpGs used by \citet{Lacey:2013iy}}\label{app:lacey}
+\subection{Estimate of number of CpGs used by \citet{Lacey:2013iy}}\label{app:lacey}
 
 I want to estimate the number of CpGs used by \citet{Lacey:2013iy} to estimate the correlation of methylation levels. They used the chromosome 11 data from an RRBS experiment on a normal myotube cell line, _MTCTL2_. Unfortunately, there is no URL provided to these data. \citet{Lacey:2013iy} cite their data as having come from \citet{Tsumagari:2013gn}, which includes a sample "Normal Human Skeletal Muscle Myoblasts", _HSMM_ ([http://genome-mirror.duhs.duke.edu/ENCODE/cellTypes.html](http://genome-mirror.duhs.duke.edu/ENCODE/cellTypes.html), [http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/](http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/)). I believe this to be the same cell line. In any case, for my purposes I simply needed some comparable RRBS data, not necessarily the exact same sample as  _MTCTL2_.
 
@@ -177,10 +180,10 @@ unix305      & $4\times$ AMD Opteron 6276 @ 2.3GHz  & 16                  & 64  
 
 ## Software details
 
-```{r}
-devtools::session_info()
-```
+__TODO__
 
-### TODOs
-
-* Cite data source and publication
+- R version
+- `MethylationTuples`
+- `methsim`
+- `methtuples`
+- others

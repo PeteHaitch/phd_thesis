@@ -275,7 +275,7 @@ Under the binomial model, ($M_{i, j} | n_{i, j}) \eqd Bin(n_{i, j}, B_{i, j})$, 
 
 \subsection{Empirical distributions}
 
-- TODO: Lots of figures and discussion. See chapter plan.
+__TODO: Update Ziller with Ziller merged__
 
 In a study involving multiple samples, the set of $\beta$-values can be summarised as a matrix where each row is a locus and each column is a sample. Some values will be missing, either because there was insufficient sequencing coverage to estimate a $\beta$-value or because that locus is not a cytosine for that sample. This matrix might be visualised to learn about the distribution of methylation levels, either row-wise, to learn about the variability across samples, or column-wise, to learn about the variability within samples.
 

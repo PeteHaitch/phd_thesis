@@ -72,8 +72,6 @@ PIM^{\ast} &= Pr(Z_{h, i} = Z_{h', i'}) \\
 
 This result is proven in Appendix \ref{app:bernoulli_equal}.
 
-__TODO: What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?__
-
 In general, $PIM^{\ast} \in [0, 1]$ since it is a probability, which is already unlike a correlation coefficient that takes values in $\[-1, 1\]$. There are a few important special cases that are worth discussing:
 
 1. $PIM^{\ast}_{inid} = (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'}$: Independent and non-identically distributed (_inid_), i.e., $Z_{h, i} \eqd Bernoulli(p_{h})$ and $Z_{h, i'} \eqd Bernoulli(p_{h'})$ and with $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.

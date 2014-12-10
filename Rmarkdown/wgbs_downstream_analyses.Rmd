@@ -10,7 +10,7 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
-\chapter{Downstream analyses of whole-genome bisulfite-sequencing data}
+\chapter{Downstream analyses of whole-genome bisulfite-sequencing data}\label{chap:wgbs_downstream_analyses}
 
 This chapter discusses various statistical analyses of bisulfite-sequencing data, which I call _downstream analyses_.
 
@@ -106,7 +106,7 @@ $Sample_{5}$ & $44$ & $46$ \\ \bottomrule
 \label{tab:one-group_example}
 \end{table}
 
-We could analyse this table using a simple stand-alone test, such as Pearson's $\chi^{2}$ test. Alternatively, we could frame this as a generalised linear model, either a log-linear model or a logistic regression. The equivalence of these methods is shown in the Appendix.
+We could analyse this table using a simple stand-alone test, such as Pearson's $\chi^{2}$ test. Alternatively, we could frame this as a generalised linear model, either a log-linear model or a logistic regression. The equivalence of these methods is shown in Appendex \ref{app:one_group_equivalence}.
 
 A key advantage of using either of the generalised linear models is the capability to include additional covariates in the model, such as the sex of each sample or terms to account for batch effects. More complex regression analyses are also possible, such as empirical Bayes or fully Bayesian models.
 
