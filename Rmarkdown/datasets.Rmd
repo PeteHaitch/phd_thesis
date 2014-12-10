@@ -19,15 +19,15 @@ bibliography: ../latex/phd_thesis.bib
 This chapter briefly documents the 51 whole-genome bisulfite-sequencing samples that I use in my thesis. The `BAM` files for each sample underwent the same basic processing:
 
 1. Genetic variants were called using `Bis-SNP (v0.82.2)` via the `bissnp_easy_usage.pl` script.
-2. M-bias was estimated using `bismark_methylation_extractor` with the `--mbias_only` flag set. These output files were then analysed using the  `MethylationTuples` R package (see section \ref{sec:MethylationTuples}) and all read-positions with an average CpG $\beta$-value more than $0.03$ away from the median were excluded from methylation calling (read 1 and read 2 analysed separately).
+2. M-bias was estimated using `bismark_methylation_extractor` with the `--mbias_only` flag set. These output files were then analysed using the  `MethylationTuples` R package (see section \ref{sec:MethylationTuples}) and all read-positions with an CpG normalised read-position methylation level more than $0.03$ from the median, i.e., $|$nrplml_{CpG}$ - median(rplm_{CpG})| > 0.03$, were excluded from methylation calling (read 1 and read 2 analysed separately where applicable).
 3. CpG methylation calling was performed using `methtuple (v1.4.0)` for m-tuples $\text{m} = 1, \ldots, 8$. CpG 2-tuples were called both with and without the `--all-combinations` flag; all other tuple sizes were called without the `--all-combinations` flag.
-4. A `MethPat` object was created for each of the EPISCOPE, Lister, Seisenberger and Ziller datasets for 1-tuples, 2-tuples, 2ac-tuples, 3-tuples and 4-tuples. I did not create `MethPat` objects for m-tuples with $\text{m} > 4$ because the data are too sparse at this large sizes to be generally useful.
+4. A `MethPat` object was created for each of the EPISCOPE, Lister, Seisenberger and Ziller datasets for 1-tuples, 2-tuples, 2ac-tuples (2-tuples with `--all-combinations`), 3-tuples and 4-tuples. I did not create `MethPat` objects for m-tuples with $\text{m} > 4$ because the data are too sparse at this larger sizes to be generally useful.
 
 __TODO__: I'd like to make available all the data and scripts necessary to reproduce my analyses, i.e., going from a `BAM` file to a `MethPat` objects, but it's a little daunting --- the folder containing __just the processed data__ (`/home/users/lab0605/hickey/methylation_m-tuples`) is $275$ GB alone.
 
 \section{Lister dataset}\label{sec:Lister_dataset}
 
-The _Lister data_ refers to whole-genome bisulfite-sequencing libraries used in \cite{Lister:2009hy} and \cite{Lister:2011kg}. The Lister data were the largest publicly available human WGBS datasets until quite recently. All samples are of human DNA.
+The _Lister dataset_ refers to whole-genome bisulfite-sequencing libraries used in \cite{Lister:2009hy} and \cite{Lister:2011kg}. The Lister data were the largest publicly available human WGBS datasets until quite recently. All samples are of human DNA.
 
 \subsection{Sample descriptions}
 
@@ -84,10 +84,10 @@ The EPISCOPE data were kindly provided to me by Professor Susan Clark (Garvan In
 
 The data are from three human donors across four different tissues, for a total of 12 whole-genome bisulfite-sequencing libraries. The four tissues are:
 
-- BUF: Buffy coat layer, which are leukocytes and platelets derived by centrifugation of a whole blood sample.
-- SA: Subcutaneous adidose tissue, which is fat found just below the skin. Unlike visceral fat, "subcutaneous fat is not related to many of the classic obesity-related pathologies, such as heart disease, cancer, and stroke" (__TODO: Get better reference than wikipedia__).
-- VA: Visceral adipose tissue, which is located inside the abdominal cavity, packed between the organs (stomach, liver, intestines, kidneys, etc.) (__TODO: Get better reference than wikipedia__).
-- VAT: Visceral adipocytes, which are derived from the VA tissue.
+- _BUF_: Buffy coat layer, which are leukocytes and platelets derived by centrifugation of a whole blood sample.
+- _SA_: Subcutaneous adidose tissue, which is fat found just below the skin. Unlike visceral fat, "subcutaneous fat is not related to many of the classic obesity-related pathologies, such as heart disease, cancer, and stroke" (__TODO: Get better reference than wikipedia__).
+- _VA_: Visceral adipose tissue, which is located inside the abdominal cavity, packed between the organs (stomach, liver, intestines, kidneys, etc.) (__TODO: Get better reference than wikipedia__).
+- _VAT_: Visceral adipocytes, which are derived from the VA tissue.
 
 The data are summarised in Table \ref{tab:EPISCOPE_dataset}.
 
@@ -115,17 +115,17 @@ E23VAT & PE         & $101$ bp    & $31\times$    \\ \bottomrule
 
 \subsection{Creation of \texttt{BAM} files}
 
-The sequencing data for these 12 samples were processed and aligned by Aaron Statham (Garvan Institute of Medical Research). Each sample was aligned to the human reference genome (hg19) using Bismark (v0.8.3) with the Bowtie2 backend. The default alignment options were used, except that the maximum insert size for valid paired-end alignments was set to 1000 instead of 500 (`-X 1000`). Duplicate reads had already been removed from the `BAM` files that I received.
+The sequencing data for these 12 samples were processed and aligned by Aaron Statham (Garvan Institute of Medical Research). Each sample was aligned to the human reference genome (hg19) using `Bismark` (`v0.8.3`) with the `Bowtie2` backend. The default alignment options were used, except that the maximum insert size for valid paired-end alignments was set to 1000 instead of 500 (`-X 1000`). Duplicate reads had already been removed from the `BAM` files that I received.
 
 \section{Seisenberger dataset}\label{sec:Seisenberger_dataset}
 
-The Seisenberger data are from a study of the dynamics of DNA methylation reprogramming in mouse primordial germ cells \cite{Seisenberger:2012ko}. These were a convenience sample provided to me by a colleague. I thank Felix Krueger (Babraham Institute) who processed and aligned the reads, and sent me the `BAM` files.
+The Seisenberger data are from a study of the dynamics of DNA methylation reprogramming in mouse primordial germ cells \cite{Seisenberger:2012ko}. These were a convenience sample provided to me by a colleague, Felix Krueger (Babraham Institude). I thank Felix who send my the `BAM` files containing processed and aligned reads.
 
 \subsection{Sample descriptions}
 
-I have the data for only three samples from the original publication, detailed in Table \ref{tab:Seisenberger_dataset}. The _J1\_1_ sample is from an embryonic stem cell line while both the _E6.5\_epiblast\_1_ and _E16.5\_male\_1_ samples are from a pool of $10-30$ embryos. Developmentally, the samples are ordered _J1\_1_ (embryonic stem cell), _E6.5\_epiblast\_1_ (embryonic day 6.5 epiblast) and _E16.5\_male\_1_ (embryonic day 16.5 male progenitor germ cells).
+I have the data for only three samples from the original publication, detailed in Table \ref{tab:Seisenberger_dataset}. The _J1\_1_ sample is from an embryonic stem cell line while both the _E6.5\_epiblast\_1_ and _E16.5\_male\_1_ samples are derived from pools of $10-30$ embryos. Developmentally, the samples are ordered _J1\_1_ (embryonic stem cell), _E6.5\_epiblast\_1_ (embryonic day 6.5 epiblast) and _E16.5\_male\_1_ (embryonic day 16.5 male progenitor germ cells).
 
-I believe that the samples I received labelled _J1\_1_ and _E16.5\_male\_1_  in fact correspond to _J1\_2_ and _E16.5\_male\_2_, respectively, i.e., the second  replicate rather than the first. The data I received are all $100$ bp paired-end sequences, which matches replicate 2 rather than replicate 1 for both of these samples \citet[Supplementary Table 1 of]{Seisenberger:2012ko}.
+I believe that the samples I received labelled _J1\_1_ and _E16.5\_male\_1_  in fact correspond to _J1\_2_ and _E16.5\_male\_2_, respectively, i.e., the second  replicate rather than the first. The data I received are all $100$ bp paired-end sequences, which matches replicate 2 rather than replicate 1 for both of these samples \citet[Supplementary Table 1]{Seisenberger:2012ko}.
 
 \begin{table}[h!]
 \centering
@@ -142,13 +142,13 @@ E16.5\_male\_1    & Male progenitor germ cells & PE         & $150$ bp    & $12\
 
 \subsection{Creation of \texttt{BAM} files}
 
-The sequencing data for these 3 samples were processed and aligned by Felix Krueger (Babraham Institute). Each sample was aligned to the mouse reference genome (GRCm38/mm10) using Bismark (v0.7.12) with the Bowtie1 backend. The default alignment options were used.
+The sequencing data for these 3 samples were processed and aligned by Felix Krueger (Babraham Institute). Each sample was aligned to the mouse reference genome (GRCm38/mm10) using `Bismark` (`v0.7.12`) with the `Bowtie1` backend. The default alignment options were used.
 
 \section{Ziller dataset}\label{sec:Ziller_dataset}
 
-The Ziller are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 19 (__TODO: Check final numbers__) WGBS libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research), who already had aligned and processed BAM files for these 19 libraries. These libraries in fact represent 19 sequencing runs of eight biological samples, which I was not aware of until the data had already been processed. Therefore, I have _post hoc_ merged these sequencing runs. This unfortunately reduces the power to detect genetic variants since the coverage of individual sequencing runs is lower than merged data, but does not adversely affect methylation calling since the number of methylated and unmethylated reads can be summed across sequencing runs.
+The Ziller are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 19 (__TODO: Check final numbers__) WGBS libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research), who already had aligned and processed BAM files for these 19 libraries. These libraries in fact represent 19 sequencing runs of eight biological samples, which I was not aware of until the data had already been processed. Therefore, I have _post hoc_ merged the processed data from sequencing runs. This unfortunately reduces the power to detect genetic variants since the coverage of individual sequencing runs is lower than merged data, but does not adversely affect methylation calling since the number of methylated and unmethylated reads can be summed across sequencing runs.
 
-The eight biological samples are as follows: frontal cortex from two 'normal' women donors (_Frontal\_cortex\_normal\_1_ and Frontal\_cortex\_normal\_2_) and from two women who had Alzheimer's disease (_Frontal\_cortex\_AD\_1_ and _Frontal\_cortex\_AD\_2_); a sample from a human liver carcinoma cell line (HepG2\_cell\_line_); a new sample from the _IMR90_ lung fibroblast cell line (_IMR90\_cell\_line_); and samples from a colon cancer matched tumour-normal pair (_Colon\_Tumor\_Primary_ and _Colon\_Primary\_Normal_).
+The eight biological samples are as follows: frontal cortex from two 'normal' women donors (_Frontal\_cortex\_normal\_1_ and _Frontal\_cortex\_normal\_2_) and from two women who had Alzheimer's disease (_Frontal\_cortex\_AD\_1_ and _Frontal\_cortex\_AD\_2_); a sample from a human liver carcinoma cell line (_HepG2\_cell\_line_); a new sample from the _IMR90_ lung fibroblast cell line (_IMR90\_cell\_line_); and samples from a colon cancer matched tumour-normal pair (_Colon\_Tumor\_Primary_ and _Colon\_Primary\_Normal_).
 
 Table \ref{tab:Ziller_dataset_sequencing_runs} summarises the data for the 19 individual sequencing runs[^Ziller_merged_ave_cov].
 
