@@ -20,7 +20,7 @@ The second half of the chapter reviews downstream analyses that are based on met
 
 \section{Differential methylation}\label{sec:differential_methylation}
 
-A common downstream analysis is the identification of differential methylation. This includes the identification of differentially methylated cytosines (DMCs) and differentially methylated regions (DMRs). Many methods have been proposed \citep[e.g.,]{Akalin:2012cmChen:2013eh, Chen:2014jb, Dolzhenko:2014bo, Gokhman:2014cp, Jaffe:2012gx, Lacey:2013iy, Lister:2009hy, Rijlaarsdam:2014hp, Sofer:2013bk, Xie:2014ez, Feng:2014iq, Hebestreit:2013ko, Sun:2014fk, Park:2014ho, Hansen:2012gr}.
+A common downstream analysis is the identification of differential methylation. This includes the identification of differentially methylated cytosines (DMCs) and differentially methylated regions (DMRs). Many methods have been proposed \citep[e.g.,]{Akalin:2012cm, Chen:2013eh, Chen:2014jb, Dolzhenko:2014bo, Gokhman:2014cp, Jaffe:2012gx, Lacey:2013iy, Lister:2009hy, Rijlaarsdam:2014hp, Sofer:2013bk, Xie:2014ez, Feng:2014iq, Hebestreit:2013ko, Sun:2014fk, Park:2014ho, Hansen:2012gr}.
 
 During my PhD I needed to analyse data from one-group experiment for differential methylation, admittedly an unusual design. Almost all these existing methods are designed for two-group experiments, with some being general enough to extend to multiple-group experiments[^multi-group_extension]. Since I spent time working on the one-group cases, and also because a review article for the two-group case was recently published \citep{Robinson:2014jz}, I pay somewhat disproportianate attention to the one-group scenario in what follows.
 
@@ -30,7 +30,7 @@ During my PhD I needed to analyse data from one-group experiment for differentia
 
 In any analysis of differential methylation we want the DMCs and DMRs to be both _biologically_ and _statistically_ significant; it's no good if all the differences are simply due to technical artefacts or random fluctuations. Key to ensuring biological relevance is good experimental design, such as the use of _replicates_ in each experimental group. A distinction is often made between _technical replicates_ and _biological replicates_. Briefly, biological replicates are experimental units that all undergo the same treatment and are used to estimate the within-group variability of the treatment. Technical replicates are repeated measurements of the same experimental unit, perhaps with slight variations in the sample preparation, and are used to estimate the variability of the sample preparation and measurement process.
 
-As is clear from this definition, the boundary between biological and technical replication is often a fuzzy one. For example, \citet{Lister:2009hy} state that, "_For each cell type, two __biological__ replicates were performed with cells of different passage number_" (emphasis mine). I contend that these are better defined as technical replicates since each replicate came from the same cell line, underwent passaging under near-identical conditions and differ only by the number of cell passages in each media[^cell_passaging].
+As is clear from this definition, the boundary between biological and technical replication is often a fuzzy one. For example, \citet{Lister:2009hy} state that, "For each cell type, two __biological__ replicates were performed with cells of different passage number" (emphasis mine). I contend that these are better defined as technical replicates since each replicate came from the same cell line, underwent passaging under near-identical conditions and differ only by the number of cell passages in each media[^cell_passaging].
 
 [^cell_passaging]: In the case of IMR90 cell line, the first replicate, IMR90_r1, underwent 4 cell passages and the second replicate, IMR90_r2, underwent 5 cell passages. In the case of the H1 cell line, the first replicate, H1_r1, underwent 25 passages in the first media and 9 passages in the second media, and the second replicate, H1_r2, underwent 27 passages in the first media and 5 passages in the second media.
 
@@ -46,20 +46,20 @@ Identifying DMCs boils down to identifying differences in the mean level of meth
 
 Regardless of the test used, all attempts to identify DMCs from whole-genome bisulfite-sequencing data must pay a large multiple-hypothesis testing penalty. Correcting for multiple hypothesis testing is standard practice in the analysis of genomics data, but the sheer number of tests, in this case approximately 25 million, is at least an order of magnitude greater than commonly tested in other genomics experiments[^multiple_testing]. Various methods have been used to correct for this multiple testing, as illustrated in Table \ref{tab:multiple_testing}.
 
-[^multiple_testing]; For example, there are approximately 20,000 tests in studies of differential gene expression and one million tests in genome-wide association studies.
+[^multiple_testing]: For example, there are approximately 20,000 tests in studies of differential gene expression and one million tests in genome-wide association studies.
 
 \begin{table}[h]
 \centering
-\begin{tabular}{@{}ll@{}}
+\begin{tabulary}{\textwidth}{LL}
 \toprule
 Method                                       & Used by                                                                            \\ \midrule
 \citet{Benjamini:1995ws}                      & \citet{Akalin:2012cm, Jaffe:2012gx, Lacey:2013iy, Rijlaarsdam:2014hp, Sofer:2013bk} \\
 \citet{Wang:2011cw}                           & \citet{Akalin:2012cm}                                                               \\
-"False discovery rate correction/adjustment" & \citet{Dolzhenko:2014bo, Gokhman:2014cp, Lister:2009hy, Xie:2014ez}                 \\
+``False discovery rate correction/adjustment'' & \citet{Dolzhenko:2014bo, Gokhman:2014cp, Lister:2009hy, Xie:2014ez}                 \\
 \citet{Storey:2007cp}                         & \citet{Jaffe:2012gx}                                                                \\
 \citet{Benjamini:2001ho}                      & \citet{Sofer:2013bk, Hebestreit:2013ko}                                             \\
 "Bonferonni adjustment"                      & \citet{Feng:2014iq}                                                                 \\ \bottomrule
-\end{tabular}
+\end{tabulary}
 \caption{Methods proposed for adjusting for the multiple hypothesis testing performed in an analysis of DMCs. Several papers use describe their analysing as performing a "false discovery rate adjustment" or "false discovery rate correction" without explicitly stating what they are doing or citing a reference. One paper uses an ultra-conservative Bonferonni correction.}
 \label{tab:multiple_testing}
 \end{table}
@@ -74,7 +74,6 @@ In a one-group experiment a DMC is a cytosine where at least one of the samples 
 
 \begin{table}[h]
 \centering
-\resizebox{\textwidth}{!}{%
   \begin{tabular}{@{}lll@{}}
   \toprule
   & m          & u          \\ \midrule
@@ -82,12 +81,11 @@ In a one-group experiment a DMC is a cytosine where at least one of the samples 
   $\vdots$     & $\vdots$   & $\vdots$   \\
   $Sample_{n}$ & $m_{i, n}$ &            \\ \bottomrule
   \end{tabular}
-}
 \caption{$2 \times n$ contingency table summarising the methylation evidence for the $i^{th}$ methylation locus in a one-group experiment.}
 \label{tab:one-group_dmc_testing}
 \end{table}
 
-Such a contingency table can be analysed in many different ways. Mathematically, to test whether this cytosine is a DMC we wish to test the null hypothesis  $H_{0}: \beta_{i, j} = \beta_{i, 0}$ for $j = 1, \ldots, n$ against the alternative that $H_{A}: \beta_{i, j} \neq \beta_{i, 0}$ for some $j$. $\beta_{i, 0}$ may be pre-specified or estimated from the data by, for example, the group average $\frac{1}{n} \sum_{j = 1}^{n} \beta_{i, j}$).
+Such a contingency table can be analysed in many different ways. Mathematically, to test whether this cytosine is a DMC we wish to test the null hypothesis  $H_{0}: \beta_{i, j} = \beta_{i, 0}$ for $j = 1, \ldots, n$ against the alternative that $H_{A}: \beta_{i, j} \neq \beta_{i, 0}$ for some $j$. $\beta_{i, 0}$ may be pre-specified or estimated from the data by, for example, the group average $\frac{1}{n} \sum_{j = 1}^{n} \beta_{i, j}$.
 
 To the best of my knowledge, none of the software specifically written for analysing differential methylation analyses is able to test this hypothesis. This is because these software are almost all designed for two-group experiments. However, this hypothesis is readily testing using routine statistical methods. As an example, consider the following data:
 
@@ -112,13 +110,13 @@ A key advantage of using either of the generalised linear models is the capabili
 
 \subsubsection{Multi-group experiments}\label{sec:multi_group_dmcs}
 
-Due to the cost of whole-genome bisulfite-sequencing, early experiments using this technology to study differential methylation compared one sample against another \citep[e.g.,]{Lister:2009hy, Berman:2012ga}. While this might be considered a two-group experiment, one without replicates, I believe this is better thought of as a one-group experiment with two samples. Indeed, the analysis of such an experiment uses techniques from Section \label{sec:one_group_dmcs}, e.g., Pearson's $\chi^{2}$ test or Fisher's exact test, which is better suited to the small sample sizes routinely seen in each $2 \times 2$ table.
+Due to the cost of whole-genome bisulfite-sequencing, early experiments using this technology to study differential methylation compared one sample against another \citep[e.g.,]{Lister:2009hy, Berman:2012ga}. While this might be considered a two-group experiment, one without replicates, I believe this is better thought of as a one-group experiment with two samples. Indeed, the analysis of such an experiment uses techniques from Section \ref{sec:one_group_dmcs}, e.g., Pearson's $\chi^{2}$ test or Fisher's exact test \citep{Fisher:1922bx}, which is better suited to the small sample sizes routinely seen in each $2 \times 2$ table.
 
-The more interesting experiment is one that includes replicates within each group, since we can then estimate the within-group variation. Unfortunately, some authors have still used Fisher's exact test \citep{Fisher:1922bx} to analyse such experiments. For example, \citet{Lister:2009hy} test for differential methylation between the _H1_ and _IMR90_ samples using Fisher's exact test by first pooling data the two replicates they have for each sample. This is incorrect, because such an analysis effectievly ignores all within-group variability \citep{Hansen:2012gr}. Instead, a test that incorporates the within-group variability should be used.
+The more interesting experiment is one that includes replicates within each group, since we can then estimate the within-group variation. Unfortunately, some authors have still used Fisher's exact test to analyse such experiments. For example, \citet{Lister:2009hy} test for differential methylation between the _H1_ and _IMR90_ samples using Fisher's exact test by first pooling data from the two replicates they have for each sample. This is incorrect, because such an analysis effectievly ignores all within-group variability \citep{Hansen:2012gr}. Instead, a test that incorporates the within-group variability should be used.
 
-In a two-group experiment this might be a t-test comparing the the average methylation level in the first group, $\bar{\beta_{i}^{(1)}}$, to that in the second group, $\bar{\beta_{i}^{(2)}}$. More generally, we can use a regression model to allow for multiple groups (i.e., ANOVA) and to incorporate additional covariates.
+In a two-group experiment this might be a t-test comparing the the average methylation level in the first group, $\widebar{\beta_{i}^{(1)}}$, to that in the second group, $\widebar{\beta_{i}^{(2)}}$. More generally, we can use a regression model to allow for multiple groups (i.e., ANOVA) and to incorporate additional covariates.
 
-Several software packages are now available for identifying DMCs, although some are limited to the two-group experiment. Rather than directly analysing the raw $\beta$-values, these software generally make additional modelling assumptions, such as the beta-binomial model (see Section \ref{sec:beta-binomial_model}), and/or perform some transformation of the data, such as smoothing of the $\beta$-values (see Section \ref{transformation}).
+Several software packages are now available for identifying DMCs, although some are limited to the two-group experiment. Rather than directly analysing the raw $\beta$-values, these software generally make additional modelling assumptions, such as the beta-binomial model (see Section \ref{sec:beta-binomial_models}), and/or perform some transformation of the data, such as smoothing of the $\beta$-values (see Section \ref{sec:transformations}).
 
 `DSS` \citep{Feng:2014iq}, `BiSeq` \citep{Hebestreit:2013ko}, `MOABS` \citep{Sun:2014fk} `methylSig` \citep{Park:2014ho} and `RADmeth` \citep{Dolzhenko:2014bo} are software packages that all use a Beta-Binomial hierarchical model of DNA methylation, although the exact details differ considerably between packages. `DSS` and `MOABS` use empirical Bayes methods to estimate parameters whereas `methylSig`, `BiSeq` and `RADmeth` use maximum likelihood estimation. `BiSeq` and `methlySig` also perform spatial smoothing of the data.
 
@@ -128,11 +126,11 @@ Not all methods for identifying differential methylation are designed for identi
 
 \subsection{DMRs}
 
-A differentially methylated region is a region of the genome where there are multiple cytosines with evidence of differential methylation. Importantly, not all cytosines in the region must be genome-wide significant DMCs. Rather, the idea is that a DMR might capture a weaker but broader difference in methylation. Such a signal may well have a clearer biological interpretation and, indeed, might be expected such as in differences in methylation at a gene promoter.
+A differentially methylated region is a region of the genome where there are multiple cytosines with evidence of differential methylation. Importantly, not all cytosines in the region must be genome-wide significant DMCs. Rather, the idea is that a DMR might capture a weaker but broader difference in methylation. Such a signal may well have a clearer biological interpretation, such as in differences in methylation at a gene promoter.
 
 There are two very different strategies for identifying differentially methylated regions:
 
-1. Using regions that are defined _a priori_, which are then tested for differential methylation. Such regions might be CpG islands \citep[e.g.,]{Huang:1999fs,Doi:2009ky}[^array], MspI restriction fragments \citep[e.g.,]{Stockwell:2014fq}, any other predefined genomic feature, such as a gene promoters or transcription factor binding sites, or general predefined bins \citep[e.g., 100 bp bins]{Park:2014ho}.
+1. Using regions that are defined _a priori_, which are then tested for differential methylation. Such regions might be CpG islands \citep[e.g.,][]{Huang:1999fs,Doi:2009ky}[^array], MspI restriction fragments \citep[e.g.,][]{Stockwell:2014fq}, any other predefined genomic feature, such as a gene promoters or transcription factor binding sites, or general predefined bins \citep[e.g., 100 bp bins used by][]{Park:2014ho}.
 2. Using data-driven regions, e.g., defined from an analysis of DMCs, which are then tested for differential methylation.
 
 [^array]: Both these examples are from microarray studies, but the same idea can be applied to sequencing studies.
@@ -141,39 +139,48 @@ The former is much simpler to analyse but is limited in its ability to discover 
 
 The latter offers the opportunity to identify previously unknown regions that are subject to differential methylation. Included in this is the opportunity to discover the scale over which differential methylation acts. However, valid statistical inference of these regions is far more challenging.
 
-\subsection{Using _a priori_ regions}
+\subsection{Using \em{a priori} regions}
 
 The idea of testing for differential methylation is relatively straightforward. For each sample, the region-wise methylation level is some summary of the methylation level at each loci in that region, for example, the weighted average of $\beta$-values for all loci in the region, where the weights are proportional to the sequencing coverage. These averages are then compared between samples. I describe a basic implementation of this for a one-group experiment and then detail a more sophisticated method that is implemented in `BiSeq` \citep{Hebestreit:2013ko}.
 
 \subsubsection{One-group experiments}\label{sec:one_group_dmrs}
 
-For a region containing $c$ methylation loci, construct the $n \times 2 \times c$ contingency table, i.e., each 'slice' of the table is a $n \times 2$ table containing the data for a single locus. Simply aggregating the counts across loci and testing the resulting $n \times 2$ table would be incorrect, since such an aggregating could introduce spurious differences in the proportions \citep{Good:1987ce}. Instead, we could fit the log-linear model with `sample`, `meth_type` and `locus` as the set of factors. The saturated model is
+For a region containing $c$ methylation loci, construct the $n \times 2 \times c$ contingency table, i.e., each 'slice' of the table is a $n \times 2$ table containing the data for a single locus. Simply aggregating the counts across loci and testing the resulting $n \times 2$ table would be incorrect, since such an aggregating could introduce spurious differences in the proportions \citep{Good:1987ce}. Instead, we could fit the log-linear model with `sample`, `meth_state` and `locus` as the set of factors. The saturated model is
 
-\begin{equation*}
-\log(F_{a, b, c}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} + \lambda_{a, b}^{meth_state, sample} + \lambda_{a, c}^{meth_state, locus} + \lambda_{b, c}^{sample, locus} + \lambda_{a, b, c}^{meth_state, sample, locus}
-\end{equation*}
+\begin{align*}
+\log(F_{a, b, c}) &= \lambda_{0} \\
+  &+ \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} \\
+  &+ \lambda_{a, b}^{meth\_state, sample} + \lambda_{a, c}^{meth\_state, locus} + \lambda_{b, c}^{sample, locus} \\
+  &+ \lambda_{a, b, c}^{meth\_state, sample, locus}
+\end{align*}
 
-We would first need to test whether there is a significant three-way interaction between `meth_type`, `sample` and `locus` by computing the deviance of the model without the three-way interaction
+We would first need to test whether there is a significant three-way interaction between `meth_state`, `sample` and `locus` by computing the deviance of the model without the three-way interaction
 
-\begin{equation*}
-\log(F_{a, b, c}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} + \lambda_{a, b}^{meth_state, sample} + \lambda_{a, c}^{meth_state, locus} + \lambda_{b, c}^{sample, locus}
-\end{equation*}
+\begin{align*}
+\log(F_{a, b, c}) &= \lambda_{0} \\
+&+ \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} \\
+&+ \lambda_{a, b}^{meth\_state, sample} + \lambda_{a, c}^{meth\_state, locus} + \lambda_{b, c}^{sample, locus}
+\end{align*}
 
-On the one hand, if there is no three-way interaction, then we can test for an interaction between `meth_type` and `sample`, i.e., test for a difference in methylation level across the loci, by comparing the model
+On the one hand, if there is no three-way interaction, then we can test for an interaction between `meth_state` and `sample`, i.e., test for a difference in methylation level across the loci, by comparing the model
 
-\begin{equation*}
-\log(F_{a, b, c}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} + \lambda_{a, b}^{meth_state, sample} + \lambda_{a, c}^{meth_state, locus} + \lambda_{b, c}^{sample, locus}
-\end{equation*}
+\begin{align*}
+\log(F_{a, b, c}) &= \lambda_{0} \\
+&+ \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} \\
+&+ \lambda_{a, b}^{meth\_state, sample} + \lambda_{a, c}^{meth\_state, locus} + \lambda_{b, c}^{sample, locus}
+\end{align*}
 
 to the model
 
-\begin{equation*}
-\log(F_{a, b, c}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} + \lambda_{a, c}^{meth_state, locus} + \lambda_{b, c}^{sample, locus}
-\end{equation*}
+\begin{align*}
+\log(F_{a, b, c}) &= \lambda_{0} \\
+&+ \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{c}^{locus} \\
+&+ \lambda_{a, c}^{meth\_state, locus} + \lambda_{b, c}^{sample, locus}
+\end{align*}
 
 This test is analogous to the generalised Cochran-Mantel-Haenszel test \citep{Landis:1978vk,MANTEL:1978iv,Birch:1965uj} of the $n \times 2 \times c$ table \citep[p231]{agresti1990categorical}. The advantage of the Cochran-Mantel-Haenszel is its applicability for sparse datasets for which the asymptotic theory does not hold for the test based on the log-linear regression  \citep[p232]{agresti1990categorical}.
 
-On the other hand, if there is a significant three-way interaction between `meth_type`, `sample` and `locus` then this requires more careful modelling to determine the nature of this interaction and whether the region is a consistent DMR.
+On the other hand, if there is a significant three-way interaction between `meth_state`, `sample` and `locus` then this requires more careful modelling to determine the nature of this interaction and whether the region is a consistent DMR.
 
 \subsubsection{A more sophisticated multi-group analysis}\label{sec:a_more_complex_example}
 
@@ -187,19 +194,19 @@ Based on my understanding of this procedure, only cytosines within differentiall
 
 \subsection{Using data-driven regions}
 
-The most common type of algorithm for identifying data-driven DMRs, also arguably the most _ad hoc_, is based on detecting clusters of DMCs \citep[e.g.,]{Lister:2009hy, Lister:2011kg, Hansen:2011gu, Feng:2014iq}. The initial identification of DMCs will typically use a relaxed statistical significance threshold. For example, \citet{Hansen:2011gu} use all CpGs with a P-value in the lowest $5\%$ and declare putative DMRs to be contiguous runs of such CpGs that are within a given distance of one another and with "all differences in the same direction". This latter requirement is what I call the _consistency_ of the DMR (see Section \ref{sec:consistency_of_dmrs}).
+The most common type of algorithm for identifying data-driven DMRs, also arguably the most _ad hoc_, is based on detecting clusters of DMCs \citep[e.g.,][]{Lister:2009hy, Lister:2011kg, Hansen:2011gu, Feng:2014iq}. The initial identification of DMCs will typically use a relaxed statistical significance threshold. For example, \citet{Hansen:2011gu} use all CpGs with a P-value in the lowest $5\%$ and declare putative DMRs to be contiguous runs of such CpGs that are within a given distance of one another and with "all differences in the same direction". This latter requirement is what I call the _consistency_ of the DMR (see Section \ref{sec:consistency_of_dmrs}).
 
-These putative DMRs may be subject to further filtering, such as requiring that they contain a minimum number of CpGs and span a minimum number of bases, and the merging of nearby putative DMRs into a single putative DMR \citep{Hansen:2011gu}. Notably, many of these methods do not include a formal statistical test of differential methylation at the region-level \citep[e.g.,]{Lister:2009hy, Lister:2011kg, Hansen:2011gu, Feng:2014iq}.
+These putative DMRs may be subject to further filtering, such as requiring that they contain a minimum number of CpGs and span a minimum number of bases, and the merging of nearby putative DMRs into a single putative DMR \citep{Hansen:2011gu}. Notably, many of these methods do not include a formal statistical test of differential methylation at the region-level \citep[e.g.,][]{Lister:2009hy, Lister:2011kg, Hansen:2011gu, Feng:2014iq}.
 
 The challenges of valid statistical inference at such data-driven regions are not unique to the problem of testing for differentially methylated regions. Similar problems arise in the analysis of chromatin immunoprecipitation sequencing (ChIP-seq) experiments \citep{Schwartzman:2011to, Lun:2014gn} and in the field of signal processing \citep{Schwartzman:2011vg}. It boils down to the problem of how to assign statistical significance to regions or peaks using the same data that were used to define these regions or peaks. These regions are already enriched for differences, which biases the interpretation the results of tests for differences at these regions. One way, and I would argue the best way, to avoid this issue is to test these regions using a separate dataset, which completely avoids the issue of statistical 'double-dipping'. If the sample size is large enough, then permutation testing may also be appropriate. For example, \citet{Hansen:2013eo} permute the group labels of their samples and re-ran their analysis to determine for each of the observed regions "how often we see another block of similar length and effect size anywhere in the genome and in any of the permutations". The chief limitation of the permutation strategy is the restricted number of permutations that are possible from small sample sizes and the time and computational resources it takes to perform analyse the data for a single permutation, which are often substantial. For example, \citet{Hansen:2013eo} only performed nine permutations.
 
 A somewhat less _ad hoc_ strategy for identify differentially methylated regions is called "bump-hunting" \citep{Jaffe:2012gx}. Initially developed for methylation microarrays, and now available for broader use in the R/Bioconductor package `bumphunter` ([http://www.bioconductor.org/packages/release/bioc/html/bumphunter.html](http://www.bioconductor.org/packages/release/bioc/html/bumphunter.html)), bump-hunting is quite a general statistical problem. For the case of identifying DMRs, the idea is to plot the value of a statistic used to test for DMCs as a function of the position in the genome[^smoothing] and then to identify bumps in this plot. Bumps are identified as contiguous regions of the genome where the signal is above some threshold and may include an error term to account for the spatial correlation of the signal. The significance of these peaks may be assessed with a permutation strategy.
 
-Another alternative for combining individual loci into data-driven DMRs is based on the loci-specific P-values. These methods can be thought of extensions to Fisher's method for combining P-values \citep{Fisher:1936vv}, by attempting to account for the correlation of tests at nearby methylation loci. `comb-p` \citep{Pedersen:2012vl} uses the Stouffer-Liptak-Kechris \citep{Stouffer:1949ua, Kechris:2010fw, Zaykin:2011jq,} correction for spatially correlated P-values. `SLIM` \citep{Wang:2011cw} is used by `methylKit` \citep{Akalin:2012cm} to do a similar correction.
+Another alternative for combining individual loci into data-driven DMRs is based on the loci-specific P-values. These methods can be thought of extensions to Fisher's method for combining P-values \citep{Fisher:1936vv}, by attempting to account for the correlation of tests at nearby methylation loci. `comb-p` \citep{Pedersen:2012vl} uses the Stouffer-Liptak-Kechris \citep{Stouffer:1949ua, Kechris:2010fw, Zaykin:2011jq} correction for spatially correlated P-values. `SLIM` \citep{Wang:2011cw} is used by `methylKit` \citep{Akalin:2012cm} to do a similar correction.
 
 Finally, there are a class of methods that turn the problem of identifying data-driven DMRs on its head by constructing the regions without first testing the individual loci for differential methylation. Then, only once these regions are defined, these methods test for differential methylation. This is different to using _a priori_ regions, since the regions are still data-defined, but not with respect to differential methylation. The only example I know of such a method is `Aclust` \citep{Sofer:2013bk}. `Aclust` first clusters CpGs into candidate regions by performing agglomerative nested clustering of the between-sample co-methylation. Briefly, this is the correlation of methylation levels at two loci across the samples[^between_sample_co-methylation]. These clusters are then tested for differential methylation using generalised estimating equations.
 
-[^between_sample_co-methylation]: See Chapter \ref{co-methylation_review} for further details of between-sample co-methylation.
+[^between_sample_co-methylation]: See Chapter \ref{chap:co-methylation_review} for further details of between-sample co-methylation.
 
 \subsubsection{Consistency of DMRs}\label{sec:consistency_of_dmrs}
 
@@ -219,25 +226,25 @@ Two other common downstream analyses based on $\beta$-values are the identificat
 
 Differential methylation is an analysis of the difference in means and seeks to identify differentially methylated regions (DMRs). Analogously, we can analyse differences in the variability of methylation profiles, which is known as differential variability, and those regions known as variably methylated regions (VMRs). It has been hypothesised that increased variability in DNA methylation indicates an epigentic _plasticity_ that may be highly relevant to common diseases, in particular, cancer \citep{Feinberg:2010dy}.
 
-In a one-group experiment, a variably methylated region is one that has increased variability compared to 'similar' regions elsewhere in the genome. In a two-group experiment, a differentially variable locus is one where the variation in one group is significantly larger than that in the other group. \citet{Jaffe:2011hy} first developed formal statistical tests for both the one-group and two-group experiments. These methods were developed for us with data from the CHARM array (see __SECTION__).
+In a one-group experiment, a variably methylated region is one that has increased variability compared to 'similar' regions elsewhere in the genome. In a two-group experiment, a differentially variable locus is one where the variation in one group is significantly larger than that in the other group. \citet{Jaffe:2011hy} first developed formal statistical tests for both the one-group and two-group experiments. These methods were developed for us with data from the CHARM array (see \ref{sec:enzyme_digestion_assays}).
 
-Statistical tests of variations are known to be more difficult than tests of means and require larger sample sizes. A more subtle difficulty is in dealing with outliers. An outlier in one group will greatly increase the variation in that same group, but this does not necessarily mean that the locus is differentially methylated. It is not hard to envisage an example where the two groups in fact have very similar variability once the outlier is excluded. Tests of differential variability that are based on the F-test \citep[e.g.,]{Hansen:2011gu} or Bartlett's test \citep[e.g.,]{Teschendorff:2012hea} will be susceptible to calling such loci as differentially variable. By contrast, \citet{Phipson:2014ji} designed `DiffVar` to test for differential variability that is deliberately robust to such outliers by using Levene's test \citep{Olkin:1960uu}. Which approach is preferable will depend on the user's perspective as to whether such loci with outliers should be called as variably methylated.
+Statistical tests of variations are well known to be more difficult than tests of means and require larger sample sizes. A more subtle difficulty is in dealing with outliers. An outlier in one group will greatly increase the variation in that same group, but this does not necessarily mean that the locus is differentially methylated. It is not hard to envisage an example where the two groups in fact have very similar variability once the outlier is excluded. Tests of differential variability that are based on the F-test \citep[e.g.,][]{Hansen:2011gu} or Bartlett's test \citep[e.g.,][]{Teschendorff:2012hea} will be susceptible to calling such loci as differentially variable. By contrast, \citet{Phipson:2014ji} designed `DiffVar` to test for differential variability that is deliberately robust to such outliers by using Levene's test \citep{Olkin:1960uu}. Which approach is preferable will depend on the user's perspective as to whether such loci with outliers should be called as variably methylated.
 
 \subsection{Partially methylated domains}
 
-Partially methylated domains, PMDs, are long stretches of the genome where the average methylation level, $B_{i}$, is away from the extremes of $0$ and $1$, typically in the range $0.20 - 0.70$. An example of such a region is shown in __FIGURE__ (__TODO: Find a PMD and plot it__).
-
-PMDs were first identified in the IMR90 genome by \citet{Lister:2009hy}. Using a simple sliding window algorithm, \citeauthor{Lister:2009hy} unexpectedly found that approximately $40\%$ of every autosome was a PMD and that the average length of these PMDs was a large 153 kb. They also showed that these PMDs were not simply due to a methylated population and an unmethylated subpopulation of cells in the sample. This did this by showing that inidividual reads mapped to these PMDs contained both methylated and unmethylated bases.
+Partially methylated domains, PMDs, are long stretches of the genome where the average methylation level, $B_{i}$, is away from the extremes of $0$ and $1$, typically in the range $0.20 - 0.70$. PMDs were first identified in the IMR90 genome by \citet{Lister:2009hy}. Using a simple sliding window algorithm, \citeauthor{Lister:2009hy} unexpectedly found that approximately $40\%$ of every autosome was a PMD and that the average length of these PMDs was a large 153 kb. They also showed that these PMDs were not simply due to a methylated population and an unmethylated subpopulation of cells in the sample. This did this by showing that inidividual reads mapped to these PMDs contained both methylated and unmethylated bases.
 
 A subsequent study found that PMDs are a common feature of somatic cell lines and that they comprise $> 30\%$ of the genome \citep{Lister:2011kg}. Perhaps even more intriguingly, across four somatic cell lines profiled with whole-genome bisulfite-sequencing, \citeauthor{Lister:2011kg} found a large amount of these genomes ($664$ Mb) comprised shared PMDs.
 
 PMDs have also been identified within tumour methylomes \citep{Berman:2012ga, Hansen:2011gu} and \citet{Hansen:2011gu} found that these overlap with other important genomic features called large organized chromatin lysine modifications (_LOCKs_) and lamina associated domains (_LADs_). However, PMDs are conspicuous by their absence in pluripotent cell lines, including both embryonic stem cells and induced pluripotent stem cells \citep{Lister:2011kg}. Their absence in the induced pluripotent cell lines may reflect the fact that the methylome is 'reset' upon induction of pluripotency \citep{Lister:2011kg}.
 
-More sophisticated methods have also been proposed to identify these PMDs. `methylSeekR` \citep{Burger:2013kq} is one such algorithm. It uses a hidden Markov model of the $\beta$-values to segment the genome into unmethylated, lowly methylated and partially methylayed regions. While `methylSeekR` is based on $\beta$-values and does not make use of individual reads to identify PMDs, it does require the high spatial resolution of $\beta$-values that methylation microarrays cannot provide.
+More sophisticated methods have also been proposed to identify these PMDs. `methylSeekR` \citep{Burger:2013kq} is one such algorithm. It uses a hidden Markov model of the $\beta$-values to segment the genome into unmethylated, lowly methylated and partially methylayed regions. While `methylSeekR` is based on $\beta$-values and does not make use of individual reads to identify PMDs, it does require the high spatial resolution of $\beta$-values that whole-genome bisulfite-sequencing provides
 
 \section{Downstream analyses of methylation patterns at m-tuples}\label{sec:downstream_analyses_of_m-tuples}
 
-The above-described analyses do not specifically exploit the fact that bisulfite-sequencing reads can measure methylation patterns at m-tuples. Yet much can be learnt my studying exactly that. To begin, I review the different types of questions that can be addressed when we make use of this extra information that is only available from bisulfite-sequencing data.
+None of the aforementioned analyses specifically exploit the fact that bisulfite-sequencing reads measure methylation patterns at multiple loci, i.e., at m-tuples. Yet much can be learnt my studying exactly that.
+
+In this section I review the different types of questions that can be addressed when we make use of this extra information that is only available from bisulfite-sequencing data.
 
 \subsection{Methylation entropy}\label{sec:methylation_entropy}
 
@@ -245,11 +252,9 @@ There are several definitions and uses of _methylation entropy_ in the literatur
 
 The natural interpretation of methylation entropy as a measure of 'disorder' allows us to quantify how heterogeneous DNA methylation is at a locus \citep{Xie:2011cy, He:2013cj}[^other_definitions]. These methylation entropies can be analysed to identify heterogeneous regions of the genome or perhaps tested for an association with a phenotype.
 
-[^other_definitions]: This is closely related to the idea of identifying epialleles, for which methylation entropy has also played a role \citep{Li:2014ei} and which I discuss in Section \ref{sec:epialleles}. Methylation entropy has also been used to identify differential methylation, however, I do not discuss this further since this uses a different definition that is not based on analysing methylation patterns at m-tuples \citep{Zhang:2011dp, Su:2012hl}.
+[^other_definitions]: This is closely related to the idea of identifying epialleles, for which methylation entropy has also played a role \citep{Li:2014ei} and which I discuss in Section \ref{sec:epialleles_and_epipolymorphism}. Methylation entropy has also been used to identify differential methylation, however, I do not discuss this further since this uses a different definition that is not based on analysing methylation patterns at m-tuples \citep{Zhang:2011dp, Su:2012hl}.
 
 While \citet{Xie:2011cy} do not provide software implementing the method, a subsequent paper from some of the same researchers introduces the `DMEAS` software to do so \citep{He:2013cj} . Unfortunately, `DMEAS` is only available as a Windows binary or as a Perl script that itself is only available as PDF file, greatly limiting its usefulness.
-
-While I have not yet done so, it is not difficult to add the calculation of methylation entropies to the `MethylationTuples` software. The input for such an analysis of methylation entropy is a list of m-tuples and the associated frequencies of each methylation pattern, exactly what `methtuple` produces. The formula for computing methylation entropies is a simple sum of ratios and log-ratios, easily implemented in R, which `MethylationTuples` is written in.
 
 \subsection{Allele-specific methylation}\label{sec:asm}
 
@@ -262,8 +267,8 @@ The obvious method to detect allele-specific methylation from bisulfite-sequenci
 \begin{tabular}{@{}lll@{}}
 \toprule
 & Allele 1 & Allele 2 \\ \midrule
-m &          &          \\
-u &          &          \\ \bottomrule
+m &  m_{1}        &  m_{2}       \\
+u &  u_{1}        &  u_{2}       \\ \bottomrule
 \end{tabular}
 \caption{$2 \times 2$ table used to test for allele-specific methylation.}
 \label{tab:asm}
@@ -279,9 +284,9 @@ Such an approach, while straightforward, is also obviously limited to a subset o
 
 A DNA sequence may have multiple epigenetic states. For example, the cytosine in the sequence `TCGA` may be methylated or unmethylated; each of the methylated and unmethylated versions of that sequence is an _epiallele_. Restricting our attention to CpG methylation, a sequence with $m$ CpGs has $2^{m}$ potential epialleles. Therefore, an epiallele is just a methylation pattern at an m-tuple, with the additional constraint that the underlying DNA sequence also be identical[^epiallele_definition]. An epiallele may also be described as an _epimutation_, if it sufficiently rare.
 
-[^epiallele_definition]\citet{Rakyan:2002wz} impose a very strict requirement that in order for the methylation pattern to be called an epiallele it must "[result] in different phenotypes". While most would agree that is those methylation patterns that confer a difference in phenotype that are most interesting, limiting the definition of 'epiallele' to such methylation patterns seems unduly restrictive. After all, we refer to alternate forms of a genetic sequence as alleles regardless of whether we know of a phenotypic consequence of the variant.
+[^epiallele_definition]: \citet{Rakyan:2002wz} impose a very strict requirement that in order for the methylation pattern to be called an epiallele it must "[result] in different phenotypes". While most would agree that is those methylation patterns that confer a difference in phenotype that are most interesting, limiting the definition of 'epiallele' to such methylation patterns seems unduly restrictive. After all, we refer to alternate forms of a genetic sequence as alleles regardless of whether we know of a phenotypic consequence of the variant.
 
-Epipolymorphism, analogous to genetic polymorphism, is the presence of multiple epialleles in a population. However, unlike genetic polymorphism, where the population is typically a set of chromosomes from multiple individuals, the population here is often within an individual, even within a tissue within an individual. The 'epipolymorphism' of a locus has also been defined as the probability that two epialleles randomly sampled from the locus are different from one another \citep{Landan:2012kp}. \citeauthor{Landan:2012kp} the epipolymorphism of an m-tuple as $1 - \sum_{p = 1}^{p = 2^{m}} (f_{p}^{2})$, where $f_{p}$ is the estimated frequency of the $p^{th}$ methylation pattern, i.e., the number of times the $p^{th}$ pattern is observed divided by the total number of reads mapped to that m-tuple[^sampling_with_replacement].
+Epipolymorphism, analogous to genetic polymorphism, is the presence of multiple epialleles in a population. However, unlike genetic polymorphism, where the population is typically a set of chromosomes from multiple individuals, the population here is often within an individual, even within a tissue within an individual. The 'epipolymorphism' of a locus has also been defined as the probability that two epialleles randomly sampled from the locus are different from one another \citep{Landan:2012kp}. \citeauthor{Landan:2012kp} define the epipolymorphism of an m-tuple as $1 - \sum_{p = 1}^{p = 2^{m}} f_{p}^{2}$, where $f_{p}$ is the estimated frequency of the $p^{th}$ methylation pattern, i.e., the number of times the $p^{th}$ pattern is observed divided by the total number of reads mapped to that m-tuple[^sampling_with_replacement].
 
 [^sampling_with_replacement]: Strictly speaking, this is in fact an estimate of the epipolymorphism under a model that assumes sampling with replacement or, equivalently, an infinite population size. While neither assumption is true, the correction for sampling without replacement from a finite population will not substantially affect the results.
 
@@ -301,7 +306,7 @@ Regardless of where you draw the line as to what constituted an epiallele, it ha
 
 \subsubsection{Methods}
 
-`methclone` \citep{Li:2014ei} is software to estimate the frequency of epialleles at m-tuples and to identify "shifts" in these distributions between two samples. `methclone` is limited to pairwise comparisons. The input is a pair of `BAM` files created with the `Bismark` aligner, one for each sample. For each m-tuple (4-tuples in the example in the paper) with sufficient sequencing coverage ($60 \times$ in the example in the paper) a form of methylation entropy, called combinatorial entropy, is computed based on the set of mapped reads for the pair of samples[^methclone_output]. The "foreground" combinatorial entropy, $S$, is based on the observed frequency of epialleles in the two samples while the "background" combinatorial entropy, $\tilde{S}$, is the expected frequency of epialleles in the two samples if "all patterns of epialleles are uniformly mixed between the two stages [samples]". The difference in these combinatorial entropies, $\delta S = S - \tilde{S}$, a kind of observed-to-expected log-ratio, is used to identify shifts in the epiallele distribution between a pair of samples. A $\delta S = 0$ corresponds to no change and a $\delta S = -144$ corresponds to maximal difference in entropy. It isn't clear whether the range of $\delta S$ depends on the size of the m-tuples nor is it clear how to choose the threshold at which to declare a significant shift in the distribution of epialleles. The example in the paper shows results for a threshold of $-60, -70$ and $-80$, but these choices appear somewhat arbitrary.
+`methclone` \citep{Li:2014ei} is software to estimate the frequency of epialleles at m-tuples and to identify "shifts" in these distributions between two samples. `methclone` is limited to pairwise comparisons. The input is a pair of `BAM` files created with the `Bismark` aligner, one for each sample. For each m-tuple (4-tuples in the example in the paper) with sufficient sequencing coverage ($60 \times$ in the example in the paper) a form of methylation entropy, called combinatorial entropy, is computed based on the set of mapped reads for the pair of samples[^methclone_output]. The "foreground" combinatorial entropy, $S$, is based on the observed frequency of epialleles in the two samples while the "background" combinatorial entropy, $\tilde{S}$, is the expected frequency of epialleles in the two samples if "all patterns of epialleles are uniformly mixed between the two stages [samples]". The difference in these combinatorial entropies, $\Delta S = S - \tilde{S}$, a kind of observed-to-expected log-ratio, is used to identify shifts in the epiallele distribution between a pair of samples. A $\Delta S = 0$ corresponds to no change and a $\Delta S = -144$ corresponds to maximal difference in entropy. It isn't clear whether the range of $\Delta S$ depends on the size of the m-tuples nor is it clear how to choose the threshold at which to declare a significant shift in the distribution of epialleles. The example in the paper shows results for a threshold of $-60, -70$ and $-80$, but these choices appear somewhat arbitrary.
 
 [^methclone_output]: It is not clear from the paper or documentaiton whether `methclone` returns a file containing the number of methylation patterns at each m-tuple, _a ala_ `methtuple`. Unfortunately, I haven't been able to install `methclone`, so have not been able to test this out.
 
@@ -309,11 +314,11 @@ The obvious challenge in estimating the frequency of an epiallele is in distingu
 
 `MPFE` is designed to estimate the frequency of epialleles by maximising a multinomial likelihood that includes error terms for both incomplete bisulfite-conversion and sequencing error. The maximisation of this likelihood is computatationally demanding, as evidenced by the need for a "fast" algorithm that approximates the likelihood. `MPFE` is designed for amplicon bisulfite-sequencing and may not scale to whole-genome data. The input is a file containing the number of times each methylation pattern was observed at that m-tuple. Unfortunately, `MPFE` does not provide a way to create this table.
 
-Methods designed to detect allele-specific methylation, specifically those that are based on the observed methylation patterns \citep[e.g.,]{Fang:2012ciPeng:2012dh}, might also adapted to identify epialleles and their associated frequencies. It is worth emphasising that since all of the methods described in this section are based entirely on the observed methylation patterns, none of these actually check that the underlying DNA sequencing is identical, which strictly speaking is a requirement for the m-tuple to be an epipolymorphic locus.
+Methods designed to detect allele-specific methylation, specifically those that are based on the observed methylation patterns \citep[e.g.,][]{Fang:2012ci, Peng:2012dh}, might also adapted to identify epialleles and their associated frequencies. It is worth emphasising that since all of the methods described in this section are based entirely on the observed methylation patterns, none of these actually check that the underlying DNA sequencing is identical, which strictly speaking is a requirement for the m-tuple to be an epipolymorphic locus.
 
-\section{`MethylationTuples`}\label{sec:MethylationTuples}
+\section{\texttt{MethylationTuples}}\label{sec:MethylationTuples}
 
-A common thread in Section \ref{sec:downstream_analyses_of_m-tuples} is that while interesting methods have been proposed to address these questions, the software implementations are often lacking or very much tailored toward a particular analysis. What has been lacking is:
+A common thread in Section \ref{sec:downstream_analyses_of_m-tuples} is that while interesting methods have been proposed to address these questions, the software implementations are often lacking or, at best, very much tailored toward a particular analysis. What has been lacking is:
 
 1. A general method for extracting methylation patterns at m-tuples,
 2. Software for manipulating, analysing and visualising these methylatoin patterns.
@@ -322,7 +327,7 @@ I have made significant progress towards the first goal with `methtuple` (see Se
 
 \subsection{Design}
 
-`MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples released under a Artistic-2.0 licence. R is a very popular language for analysing data, particularly in bioinformatics, and is my computational mother tongue, hence my choice of R as the language. To improve the performance of the package, peaks are written in `C++`, making use of the wonderful `Rcpp` package \citep{Eddelbuettel:2011to,Eddelbuettel:2013if}.
+`MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples released under a Artistic-2.0 licence. R is a very popular language for analysing data, particularly in bioinformatics, and is my computational mother tongue, hence my choice of R as the language. To improve the performance of the package, parts are written in `C++`, making use of the wonderful `Rcpp` package \citep{Eddelbuettel:2011to,Eddelbuettel:2013if}.
 
 While initially developed to support my research into co-methylation (Chapter \ref{chap:co-methylation}), the data structures developed in `MethylationTuples` are also well-suited to analysing methylation entropy, allele-specific methylation, epialleles and epipolymorphism.
 
@@ -330,7 +335,7 @@ While initially developed to support my research into co-methylation (Chapter \r
 
 [^bioc]: `MethylationTuples` has not yet been submitted to Bioconductor but its development is being published to [https://github.com/PeteHaitch/MethylationTuples](https://github.com/PeteHaitch/MethylationTuples).
 
-Bioconductor has excellent support for working with data defined on genomic ranges via the `IRanges` and `GenomicRanges` packages \citep{Lawrence:2013hi, Lawrence:2014gy}. However, genomic tuples, such as the co-ordinates of an m-tuples, do not naturally fit into this framework[^tuples_vs_ranges]. Therefore, I wrote a Bioconductor package for working with genomic tuples, rather unimaginatively called `GenomicTuples`, first released as part of Bioconductor version 3.0 ([http://www.bioconductor.org/packages/3.0/bioc/html/GenomicTuples.html](http://www.bioconductor.org/packages/3.0/bioc/html/GenomicTuples.html)). In fact, `GenomicTuples` is heavily based on the `GenomicRanges` package, with modifications for tuple-specific operations. For example, there is a tuple-specific method for the `findOverlaps` generic function to identify genomic tuples with equal co-ordinates (i.e., `type = 'equal'`). Since the classes in `GenomicTuples` extend those defined in `GenomicRanges`, these have excellent interoperability with existing Bioconductor infrastructure.
+Bioconductor has excellent support for working with data defined on genomic ranges via the `IRanges` and `GenomicRanges` packages \citep{Lawrence:2013hi, Lawrence:2014gy}. However, genomic tuples, such as the co-ordinates of an m-tuples, do not naturally fit into this framework[^tuples_vs_ranges]. Therefore, I wrote a Bioconductor package for working with genomic tuples, rather unimaginatively called `GenomicTuples`, first released as part of Bioconductor version 3.0 ([http://www.bioconductor.org/packages/3.0/bioc/html/GenomicTuples.html](http://www.bioconductor.org/packages/3.0/bioc/html/GenomicTuples.html)). In fact, `GenomicTuples` is heavily based on the `GenomicRanges` package, with modifications for tuple-specific operations. For example, there is a tuple-specific method for the `findOverlaps` generic function to identify genomic tuples with equal co-ordinates (i.e., `type = \`equal'`). Since the classes in `GenomicTuples` extend those defined in `GenomicRanges`, these have excellent interoperability with existing Bioconductor infrastructure.
 
 [^tuples_vs_ranges]: The difference between a genomic range and a genomic tuple  can be thought of as the difference between an interval and a set. Namely, an interval includes the co-ordinates in between the start and end whereas a set only includes those co-ordinates listed in the set. For example, the genomic interval `chr3:+:[10, 12]` includes the co-ordinates `chr3:10`, `chr3:11` and `chr3:12` on the forward strand, whereas the genomic 2-tuple `chr3:+:{10, 12}` only includes the co-ordinates `chr3:10` and `chr3:12` on the forward strand.
 
@@ -338,7 +343,7 @@ In the `MethylationTuples` package, I define the `MethPat` class to store the ge
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/MethPat.pdf}
-\caption{Schematic of the \texttt{MethPat} class, shown here for 3-tuples. Each row represents a 3-tuple to which the genomic co-ordinates of the tuples (green box) and the frequencies of the methylation patterns (grey box) are aligned. The frequencies of each methylation pattern --- $MMM, MMU, \ldots, UUU$ --- are stored as separate matrices where the columns represent samples --- $S_{1}, \ldots, S_{n}$. Some sample may have now have any sequencing coverage for a particular m-tuple, in which case the corresponding frequencies are recorded as \texttt{NA}.}
+\caption{Schematic of the \texttt{MethPat} class, shown here for 3-tuples. Each row represents a 3-tuple to which the genomic co-ordinates of the tuples (green box) and the frequencies of the methylation patterns (grey box) are aligned. The frequencies of each methylation pattern --- $MMM, MMU, \ldots, UUU$ --- are stored as separate matrices where the columns represent samples --- $S_{1}, \ldots, S_{n}$. Some samples may have now have any sequencing coverage for a particular m-tuple, in which case the corresponding frequencies are recorded as \texttt{NA}.}
 \label{fig:MethPat}
 \end{figure}
 
@@ -372,19 +377,19 @@ Being based on core Bioconductor functionality, `MethylationTuples` is highly co
 
 The challenges of working with large datasets in R are well-known. These are in large part due to R being designed as an 'in-memory' application and it's implementation of 'copy-on-modify' semantics \citep{wickham2014advanced}. More generally with large datasets, there is often a trade-off to be made between storage efficiency and algorithm simplicity --- a more efficient way of storing the data may be less convenient to work with and _vice versa_.
 
-I have used the `MethylationTuples` package to analyses datasets containing up to 19 whole-genome bisulfite-sequencing samples (the Ziller data), albeit using a server with $512$ Gb of (shared) memory. I have found the `MethPat` class to be a very convenient representation of the data, but one that does not coincide with the most efficient storage. This is more of a problem as the size of the m-tuples increases and the data become sparser. However, for values of $m < 5$, and particularly for 'dense' data, such as RRBS, this is far less of an issue. Shown in Table \ref{tab:methpat_sparsity} is the size of the `MethPat` objects in memory for the EPISCOPE whole-genome bisulfite-sequencing data with various sized m-tuples. It also highlights the sparsity of the data as the size of the tuples grows --- most entries are $0$, meaning that particular methylation pattern was not observed in that particular sample, or `NA`, meaning that that m-tuple was not observed in that particular sample.
+I have used the `MethylationTuples` package to analyses datasets containing up to 17 whole-genome bisulfite-sequencing samples (the Lister data), albeit using a server with $512$ Gb of (shared) memory. I have found the `MethPat` class to be a very convenient representation of the data, but one that does not coincide with the most efficient storage. This is more of a problem as the size of the m-tuples increases and the data become sparser. However, for values of $m < 5$, and particularly for 'dense' data, such as RRBS, this is far less of an issue. Shown in Table \ref{tab:methpat_sparsity} is the size of the `MethPat` objects in memory for the EPISCOPE whole-genome bisulfite-sequencing data with various sized m-tuples. It also highlights the sparsity of the data as the size of the tuples grows --- most entries are $0$ (meaning that particular methylation pattern was not observed in that particular sample) or `NA` (meaning that that m-tuple was not observed in that particular sample).
 
 \begin{table}[h]
 \centering
-\begin{tabular}{@{}lllll@{}}
+\begin{tabulary}{\textwidth}{LLLLL}
 \toprule
 & \texttt{pryr::object\_size(x)} & \texttt{nrow} & Number of assays & Percentage of \texttt{NA} and $0$ values \\ \midrule
 1-tuples                                 & $5.9$ GB                        & $56,348,522$    & $2$              & $28\%$                                     \\
 2-tuples                                 & $20.1$ GB                        & $100,586,237$   & $4$              & $80\%$                                     \\
 2-tuples (\texttt{--all-combinations}) & $60.0$ GB                          & $299,814,999$   & $4$              & $78\%$                                     \\
 3-tuples                                 & $43.3$ GB                        & $109,376,348$   & $8$              & $93\%$                                     \\
-4-tuples                                 & $80.5$ GB                        & $102,625,758$   & $16$             &                                            \\ \bottomrule
-\end{tabular}
+4-tuples                                 & $80.5$ GB                        & $102,625,758$   & $16$             & $97\%$                                       \\ \bottomrule
+\end{tabulary}
 \caption{Size of \texttt{MethPat} objects for the \em{EPISCOPE} data. All m-tuples are stranded. The size of the \texttt{MethPat} object is computed using the \texttt{object\_size} function in the \texttt{pryr} package (\url{http://cran.r-project.org/web/packages/pryr/index.html}). The number of rows (\texttt{nrow}) corresponds to the number of m-tuples in the object. The number of assays is $2^{\text{m}}$, where $m$ is the size of the m-tuples. The final column is a measure of how sparse the data are --- a $0$ values means that particular methylation pattern was not observed in that particular sample and an \texttt{NA} value means that that m-tuple was not observed in that particular sample.}
 \label{tab:methpat_sparsity}
 \end{table}

@@ -18,11 +18,11 @@ Co-methylation is the dependence structure of DNA methylation data. This depende
 
 \section{What is co-methylation and why study it?}\label{subsec:co-methylation_definition}
 
-I define co-methylation as the dependence structure of DNA methylation data. This broad definition encompasses several concepts that have variously been described as 'co-methylation', or similar. My definition is broader than "the presence of methylation over a stretch of neighbouring CpG positions" \citep{Schatz:2004cha}) or "the relationship between the degree of methylation over distance" \citep{Eckhardt:2006gh}; it also includes the "correlation of two [loci] across many sample" \citep{Akulenko:2013fl} and the "_vertical_ (i.e., progenitor to descendant) correlation between the same CpG site in neighbouring cell types" \citep{Capra:2014uh}. A first important point to emphasise is that there exists both within-sample co-methylation and between-sample co-methylation.
+I define co-methylation as the dependence structure of DNA methylation data. This broad definition encompasses several concepts that have variously been described as 'co-methylation', or similar. My definition is broader than "the presence of methylation over a stretch of neighbouring CpG positions" \citep{Schatz:2004cha} or "the relationship between the degree of methylation over distance" \citep{Eckhardt:2006gh}; it also includes the "correlation of two [loci] across many sample" \citep{Akulenko:2013fl} and the "_vertical_ (i.e., progenitor to descendant) correlation between the same CpG site in neighbouring cell types" \citep{Capra:2014uh}. A first important point to emphasise is that there exists both within-sample co-methylation and between-sample co-methylation.
 
-Within-sample co-methylation is the spatial dependence of DNA methylation along the genome within a single sample. Many researchers have observed that there is a strong spatial dependence of DNA methylation along a genome, that is, methylation loci near to one another in the genome tend to be similarly methylated \citep[e.g.,]{Eckhardt:2006gh, Cokus:2008fc, Lister:2009hy, Lacey:2009by, Li:2010fb, Lyko:2010dr, Landan:2012kp}. Moreover, these studies found that the strength of this dependence itself depends on the distance between the loci and on the genomic context.
+Within-sample co-methylation is the spatial dependence of DNA methylation along the genome within a single sample. Many researchers have observed that there is a strong spatial dependence of DNA methylation along a genome, that is, methylation loci near to one another in the genome tend to be similarly methylated \citep[e.g.,][]{Eckhardt:2006gh, Cokus:2008fc, Lister:2009hy, Lacey:2009by, Li:2010fb, Lyko:2010dr, Landan:2012kp}. Moreover, these studies found that the strength of this dependence itself depends on the distance between the loci and on the genomic context.
 
-The fundamental level of within-sample co-methylation is the dependence structure of DNA methylation events occurring on the same DNA fragment, which I call _within-fragment co-methylation__. At a higher level is the _correlation of aggregate methylation levels_, such as the spatial correlation of $\beta$-values within a sample.
+The fundamental level of within-sample co-methylation is the dependence structure of DNA methylation events occurring on the same DNA fragment, which I call _within-fragment co-methylation_. At a higher level is the _correlation of aggregate methylation levels_, such as the spatial correlation of $\beta$-values within a sample.
 
 Between-sample co-methylation is the relationship between methylation levels at a pair of loci across a set of samples[^concordance]. For example, \citet{Akulenko:2013fl} reported 187 pairs of genes whose methylation level was highly correlated (Pearson $|r| \geq 0.75$) across more than 300 breast cancer samples. Also note, however, that measures of within-sample co-methylation can themselves be compared between samples, which is discussed at the end of this chapter.
 
@@ -104,7 +104,7 @@ The $10$ nucleotide periodicity is equal to the length of one helical DNA turn. 
 
 [^comethylation_def2]: This is also referred to as "co-methylation" by \citet{Jurkowska:2011dt}, here meaning the methylation of multiple loci in a single event. \citet{Jurkowska:2011dt} reviews a plausible biochemical model for how _DNMT3a_ could co-methylate two CpGs separated by $8-10$ nucleotides; this model includes both the scenario where both CpGs are on the same DNA strand and the scenario where the CpGs are on opposite strands.
 
-\subsection{\citet{Chodavarapu:2010iqa}}{sec:chodavarapu}
+\subsection{\citet{Chodavarapu:2010iqa}\label{sec:chodavarapu}
 
 \citet{Chodavarapu:2010iqa} use MNase-seq to study nucleosome positioning and the relationship to DNA methylation, including co-methylation, in _Arabidopsis_ and an embryonic human stem cell line (_HSF1_). The authors plot a "weighted average methylation", which I presume to be a weighted version of the $\beta$-values, against the distance from predicted nucleosome start sites, which are obtained via MNase-seq. The nucleosome start sites anchor the methylation observations to a common grid and this plot is used to show that nucleosome bound DNA has a greater level of methylation than DNA that is not bound to nucleosomes. A $10$ nucleotide periodicity is readily observed in these plots, consistent with the discovery of $10$ nucleotide periodicities in the autocorrelation of $\beta$-values published by \cite{Cokus:2008fc}. Again, the observed periodicity is confirmed by analysing a Fourier transform of this correlation signal.
 
@@ -172,7 +172,7 @@ Furthermore, if we compute the Fourier transform of this autocorrelation we find
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/FF_chr21_acf_beta_star_fourier.pdf}
-\caption{Fourier transformation of the autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \em{FF} sample. Fourier transformation computed and plotted using the \texttt{spectrum} function in R. The period is defined as 1 / frequency. The maximum frequency is approximately $0.33$, which corresponds to a period of approximately $3$ bp.}
+\caption{Fourier transformation of the autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \textit{FF} sample. Fourier transformation computed and plotted using the \texttt{spectrum} function in R. The period is defined as 1 / frequency. The maximum frequency is approximately $0.33$, which corresponds to a period of approximately $3$ bp.}
 \label{fig:FF_chr21_acf_beta_star_fourier}
 \end{figure}
 
@@ -273,9 +273,9 @@ As part of their analysis they compute "methylation linkage diagrams". For each 
 \cmidrule(l){3-5}
  &  & \multicolumn{3}{c}{Second CpG} \\ \cmidrule(l){3-5}
  &  & m & u & Total \\ \cmidrule(l){2-5}
-\multirow{3}{*}{First CpG} & m & $n_{m, m}$ & $n_{m, u}$ &  \\
- & u & $n_{u, m}$ & $n_{u, u}$ &  \\
- & Total &  &  & n \\ \cmidrule(l){2-5}
+\multirow{3}{*}{First CpG} & m & $n_{m, m}$ & $n_{m, u}$ & $n_{m, .} \\
+ & u & $n_{u, m}$ & $n_{u, u}$ & $n_{u, .}$ \\
+ & Total & $n_{., m}$  & $n_{, u}$  & n \\ \cmidrule(l){2-5}
 \end{tabular}
 \caption{Summary of read counts at a CpG 2-tuple.}
 \label{tab:landan}
@@ -285,7 +285,7 @@ These correlations are then plotted like a linkage disequilibrium heatmap to ide
 
 > "[the] correlation between the methylation states of pairs of CpGs was generally very low. This lack of correlation suggests that methylation dynamics are typically independent for different CpGs, making the methylation state of one CpG (whether high or low) uninformative on the methylation state of nearby CpGs."
 
-As we will see in \ref{chap:co-methylation}, this is contradicted by my analyses of co-methylation.
+As we will see in Chapter \ref{chap:co-methylation}, this is contradicted by my analyses of co-methylation.
 
 \section{Between-sample co-methylation}
 \label{sec:between_sample_cometh}
@@ -313,7 +313,7 @@ For example, the `bsseq` R/Bioconductor package for identifying differentially m
 
 The R/Bioconductor package `BiSeq` \citep{Hebestreit:2013ko} also smooths the $\beta$-values, albeit slightly differently to `bsseq` since it is designed for identifying differentially methylated regions from RRBS data. The authors also cite \citet{Eckhardt:2006gh} as justification for smoothing the $\beta$-values.
 
-To summarise, both `bsseq` and `BiSeq` smooth $\beta$-values on a per-sample basis and are motivated by an analysis of within-sample co-methylation. Whenever using statistical smoothing, an important parameter is the choice of window size over which to smooth, also known as the _bandwidth_ of the smoother. The default window size in `bsseq` is defined as one that contains at least 70 CpGs and is at least 2000 bp wide. `BiSeq` uses a much smaller default window size of 80 bp, a decision that is again driven by its focus on RRBS data which has a higher CpG density than WGBS data. Ideally, a data-driven window size would be used, one driven by the strength of co-methylation in the region, but this is difficult to implement in practice. A simpler but potentially useful hybrid would be to define different window sizes for genomic features with generally different co-methylation structures, e.g., CpG islands vs. the rest of the genome (see Chapter \ref{chap:co-methyaltion}).
+To summarise, both `bsseq` and `BiSeq` smooth $\beta$-values on a per-sample basis and are motivated by an analysis of within-sample co-methylation. Whenever using statistical smoothing, an important parameter is the choice of window size over which to smooth, also known as the _bandwidth_ of the smoother. The default window size in `bsseq` is defined as one that contains at least 70 CpGs and is at least 2000 bp wide. `BiSeq` uses a much smaller default window size of 80 bp, a decision that is again driven by its focus on RRBS data which has a higher CpG density than WGBS data. Ideally, a data-driven window size would be used, one driven by the strength of co-methylation in the region, but this is difficult to implement in practice. A simpler but potentially useful hybrid would be to define different window sizes for genomic features with generally different co-methylation structures, e.g., CpG islands vs. the rest of the genome (see Chapter \ref{chap:co-methylation}).
 
 `BiSeq` also estimates and tries to account for the spatial correlation between test statistics of differential methylation at neighbouring loci. This is not the same as looking for correlations between the $\beta$-values, but is rather based on looking for correlations amongst the _differences_ in $\beta$-values, since these differences are what the test statistics of differential methylation are based upon. Specifically, `BiSeq` fits a semivariogram to the test statistics of differentially methylated CpGs. The correlations estimated using the semivariogram are in turn used in estimates of the standard deviations when identifying differentially methylated regions.
 

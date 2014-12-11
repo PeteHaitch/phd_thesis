@@ -214,7 +214,7 @@ As mentioned in Chapter \ref{chap:wgbs_bioinformatics_analysis}, studies using b
 3. $\mathcal{I}^{Bis-SNP}$: Defined by calling genetic variants from the bisulfite-sequencing data using `Bis-SNP` \citep{Liu:2012ge}. Identifies sample-specific methylation loci and removes reference-specific methylation loci. This is the best approach if only bisulfite-sequencing data are available.
 4. $\mathcal{I}^{WGS}$: Defined by identifying all methylation loci from _whole-genome sequencing_ (WGS) of the sample's genome. The gold standard. All methylation loci are defined with respect to the sample's genome. The only differences between $\mathcal{I}^{WGS}$ and $\mathcal{I}^{truth}$ are due to sequencing errors, incomplete sequencing coverage of the sample's genome and variant calling errors from the WGS data.
 
-\subsubsection{Genetic heterozygosity at a methylation locus}\label{sec:heterozygosity}
+\subsubsection{Genetic heterozygosity at a methylation locus} \label{sec:heterozygosity}
 
 The genome of a diploid organism has sites that are heterozygous due to differences between the maternal and paternal chromosomes. Such heterozygous loci are sometimes also methylation loci. For example, a locus where the maternal chromosome is a CpG and the paternal chromosome is an ApG. In effect, the maternal and paternal chromosomes within the sample have different $\mathcal{I}^{truth}$.
 
