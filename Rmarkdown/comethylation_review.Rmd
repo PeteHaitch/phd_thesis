@@ -272,10 +272,10 @@ As part of their analysis they compute "methylation linkage diagrams". For each 
 \begin{tabular}{@{}ccccc@{}}
 \cmidrule(l){3-5}
  &  & \multicolumn{3}{c}{Second CpG} \\ \cmidrule(l){3-5}
- &  & m & u & Total \\ \cmidrule(l){2-5}
-\multirow{3}{*}{First CpG} & m & $n_{m, m}$ & $n_{m, u}$ & $n_{m, .} \\
- & u & $n_{u, m}$ & $n_{u, u}$ & $n_{u, .}$ \\
- & Total & $n_{., m}$  & $n_{, u}$  & n \\ \cmidrule(l){2-5}
+ &  & $m$ & $u$ & Total \\ \cmidrule(l){2-5}
+\multirow{3}{*}{First CpG} & $m$ & $n_{m, m}$ & $n_{m, u}$ & $n_{m, .}$ \\
+ & $u$ & $n_{u, m}$ & $n_{u, u}$ & $n_{u, .}$ \\
+ & Total & $n_{., m}$  & $n_{, u}$  & $n$ \\ \cmidrule(l){2-5}
 \end{tabular}
 \caption{Summary of read counts at a CpG 2-tuple.}
 \label{tab:landan}
