@@ -117,97 +117,13 @@ Ideally, the probability that a base is called methylated should be independent 
 
 M-bias can be identified by plotting the read-position methylation level ($rpml$), which is the proportion of reads that are methylated at each read-position, as a function of read-position. These $rpml$ are computed separately for each methylation type and, for paired-end sequencing data, separately for _read 1_ and _read 2_. If there is no M-bias then this plot should be a horizontal line. A 'bend' or 'spike' in this plot is evidence of M-bias. Furthermore, these lines, which indicate the average level of methylation in the sample for that methylation type, should be at the same height for `read_1` and `read_2`, although we see this is often not quite the case. Figure \ref{fig:ADS_M-bias} shows the M-bias plot for the ADS sample from the Lister (2011) dataset.
 
-```{r ADS_M-bias, eval = TRUE, echo = FALSE, message = FALSE, fig.cap = "M-bias plot for the ADS sample from the Lister (2011) dataset. Each of read 1 (R1) and read 2 (R2) are plotted separately. We see significant CpG M-bias at the start of read 2 and some noise at the start of read 1.", dev = "pdf", outwidth = "0.8\\linewidth"}
-library(dplyr)
-library(ggplot2)
-thesis_theme <- theme_classic(base_size = 12)
-thesis_theme <- theme_bw(base_size = 12)
-read.mbias <- function(file) {
-
-  # Echo some information
-  message(paste0("Reading ", file, " ..."))
-
-  # Read the file.
-  x <- read.table(file, sep = '\n', as.is = TRUE)
-
-  # Find 'header' lines, which are dispersed throughout the file.
-  header_lines <- sapply(X = x, function(xx) {
-    grepl(pattern = 'context', x = xx)
-    })
-  y <- vector(mode = "list", length = sum(header_lines))
-  names(y) <- x[header_lines]
-
-  # z indexes the lines containing M-bias values.
-  z <- sapply(X = x, function(xx) {
-    grep(pattern = "context|^=|position", x= xx, invert = TRUE)
-    })
-  dz <- diff(z)
-  next_context_idx <- c(which(dz > 1), nrow(z))
-  colnames_idx <- sapply(X = x, function(xx) {
-    grep(pattern = "position", x = xx)
-    })[1]
-  colnames <- strsplit(x = x[colnames_idx, ], split = "\t")[[1]]
-
-  # Loop over the lines in the file.
-  for (i in seq_along(next_context_idx)) {
-    # Note the "+4" to skip the intermediate 'header' rows
-    start_idx <- ifelse(i == 1, 4, z[next_context_idx[i - 1]] + 4)
-    end_idx <- z[next_context_idx[i]]  
-    yy <- x[seq(from = start_idx, to = end_idx, by = 1), ]
-    y[[i]] <- do.call("rbind", lapply(yy, function(yyy, colnames) {
-      tmp <- strsplit(yyy, split = "\t")
-      val <- data.frame(as.integer(tmp[[1]][1]),
-                        as.integer(tmp[[1]][2]),
-                        as.integer(tmp[[1]][3]),
-                        as.numeric(tmp[[1]][4]),
-                        as.integer(tmp[[1]][5]))
-      colnames(val) <- colnames
-      return(val)
-      }, colnames = colnames))
-    }
-  y <- do.call("rbind", y)
-  y$Context <- strtrim(rownames(y), width = 3)
-
-  # Add R1/R2 annotation if paired-end data
-  if (grepl(pattern = "R1", x = rownames(y)[1])){
-    y$Read <- ifelse(grepl(pattern = "R1", x = rownames(y)), "R1", "R2")
-    } else{
-      y$Read <- "SE"
-      }
-  rownames(y) <- NULL
-
-  # Simplify column names
-  colnames(y) <- c('read_pos', 'M', 'U', 'perc_M', 'total',
-                   'methylation_type', 'read')
-
-  # Re-order columns
-  y <- y[, c('read', 'read_pos', 'methylation_type', 'M', 'U', 'total',
-             'perc_M')]
-
-  # Replace CpG with CG
-  y$methylation_type <- ifelse(y$methylation_type == 'CpG', 'CG',
-                               y$methylation_type)
-
-  # Convert to an MBias object.
-  return(y)
-  }
-
-#files <- paste0("../M-bias/", list.files("../M-bias/"))
-# ADS
-files <- "../data/M-bias/ADS.M-bias.txt"
-sample_names <- gsub("../data/M-bias/", "", gsub(".M-bias.txt", "", files))
-mbias <- lapply(files, read.mbias)
-mbias <- tbl_df(cbind(sample = rep(sample_names, sapply(mbias, nrow)),
-                      do.call("rbind", mbias)))
-mbias <- mutate(mbias, read_f = ifelse(read == "SE", "R1", read))
-mbias %>%
-  filter(sample == "ADS") %>%
-  ggplot(aes(x = read_pos, y = perc_M, colour = methylation_type)) +
-  geom_line(lwd = 1.3) + facet_grid(. ~ read_f) + ggtitle("M-bias: ADS") +
-  ylim(c(0, 100)) + ylab("Percentage methylation") + xlab("Read position") +
-  thesis_theme +
-  scale_color_discrete(guide = guide_legend(title = "Methylation type"))
-```
+\begin{figure}[h!]
+\centering
+\centering
+\includegraphics[width=\textwidth]{../figures/ADS_M-bias.pdf}
+\caption{M-bias plot for the ADS sample from the Lister (2011) dataset. Each of read 1 (R1) and read 2 (R2) are plotted separately. We see significant CpG M-bias at the start of read 2 and some noise at the start of read 1.}
+\label{fig:ADS_M-bias}
+\end{figure}
 
 If a sample was processed in multiple batches, then M-bias estimation (and methylation calling) should probably be performed separately for each batch and then combined, or in some manner that is 'batch aware'. For example, two libraries with DNA derived from the same cell line, but with separate library preparations and sequencing runs, will likely suffer from batch effects due to differences in the library preparations or differences with the sequencing runs. Unfortunately, the person analysing the data doesn't always know all the sample processing steps that may have introduced such batch effects and so these can be hard to deal with.
 
@@ -236,23 +152,12 @@ The M-bias plot is based on the read-position from the aligned data and not the 
 
 For example, suppose we performed $100$ bp single-end sequencing and pre-trimmed the first 20 bp of $90\%$ of the reads. Then, read-position $80$ will comprise $10\%$ sequencing cycle $80$ and $90\%$ sequencing cycle $100$. It is very likely that sequencing cycle $100$ suffers more from M-bias than does cycle $80$, and so this will appear in the M-bias plot as M-bias at read position $80$.
 
-```{r E18VA_M-bias, eval = TRUE, echo = FALSE, message = FALSE, fig.cap = "M-bias plot for the E18VA sample from the EPISCOPE dataset. Each of read 1 (R1) and read 2 (R2) are plotted separately. For CpGs in read 1, we see noise at the start of the read, followed by a downward slope in the M-bias, which ends with a spike. For CpGs in read 2, we see a downward spike at the start of the read following by a gradual increase in the M-bias curve, with a spike at read-position 101 and a spike at the last read positions for all methylation types. The spike at read-position 101 is also evidence, albeit to a lesser extent, in read 1. This position should be ignored in downstream analyses but we do not necessarily also want to ignore read-positions $102-150$ since this would remove one-third of the data.", dev = "pdf", outwidth = "0.8\\linewidth"}
-#files <- paste0("../M-bias/", list.files("../M-bias/"))
-# E18VA
-files <- "../data/M-bias/E18VA.M-bias.txt"
-sample_names <- gsub("../data/M-bias/", "", gsub(".M-bias.txt", "", files))
-mbias <- lapply(files, read.mbias)
-mbias <- tbl_df(cbind(sample = rep(sample_names, sapply(mbias, nrow)),
-                      do.call("rbind", mbias)))
-mbias <- mutate(mbias, read_f = ifelse(read == "SE", "R1", read))
-mbias %>%
-  filter(sample == "E18VA") %>%
-  ggplot(aes(x = read_pos, y = perc_M, colour = methylation_type)) +
-  geom_line(lwd = 1.3) + facet_grid(. ~ read_f) + ggtitle("M-bias: E18VA") +
-  ylim(c(0, 100)) + ylab("Percentage methylation") + xlab("Read position") +
-  thesis_theme +
-  scale_color_discrete(guide = guide_legend(title = "Methylation type"))
-```
+\begin{figure}[h!]
+\centering
+\centering
+\includegraphics[width=\textwidth]{../figures/E18VA_M-bias.pdf}
+\caption{M-bias plot for the E18VA sample from the EPISCOPE dataset. Each of read 1 (R1) and read 2 (R2) are plotted separately. For CpGs in read 1, we see noise at the start of the read, followed by a downward slope in the M-bias, which ends with a spike. For CpGs in read 2, we see a downward spike at the start of the read following by a gradual increase in the M-bias curve, with a spike at read-position 101 and a spike at the last read positions for all methylation types. The spike at read-position 101 is also evidence, albeit to a lesser extent, in read 1. This position should be ignored in downstream analyses but we do not necessarily also want to ignore read-positions $102-150$ since this would remove one-third of the data.}
+\end{figure}
 
 The loss of the one-to-one relationship between sequencing cycle and read-position cannot be avoided if reads are pre-trimmed because the trimming information is not preserved. \citet{Hansen:2012gr} suggest a separate M-bias plot for each read-length, which will help mitigate the effect of confounding between read-position and sequencing-cycle[^read_trimming]. However, if trimming is performed during the alignment then all the necessary information is retained and the x-axis of M-bias plots would be 'sequencing cycle' rather than 'read-position', thus avoiding the issue entirely.
 
@@ -385,25 +290,7 @@ A further complication occurs when there is a genetic variant in the two nucleot
 
 \section{\texttt{methtuple}}\label{sec:methtuple}
 
-Most methylation callers, such as `bismark_methylation_extractor` and `Bis-SNP`, perform methylation calling at single methylation loci, which I refer to as 1-tuples. The output file is a table, where each row records the co-ordinates of a cytosine and the number of methylated and unmethylated reads at that position. Table \ref{tab:1-tuples} is representative of the type of data returned by these programs. The file format is generally tab-delimited plain text, the Browser Extensible Data (BED) format or the Variant Call Format (VCF).
-
-\begin{table}[h]
-\centering
-\begin{tabular}{@{}lllll@{}}
-\toprule
-Chromosome & Strand & Position & M & U \\ \midrule
-chr1       & $+$      & 100      & 7 & 1 \\
-chr1       & $-$      & 101      & 5 & 2 \\
-chr2       & $+$      & 400      & 0 & 3 \\
-chr2       & $+$      & 450      & 1 & 2  \\ \bottomrule
-\end{tabular}
-\caption{Example of output for methylation calling at 1-tuples. Most CpGs will have a measurement from both the positive and negative strands, but not always.}
-\label{tab:1-tuples}
-\end{table}
-
-While 1-tuples are the basis of most analyses of bisulfite-sequencing data, these do not make full use of the information available from bisulfite-sequencing data. Each bisulfite-sequencing read may contain multiple methylation loci, which I call an m-tuple. Furthermore, since each read is from a single cell[^chimeric_reads], we can study the methylation calls at m-tuples to learn about _epialleles_ and _epipolymorphisms_ (Chapter \ref{chap:wgbs_statistical_framework}) and _co-methylation_ (Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}). In order to study these concepts, we need software that can perform methylation calling at m-tuples, which was not available when I began my PhD, and so I wrote `methtuple`.
-
-[^chimeric_reads]: This ignores chimeric reads, which are created when two DNA fragments ligate to one another during the library preparation. Certain bisulfite-sequencing protocols frequently produce chimeric reads. For example, using the post-bisulfite adapter tagging (PBAT) protocol \citep{Miura:2012fr} with a low input amount of DNA results in a huge number of chimeric reads (personal communication from Felix Krueger). The standard whole-genome bisulfite-sequencing protocol is not known to suffer from this issue.
+`methtuple` ([https://github.com/PeteHaitch/methtuple](https://github.com/PeteHaitch/methtuple)) is software I wrote to perform methylation calling at m-tuples. In order to explain how it works and my motivation for writing it, I first need to explain what an m-tuple is.
 
 \subsection{m-tuples}\label{sec:m-tuples}
 
@@ -475,18 +362,39 @@ With current sequencing technology we are limited to extracting m-tuples that sp
 
 \subsection{Motivation}
 
-`methtuple` ([https://github.com/PeteHaitch/methtuple](https://github.com/PeteHaitch/methtuple)) is software to perform methylation calling at m-tuples from bisulfite-sequencing data. Table \ref{tab:other_m-tuple_methylation_callers} lists other software that can perform methylation calling at m-tuples. However, none of these existed when I started writing `methtuple` nor do any of them do exactly what I require. To the best of my knowledge, `methtuple` is the only software that can perform methylation calling at m-tuples from whole-genome data.
+Most methylation callers, such as `bismark_methylation_extractor` and `Bis-SNP`, perform methylation calling at single methylation loci, which I refer to as 1-tuples. The output file is a table, where each row records the co-ordinates of a cytosine and the number of methylated and unmethylated reads at that position. Table \ref{tab:1-tuples} is representative of the type of data returned by these programs. The file format is generally tab-delimited plain text, the Browser Extensible Data (BED) format or the Variant Call Format (VCF).
 
 \begin{table}[h]
 \centering
-\begin{tabulary}{\textwidth}{LLLLL}
+\begin{tabular}{@{}lllll@{}}
 \toprule
-Software           & Reference                                & Input                                              & Designed for targeted sequencing & Other limitations                                                                \\ \midrule
-\texttt{methclone} & \citet{Li:2014ei}                       & Bismark BAM files                                  & No, although example uses eRRBS  & \textbf{TODO: Suspect you can't get actual methylation calls.} \\
-\texttt{methpat}  & \url{https://github.com/bjpop/methpat} & Output of \texttt{bismark\_methylation\_extractor} & Yes (amplicons)                  &                                                                                  \\
-\texttt{DMEAS}     & \citet{He:2013cj}                       & Output of \texttt{bismark\_methylation\_extractor} &                                  & Windows operating system only. Perl code only available as PDF file.             \\ \bottomrule
+Chromosome & Strand & Position & M & U \\ \midrule
+chr1       & $+$      & 100      & 7 & 1 \\
+chr1       & $-$      & 101      & 5 & 2 \\
+chr2       & $+$      & 400      & 0 & 3 \\
+chr2       & $+$      & 450      & 1 & 2  \\ \bottomrule
+\end{tabular}
+\caption{Example of output for methylation calling at 1-tuples. Most CpGs will have a measurement from both the positive and negative strands, but not always.}
+\label{tab:1-tuples}
+\end{table}
+
+While 1-tuples are the basis of most analyses of bisulfite-sequencing data, these do not make full use of the information available from bisulfite-sequencing data. Each bisulfite-sequencing read may contain multiple methylation loci, which I call an m-tuple. Furthermore, since each read is from a single cell[^chimeric_reads], we can study the methylation calls at m-tuples to learn about _epialleles_ and _epipolymorphisms_ (Chapter \ref{chap:wgbs_statistical_framework}) and _co-methylation_ (Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}).
+
+[^chimeric_reads]: This ignores chimeric reads, which are created when two DNA fragments ligate to one another during the library preparation. Certain bisulfite-sequencing protocols frequently produce chimeric reads. For example, using the post-bisulfite adapter tagging (PBAT) protocol \citep{Miura:2012fr} with a low input amount of DNA results in a huge number of chimeric reads (personal communication from Felix Krueger). The standard whole-genome bisulfite-sequencing protocol is not known to suffer from this issue.
+
+In order to study these concepts, we need software that can perform methylation calling at m-tuples. Table \ref{tab:other_m-tuple_methylation_callers} lists other software that can perform methylation calling at m-tuples. However, none of these existed when I started writing `methtuple`. Even now, none of these do exactly what I require and have more general limitations. To the best of my knowledge, `methtuple` is the only software that can perform methylation calling at m-tuples from whole-genome data.
+
+\begin{table}[h]
+\centering
+\begin{tabulary}{\textwidth}{LLLL}
+\toprule
+Software           & Reference                                & Input                                              & Limitations                                                                \\ \midrule
+methclone & \citet{Li:2014ei}                       & \texttt{Bismark} \texttt{BAM}                                  & Unable to install \\
+methpat  & \url{https://github.com/bjpop/methpat} & Output of \texttt{bsm} & Designed for amplicons not whole-genome data.                                                                                 \\
+DMEAS    & \citet{He:2013cj}                       & Output of \texttt{bsm} & Windows operating system only. Perl code only available as PDF file.             \\
+\bottomrule
 \end{tabulary}
-\caption{Other software for methylation calling at m-tuples.}
+\caption{Other software for methylation calling at m-tuples and their limitations. Abbreviations: \texttt{bsm} =  \texttt{bismark\_methylation\_extractor}.}
 \label{tab:other_m-tuple_methylation_callers}
 \end{table}
 
@@ -517,82 +425,19 @@ The running time of \texttt{methtuple} is proportional to the number of reads ma
 
 The maximum memory usage is not strictly proportional to chromosome length. It is instead driven by the number and density of CpGs on the chromosome.  For example, \texttt{chr19}, which has the highest CpG density of all the autosomes in the human genome, requires far more memory than \texttt{chr18}, which has less than half the CpG density of \texttt{chr19} (see Table \ref{tab:cpg_density_hg19}). The relationship between the maximum memory usage and the tuple size (\texttt{-m}) is complex; more data have to be retained as \texttt{-m} increases, thus increasing the memory usage, but fewer reads contain tuples of that size and so there aren't as many m-tuples or observations on these to count and retain. Therefore, memory usage is relatively constant across values of \texttt{-m} for a given chromosome. The obvious exception is for tuple size \texttt{2ac}, which used the \texttt{--all-combinations} flag. This means that all 2-tuples with $NIL \geq 0$ were computed and there are many, many more CpG 2-tuples with $NIL \geq 0$ than there are with $NIL = 0$, hence the enormous increase in memory usage.
 
-```{r methtuple_runtime, eval = TRUE, echo = FALSE, message = FALSE, fig.cap = "The running times are the 'User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix 'ac' on the tuple size means that the option \texttt{--all-combinations} was set.", dev = "pdf", out.width = "0.8\\linewidth"}
-library(dplyr)
-library(ggplot2)
-library(stringr)
-library(gridExtra)
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/methtuple_runtime.pdf}
+\caption{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{--all-combinations} was set. Note that the reported $49$ samples separately counts each of the Ziller sequencing runs.}
+\label{fig:methtuple_runtime}
+\end{figure}
 
-# facet_wrap_labeller() from http://stackoverflow.com/a/19298442
-facet_wrap_labeller <- function(gg.plot, labels = NULL) {
-  #works with R 3.0.1 and ggplot2 0.9.3.1
-
-  g <- ggplotGrob(gg.plot)
-  gg <- g$grobs
-  strips <- grep("strip_t", names(gg))
-
-  for(ii in seq_along(labels))  {
-    modgrob <- getGrob(gg[[strips[ii]]], "strip.text",
-                       grep=TRUE, global=TRUE)
-    gg[[strips[ii]]]$children[[modgrob$name]] <- editGrob(modgrob,
-                                                          label = labels[ii])
-    }
-
-  g$grobs <- gg
-  class(g) = c("arrange", "ggplot",class(g))
-  g
-  }
-thesis_theme <- theme_classic(base_size = 12)
-thesis_theme <- theme_bw(base_size = 12)
-# Time
-time <- lapply(paste0("../data/methtuple_performance/time/",
-                      list.files("../data/methtuple_performance/time/")),
-               read.table)
-names(time) <- gsub(".time", "",
-                    list.files("../data/methtuple_performance/time/"))
-n <- str_split(names(time), "\\.")
-time <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1),
-                                             times = sapply(time, nrow)),
-                                         levels =
-                                           paste0("chr",
-                                                  c(1:22, "X", "Y", "M", "L"))),
-                   "Tuple" = rep(sapply(n, "[", 2),
-                                 times = sapply(time, nrow)),
-                   "Time" = unlist(time))
-
-gg_time <- time %>%
-  ggplot(aes(x = Chromosome, y = Time / 60)) + geom_boxplot() +
-  facet_wrap( ~ Tuple, ncol = 3) + thesis_theme +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ylab("Running time (minutes)") +
-  ggtitle("Running time of methtuple across 49 samples")
-facet_wrap_labeller(gg_time, paste0("Tuple size: ", unique(time$Tuple)))
-```
-
-```{r methtuple_memory, eval = TRUE, echo = FALSE, message = FALSE, fig.cap = "The maximum memory usage is the 'Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix 'ac' means that the option \texttt{--all-combinations} was set.", dev = "pdf", out.width = "0.8\\linewidth"}
-# Memory
-memory <- lapply(paste0("../data/methtuple_performance/memory/",
-                        list.files("../data/methtuple_performance/memory/")),
-                 read.table)
-names(memory) <- gsub(".memory", "",
-                      list.files("../data/methtuple_performance/memory/"))
-n <- str_split(names(memory), "\\.")
-# NB: Need to divide reported memory usage by 4 due to bug in 'time'
-# (https://bugzilla.redhat.com/show_bug.cgi?id=703865)
-memory <- data_frame("Chromosome" = factor(rep(sapply(n, "[", 1),
-                                               times = sapply(memory, nrow)),
-                                           levels =
-                                             paste0("chr",
-                                                    c(1:22, "X", "Y", "M", "L"))),
-                     "Tuple" = rep(sapply(n, "[", 2),
-                                   times = sapply(memory, nrow)),
-                     "Memory" = unlist(memory) / 4)
-gg_memory <- memory %>%
-  ggplot(aes(x = Chromosome, y = Memory / 10^6)) + geom_boxplot() +
-  facet_wrap( ~ Tuple, ncol = 3) + thesis_theme +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ylab("Memory usage (GB)") +
-  ggtitle("Maximum memory usage of methtuple across 49 samples")
-facet_wrap_labeller(gg_memory, paste0("Tuple size: ", unique(memory$Tuple)))
-```
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/methtuple_memory.pdf}
+\caption{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{--all-combinations} was set. Note that the reported $49$ samples separately counts each of the Ziller sequencing runs.}
+\label{fig:methtuple_runtime}
+\end{figure}
 
 ```{r autosomal_cpg_density_hg19, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
 library(xtable)
@@ -603,7 +448,6 @@ align(xt) <- rep("c", ncol(x) + 1)
 digits(xt) <- 2
 print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, include.rownames = FALSE)
 ```
-
 
 \subsection{Availability}
 
