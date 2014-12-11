@@ -283,7 +283,9 @@ _Restriction endonucleases_ are an important technique in molecular biology. The
 
 For example, the recognition site of the restriction enzyme _HpaII_ is `CCGC`. However, _HpaII_ will only digest DNA when the second cytosine in the motif is unmethylated. The _HELP_ (_HpaII_ tiny fragment enrichment by ligation-mediated PCR) assay compares DNA digested by _HpaII_ to one digested with another restriction enzyme that has the same recognition motif but is methylation-insensitive (_MspI_) to identify _hypomethylated_ regions of a genome \citep{Khulan:2006gx}.
 
-Assays based on restriction enzyme were some of the first developed for studying DNA methylation. They were initially developed for studying particular loci although they have been extended to genome-scale analysis approaches \citep{Laird:2010iv}. Restriction enzyme assays have a relatively low resolution.
+Assays based on restriction enzyme were some of the first developed for studying DNA methylation. They were initially developed for studying particular loci although they have been extended to genome-scale analysis approaches \citep{Laird:2010iv}. One such genome-wide assays is CHARM (_comprehensive high-throughput arrays for relative methylation_, \citet{Irizarry:2008hg}). CHARM combines a methylation fractionation step --- be it _MeDIP_, _HpaII_, or as in the original publication, _McrBC_ --- with a tiling array and analysis techniques that leverage regional DNA methylation levels.
+
+While restriction enzyme assays do not typically provide single nucleotide resolution data, `methylCRF` \citep{Stevens:2013hv} is able to infer single CpG methylation levels by combining data from a restriction enzyme based assay (MRE-seq) with one based on affinity enrichment (MeDIP-seq) in a sophisticated statistical analysis.
 
 \subsection{Affinity enrichment assays}\label{sec:affinity_enrichment_assays}
 
