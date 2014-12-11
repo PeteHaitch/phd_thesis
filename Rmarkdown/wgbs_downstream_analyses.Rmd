@@ -267,8 +267,8 @@ The obvious method to detect allele-specific methylation from bisulfite-sequenci
 \begin{tabular}{@{}lll@{}}
 \toprule
 & Allele 1 & Allele 2 \\ \midrule
-m &  m_{1}        &  m_{2}       \\
-u &  u_{1}        &  u_{2}       \\ \bottomrule
+$m$ &  $m_{1}$        &  $m_{2}$       \\
+$u$ &  $u_{1}$        &  $u_{2}$       \\ \bottomrule
 \end{tabular}
 \caption{$2 \times 2$ table used to test for allele-specific methylation.}
 \label{tab:asm}
