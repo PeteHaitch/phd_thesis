@@ -1,7 +1,5 @@
 ---
-title: "Co-methylation"
 author: "Peter Hickey"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   pdf_document:
     fig_caption: yes
@@ -16,14 +14,50 @@ bibliography: ../latex/phd_thesis.bib
 
 ## Chapter overview
 
-In this chapter I describe two measures of within-sample co-methylation, _within-fragment co-methylation_ and _correlation of $\beta$-values_. Using both these measures I explore how co-methylation is affected by the distance between methylation loci, the density of methylation loci and the genomic context of the methylation loci. I apply these methods to more than fifty whole-genome bisulfite-sequencing libraries to study the between-sample variability of co-methylation.
+In this chapter I describe two measures of within-sample co-methylation, _within-fragment co-methylation_ and _correlation of $\beta$-values_. Using both these measures I explore how co-methylation is affected by the distance between methylation loci, the density of methylation loci and the genomic context of the methylation loci. I apply these methods to 40 whole-genome bisulfite-sequencing samples to study the between-sample variability of co-methylation.
 
 Throughout this chapter I focus on co-methylation of CpGs, although the methods described are also applicable to non-CpG methylation loci. The reason I do not explore co-methylation at non-CpG methylation loci is because such loci are rarely methylated in the samples that I am studying.
 
 \section{Correlations of $\beta$-values}\label{subsec:beta_cor}
 
-__TODO: A spiel on how my method is better than existing ones.__
+Chapter \ref{chap:co-methylation_review} documented several previous analyses based on 'correlations' of aggregate methylation levels, such as $\beta$-values. What was lacking from these was a clear description and implementation of the proposed method. Here I describe two simple methods based on correlations of $\beta$-values. Both of these are implemented in the `methLevelCor` function that is part of the `MethylationTuples` software.
 
+The aim of this analysis is to address the question of 'how are aggregate methylation levels correlated as a function of the distance between loci?'. There are two steps in this analysis:
+
+1. Define the pairs of methylation loci.
+2. For each $IPD$, compute the correlation of $\beta$-values for all pairs of methylation loci separated by that $IPD$.
+
+Step (2) may be further stratified by the genomic context of the pair of CpGs, such as whether they are in a CpG island, or other variables of interest.
+
+The same analysis could be performed using $\mathcal{M}$-values rather than $\beta$-values, and this is available as an option in the `methLevelCor` function.
+
+\subsection{Constructing the pairs}
+
+I consider two different strategies for creating pairs of CpGs. Both strategies are based on CpGs in the reference genome after having filtered out those reference-specific CpGs. That is, I begin with $\mathcal{I}^{ref}$ and, based on the `Bis-SNP` output, I filter out loci that are not CpGs in the sample's genome. Rather than actually remove these sites, I simply set the corresponding $\beta$-value to `NA`. I also set the $\beta$-values of 'missing' CpGs, those without sufficient sequencing coverage to call a $\beta$-value, to `NA` so that these are still included in the set of CpGs.
+
+The first strategy creates all pairs of adjacent CpGs on the same chromosome and strand, which are then stratified by $IPD$ and any secondary variables, such as genomic context. For a chromosome with $N$ CpGs there are $(N - 1)$ pairs. I call this the 'adjacent pairs' or $NIL = 0$ strategy, since all pairs have zero intervening loci^[nil0].
+
+[^nil]: Recall that this is with respect to the reference genome and not the sample genome.
+
+The second strategy uses all pairs of CpGs on the same chromosome and strand, which are then stratified by $IPD$ and any secondary variables, such as genomic context. In practice, the second strategy only uses pairs for a set of $IPD$s, e.g., $IPD = 2 - 2000$, otherwise the number of pairs becomes unwieldy. This is more like a traditional autocorrelation analysis of $\bm{\beta} = (\beta_{1}, \ldots, \beta_{N_{loci}})$, albeit of a vector of unequally spaced observations and with care taken to only use pairs on the same chromosome and strand. I refer to this as the $NIL \geq 0$ strategy. Using the $NIL \geq 0$ strategy, two pairs of CpGs with an identical $IPD$ may have a very different number of intervening CpGs.
+
+The interpretation of correlations computed using the $NIL \geq 0$ is complicated because the set of pairs are more heterogeneous than those under the $NIL = 0$ strategy. For this reason I prefer the $NIL = 0$ strategy, however, it may be useful to consider and contrast the two strategies, which is what I have done in my thesis.
+
+\subsection{Stratifying by a genomic feature}
+
+Even when using the $NIL = 0$ strategy, two pairs of CpGs with an identical $IPD$ may come from two distinct regions of the genome that have very different methylation dynamics. In other words, the vector of $\beta$-values for a given sample is highly non-stationary --- the covariance and correlation between two loci depends on more than just the $IPD$. An obvious thing to investigate is how strong an influence the genomic context has on these correlations of $\beta$-values. To do this, we can stratify our analysis by a genomic feature. While this does not eliminate this non-stationarity, it may help identify factors that drive some of the heterogeneity.
+
+For any genomic feature, a pair of loci may be inside, outside or spanning the boundary of the feature. __FIGURE__ illustrates the 'feature status' of some pairs of loci. Note that a pair where each loci is in a different CpG island is declared to be inside the feature, i.e., elements need not be in the same feature but rather in the same type of feature. The genomic feature should partition the genome so that each loci is either inside or outside of the feature. Since the number of 'spanning pairs' is substantially fewer than those inside or outside of the feature, and the boundaries of the feature are oftentimes fuzzy, I have excluded these 'spanning pairs' in the results shown below.
+
+\subsection{Choice of correlation coefficient}
+
+The three commonly used correlation coefficients are Pearson's $r$ (__CITE__), Spearman's $\rho$ (__CITE__) and Kendall's $\tau$ (__CITE__). Briefly, Pearson's product-moment correlation is designed to detect linear relationships between two variables. However, it is not robust to outliers, which motivates the use of Spearman's and Kendall's rank-based correlation coefficients. Spearman's $\rho$ is simply the Pearson product-moment correlation of the ranks of the data while Kendall's $\tau$ is based on the relative frequency of concordantly ranked pairs. Owing to the size of whole-genome bisulfite-sequencing data, I have chosen to only compute Pearson's $r$ and Spearman's $\rho$, which are much faster to compute than Kendall's $\tau$.
+
+\subsection{Results}
+
+For all 40 samples in the EPISCOPE, Lister, Seisenberger and Ziller datasets, I compute the Pearson and Spearman correlations using both the $NIL = 0$ and $NIL \geq 0$ strategies. I compute these genome-wide and after stratifying CpG pairs by whether they are in a CpG island.
+
+__TODO: Results__
 
 \section{Within-fragment co-methylation}\label{subsec:wf_cometh}
 
