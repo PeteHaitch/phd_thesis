@@ -16,14 +16,14 @@ bibliography: ../latex/phd_thesis.bib
 
 \section{Chapter overview}
 
-This chapter briefly documents the 51 whole-genome bisulfite-sequencing samples that I use in my thesis. The `BAM` files for each sample underwent the same basic processing:
+This chapter briefly documents the 40 whole-genome bisulfite-sequencing samples that I use in my thesis. The `BAM` files for each sample underwent the same basic processing:
 
 1. Genetic variants were called using `Bis-SNP (v0.82.2)` via the `bissnp_easy_usage.pl` script.
 2. M-bias was estimated using `bismark_methylation_extractor` with the `--mbias_only` flag set. These output files were then analysed using the  `MethylationTuples` R package (see section \ref{sec:MethylationTuples}) and all read-positions with an CpG normalised read-position methylation level more than $0.03$ from the median, i.e., $|$nrplml_{CpG}$ - median(rplm_{CpG})| > 0.03$, were excluded from methylation calling (read 1 and read 2 analysed separately where applicable).
 3. CpG methylation calling was performed using `methtuple (v1.4.0)` for m-tuples $\text{m} = 1, \ldots, 8$. CpG 2-tuples were called both with and without the `--all-combinations` flag; all other tuple sizes were called without the `--all-combinations` flag.
 4. A `MethPat` object was created for each of the EPISCOPE, Lister, Seisenberger and Ziller datasets for 1-tuples, 2-tuples, 2ac-tuples (2-tuples with `--all-combinations`), 3-tuples and 4-tuples. I did not create `MethPat` objects for m-tuples with $\text{m} > 4$ because the data are too sparse at this larger sizes to be generally useful.
 
-__TODO__: I'd like to make available all the data and scripts necessary to reproduce my analyses, i.e., going from a `BAM` file to a `MethPat` objects, but it's a little daunting --- the folder containing __just the processed data__ (`/home/users/lab0605/hickey/methylation_m-tuples`) is $275$ GB alone.
+__TODO__: I'd like to make available all the data and scripts necessary to reproduce my analyses, i.e., going from a `BAM` file to a `MethPat` objects, but it's a little daunting --- the folder containing __just the processed data__ (`/home/users/lab0605/hickey/methylation_m-tuples`) is $> 275$ GB alone.
 
 \section{Lister dataset}\label{sec:Lister_dataset}
 
@@ -85,8 +85,8 @@ The EPISCOPE data were kindly provided to me by Professor Susan Clark (Garvan In
 The data are from three human donors across four different tissues, for a total of 12 whole-genome bisulfite-sequencing libraries. The four tissues are:
 
 - _BUF_: Buffy coat layer, which are leukocytes and platelets derived by centrifugation of a whole blood sample.
-- _SA_: Subcutaneous adidose tissue, which is fat found just below the skin. Unlike visceral fat, "subcutaneous fat is not related to many of the classic obesity-related pathologies, such as heart disease, cancer, and stroke" (__TODO: Get better reference than wikipedia__).
-- _VA_: Visceral adipose tissue, which is located inside the abdominal cavity, packed between the organs (stomach, liver, intestines, kidneys, etc.) (__TODO: Get better reference than wikipedia__).
+- _SA_: Subcutaneous adidose tissue, which is fat found just below the skin. Unlike visceral adipose tissue, subcutaneous adipose tissue is thought to be protective against obesity-related metabolic dysfunction \citep{Chau:2014do}.
+- _VA_: Visceral adipose tissue, which is located inside the abdominal cavity, packed between the organs and is associated with metabolic dysfunction \citep{Chau:2014do}.
 - _VAT_: Visceral adipocytes, which are derived from the VA tissue.
 
 The data are summarised in Table \ref{tab:EPISCOPE_dataset}.
@@ -146,7 +146,7 @@ The sequencing data for these 3 samples were processed and aligned by Felix Krue
 
 \section{Ziller dataset}\label{sec:Ziller_dataset}
 
-The Ziller are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 19 (__TODO: Check final numbers__) WGBS libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research), who already had aligned and processed BAM files for these 19 libraries. These libraries in fact represent 19 sequencing runs of eight biological samples, which I was not aware of until the data had already been processed. Therefore, I have _post hoc_ merged the processed data from sequencing runs. This unfortunately reduces the power to detect genetic variants since the coverage of individual sequencing runs is lower than merged data, but does not adversely affect methylation calling since the number of methylated and unmethylated reads can be summed across sequencing runs.
+The Ziller are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 8 WGBS libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research), who already had aligned and processed BAM files for these 19 libraries. These libraries in fact represent 19 sequencing runs of eight biological samples, which I was not aware of until the data had already been processed. Therefore, I have _post hoc_ merged the processed data from sequencing runs. This unfortunately reduces the power to detect genetic variants since the coverage of individual sequencing runs is lower than merged data, but does not adversely affect methylation calling since the number of methylated and unmethylated reads can be summed across sequencing runs.
 
 The eight biological samples are as follows: frontal cortex from two 'normal' women donors (_Frontal\_cortex\_normal\_1_ and _Frontal\_cortex\_normal\_2_) and from two women who had Alzheimer's disease (_Frontal\_cortex\_AD\_1_ and _Frontal\_cortex\_AD\_2_); a sample from a human liver carcinoma cell line (_HepG2\_cell\_line_); a new sample from the _IMR90_ lung fibroblast cell line (_IMR90\_cell\_line_); and samples from a colon cancer matched tumour-normal pair (_Colon\_Tumor\_Primary_ and _Colon\_Primary\_Normal_).
 
