@@ -51,11 +51,13 @@ For any genomic feature, a pair of loci may be inside, outside or spanning the b
 
 \subsection{Choice of correlation coefficient}
 
-The three commonly used correlation coefficients are Pearson's $r$ (__CITE__), Spearman's $\rho$ (__CITE__) and Kendall's $\tau$ (__CITE__). Briefly, Pearson's product-moment correlation is designed to detect linear relationships between two variables. However, it is not robust to outliers, which motivates the use of Spearman's and Kendall's rank-based correlation coefficients. Spearman's $\rho$ is simply the Pearson product-moment correlation of the ranks of the data while Kendall's $\tau$ is based on the relative frequency of concordantly ranked pairs. Owing to the size of whole-genome bisulfite-sequencing data, I have chosen to only compute Pearson's $r$ and Spearman's $\rho$, which are much faster to compute than Kendall's $\tau$.
+The three commonly used correlation coefficients are Pearson's $r$ (__CITE__), Spearman's $\rho$ (__CITE__) and Kendall's $\tau$ (__CITE__). Briefly, Pearson's product-moment correlation is designed to detect linear relationships between two variables. However, it is not robust to outliers, which motivates the use of Spearman's and Kendall's rank-based correlation coefficients. Spearman's $\rho$ is simply the Pearson product-moment correlation of the ranks of the data while Kendall's $\tau$ is based on the relative frequency of concordantly ranked pairs.
+
+Owing to the size of whole-genome bisulfite-sequencing data, I have chosen to only compute Pearson's $r$ and Spearman's $\rho$, which are much faster to compute than Kendall's $\tau$. The `methLevelCor` function in the `MethylationTuples` will compute a confidence interval, $95\%$ by default, for the Pearson correlation. This feature is not yet available when using Spearman's or Kendall's correlation coefficient.
 
 \subsection{Results}
 
-For all 40 samples in the EPISCOPE, Lister, Seisenberger and Ziller datasets, I compute the Pearson and Spearman correlations using both the $NIL = 0$ and $NIL \geq 0$ strategies. I compute these genome-wide and after stratifying CpG pairs by whether they are in a CpG island.
+For all 40 samples in the EPISCOPE, Lister, Seisenberger and Ziller datasets, I compute the Pearson and Spearman correlations using both the $NIL = 0$ and $NIL \geq 0$ strategies. I compute these genome-wide and after stratifying CpG pairs by whether they are in a CpG island. These analyses are performed separately for each strand and also for strand-collapsed $\beta$-values.
 
 __TODO: Results__
 
