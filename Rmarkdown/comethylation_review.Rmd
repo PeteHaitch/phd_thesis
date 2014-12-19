@@ -261,7 +261,7 @@ In summary, this analysis uses high resolution measurements from a moderate numb
 
 \subsection{\citet{Landan:2012kp}}\label{sec:landan}
 
-\citet{Landan:2012kp} is notable for its use of the within-read information available from bisulfite-sequencing data.  The authors explore the within-sample heterogeneity of methylation patterns at 4-tuples and 6-tuples of CpGs. They use ultradeep (median coverage of each CpG in the target $> 10,000 \times$) bisulfite-sequencing of a 45 cancer-related CpG islands and study how methylation dynamics at this regions evolves over time. They also use these data to estimate co-methylation.
+\citet{Landan:2012kp} is notable for its use of the within-read information available from bisulfite-sequencing data.  The authors explore the within-sample heterogeneity of methylation patterns at 4-tuples and 6-tuples of CpGs. They use ultra-deep (median coverage of each CpG in the target $> 10,000 \times$) bisulfite-sequencing of a 45 cancer-related CpG islands and study how methylation dynamics at this regions evolves over time. They also use these data to estimate co-methylation.
 
 As part of their analysis they compute "methylation linkage diagrams". For each pair of CpGs in their targeted regions, they create a $2 \times 2$ contingency table. The general form of the table is shown below in Table \ref{tab:landan}. They then compute the Pearson correlation of each table[^cor_equivalence], which estimates the correlation of methylation events at that pair of CpGs. Importantly, these are within-read measurements from a single sample and so these are estimates of within-read, within-sample co-methylation.
 

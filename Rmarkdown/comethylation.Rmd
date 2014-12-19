@@ -20,7 +20,11 @@ Throughout this chapter I focus on co-methylation of CpGs, although the methods 
 
 \section{Correlations of $\beta$-values}\label{subsec:beta_cor}
 
-Chapter \ref{chap:co-methylation_review} documented several previous analyses based on 'correlations' of aggregate methylation levels, such as $\beta$-values. What was lacking from these was a clear description and implementation of the proposed method. Here I describe two simple methods based on correlations of $\beta$-values. Both of these are implemented in the `methLevelCor` function that is part of the `MethylationTuples` software.
+Chapter \ref{chap:co-methylation_review} documented several previous analyses based on 'correlations' of aggregate methylation levels, such as $\beta$-values. What was lacking from these were clear descriptions of the proposed methods and software implementations.
+
+\subsection{Methods}
+
+Here I describe two simple methods based on correlations of $\beta$-values. Both of these are implemented in the `methLevelCor` function that is part of the `MethylationTuples` software.
 
 The aim of this analysis is to address the question of 'how are aggregate methylation levels correlated as a function of the distance between loci?'. There are two steps in this analysis:
 
@@ -31,7 +35,7 @@ Step (2) may be further stratified by the genomic context of the pair of CpGs, s
 
 The same analysis could be performed using $\mathcal{M}$-values rather than $\beta$-values, and this is available as an option in the `methLevelCor` function.
 
-\subsection{Constructing the pairs}
+\subsubsection{Constructing the pairs}\label{sec:beta_pair_construction}
 
 I consider two different strategies for creating pairs of CpGs. Both strategies are based on CpGs in the reference genome after having filtered out those reference-specific CpGs. That is, I begin with $\mathcal{I}^{ref}$ and, based on the `Bis-SNP` output, I filter out loci that are not CpGs in the sample's genome. Rather than actually remove these sites, I simply set the corresponding $\beta$-value to `NA`. I also set the $\beta$-values of 'missing' CpGs, those without sufficient sequencing coverage to call a $\beta$-value, to `NA` so that these are still included in the set of CpGs.
 
@@ -43,13 +47,13 @@ The second strategy uses all pairs of CpGs on the same chromosome and strand, wh
 
 The interpretation of correlations computed using the $NIL \geq 0$ is complicated because the set of pairs are more heterogeneous than those under the $NIL = 0$ strategy. For this reason I prefer the $NIL = 0$ strategy, however, it may be useful to consider and contrast the two strategies, which is what I have done in my thesis.
 
-\subsection{Stratifying by a genomic feature}
+\subsubsection{Stratifying by a genomic feature}\label{sec:pair_stratification}
 
 Even when using the $NIL = 0$ strategy, two pairs of CpGs with an identical $IPD$ may come from two distinct regions of the genome that have very different methylation dynamics. In other words, the vector of $\beta$-values for a given sample is highly non-stationary --- the covariance and correlation between two loci depends on more than just the $IPD$. An obvious thing to investigate is how strong an influence the genomic context has on these correlations of $\beta$-values. To do this, we can stratify our analysis by a genomic feature. While this does not eliminate this non-stationarity, it may help identify factors that drive some of the heterogeneity.
 
 For any genomic feature, a pair of loci may be inside, outside or spanning the boundary of the feature. __FIGURE__ illustrates the 'feature status' of some pairs of loci. Note that a pair where each loci is in a different CpG island is declared to be inside the feature, i.e., elements need not be in the same feature but rather in the same type of feature. The genomic feature should partition the genome so that each loci is either inside or outside of the feature. Since the number of 'spanning pairs' is substantially fewer than those inside or outside of the feature, and the boundaries of the feature are oftentimes fuzzy, I have excluded these 'spanning pairs' in the results shown below.
 
-\subsection{Choice of correlation coefficient}
+\subsubsection{Choice of correlation coefficient}
 
 The three commonly used correlation coefficients are Pearson's $r$ (__CITE__), Spearman's $\rho$ (__CITE__) and Kendall's $\tau$ (__CITE__). Briefly, Pearson's product-moment correlation is designed to detect linear relationships between two variables. However, it is not robust to outliers, which motivates the use of Spearman's and Kendall's rank-based correlation coefficients. Spearman's $\rho$ is simply the Pearson product-moment correlation of the ranks of the data while Kendall's $\tau$ is based on the relative frequency of concordantly ranked pairs.
 
@@ -63,61 +67,81 @@ __TODO: Results__
 
 \section{Within-fragment co-methylation}\label{subsec:wf_cometh}
 
-__TODO: A spiel on how my method is better than existing ones.__
+The key advantage of studying within-fragment co-methylation is that measures the dependence of DNA methylation at the scale on which the biological process acts. I have developed a method based on odds-ratios to quantify the strength of co-methylation for a pair of methylation loci in a single sample.
+
+\subsection{Methods}
+
+Here I describe a simple method based on analysing methylation patterns at 2-tuples[^higher_order_m-tuples]. For simplicity, I will use CpG 2-tuples, but the method is applicable to any methylation type. This method is implemented in the `cometh` function that is part of the `MethylationTuples` software.
 
 
-In studying within-fragment co-methylation, I assume that all copies of each chromosome have the same dependence structure (__TODO: Although not the same mean structure? Make this mathematically precise__). The data are sampled from a population containing multiple copies of each chromosome and if each copy has a different dependence structure then we cannot hope to say anything about these structures since these copies are not identifiable.
+[^higher_order_m-tuples]: Extensions to m-tuples with $\text{m} > 2$ are discussed in __SECTION__.
 
-\subsection{Using pairs of methylation loci}\label{subsec:pairs}
+The aim of this analysis is to address the question of 'how are methylation states on individual DNA fragments correlated as a function of the distance between loci?'. There are two steps in this analysis:
 
-The simplest summary of within-fragment co-methylation uses pairs (2-tuples) of methylation loci. Consider a single pair of CpGs in the reference genome and all reads that contain both CpGs of the pair (see Figure \ref{reads_containing_pair_of_CpGs}).
+1. Define the 2-tuples.
+2. For each 2-tuple, estimates the dependence between the methylation state at the first locus and the second locus. For this I use the logarithm of the odds ratio ($LOR$).
 
-\begin{figure}[h!]
-  \centering
-    \includegraphics[width=0.5\textwidth]{../figures/reads_containing_pair_of_CpGs.pdf}
-      \caption{All reads containing a pair of CpGs. The CpGs are highlighted by the short blue bars along the bottom of the figure. Each long grey (resp. green) bar is a read mapped to the forward (resp. reverse) strand. Those reads highlighted in yellow contain both CpGs of the pair. Data are from the IMR90-iPSC sample.}
-      \label{reads_containing_pair_of_CpGs}
-\end{figure}
+Step (2) may be further stratified by the genomic context of the pair of CpGs, such as whether they are in a CpG island, or other variables of interest. This is done in the same manner as for pairs of $\beta$-values (Section \ref{sec:pair_stratification}).
 
-We tabulate the methylation states of each of these reads as shown in Table \ref{reads_containing_pair_of_CpGs_counts}. The `methtuple` software can perform this tabulation for all pairs of methylation loci in a sample.
+Finally, a similar analysis could be performed using a different measure of dependence, which I discuss in Section \ref{sec:choice_of_dependence_measure}.
 
-The within-fragment co-methylation of the pair of CpGs, $(i, i')$, in the $j^{th}$ sample is then defined as the log-odds ratio of this table, $LOR_{(i, i'), j} = log_2 \Big (\frac{MM_{i, i'} \times UU_{i, i'}}{MU_{i, i'} \times UM_{i, i'}} \Big)$. For the data shown in Figure \ref{reads_containing_pair_of_CpGs} the $LOR =$ `r round(log2((1.5 * 4.5) / (0.5 * 2.5)), 1)`.
+\subsubsection{Constructing the 2-tuples}
 
-\begin{table}[h]
-  \centering
+The construction of 2-tuples is very similar to constructing the pairs of methylation levels, described in Section \ref{sec:beta_pair_construction}. However, we are now limited to analysing co-methylation of loci that can be captured within a single read. In practice, this means we are limited to studying within-fragment co-methylation for 2-tuples with $IPD \lessapprox 200$.
 
-  \begin{tabular}{lcccl}
-                           & \multicolumn{1}{l}{} & \multicolumn{2}{l}{Second CpG} &                \\
-                           &                      & \textbf{M}     & \textbf{U}    & \textbf{Total} \\ \cline{2-5}
-\multirow{2}{*}{First CpG} & \textbf{M}           & 1              & 2             & 3              \\
-                           & \textbf{U}           & 0              & 4             & 4              \\ \cline{2-5}
-                           & \textbf{Total}       & 1              & 6             & 7
-\end{tabular}
-\caption{Counts of each methylation pattern for reads shown in Figure \ref{reads_containing_pair_of_CpGs}}
-\label{reads_containing_pair_of_CpGs_counts}
-\end{table}
+Again, we can employ either the $NIL = 0$ or the $NIL \geq 0$ strategy. Both strategies start with CpGs in the reference genome that, for each sample, are then filtered to remove reference-specific loci. Rather than actually remove these loci, I simply set the corresponding counts of the methylation patterns to `NA`.
 
-A positive $LOR$ is evidence that the methylation states are likely to be the same at both CpGs in the pair on the same DNA fragment (_co-methylation_), a negative $LOR$ is evidence that the methylation states are likely to be different at each CpG in the pair on the same DNA fragment and a value close to zero is evidence that the methylation state at each CpG in the pair on the same DNA fragment are independent of one another. More precisely, we may wish to compute a confidence interval for $LOR$ or perform a hypothesis test to determine whether the observed $LOR$ is evidence for co-methylation at this pair of CpGs.
+As in Section \ref{subsec:beta_cor} I consider the $NIL = 0$ and $NIL \geq 0$ strategies for constructing pairs. The $NIL \geq 0$ strategy corresponds to using the `--all-combination` flag in `methtuple`. Again, the $NIL = 0$ strategy is simpler, both conceptually and computationally, and so I prefer it. For example, if we have a pair with $NIL = 3$ then we need to take care to ensure that this $LOR$ is due to a genuine dependence between these two CpGs above and beyond the pairwise dependencies $(CpG_{1}, CpG_{2}), \ldots, (CpG_{4}, CpG_{5})$.
 
-In theory we can compute $LOR$ for all pairs of methylation loci. In practice, using current technology, we can only compute it for pairs of methylation loci that are at most separated by 200-250 bp.
+\subsubsection{Choice of dependence measure}\label{sec:choice_of_dependence_measure}
 
-### Comparison of LOR to correlations
+Recall that for each 2-tuple and sample we can summarise the methylation patterns by a $2 \times 2$ contingency table (__FIGURE__). The within-fragment co-methylation of the pair of CpGs, $(i, i')$, in the $j^{th}$ sample is then defined as the logarithm of the odds ratio of this table, $LOR_{(i, i'), j} = log_2 \Big (\frac{MM_{i, i'} \times UU_{i, i'}}{MU_{i, i'} \times UM_{i, i'}} \Big)$. I use base-2 logarithms due to their widespread use and familiarity within biology. In the `cometh` function I also add a small offset (default `offset = 1`) to avoid problems arising from zero counts, which frequently occur.
 
-__TODO: Compare use of log-odds ratio to use of correlation coefficient and justify using LOR__
+A positive $LOR$ is evidence that the methylation states are likely to be the same at both CpGs in the pair on the same DNA fragment, a negative $LOR$ is evidence that the methylation states are likely to be different at each CpG in the pair on the same DNA fragment, and a value close to zero is evidence that the methylation state at each CpG in the pair on the same DNA fragment are independent of one another. More precisely, we may wish to compute a confidence interval for $LOR$ or perform a hypothesis test to determine whether the observed $LOR$ is evidence for co-methylation at this pair of CpGs.
 
-### Constructing pairs of methylation loci
+__TODO: Comparison of LORs and Pearson correlations of Landan__
 
-There are additional considerations in constructing pairs of methylation loci on top of those constraints imposed by the sequencing technology.
+__TODO: Discussion of Kraemer's work, in particular, the fact that non-zero LOR are not informative for the strength of the correlation__
 
-For a sequence containing $k$ methylation loci there are $\binom{k}{2}$ pairs, which is $\mathcal{O}(k^{2})$ as $\lim_{k \to \infty}$. In contrast, there are $k - 1$ pairs of _neighbouring_ methylation loci (i.e., pairs where the _number of intervening methylation loci_ equal to zero, $NIML = 0$), which is $\mathcal{O}(k)$ as $\lim_{k \to \infty}$.
+__TODO: \cite{Bonett:2007bd} is a reference that Pearson correlation of 2x2 is phi coefficient__
 
-Apart from this difference in the number of pairs, the interpretation of co-methylation at neighbouring loci is far simpler than for non-neighbouring loci and so it may be preferable to focus on neighbouring loci. For example, if we observe $LOR >> 0$ for a pair of CpGs, $(CpG_{1}, CpG_{5})$, with $NIML = 3 > 0$ then we need to take care to ensure that this is due to a genuine dependence between these two CpGs above and beyond the pairwise dependencies $(CpG_{1}, CpG_{2}), \ldots, (CpG_{4}, CpG_{5})$.
+\subsection{Results}
 
-The `methtuple` software by default tries to only construct pairs of neighbouring methylation loci[^all-combinations]. However, because `methtuple` processes each read independently, filters methylation loci on user-specified criteria and is unaware of the reference genome, it will occasionally create pairs that are not truly neighbouring. Therefore, if strictly neighbouring pairs are required, non-neighbouring pairs should be post-hoc filtered (__TODO: e.g. using the `whatFunction` in `myRMethTuplePackage`__).
+$LOR$s are only computed for 2-tuples with sufficient sequencing coverage (here, $5 \times$ for stranded 2-tuples and $10 \times$ for unstranded 2-tuples). For any given $IPD$ there are hundreds of thousands of CpG pairs, and so there is a distribution of co-methylation for any given $IPD$. We could visualise the distribution for a given $IPD$ using classical visualisation techniques such as histograms, kernel density estimates and boxplots. These summaries may be stratified by one or more annotations. However, what these $IPD$-specific plots don't give the reader is a sense of how $IPD$ affects within-fragment co-methylation.
 
-[^all-combinations]: `methtuple` also provides the option `--all-combinations` to specifically create all $\binom{k}{m}$ $m$-tuples. However the computational requirements are generally prohibitive for $m > 2$.
+Instead, for each sample I plot selected quantiles --- $10\%, 25\%, 50\%, 75\% and 90\%$ --- of each $IPD$-specific $LOR$ distribution as a function of $IPD$. I refer to these as _quantile plots_ of $LOR$ as a function of $IPD$. These quantile plots may also be stratified by additional annotations.
 
-Furthermore, while CpG methylation is typically strand-symmetric, it may be preferable to compute co-methylation separately for each strand. This will double the number of CpG 2-tuples. By default, `methtuple` does not collapse CpGs across strands, but this option is available via the `--strand-collapse` option or as a post-hoc step in __TODO: e.g. using the `whatFunction` in `myRMethTuplePackage`__.
+
+Key points:
+
+- LOR decreases with IPD
+- For a given IPD, a wide variation in LOR
+- LOR does not go to zero over observable distance
+- Variation is fairly constant across IPD
+- Noise at the end is due to limited data
+- CGIs are more co-methylated than non-CGI
+- SE data can't cut the mustard
+- Intriguing mode/plateua around 150-200 bp (NIL >= 0)
+  - SE data suggests some is technical, e.g., incomplete removal of M-bias
+  - Also, IMR90 PE data doesn't have it
+- LOR vs. Pearson
+- NIL = 0 vs. NIL >= 0
+- iPSC vs. somatic
+- Plot histogram of LOR and histogram of r
+- Look for tables with LOR > 0 and r = 0
+
+
+An example quantile plot for the __WHICH SAMPLE__ is shown in __FIGURE__. The vast majority of $LOR$s are positive, meaning that most 2-tuples are co-methylated. The strength of co-methylation decays roughly as $IPD$ increases, which can be seen by the downward shift in the quantiles as a function of $IPD$. I
+
+__FIGURES__ show that the two DNA strands have near identical $LOR$ distributions. This is not to discount the possibility of 2-tuples with strand-specific differences in co-methylation, however, it does mean that it is generally safe to aggregate counts across strands.
+
+__FIGURES__
+
+
+__TODO__
+
+
+__OLD WRITING BELOW THIS LINE__
 
 ### Visualisations
 
@@ -173,7 +197,6 @@ As is clear from __FIGURE__, these is very difficult for 3-tuples, let alone for
 
 ## Results of co-methylation analyses
 
-__TODO__
 
 ## A Markov model of within-fragment co-methylation
 
