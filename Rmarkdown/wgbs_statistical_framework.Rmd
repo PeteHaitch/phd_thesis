@@ -290,7 +290,7 @@ Under the binomial model, ($M_{i, j} | n_{i, j}) \eqd Bin(n_{i, j}, B_{i, j})$, 
 
 In a study involving multiple samples, the set of $\beta$-values can be summarised as a matrix where each row is a locus and each column is a sample. Some values will be missing, either because there was insufficient sequencing coverage to estimate a $\beta$-value or because that locus is not a cytosine for that sample. This matrix might be visualised to learn about the distribution of methylation levels, either row-wise, to learn about the variability across samples, or column-wise, to learn about the variability within samples.
 
-\subsubsection{Genome-wide distribution of $\beta$-values}
+\subsubsection{Genome-wide distribution of $\beta$-values}\label{sec:genome-wide_distribution_of_beta_values}
 
 Restricting our attention to CpGs, Figures \ref{fig:EPISCOPE_plotBetaDensity}, \ref{fig:Lister_plotBetaDensity}, \ref{fig:Seisenberger_plotBetaDensity} and \ref{fig:Ziller_merged_plotBetaDensity} show the kernel density estimates of the genome-wide distributions of $\beta$-values, that is, the column-wise summaries, for each sample of the EPISCOPE, Lister, Seisenberger and Ziller datasets, respectively. Figures \ref{fig:EPISCOPE_plotBetaFreqPoly}, \ref{fig:Lister_plotBetaFreqPoly}, \ref{fig:Seisenberger_plotBetaFreqPoly} and \ref{fig:Ziller_merged_plotBetaFreqPoly} show the same data but with the $\beta$-values grouped into $0.01$-width bins and plotted against the percentages of CpGs that fall into each bin.
 
