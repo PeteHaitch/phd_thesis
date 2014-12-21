@@ -151,18 +151,130 @@ I have elected to use Spearman's correlation coefficient in what follows because
 \label{fig:Ziller_merged_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed}
 \end{figure}
 
-\subsubsection{$NIL = 0$ versus $NIL \geq 0$}
+\subsubsection{$NIL = 0$}
+
+Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI} and \ref{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed_CI} show the Spearman correlations of strand-collapsed $\beta$-values for $NIL = 0$ pairs of CpGs. Two things immediately stand out. Firstly, for all samples the trend is that the strength of the correlation decays as a function of $IPD$ --- pairs of CpGs separated larger distances are on average less correlated than pairs of CpGs separated by shorter distances. Secondly, the estimated correlations violently jump around for larger $IPD$s. The latter is simply due to the aforementioned lack of $NIL = 0$ pairs at larger $IPD$s with which to estimate these correlations. Therefore, it is the trend, rather than the individual values, that should be analysed in these plots.
+
+The are some consistent patterns in comparing these trends across samples. The correlations very quickly drop well below $0.5$, within approximately $50$ bp for all the EPISCOPE and Seisenberger samples and most of the Lister and Ziller samples. Samples that are exceptions to this trend --- _ADS_, _ADS-adipose_, _ADS-iPSC_, _FF_, _IMR90\_r1_, _IMR90\_r2_, _IMR90\_cell\_line_ and _HepG2\_cell\_line_ --- have a slower decay in these correlations and remain more highly correlated over $IPD = 2, \ldots, 1500$. These same samples are also notable because they have significant amounts of intermediate methylation (Section \ref{sec:genome-wide_distribution_of_beta_values}). I believe this is what drives the stronger and slowly decaying correlations. The scatterplots of $\beta$-values for these samples will have more $\beta$-values in the middle of the scatterplot, and fewer in the corners, hence the stronger correlations.
+
+Most samples have a correlation close to $1$ for neighbouring CpGs ($IPD = 2$). The notable exceptions are the embryonic stem cell replicates, _H1\_r1_ and _H1\_r2_ (Lister dataset), which begin with a maximum correlation of only around $0.5$. This is not observed in the other embryonic stem cells _H9_, _H9\_Laurent_, _HSF1_ and _J1\_1_), which makes it difficult to know whether $\beta$-values of embryonic stem cells are truly less correlated than other cell types.
+
+The trend of the correlations for all these samples plateaus out close to zero, slightly higher for those samples with significant intermediate methylation. However, it should not be concluded from this that the methylation of CpGs separated by more than a few hundred base pairs are uncorrelated. Recall that these results are only for $NIL = 0$ pairs of CpGs, which are increasingly rare for larger $IPD$s. These results tell us about the 'first-order' correlations of $\beta$-values, which decay very quickly but whose importance also decreases quite quickly owing to the vast majority of CpGs being within $100$ bp of another CpG (e.g., Figure \ref{fig:IPD_ECDF_hg19} for humans).
+
+One final aspect of these genome-wide plots bears mentioning. There are hints of an approximately $150-200$ bp periodicity in these plots. This is a similar scale to the previously reported periodicities in correlations of $\beta$-values (see Chapter \ref{chap:co-methylation_review}). While this periodicity can readily be detected by eye, it is somewhat more difficult to verify using traditional methods based on Fourier analysis of the signal. The chief reason is that the data are very noisy beyond the second or third putative cycle due to the limited data at these larger $IPD$s.
+
+To address this problem, we might try smoothing the raw correlations, for example, by using LOESS (__CITE__), and then looking for periodicities in the smoothed values. However, this is only helpful when the data are corrupted by a small amount of noise, certainly not the extreme noise we see for $IPD > 1000$ in most samples. Furthermore, smoothing introduces problems of its own, such as choosing the smoothing bandwidth in such a way as to not introduce or destroy real periodicities. Even if we can automatically choose these smoothing parameters in an unbiased manner, we are still stuck with only observing a handful of periods of this size from $NIL = 0$ pairs. So while these periodicities are 'obvious' in the plots, they are rather more difficult to detect without visualising the raw data.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI.pdf}
+\caption{Spearman correlations of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the EPISCOPE dataset.}
+\label{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI.pdf}
+\caption{Spearman correlations of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the Lister dataset.}
+\label{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI.pdf}
+\caption{Spearman correlations of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the Seisenberger dataset.}
+\label{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_spearman_beta_cors_min_cov_10_strand_collapsed_CI.pdf}
+\caption{Spearman correlation of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the Ziller dataset.}
+\label{fig:Ziller_merged_spearman_beta_cors_min_cov_10_strand_collapsed_CI}
+\end{figure}
+
+The above are genome-wide plots, all pairs of CpGs with a given $IPD$ are treated identically. However, there are good reasons to expect that the correlations of $\beta$-values, like the $\beta$-values themselves, might be influenced by their genomic context. To investigate this, we can stratify pairs of CpGs pairs by a genomic feature and repeat the analysis. The obvious feature to stratify on is CpG islands.
+
+Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI} and \ref{fig:Ziller_merged_spearman_beta_cors_min_cov_10_strand_collapsed_CI} are plots of Spearman correlations of $\beta$-values for pairs of CpGs stratified by whether the pair is inside or outside of a CpG island[^spanning]. Again, the substantial noise in these plots is due to a lack of $NIL = 0$ pairs with large $IPD$s, particularly inside CpG islands.
+
+The message from these plots is clear, $\beta$-values of $NIL = 0$ pairs within CpG islands are much more correlated than those pairs outside of islands. Stratifying by CpG island status also reveals that the correlation of the methylation levels of CpGs inside islands is less influenced by $IPD$. In fact, for some samples it appears that the most correlated $NIL = 0$ pairs inside islands are not those with the minimum $IPD = 2$, but those with a slightly larger $IPD. From these plots we can now see that the apparent sharp decline in correlations over the first $50$ bp from the genome-wide data is really driven by a shift from pairs that are frequently inside CpG islands to pairs that are mostly outside of islands.
+
+[^spanning]: Pairs spanning the boundary are excluded. There are few of these pairs.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CGI.pdf}
+\caption{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the EPISCOPE dataset.}
+\label{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CGI.pdf}
+\caption{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the Lister dataset.}
+\label{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CGI.pdf}
+\caption{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the Seisenberger dataset.}
+\label{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_spearman_beta_cors_min_cov_10_strand_collapsed_CGI.pdf}
+\caption{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the Ziller dataset.}
+\label{fig:Ziller_merged_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}
+\end{figure}
+
+\subsubsection{$NIL \geq 0$}\label{sec:nil_geq_0_beta_cors}
+
+Figures \ref{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}, \ref{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}, \ref{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI} and \ref{fig:Ziller_merged_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI} are the plots of CpG $\beta$-value correlations against $IPD$ for $NIL \geq 0$ pairs. In contrast to the $NIL = 0$ results, the correlations here are relatively stable, at least for $IPD = 2, \ldots, 2000$[^ipd_choice]. This is because there are many more $NIL \geq 0$ pairs than there are $NIL = 0$ pairs.
+
+[^ipd_choice]: These correlations could be computed for $IPD > 2000$. However, constructing all $NIL \geq 0$ pairs requires much more time and memory than constructing all $NIL = 0$ pairs because there are many more such pairs. For this reason, and for compatability with the $NIL = 0$ results, I have focused on $IPD = 2, \ldots, 2000$ for the $NIL \geq 0$ pairs.
 
 __UP TO HERE__
 
-__Key points__
-
-
-- NIL = 0 vs. NIL >= 0
+- Complications of interpreting NIL >= 0 plots
+- Periodicities or lack thereof
 - CGI vs. non-CGI
-- periodicities
 
-__TODO: Results__
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI.pdf}
+\caption{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the EPISCOPE dataset.}
+\label{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI.pdf}
+\caption{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the Lister dataset.}
+\label{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI.pdf}
+\caption{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the Seisenberger dataset.}
+\label{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI.pdf}
+\caption{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the Ziller dataset.}
+\label{fig:Ziller_merged_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}
+\end{figure}
+
+
+\subsection{Summary}
+
+The $NIL = 0$ results measure the 'first-order' or 'one-step' correlations of $\beta$-values whereas the $NIL \geq 0$ measure a mixture of different orders of correlations of $\beta$-values. For this reason I find the $NIL = 0$ plots are easier to interpret, however, which is more relevant will depend on the application.
 
 \section{Within-fragment co-methylation}\label{subsec:wf_cometh}
 
