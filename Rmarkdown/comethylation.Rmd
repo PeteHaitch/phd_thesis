@@ -269,8 +269,6 @@ Comparing CpG islands to non-islands, Figures \ref{fig:EPISCOPE_spearman_beta_co
 
 [^hepg2]: The minor exception is the _HepG2\_cell\_line_ where the CGI and non-CGI lines intersect by $IPD = 1500$, but we have already seen that this sample has an unusual methylome compared to the other samples.
 
-__TODO: How often are points in these plots from different CGIs? Compute distribution of CGI widths and gaps between them__
-
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI.pdf}
@@ -299,9 +297,7 @@ __TODO: How often are points in these plots from different CGIs? Compute distrib
 \label{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 
-__TODO: Periodicities__
-- The periodicities (10? and 167ish) are more noticeable in the non-island pairs than the pairs in CpG islands. Possible reasons?
-- A shorter periodicity over the first 100 bp?
+The $150-200$ bp periodicity is also evident from the $NIL \geq 0$ data and is particularly clear for the CpG pairs outside of CpG islands. __TODO: Discuss more__
 
 \subsection{Summary}
 
@@ -340,11 +336,33 @@ As in Section \ref{subsec:beta_cor} I consider the $NIL = 0$ and $NIL \geq 0$ st
 
 \subsubsection{Choice of dependence measure}\label{sec:choice_of_dependence_measure}
 
-Recall that for each 2-tuple and sample we can summarise the methylation patterns by a $2 \times 2$ contingency table (__FIGURE__). The within-fragment co-methylation of the pair of CpGs, $(i, i')$, in the $j^{th}$ sample is then defined as the logarithm of the odds ratio of this table, $LOR_{(i, i'), j} = log_2 \Big (\frac{MM_{i, i'} \times UU_{i, i'}}{MU_{i, i'} \times UM_{i, i'}} \Big)$. I use base-2 logarithms due to their widespread use and familiarity within biology. In the `cometh` function I also add a small offset (default `offset = 1`) to avoid problems arising from zero counts, which frequently occur.
+Recall that for each 2-tuple and sample we can summarise the methylation patterns by a $2 \times 2$ contingency table, like that shown in Table \ref{tab:2x2}. The within-fragment co-methylation of the pair of CpGs, $(i, i')$, in the $j^{th}$ sample is then defined as the logarithm of the odds ratio of this table, $LOR_{(i, i'), j} = \log_{2} \Big (\frac{mm_{i, i'} \times uu_{i, i'}}{mu_{i, i'} \times um_{i, i'}} \Big)$. I use base-2 logarithms due to their widespread use and familiarity within biology. In the `cometh` function I also add a small offset (default `offset = 1`) to avoid problems arising from zero counts, which frequently occur. For the example in Table \ref{tab:2x2} with `offset = 1` we have $LOR = \log_{2} \Big (\frac{(1 + 1) \times (4 + 1)}{(0 + 1) \times (4 + 1)} \Big) = 1.74$.
 
-A positive $LOR$ is evidence that the methylation states are likely to be the same at both CpGs in the pair on the same DNA fragment, a negative $LOR$ is evidence that the methylation states are likely to be different at each CpG in the pair on the same DNA fragment, and a value close to zero is evidence that the methylation state at each CpG in the pair on the same DNA fragment are independent of one another. More precisely, we may wish to compute a confidence interval for $LOR$ or perform a hypothesis test to determine whether the observed $LOR$ is evidence for co-methylation at this pair of CpGs.
+From a Bayesian perspective, the offset may be interpreted as a prior count from a table with no association, i.e., a table with $LOR = 0$. The offset then has the effect of shrinking the raw estimate of the $LOR$, with more shrinkage applied for larger values of `offset`. Analyses using different offsets should be compared with caution.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcccl}
+                           & \multicolumn{1}{l}{} & \multicolumn{2}{l}{Second CpG} &                \\
+                           &                      & \textbf{M}     & \textbf{U}    & \textbf{Total} \\ \cline{2-5}
+\multirow{2}{*}{First CpG} & \textbf{M}           & 1              & 2             & 3              \\
+                           & \textbf{U}           & 0              & 4             & 4              \\ \cline{2-5}
+                           & \textbf{Total}       & 1              & 6             & 7
+\end{tabular}
+\caption{Example $2 \times 2$ contingency table summarising methylation patterns at a 2-tuple.}
+\label{tab:2x2}
+\end{table}
+
+A positive $LOR$ is evidence that the methylation states of two CpGs on the same DNA fragment are likely to be the identical, a negative $LOR$ is evidence that the methylation states of two CpGs on the same DNA fragment are likely to be the different, and a value close to zero is evidence that the methylation states of two CpGs on the same DNA fragment are independent of one another. More precisely, we may wish to compute a confidence interval for the $LOR$ or perform a hypothesis test to determine whether the observed $LOR$ is evidence for co-methylation at this pair of CpGs.
+
+There are several alternative measures of association for a $2 \times 2$ table of binary variables such as __EXAMPLES__
+
 
 __TODO: Comparison of LORs and Pearson correlations of Landan__
+
+- Plot histogram of LOR and histogram of r
+
+- Look for tables with LOR > 0 and r = 0 (and vice versa?)
 
 __TODO: Discussion of Kraemer's work, in particular, the fact that non-zero LOR are not informative for the strength of the correlation__
 
@@ -372,8 +390,6 @@ Key points:
 - LOR vs. Pearson
 - NIL = 0 vs. NIL >= 0
 - iPSC vs. somatic
-- Plot histogram of LOR and histogram of r
-- Look for tables with LOR > 0 and r = 0
 
 
 An example quantile plot for the __WHICH SAMPLE__ is shown in __FIGURE__. The vast majority of $LOR$s are positive, meaning that most 2-tuples are co-methylated. The strength of co-methylation decays roughly as $IPD$ increases, which can be seen by the downward shift in the quantiles as a function of $IPD$. I
@@ -384,6 +400,10 @@ __FIGURES__
 
 
 __TODO__
+
+\section{Summary}
+
+- Discuss 1D nature of $IPD$s vs. $4D$ structure of genome (3D + time)
 
 
 __OLD WRITING BELOW THIS LINE__
