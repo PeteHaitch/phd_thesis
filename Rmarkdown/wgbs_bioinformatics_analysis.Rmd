@@ -117,7 +117,7 @@ Ideally, the probability that a base is called methylated should be independent 
 
 M-bias can be identified by plotting the read-position methylation level ($rpml$), which is the proportion of reads that are methylated at each read-position, as a function of read-position. These $rpml$ are computed separately for each methylation type and, for paired-end sequencing data, separately for _read 1_ and _read 2_. If there is no M-bias then this plot should be a horizontal line. A 'bend' or 'spike' in this plot is evidence of M-bias. Furthermore, these lines, which indicate the average level of methylation in the sample for that methylation type, should be at the same height for `read_1` and `read_2`, although we see this is often not quite the case. Figure \ref{fig:ADS_M-bias} shows the M-bias plot for the ADS sample from the Lister (2011) dataset.
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/ADS_M-bias.pdf}
@@ -152,7 +152,7 @@ The M-bias plot is based on the read-position from the aligned data and not the 
 
 For example, suppose we performed $100$ bp single-end sequencing and pre-trimmed the first 20 bp of $90\%$ of the reads. Then, read-position $80$ will comprise $10\%$ sequencing cycle $80$ and $90\%$ sequencing cycle $100$. It is very likely that sequencing cycle $100$ suffers more from M-bias than does cycle $80$, and so this will appear in the M-bias plot as M-bias at read position $80$.
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/E18VA_M-bias.pdf}
@@ -188,7 +188,7 @@ The `plot` method has a `type` argument, so that the 'raw' M-bias or the 'normal
 
 Now that we've found read-positions with M-bias, what can we do about it? Typically, read-positions showing evidence of M-bias are excluded when calling methylation events. In fact, a slightly cruder procedure is often used whereby the entire ends of reads are removed. For example, for a $100$ bp read with M-bias observed at positions $1-4, 9, 94, 96-100$, then positions $1-9$ and $94-100$ would be ignored when methylation calling.  Both `bismark_methylation_extractor` and `Bis-SNP`, two popular methylation callers, use this method.
 
-Generally, this strategy is okay because M-bias tends to occur as runs of read-positions at the 5' and 3' ends of reads. However, occasionally there are spikes in the M-bias plot, which indicate specific read-positions that we would like to exclude. Figure \ref{fig:E18VA_M-bias} shows an example of such a spike that occurred at read-position 101. Using `bismark_methylation_extractor` we would be forced to either retain this position or to ignore read-positions $101-150$, effectively ignoring one third of the sequencing data, much of it unaffected by M-bias. My `methtuple` software (Section \ref{sec:methtuple}) avoids the unnecessary exclusion of those bases by allowing the user to specify the exact read-positions that she wants excluded.
+Generally, this strategy is okay because M-bias tends to occur as runs of read-positions at the 5' and 3' ends of reads. However, occasionally there are spikes in the M-bias plot, which indicate specific read-positions that we would like to exclude. Figure \ref{fig:E18VA_M-bias} shows an example of such a spike that occurred at read-position 101. Using `bismark_methylation_extractor` we would be forced to either retain this position or to ignore read-positions $101-150$, effectively ignoring one third of the sequencing data, much of it unaffected by M-bias. My `methtuple` software (Section \ref{sec:methtuple}) avoids the unnecessary exclusion of those bases by allowing the user to specify the exact read-positions that she wants excluded, however, this is not without its own problems, as we shall see in Section \ref{sec:cometh_nil_geq0}.
 
 In the datasets I have analysed I've had to ignore up to 30 read-positions per read due to M-bias. Ideally, we would be able to remove the effects of M-bias by accounting for it in methylation calling rather than by simply excluding those read positions entirely. One idea is to inversely weight methylation calls by the level of M-bias. A downside to this approach is that this would turn an otherwise binary methylation call into a continuous value between $0$ and $1$, with an attendant loss in interpretability. However, we could still compute the ubiquitous $\beta$-values, traditionally defined as the proportion of reads that are methylated at a locus, and use these in downstream inferences, without much loss in interpretation. The bigger problem with this approach is the increased computational complexity and cost, and this is why I have not further pursued this idea.
 
@@ -256,7 +256,7 @@ The next best approach is that implemented in `Bis-SNP` \citep{Liu:2012ge}, whic
 
 Certain variants, in particular heterozygous $C>T$ SNPs, are more difficult to accurately genotype than others. Unfortunately, $C>T$ SNPs are also quite important because they are the most common SNPs in mammals \citep{Liu:2012ge}, mostly occur at CG dinucleotides and, as a result, are easily mis-called as unmethylated cytosines rather than as genetic variants. Fortunately, it is possible to distinguish such $C>T$ SNPs from unmethylated cytosines by examining the nucleotide on the opposing strand --- if it is a $G$ then the position must be a $C$, if it is a $A$ then it must be a $T$ (see Figure \ref{fig:Bis-SNP}). Other base substitutions are more readily detected, and insertion and deletion events (indels) may also be called.
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/Bis-SNP.pdf}
@@ -312,7 +312,7 @@ For each m-tuple, I also define the intra-pair distance (_IPD_) as the vector co
 
 To illustrate several of the above-mentioned concepts, suppose we sequence a region of the genome containing five methylation loci with three paired-end reads (`A`, `B` and `C`), shown in Figure \ref{fig:methtuple_example1}.
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
 \centering
 \includegraphics[width=0.6\textwidth]{../figures/methtuple_example1.pdf}
@@ -322,7 +322,7 @@ To illustrate several of the above-mentioned concepts, suppose we sequence a reg
 
 If we are interested in 1-tuples, Figure \ref{fig:methtuple_example2} shows what we would obtain from each read by running `methtuple`. The result is identical regardless of whether the `--all-combinations` flag is set.
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_example2.pdf}
 \caption{1-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2}.}
@@ -335,7 +335,7 @@ If we are interested in 3-tuples, Figure \ref{fig:methtuple_example3} shows what
 - Read-pair `B` sequences none of the adjacent 3-tuples but does 'erroneously' construct two 3-tuples from pairs of non-adjacent loci. This happens because m-tuples are created independently from each read-pair; effectively, read-pair `B` is unaware of methylation locus `3`. Depending on the downstream analysis, you may want to _post-hoc_ filter out these m-tuples with non-adjacent loci.
 - The twice-sequenced methylation loci in read-pair `C`, `2` and `3`, are not double counted.
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_example3.pdf}
 \caption{3-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2}.}
@@ -344,7 +344,7 @@ If we are interested in 3-tuples, Figure \ref{fig:methtuple_example3} shows what
 
 Finally, Figure \ref{fig:methtuple_example4} shows the output if we were to analyse 3-tuples but with the `--all-combinations` flag set.
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_example4.pdf}
 \caption{3-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2} when the \texttt{--all-combinations} flag is set.}
@@ -353,7 +353,7 @@ Finally, Figure \ref{fig:methtuple_example4} shows the output if we were to anal
 
 With current sequencing technology we are limited to extracting m-tuples that span no more than $200-250$ bp. This obviously affects the size of m-tuples that we can study. Figure \ref{fig:Lister_CpGs_per_read} shows the number of CpGs per read for the Lister dataset (see Chapter \ref{chap:dataset} for a description of the Lister dataset). Longer reads, and paired-end reads, contain more methylation loci and so are more informative for analyses using m-tuples. This can be seen by comparing, for example, the _ADS_ and _HSF1_ samples. Samples sequenced more deeply will have more reads per m-tuple, although this can't be seen in these plots since they are normalised by sequencing depth.
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_CpGs_per_read.pdf}
 \caption{Number of CpGs per read for the Lister dataset.}
@@ -408,7 +408,7 @@ DMEAS    & \citet{He:2013cj}                       & Output of \texttt{bsm} & Wi
 
 The output format of `methtuple` is tab-delimited plain text, optionally compressed with `gzip` or `bzip2`. Figure \ref{fig:3-tuples} shows an example of the output for 3-tuples.
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/3-tuples.pdf}
 \caption{Example output of \texttt{methtuple} for 3-tuples.}
@@ -425,14 +425,14 @@ The running time of \texttt{methtuple} is proportional to the number of reads ma
 
 The maximum memory usage is not strictly proportional to chromosome length. It is instead driven by the number and density of CpGs on the chromosome.  For example, \texttt{chr19}, which has the highest CpG density of all the autosomes in the human genome, requires far more memory than \texttt{chr18}, which has less than half the CpG density of \texttt{chr19} (see Table \ref{tab:cpg_density_hg19}). The relationship between the maximum memory usage and the tuple size (\texttt{-m}) is complex; more data have to be retained as \texttt{-m} increases, thus increasing the memory usage, but fewer reads contain tuples of that size and so there aren't as many m-tuples or observations on these to count and retain. Therefore, memory usage is relatively constant across values of \texttt{-m} for a given chromosome. The obvious exception is for tuple size \texttt{2ac}, which used the \texttt{--all-combinations} flag. This means that all 2-tuples with $NIL \geq 0$ were computed and there are many, many more CpG 2-tuples with $NIL \geq 0$ than there are with $NIL = 0$, hence the enormous increase in memory usage.
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_runtime.pdf}
 \caption{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{--all-combinations} was set. Note that the reported $49$ samples separately counts each of the Ziller sequencing runs.}
 \label{fig:methtuple_runtime}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_memory.pdf}
 \caption{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{--all-combinations} was set. Note that the reported $49$ samples separately counts each of the Ziller sequencing runs.}

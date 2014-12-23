@@ -35,7 +35,7 @@ The WGBS libraries from the \cite{Lister:2009hy} paper were the first published 
 
 The WGBS libraries from the \cite{Lister:2011kg} include some created and published by other groups (see Table \ref{tab:Lister_dataset}). These samples include cell lines from differentiated cell lines, embryonic stem cell lines, pluripotent stem cell lines and _in vitro_ differentiated from pluripotent stem cells. There are no replicates for any of the 2011 samples.
 
-\begin{table}[h!]
+\begin{table}[!htb]
 \centering
 \begin{tabulary}{\textwidth}{LLLLLL}
 \toprule
@@ -91,7 +91,7 @@ The data are from three human donors across four different tissues, for a total 
 
 The data are summarised in Table \ref{tab:EPISCOPE_dataset}.
 
-\begin{table}[h!]
+\begin{table}[!htb]
 \centering
 \begin{tabulary}{\textwidth}{LLLL}
 \toprule
@@ -127,7 +127,7 @@ I have the data for only three samples from the original publication, detailed i
 
 I believe that the samples I received labelled _J1\_1_ and _E16.5\_male\_1_  in fact correspond to _J1\_2_ and _E16.5\_male\_2_, respectively, i.e., the second  replicate rather than the first. The data I received are all $100$ bp paired-end sequences, which matches replicate 2 rather than replicate 1 for both of these samples \citet[Supplementary Table 1]{Seisenberger:2012ko}.
 
-\begin{table}[h!]
+\begin{table}[!htb]
 \centering
 \begin{tabulary}{\textwidth}{LLLLL}
 \toprule
@@ -154,7 +154,7 @@ Table \ref{tab:Ziller_dataset_sequencing_runs} summarises the data for the 19 in
 
 [^Ziller_merged_ave_cov]: The average sequencing coverage of the _post-hoc_ merged samples are approximately the sums of the average sequencing coverage for the corresponding individual sequencing runs.
 
-\begin{table}[h!]
+\begin{table}[!htb]
 \centering
 \begin{tabulary}{\textwidth}{LLLLL}
 \toprule
