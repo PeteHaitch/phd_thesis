@@ -302,7 +302,7 @@ In humans, there have been several interesting studies using epialleles to infer
 
 Finally, although there is much interest, if not outright hype, surrounding transgenerational epialleles, these are difficult to prove outside of very controlled experimental conditions \citep{Daxinger:2012kl}.
 
-Regardless of where you draw the line as to what constituted an epiallele, it has become clear that the occurrence of multiple methylation patterns at an m-tuple is the norm rather than the exception when performing bisulfite-sequencing. For example, __FIGURE__ shows the number of methylation patterns observed at 4-tuples with a frequency greater than __WHAT__ from the __WHICH__ sample. There has been some progress in developing software to extract and analyse these epialleles, which I now describe. (Alternatively, cite Landan et al.)
+Regardless of where you draw the line as to what constituted an epiallele, it has become clear that the occurrence of multiple methylation patterns at an m-tuple is the norm rather than the exception when performing bisulfite-sequencing \citep{Landan:2012kp}. There has been some progress in developing software to extract and analyse these epialleles, which I now describe.
 
 \subsubsection{Methods}
 
