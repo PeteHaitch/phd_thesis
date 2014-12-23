@@ -546,13 +546,15 @@ Figures \ref{fig:EPISCOPE_lor_min_cov_10_strand_collapsed_ac}, \ref{fig:Lister_l
 \label{fig:Ziller_lor_min_cov_10_strand_collapsed_ac}
 \end{figure}
 
+__TODO: Re-write everything between @@@@@. I'm really not yet sure if this result is biology or an artefact. My instinct says artefact but I haven't yet been able to prove this either way to my satisfaction__
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 These plots appear to show that there is a dramatic increase in within-fragment co-methylation at precisely these $IPD$s for paired-end samples from the Lister dataset. However, I am very skeptical as to the biological relevance of these results.
 
 There are three reasons for my skepticism. Firstly, similar results are not observed for any of the EPISCOPE samples nor any of the Ziller samples[^mouse_vs_man]. Secondly, the Lister samples with single-end sequencing have a similar spike in the estimated within-fragment co-methylation at the edge of the observable $IPD$s. However, for single-end data this corresponds to an $IPD \approx 60-80$ bp and we see no evidence of an increase in within-fragment co-methylation at these $IPD$s in any of the paired-end samples. This leads to my final reason, and what I think is the source of this artefact. Namely, estimates of within-fragment co-methylation are highly susceptible bias due to the incomplete removal of M-bias. This is particularly true for larger $IPD$s where the loci in the 2-tuples come from the ends of the reads, which are where M-bias is most prevalent.
 
 [^mouse_vs_man]: I exclude the Seisenberger data simply because these are of mice rather than humans. The Seisenberger data also display a dramatic increase in within-fragment co-methylattion but since this increase occurs at the edge of the observable $IPD$s, I am concerned it suffers from the same bias as the Lister data.
 
-As discussed in Section \ref{sec:m-bias}, the incomplete removal of M-bias is a real problem for reads that have undergone pre-trimming because this destroys the relationship between read-position and sequencing cycle. __FIGURE__ shows that there is considerable variation in the read lengths of the _ADS_ sample, indicative of aggressive pre-trimming of these reads (__TODO: Histogram of read lengths__).
+As discussed in Section \ref{sec:m-bias}, the incomplete removal of M-bias is a real problem for reads that have undergone pre-trimming because this destroys the relationship between read-position and sequencing cycle. __FIGURE__ shows that while there is considerable variation in the read lengths of the _ADS_ sample, which is indicative of aggressive pre-trimming of these reads, most reads are full length or close to it (__TODO: Histogram of read lengths__).
 
 To investigate my suspicion that these results are due to the incomplete removal of M-bias, I used an aggressive filtering strategy that attempts to only use read-positions that are unlikely to suffer from M-bias. I applied this to the _ADS_ sample. In this analysis I ignored read-positions $1-20$ and $55-80$ of both _read 1_ and _read 2_. Unfortunately, this is a situation where the M-bias filtering strategy of `methtuple` is a disadvantage. `methtuple` is designed to filter out specific read-positions and cannot 'exclude the first/last $n$ bases'. For example, using this aggressive strategy will have a detrimental effect for a read that has been pre-trimmed to $30$ bp, of which the last $10$ bp are affected by M-bias, because this filtering strategy will __retain__ read-positions $21-30$, which are exactly those affected by M-bias. Nevertheless, it is the best that can be done with the current version of the software[^methtuple_refactoring] and with such aggressively pre-trimmed data.
 
@@ -563,6 +565,7 @@ The results for the aggressively trimmed _ADS_ sample are shown in __FIGURE__.
 __TODO: Comment on these results and how we should interpret the Lister co-methylation results (particularly NIL >= 0)__
 
 __TODO: Summarise the M-bias issue__
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 Comparing CpG islands to non-islands we again, Figures \ref{fig:EPISCOPE_lor_min_cov_10_strand_collapsed_ac_CGI}, \ref{fig:Lister_lor_min_cov_10_strand_collapsed_ac_CGI}, \ref{fig:Seisenberger_lor_min_cov_10_strand_collapsed_ac_CGI} and \ref{fig:Ziller_lor_min_cov_10_strand_collapsed_ac_CGI}, see that the methylation levels of pairs of CpGs within islands are consistently more correlated than those outside of islands.
 
