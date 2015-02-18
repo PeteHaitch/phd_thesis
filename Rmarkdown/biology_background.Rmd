@@ -162,9 +162,16 @@ The importance of 5-methylcytosine in mammalian genomes is such it has been dubb
 
 \subsection{CpG dinucleotides}\label{cpg_dinucleotides}
 
-CpGs are underrepresented in the human genome. The GC-content of each the human genome, which is defined as the percentage of nucleotides that are either guanines or cytosines, is between $41\%$. If the nucleotides were uniformly distributed across the human genome we would expect about $4.1\%$ of dinucleotides to be Cpgs. Instead, only $1\%$ of dinucleotides are CpGs. See the Appendix for details of these calculations and a figure comparing the observed:expected ratio of each dinucleotide in the human reference genome (hg19).
+CpGs are underrepresented in the human genome. The GC-content of each the human genome, which is defined as the percentage of nucleotides that are either guanines or cytosines, is between $41\%$. If the nucleotides were uniformly distributed across the human genome we would expect about $4.1\%$ of dinucleotides to be CpGs. Instead, only $1\%$ of dinucleotides are CpGs.
 
-One reason for this relative scarcity of CpGs is that methylated cytosines can spontaneously deaminate to thymines \citep{Scarano:1967ue}. Thus, over time, many methylated CpGs will become TpGs, leading to a genome-wide reduction in the proportion of CpGs and a genome-wide increase in the proportion of TpGs (see Figure \ref{fig:dinuclotide_distribution}). There are many other evolutionary pressures on the distribution of nucleotides in a genome. One effect of this is that the distribution of CpGs is far from uniform. In fact, CpGs tend to form clusters, which are termed CpG islands.
+One reason for this relative scarcity of CpGs is that methylated cytosines can spontaneously deaminate to thymines \citep{Scarano:1967ue}. Thus, over time, many methylated CpGs will become TpGs, leading to a genome-wide reduction in the proportion of CpGs and a genome-wide increase in the proportion of TpGs (see Figure \ref{fig:dinucleotide_frequency_hg19}). There are many other evolutionary pressures on the distribution of nucleotides in a genome. One effect of this is that the distribution of CpGs is far from uniform. In fact, CpGs tend to form clusters, which are termed CpG islands.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.3\textwidth]{../figures/dinucleotide_frequency_hg19.pdf}
+\caption{Observed:expected ratio of dinucleotides in the human reference genome (hg19). The expected frequency is computed under an 'independence' model, based on the observed frequencies of each nucleotide.}
+\label{fig:dinucleotide_frequency_hg19}
+\end{figure}
 
 \subsection{CpG islands and other sandy metaphors}\label{sec:cpg_islands}
 
@@ -172,7 +179,7 @@ One way to explore the distribution of CpGs in the human genome is to look at th
 
 \begin{figure}[htbp]
 \includegraphics[width=\textwidth]{../figures/IPD_ECDF_hg19.pdf}
-\caption{Plot of the empirical cumulative distribution function of distance between adjacent CpGs in the human reference genome (hg19). The observed distances are contrasts with those under the 'expected' model whereby CpGs are distributed uniformly at random with probability equal to the observed frequency of Cpgs on each chromosome.}
+\caption{Plot of the empirical cumulative distribution function of distance between adjacent CpGs in the human reference genome (hg19). The observed distances are contrasted with those under the 'expected' model whereby CpGs are distributed uniformly at random with probability equal to the observed frequency of Cpgs on each chromosome.}
 \label{fig:IPD_ECDF_hg19}
 \end{figure}
 
