@@ -12,6 +12,8 @@ bibliography: ../latex/phd_thesis.bib
 
 \chapter{A critical review of co-methylation}\label{chap:co-methylation_review}
 
+__TODO: Review co-methylation in "Bell, J. T. et al. DNA methylation patterns associate with genetic and gene expression variation in HapMap cell lines. Genome Biol 12, R10 (2011)."
+
 \section{Introduction}
 
 Co-methylation is the dependence structure of DNA methylation data. This dependence structure can be viewed from different perspectives and on different scales, which has led to several disparate definitions of co-methylation. In this chapter I critically review these definitions and put them in the statistical framework of Chapter \ref{chap:wgbs_statistical_framework}. I highlight various shortcomings of proposed methods, which led me to develop the methods and software described in  Chapter \ref{chap:co-methylation}. I also review how methods to detect differential methylation have sought to account for and exploit co-methylation.
