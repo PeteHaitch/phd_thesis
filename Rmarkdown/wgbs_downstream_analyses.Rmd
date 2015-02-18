@@ -58,9 +58,9 @@ Method                                       & Used by                          
 ``False discovery rate correction/adjustment'' & \citet{Dolzhenko:2014bo, Gokhman:2014cp, Lister:2009hy, Xie:2014ez}                 \\
 \citet{Storey:2007cp}                         & \citet{Jaffe:2012gx}                                                                \\
 \citet{Benjamini:2001ho}                      & \citet{Sofer:2013bk, Hebestreit:2013ko}                                             \\
-"Bonferonni adjustment"                      & \citet{Feng:2014iq}                                                                 \\ \bottomrule
+``Bonferonni adjustment''                      & \citet{Feng:2014iq}                                                                 \\ \bottomrule
 \end{tabulary}
-\caption{Methods proposed for adjusting for the multiple hypothesis testing performed in an analysis of DMCs. Several papers use describe their analysing as performing a "false discovery rate adjustment" or "false discovery rate correction" without explicitly stating what they are doing or citing a reference. One paper uses an ultra-conservative Bonferonni correction.}
+\caption{Methods proposed for adjusting for the multiple hypothesis testing performed in an analysis of DMCs. Several papers use describe their analysing as performing a ``false discovery rate adjustment'' or ``false discovery rate correction'' without explicitly stating what they are doing or citing a reference. One paper uses an ultra-conservative Bonferonni correction.}
 \label{tab:multiple_testing}
 \end{table}
 
@@ -236,7 +236,7 @@ Partially methylated domains, PMDs, are long stretches of the genome where the a
 
 A subsequent study found that PMDs are a common feature of somatic cell lines and that they comprise $> 30\%$ of the genome \citep{Lister:2011kg}. Perhaps even more intriguingly, across four somatic cell lines profiled with whole-genome bisulfite-sequencing, \citeauthor{Lister:2011kg} found a large amount of these genomes ($664$ Mb) comprised shared PMDs.
 
-PMDs have also been identified within tumour methylomes \citep{Berman:2012ga, Hansen:2011gu} and \citet{Hansen:2011gu} found that these overlap with other important genomic features called large organized chromatin lysine modifications (_LOCKs_) and lamina associated domains (_LADs_). However, PMDs are conspicuous by their absence in pluripotent cell lines, including both embryonic stem cells and induced pluripotent stem cells \citep{Lister:2011kg}. Their absence in the induced pluripotent cell lines may reflect the fact that the methylome is 'reset' upon induction of pluripotency \citep{Lister:2011kg}.
+PMDs have also been identified within tumour methylomes \citep{Berman:2012ga, Hansen:2011gu} and \citet{Hansen:2011gu} found that these overlap with other important genomic features called large organized chromatin lysine modifications (_LOCKs_) and lamina associated domains (_LADs_). However, PMDs are conspicuous by their absence in pluripotent cell lines, including both embryonic stem cells and induced pluripotent stem cells \citep{Lister:2011kg}. Their absence in the induced pluripotent cell lines may reflect the fact that the methylome is 'reset' upon induction of pluripotency \citep{Lister:2011kg, Stricker:2013kl}.
 
 More sophisticated methods have also been proposed to identify these PMDs. `methylSeekR` \citep{Burger:2013kq} is one such algorithm. It uses a hidden Markov model of the $\beta$-values to segment the genome into unmethylated, lowly methylated and partially methylayed regions. While `methylSeekR` is based on $\beta$-values and does not make use of individual reads to identify PMDs, it does require the high spatial resolution of $\beta$-values that whole-genome bisulfite-sequencing provides
 
