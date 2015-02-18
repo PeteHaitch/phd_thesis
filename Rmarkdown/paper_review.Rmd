@@ -1,4 +1,14 @@
-# Paper reviews
+---
+title: "Paper reviews"
+output:
+  pdf_document:
+    fig_caption: yes
+    includes:
+      in_header: ../latex/header.tex
+  html_document:
+    keep_md: true
+bibliography: ../latex/phd_thesis.bib
+---
 
 These are my reviews of important papers in the field. I do not want to reproduce these verbatim in my thesis but rather summarise these down to key points of similarity and difference between the methods.
 

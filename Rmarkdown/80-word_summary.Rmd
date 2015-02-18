@@ -1,3 +1,18 @@
+---
+title: "80-word summary"
+output:
+  pdf_document:
+    fig_caption:
+    - yes
+    includes:
+      in_header:
+      - ../latex/header.tex
+  html_document:
+    keep_md:
+    - yes
+bibliography: ../latex/phd_thesis.bib
+---
+
 # The statistical analysis of data from high-throughput assays for studying DNA methylation
 
 I develop a statistical framework for modelling and analysing DNA methylation data. In particular, I focus on the complex dependence structure of these data. I describe how this can be incorporated into statistical analyses of bisulfite-sequencing (BS-seq) experiments and develop software to simulate realistic BS-seq data by incorporating this dependence.

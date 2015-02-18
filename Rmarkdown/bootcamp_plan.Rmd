@@ -1,3 +1,15 @@
+---
+title: "Bootcamp plan"
+output:
+  pdf_document:
+    fig_caption: yes
+    includes:
+      in_header: ../latex/header.tex
+  html_document:
+    keep_md: true
+bibliography: ../latex/phd_thesis.bib
+---
+
 # Thesis outline
 
 ## Thesis title

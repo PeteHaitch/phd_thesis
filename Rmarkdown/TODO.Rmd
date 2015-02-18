@@ -1,4 +1,14 @@
-# TODO
+---
+title: "TODOs"
+output:
+  pdf_document:
+    fig_caption: yes
+    includes:
+      in_header: ../latex/header.tex
+  html_document:
+    keep_md: true
+bibliography: ../latex/phd_thesis.bib
+---
 
 Those of highest priority are tagged, __URGENT__.
 
@@ -199,11 +209,11 @@ So, I have nominated 17/12/2014 as the date that I will submit my thesis.
 
 TODOs for 3.5 year candidature review, which is due by November 15.
 
-- [ ] Complete progress review
-- [ ] Organise progress review meeting __URGENT__
+- [x] Complete progress review
+- [x] Organise progress review meeting __URGENT__
   - [x] Emailed Terry
-  - [ ] Emailed Peter
-  - [ ] Emailed Gordon
+  - [x] Emailed Peter
+  - [x] Emailed Gordon
 
 
 ## Fellowship applications
@@ -211,4 +221,4 @@ TODOs for 3.5 year candidature review, which is due by November 15.
 TODOs for fellowship applications for 2015.
 
 - [ ] Check out the [Joint Academic Scholarships Online Network](http://jason.edu.au/)
-- [ ] __URGENT:__ Consult notes from meeting with Lynne Hartley
+- [x] __URGENT:__ Consult notes from meeting with Lynne Hartley
