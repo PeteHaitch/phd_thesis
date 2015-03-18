@@ -1017,6 +1017,56 @@ People already knew that differences in agouti expression resulted in phenotypic
 - Entropy is minimal if there is only one pattern
 - Entropy is maximal if there are all $2^{m}$ possible patterns and these all occur with equal frequency.
 
+## \cite{Rackham:2015bv}
+
+This was the "oh, crap" paper, published when I was writing up the last chapter of my thesis (which is on simulating WGBS data and my `methsim` software).
+
+`WGBSsuite`:
+
+- Simulates single-base resolution WGBS data
+- "Several" parameters may be derived from real data
+- Simulation uses two __dependent__ HMMs (dependent only through the methylation state, i.e., 'methylated', 'de-methylated' and 'transition' states).
+
+The authors highlight that previous simulation methods have been too simple or designed from RRBS data \citep{Lacey:2013iy}.
+
+An important difference between `WGBSsuite` and `methsim` is that `methsim` simulates individual reads whereas `WGBSsuite` does not and can not. Instead, `WGBSsuite` simulates the average methylation level at each CpG, which should be faster and simpler to do.
+
+Finally, for better or worse, I'd argue `methsim` is more data-driven since almost all parameters are sampled from real data.
+
+### Algorithm
+
+1. Simulate CpG positions using a homogeneous first-order HMM with three states (CGI, shores and deserts). According to the transition matrix, it is impossible to go from a CGI to a desert without going via shore (probably reasonable).
+2. Simulate the methylation state of each CpG using an inhomogeneous first-order HMM with four states ('methylated', 'transition1', 'transition2' and 'de-methylated'). The inhomogeneity is to induce some spatial dependence amongst nearby CpGs such that the transition probabilities are modulated by the distance between CpGs. According to the transition matrix, it is impossible to go from methylated to de-methylated without going via transition2. Similarly, it is impossible to go from de-methylated to methylated without going via transition1. It is also impossible to go between the two transition states without going via one of methylated or de-methylated. The modulation of transition probabilities as a function of distance is via an exponential decay. The rate of decay depends only on the distance between CpGs and not their context (e.g., identical between CGI and desert for a given distance).
+3. Simulate read depth from a Poisson distribution.
+4. Simulate read counts from a binomial or (truncated) negative binomial distribution. That is, the binomial (or truncated negative binomial) distribution is the emission distribution of the HMM in (2). The probability of success is identical within all 'methylated' states, 'de-methylated' states, and within 'transition1' and 'transition2' states, except for some random Gaussian noise (i.i.d. for each CpG). The average methylation level in 'de-methylated' regions is defined as $p_{de-methylated} = median(\{ \beta_{i}: 0 \leq \beta_{i} < 0.5 \})$; for 'methylated' regions it is defined as $p_{methylated} = median( \{ \beta_{i} : 0.5 \leq \beta_{i} \geq \leq 1 \}); and for 'transition1' and 'transition2' regions it is defined as $p_{transition} = \frac{p_{methylated} + p_{de-methyalted}}{2}. $\beta_{i}$ are computed from real data.
+5. DMRs are induced by defining the expected difference in average methylation between cases and controls for randomly sampled regions.
+
+- I don't really understand the need or desire for (1); just use the locations of CpGs (and consequently CGIs, shores, etc.) from the genome you are interested in.
+- There's no discussion of running time or computational requirements in the main paper.
+- All HMMs are first-order.
+
+### Miscellaneous comments
+
+> DNA sequencing following bisulphite treatment results in sets of reads that either map to a methylated or un-methylated versions of the genome.
+
+This isn't how bisulfite-aware mappers typically work. If they did, it would only be possible to map fully methylated or fully unmethylated reads.
+
+> We acknowledge that this simulator does not deal with sample mixtures, an experimental setup that is common when methylation profiles are generated from complex heterogenous tissues (i.e., where the underlying signal is likely to originate from multiple cell-types).
+
+This is hard. I think I get some of the way there in `methsim` by having multiple haplotypes of varying frequencies and having more than three states in the underlying average methylation level.
+
+> the distance between $CpG_{t}$ and $CpG_{t+1}$ is drawn from an exponential emission distribution with a fixed rate $r$ (rate = 1/mean) different for each state ($r_{island}$, $r_{desert}$ and $r_{shore}$). In the CpG island state this rate favours short distances (default = $0.025$), the desert state long distances (default = $10^{−4}$) and the CpG shore state medium length distances (default = $0.05$).
+
+It would be nice to have some justification for these defaults, e.g., a comparison with distances in real data. For example, this means that the average distance between CpGs in a CGI is 40 bp, which on first impression seems high to me but may be entirely appropriate.
+
+> where $\pi_{s}(t)$ = as $exp{−b \log(min(1, l_{t} − l_{t−1})}, s = 1,...,4$. $l_{t}$ is the location of the $t^{th}$ CpG site, $a_{s} \in [0,1]$ is the baseline probability of transition whereas the coefficient $b$ (default $= 1.895e−02$) controls how much $\pi_{s}(t)$ depends on the distance between two consecutive CpGs.
+
+Again, it would be nice to see some justification for this default value.
+
+> [Stuff on "phase difference"]
+
+On first reading I don't really understand this. I think it's to induce between-group variability, i.e., DMRs.
+
 # Review of simulation methods
 
 ### \cite{Feng:2014iq}
