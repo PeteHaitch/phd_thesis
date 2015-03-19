@@ -1017,7 +1017,7 @@ People already knew that differences in agouti expression resulted in phenotypic
 - Entropy is minimal if there is only one pattern
 - Entropy is maximal if there are all $2^{m}$ possible patterns and these all occur with equal frequency.
 
-## \cite{Rackham:2015bv}
+## \citet{Rackham:2015bv}
 
 This was the "oh, crap" paper, published when I was writing up the last chapter of my thesis (which is on simulating WGBS data and my `methsim` software).
 
