@@ -54,7 +54,8 @@ TODOs according to the [Unimelb PhD handbook](http://gradresearch.unimelb.edu.au
 
 > Candidates may write up to 100,000 words without seeking special permission from the RHD Committee.
 
-- [ ] Find a `wordcount` function for LaTeX or markdown files.
+- [x] Find a `wordcount` function for LaTeX or markdown files.
+  - Use `texcount` ([http://stackoverflow.com/questions/2974954/correct-word-count-of-a-latex-document](http://stackoverflow.com/questions/2974954/correct-word-count-of-a-latex-document)).
 
 ### [Preparation of a thesis that contains published work](http://gradresearch.unimelb.edu.au/handbooks/phd/thesis.html#published)
 
