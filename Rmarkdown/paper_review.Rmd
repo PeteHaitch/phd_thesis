@@ -365,7 +365,7 @@ Regardless of which test is used, DMRs are called as those regions with a P-valu
 
 ## \citet{Lacey:2013iy}
 
-\cite{Lacey:2013iy} details a modeling and inference framework for RRBS data, as well as a method for simulating RRBS data. Here I only describe the modelin framework and reserve the description and discussion of the simulation framework for __CHAPTER__.
+\cite{Lacey:2013iy} details a modeling and inference framework for RRBS data, as well as a method for simulating RRBS data. Here I only describe the modeling framework and reserve the description and discussion of the simulation framework for __CHAPTER__.
 
 The modeling framework is based on a two-group experiment. At each methylation loci the authors fit a logistic regression model of $\beta_i$ against a indicator variable denoting from which group the sample comes. The raw P-values from the $\chi^2$ test of the residuals of this model are then transformed by a procedure dubbed `QUASASS` (quantile adjustment for score and sample size). The authors claim that `QUASASS` adjusts for the differences in read coverage and sample size that would otherwise reduce the sensitivity in low-coverage regions and reduce the specificity in high-coverage regions. __DISCUSS WITH TERRY: What is `QUASASS` actually doing?__. The authors recommend that `QUASASS`-adjusted P-values, rather than the raw P-values, are used in all downstream analyses.
 
@@ -933,8 +933,6 @@ A Bayesian test to replace the "Lister method" of identifying methylcytosines. I
 
 Then uses a mixture model to estimate tumour and normal components.
 
-
-
 ### Simulation
 
 They use the [`BSsim`](http://122.228.158.106/BSSim) software for simulation.
@@ -1138,3 +1136,13 @@ No simulation of true values or sequencing coverage, but directly simulate $\bet
   - Beta
   - Normal distribution
   - Normal-mixture
+
+### \citet{Rackham:2015bv}
+
+Simulate WGBS.
+
+1. Simulate CpG positions using a homogeneous first-order HMM with three states (CGI, shores and deserts). According to the transition matrix, it is impossible to go from a CGI to a desert without going via shore (probably reasonable).
+2. Simulate the methylation state of each CpG using an inhomogeneous first-order HMM with four states ('methylated', 'transition1', 'transition2' and 'de-methylated'). The inhomogeneity is to induce some spatial dependence amongst nearby CpGs such that the transition probabilities are modulated by the distance between CpGs. According to the transition matrix, it is impossible to go from methylated to de-methylated without going via transition2. Similarly, it is impossible to go from de-methylated to methylated without going via transition1. It is also impossible to go between the two transition states without going via one of methylated or de-methylated. The modulation of transition probabilities as a function of distance is via an exponential decay. The rate of decay depends only on the distance between CpGs and not their context (e.g., identical between CGI and desert for a given distance).
+3. Simulate read depth from a Poisson distribution.
+4. Simulate read counts from a binomial or (truncated) negative binomial distribution. That is, the binomial (or truncated negative binomial) distribution is the emission distribution of the HMM in (2). The probability of success is identical within all 'methylated' states, 'de-methylated' states, and within 'transition1' and 'transition2' states, except for some random Gaussian noise (i.i.d. for each CpG). The average methylation level in 'de-methylated' regions is defined as $p_{de-methylated} = median(\{ \beta_{i}: 0 \leq \beta_{i} < 0.5 \})$; for 'methylated' regions it is defined as $p_{methylated} = median( \{ \beta_{i} : 0.5 \leq \beta_{i} \geq \leq 1 \}); and for 'transition1' and 'transition2' regions it is defined as $p_{transition} = \frac{p_{methylated} + p_{de-methyalted}}{2}. $\beta_{i}$ are computed from real data.
+5. DMRs are induced by defining the expected difference in average methylation between cases and controls for randomly sampled regions.
