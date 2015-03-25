@@ -264,11 +264,11 @@ I now describe each step in this process in greater detail.
 
 [^other]: `other` roughly corresponds to 'mostly methylated regions', although \citet{Burger:2013kq} do not describe these regions as such.
 
-\subsubsection{Simulating $\mathbf{{Z_{\tilde{h}}}}$}
+\subsubsection{Simulating $\{ \mathbf{{Z_{\tilde{h}}}} \}_{\tilde{h} = 1}^{n_{\tilde{h}}}$}
 
-- [ ] DONE
+- [x] DONE
 
-`methsim` uses a two-state ($1 =$ methylated or $0 =$ unmethylated), one-step Markov chain to model $\mathbf{{Z_{\tilde{h}}}}$. This allows the incorporation of within-fragment co-methylation into the simulation.  The choice of a one-step process is one of computational simplicity, although I will show that this is a reasonable approximation of within-fragment co-methylation.
+`methsim` uses a two-state ($1 =$ methylated or $0 =$ unmethylated), one-step Markov chain to model $\mathbf{{Z_{\tilde{h}}}}$. This allows the incorporation of within-fragment co-methylation into the simulation. The choice of a one-step process is one of computational simplicity, although I will show that this is a reasonable approximation of within-fragment co-methylation.
 
 In Chapter \ref{chap:co-methylation} I showed that the strength of within-fragment co-methylation varies as a function of the intra-pair distance and by the genomic context. I also showed that for a pair of CpGs separated by given IPD, and in the same genomic context, that there is a large amount of variability in the strength of within-fragment co-methylation.
 
@@ -278,142 +278,133 @@ For these reasons I allow the transition probabilities to vary with $i$ and $r_{
 
 The above-described model, being spatially inhomogeneous, is not particularly amenable to analytical calculations. However, it is very simple to simulate realisations from this model, requiring only a single loop over the set of loci on each chromosome. For a chromosome containing $n$ methylation loci there are $n - 1$ transition matrices, $P_{i^{(h)}}$, to estimate or otherwise assign. Again, I emphasise that `methsim` uses the same set of parameters for all $n_{\tilde{h}}$ "pseudo-haplotypes". Therefore, only one set of transition matrices need to be assigned.
 
-`methsim` assigns these transition probabilities based on $\beta_{i | r_{i}}$ and $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$, the empirical distributions of $\beta_{i}$ and $LOR_{IPD(i, i + 1)}$ conditional on the region type of the $i^{th}$ locus, $r_{i}$, and the intra-pair distance of the the $i^{th}$ and $(i + 1)^{th}$ locus, $IPD(i, i+1)$, respectively. These empirical distributions are shown for the \emph{ADS} sample in Figures \ref{fig:ADS_beta_by_pm_boxplots} and \ref{fig:ADS_lor_by_pm_quantile_plots} (__TODO: Are these other examples necessary?__)
+`methsim` assigns these transition probabilities based on $\beta_{i | r_{i}}$ and $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$, the empirical distributions of $\beta_{i}$ and $LOR_{IPD(i, i + 1)}$ conditional on the region type of the $i^{th}$ locus, $r_{i}$, and the intra-pair distance of the the $i^{th}$ and $(i + 1)^{th}$ locus, $IPD(i, i+1)$, respectively. These empirical distributions are shown for the \emph{ADS} sample in Figures \ref{fig:ADS_beta_by_pm_boxplots} and \ref{fig:ADS_lor_by_pm_quantile_plots}.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/ADS_beta_by_pm_boxplots.pdf}
-\caption{$\beta_{i | r_{i}}$ and $LOR_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{ADS} sample. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\caption{$\beta_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{ADS} sample. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
 \label{fig:ADS_beta_by_pm_boxplots}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/ADS_lor_by_pm_quantile_plots.pdf}
-\caption{$LOR_{i | r_{i}}$ and $LOR_{i | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{ADS} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\caption{$LOR_{(i, i + 1) | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{ADS} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
 \label{fig:ADS_lor_by_pm_quantile_plots}
 \end{figure}
 
-These same distributions for all the _Ziller_, _Lister_, _Seisenberger_ and _Ziller_ datasets are shown in Figures \ref{fig:EPISCOPE_beta_by_pm_boxplots}, \ref{fig:EPISCOPE_lora_by_pm_quantile_plots}, \ref{fig:Lister_beta_by_pm_boxplots}, \ref{fig:Lister_lora_by_pm_quantile_plots},
+These same distributions for all the _Ziller_, _Lister_, _Seisenberger_ and _Ziller_ datasets are shown in Figures \ref{fig:EPISCOPE_beta_by_pm_boxplots}, \ref{fig:EPISCOPE_lor_by_pm_quantile_plots}, \ref{fig:Lister_beta_by_pm_boxplots}, \ref{fig:Lister_lor_by_pm_quantile_plots},
 \ref{fig:Seisenberger_beta_by_pm_boxplots}, \ref{fig:Seisenberger_lor_by_pm_quantile_plots},
-\ref{fig:Ziller_merged_beta_by_pm_boxplots} and \ref{fig:Ziller_merged_lor_by_pm_quantile_plots}.
+\ref{fig:Ziller_merged_beta_by_pm_boxplots} and \ref{fig:Ziller_merged_lor_by_pm_quantile_plots} (__TODO: Are these other examples necessary?__).
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_beta_by_pm_boxplots.pdf}
-\caption{$\beta_{i | r_{i}}$ and $LOR_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{EPISCOPE} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\caption{$\beta_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{EPISCOPE} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
 \label{fig:EPISCOPE_beta_by_pm_boxplots}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_lor_by_pm_quantile_plots.pdf}
-\caption{$LOR_{i | r_{i}}$ and $LOR_{i | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{EPISCOPE} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\caption{$LOR_{(i, i + 1) | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{EPISCOPE} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
 \label{fig:EPISCOPE_lor_by_pm_quantile_plots}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_beta_by_pm_boxplots.pdf}
-\caption{$\beta_{i | r_{i}}$ and $LOR_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{Lister} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\caption{$\beta_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{Lister} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
 \label{fig:Lister_beta_by_pm_boxplots}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_lor_by_pm_quantile_plots.pdf}
-\caption{$LOR_{i | r_{i}}$ and $LOR_{i | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{Lister} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\caption{$LOR_{(i, i + 1) | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{Lister} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
 \label{fig:Lister_lor_by_pm_quantile_plots}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_beta_by_pm_boxplots.pdf}
-\caption{$\beta_{i | r_{i}}$ and $LOR_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{Seisenberger} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\caption{$\beta_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{Seisenberger} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
 \label{fig:Seisenberger_beta_by_pm_boxplots}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_lor_by_pm_quantile_plots.pdf}
-\caption{$LOR_{i | r_{i}}$ and $LOR_{i | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{Seisenberger} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\caption{$LOR_{(i, i + 1) | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{Seisenberger} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
 \label{fig:Seisenberger_lor_by_pm_quantile_plots}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_beta_by_pm_boxplots.pdf}
-\caption{$\beta_{i | r_{i}}$ and $LOR_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{Ziller} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\caption{$\beta_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{Ziller} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
 \label{fig:Ziller_merged_beta_by_pm_boxplots}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_lor_by_pm_quantile_plots.pdf}
-\caption{$LOR_{i | r_{i}}$ and $LOR_{i | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{Ziller} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\caption{$LOR_{(i, i + 1) | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{Ziller} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
 \label{fig:Ziller_merged_lor_by_pm_quantile_plots}
 \end{figure}
 
 `methsim` assigns these probabilities as follows:
 
-1. For each region, $r_{i}$, sample $B_{r_{i}}$ from $\beta_{i | r_{i}}$. This can be interpreted as $Pr(Z_{r_{i}} = 1)$, the marginal probability that a methylation locus in region $r_{i}$ is methylated, or, alternatively, as the average level of methylation for all methylation loci in the region.
-2. For every pair of methylation loci, $(i, i + 1)$, $ 1 \leq i \leq (n - 1)$, sample $\psi_{(i, i + 1)}$ from $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}. This can be interpreted as the odds that the $(i + 1)^{th}$ methylation locus has the same methylation state as the $i^{th}$ methylation locus.
+1. For each region, $r_{i}$, sample $B_{r_{i}}$ from $\beta_{i | r_{i}}$. This can be interpreted as $Pr(Z_{r_{i}} = 1)$, the marginal probability that a methylation locus in region $r_{i}$ is methylated, or, alternatively, as the average level of methylation for all methylation loci in the region[^extreme_B].
+2. For every pair of methylation loci, $(i, i + 1)$, $1 \leq i \leq (n - 1)$, sample $\Psi_{(i, i + 1)}$ from $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$. This can be interpreted as the odds that the $(i + 1)^{th}$ methylation locus has the same methylation state as the $i^{th}$ methylation locus.
 
-The second step requires further explanation. If there are an insufficient number of observations with the given $IPD$-region combination, then, by default, `methsim` samples $\psi_{(i, i + 1)}$ from a Gaussian distribution with mean equal to __TODO: What?__ and standard deviation equal to __TODO: What?__. __TODO: Explain how these means and standard deviations are estimated using loess.__ By default, if there are less than __TOOD: how many?__ $LOR$ with the given $IPD(i, i + 1), r_{i}$ combination then the Normal-approximation is used. The user may specify a different method for dealing with these rarer $IPD$-region combinations.
+[^extreme_B]: If $B_{r_{i}} = 0$ (resp. $B_{r_{i}} = 1$), `methsim` adds (resp. subtracts) a small value $\epsilon$. The default value is $\epsilon = 0.01$. The boundary values of $0$ and $1$ are common in $\beta_{i | r_{i}}$ and, were these retained, would result in methylomes with large regions that are uniformly unmethylated (resp. methylated).
 
-Now that we have $B_{r_{i}}$ and $\psi_{i, i + 1}$ for $1 \leq i \leq n - 1$ we can simulate realisations of $\mathbf{Z_{\tild{h}}}$. To begin the process (i.e., when $i = 1$) $Z_{\tilde{h}, 1}$, is simulated from the "marginal" distribution, which is Bernoulli($B_{r_{1}}$). Then, we loop over $i = 2, \ldots, n - 1$ to simulate the remainder of the process. At each step we compute the transition probability, $p_{i, i + 1} = Pr(Z_{\tilde{h}, i + 1} = 1 | Z_{\tilde{h}, i}) = \frac{Pr(Z_{tilde{h}, i}, Z_{tilde{h}, i + 1} = 1)}{Pr(Z_{tilde{h}})}$, from $B_{r_{i}}, $B_{r_{i + 1}}, \psi_{(i, i + 1)}$ and the observed (simulated) value at the previous iteration, $Z_{\tilde{h}, i}$. Then, $Z_{\tilde{h}, i + 1}$ is simulated from the Bernoulli($p_{i, i + 1}$) distribution.
+The second step requires further explanation. If there are an insufficient number of observations with the given $IPD$-region combination, then, by default, `methsim` samples $\Psi_{(i, i + 1)}$ from a Gaussian distribution with mean equal to __TODO: What?__ and standard deviation equal to __TODO: What?__. __TODO: Explain how these means and standard deviations are estimated using loess.__ By default, if there are less than __TOOD: how many?__ $LOR$ with the given $IPD(i, i + 1), r_{i}$ combination then the Normal-approximation is used. The user may specify a different method for dealing with these rarer $IPD$-region combinations.
 
-To compute the transition probability, $p_{i, i + 1}$, `methsim` uses the iterative proportional fitting algorithm (IPF; __TODO: CITE IPD paper__) to construct the joint probability matrix, __TODO: Mathematically describe this matrix__. Then, the appropriate element of this matrix is divided by the appropriate marginal probability to obtain the transition probability. An example of this procedure is illustrative.
+Now that we have $B_{r_{i}}$ and $\Psi_{i, i + 1}$ for $1 \leq i \leq n - 1$ we can simulate realisations of $\mathbf{Z_{\tilde{h}}}$. To begin the process (i.e., when $i = 1$) $Z_{\tilde{h}, 1}$, is simulated from the "marginal" distribution, which is Bernoulli($B_{r_{1}}$). Then, we loop over $i = 2, \ldots, n - 1$ to simulate the remainder of the process. At each step we compute the transition probability, $p_{(i + 1) | i} = Pr(Z_{\tilde{h}, i + 1} = 1 | Z_{\tilde{h}, i}) = \frac{Pr(Z_{tilde{h}, i}, Z_{tilde{h}, i + 1} = 1)}{Pr(Z_{tilde{h}})}$, from $B_{r_{i}}, B_{r_{i + 1}}, \Psi_{(i, i + 1)}$ and the observed (simulated) value at the previous iteration, $Z_{\tilde{h}, i}$. Then, $Z_{\tilde{h}, i + 1}$ is simulated from the Bernoulli($p_{(i + 1) | i}$) distribution.
 
-The IPD procedure is a general method for __TODO: blah blah__. In this case we wish to use the IPF procedure to construct the unique $2 \times 2$ array (the joint probability matrix) with specified margins (the marginal probabilities of each methylation state at each locus) and the specified cross-product ratio (the odds-ratio). __UP TO HERE__
+In order to compute the transition probability, $p_{(i + 1) | i}$, `methsim` first uses the iterative proportional fitting algorithm \citet[see]{Speed:2005tg}[for an overview of the algorithm] to construct the joint probability matrix,
 
-\begin{equation}
-% An example of IPF being used to form a transition matrix.
-\end{equation}
+\begin{equation*}
+P = \bordermatrix{~ & Pr(Z_{i+1} = 0) = 1 - B_{r_{i+1}} & Pr(Z_{i+1} = 1) = B_{r_{i+1}} \cr
+Pr(Z_{i} = 0) = 1 - B_{r_{i}} & Pr(Z_{i} = 0, Z_{i + 1} = 0) & Pr(Z_{i} = 0, Z_{i + 1} = 1) \cr
+Pr(Z_{i} = 1) = B_{r_{i}} & Pr(Z_{i} = 1, Z_{i + 1} = 0) & Pr(Z_{i} = 1, Z_{i + 1} = 1) \cr}
+\end{equation*}
 
-To simulate $Z_{h, j}$ the algorithm proceeds as follows (in `R` pseudocode):
+Iterative proportional fitting is a general method "for constructing tables of numbers satisfying certain constraints" \citep{Speed:2005tg}. `methsim` uses iterative proportional fitting to construct the _unique_ $2 \times 2$ array (the joint probability matrix) with specified margins (the marginal probabilities of each methylation state at each locus, $B_{r_{i}} = Pr(Z_{i} = 1), B_{r_{i + 1}} = Pr(Z_{i + 1} = 1)$) and the specified cross-product ratio (the odds-ratio, $\psi_{i, i + 1} = \log_{2}(\Psi_{i, i + 1})$).
 
-```{r, echo = TRUE, eval = FALSE}
-n <- length(z)
-u <- runif(n, 0, 1)
-# Sample from region-specific beta-value distributions
-b <- sample(BETA, n)
-# Sample from region-specific LOR distributions
-l <- sample(LOR, n - 1)
+Once $P$ is formed, the appropriate element of it is divided by the appropriate marginal probability to obtain the transition probability. An example of this procedure is illustrative.
 
-# Sample the first observation from the "stationary/marginal" distribution
-if (u[1] < b[1]) {
-  z[1] <- 0
-} else {
-  z[1] <- 1
-}
+Let $\Psi_{i, i + 1} = 2$, and therefore $\psi = 2^{2} = 4$, and $B_{r_{i}} = B_{r_{i + 1}} = 0.7$. To begin the iterative proportional fitting algorithm, form the matrix $P^{(0)} = \Bigl(\begin{smallmatrix}
+\psi & 1 \\
+   1 & 1
+\end{smallmatrix} \Bigr).$ This matrix has the desired cross-ratio, $\psi$, but not the desired row and column margins. At each iteration of the algorithm, iterative proportional fitting adjusts the rows and columns such that the cross-ratio remains $\psi$ while the row and column margins converge towards the desired values. The algorithm continues in this manner, forming a series of $2 \times 2$ tables that converge pointwise (and uniquely) to a $2 \times 2$ table $P^{(*)} \equiv P$. For our example, $P^{(*)} = \Bigl(\begin{smallmatrix}
+0.122 & 0.178 \\
+0.178 & 0.522
+\end{smallmatrix} \Bigr)$, to 3 decimal places of precision. It is easily verified that $P^{(*)}$ has the desired cross-ratio and marginal sums.
 
-# Sample the rest of the z
-for (i in 2:n) {
-  if (z[i] == 0) {
-    # Compute transition probability
-    # Compute z[i]
+In `methsim`, the routine to simulate $\{ \mathbf{{Z_{\tilde{h}}}} \}_{\tilde{h} = 1}^{n_{\tilde{h}}}$ is available as the `simulate,SimulateMethylomeParam-method`. It is mostly written in C++ using the wonderful Rcpp package \citep{Eddelbuettel:2011to, Eddelbuettel:2013if}, which greatly speeds up the running time.
 
-  } else {
-    # Compute transition probability
-    # Compute z[i]
-  }
-}
-```
-
-\subsubsection{Simulating a single sample}
+\subsubsection{Simulating $\mathbf{W}$}
 
 - [ ] DONE
 
-Given a set of transition matrices, $\Big \{ P_{i^{(h, j)}} \Big \}$, we can readily simulate a realisation of the methylation states along a haploid genome, $Z_{h, j}$. Naively, we might simulate a single sample by simply generating a realisation for each $h$ of $Z_{h, j}$. However, although there is cell-to-cell heterogeneity in the methylation patterns, there is still a degree of dependence for the $i^{th}$ methylation state across the $h$ haploid genomes in the $j^{th}$ sample. After all, the cells are from the same individual and are broadly of the same "type".
+For each region we need to assign the vector of weights, $\mathbf{W_{r_{i}, \cdot}}$. To do so, `methsim` uses a heuristic procedure. For higher-order m-tuples, $m = 3$ or $4$ is recommended, `methsim` computes the relative frequency of the $2^{m}$ possible methylation patterns at each m-tuple with sufficient sequencing coverage. `methsim` then samples from this distribution, stratified by region-type; call these empirical distributions
 
-What this means is that we want some degree of dependence between the set of transition matrices for haploid methylome $h$, $\Big \{ P_{i^{(h, j)}} \Big \}$, and for those for haploid methylome $h'$, $\Big \{ P_{i^{(h', j)}} \Big \}$. This is asking quite a lot of our simple simulation model. Instead, `methsim` uses a heuristic procedure to achieve a similar result.
+__TODO__: Really computing (and plotting) $w_{i | r_{(i, \ldots, i + m - 1)}}, \ldots, w_{i + m - 1 | r_{(i, \ldots, i + m - 1)}}$ not $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$. These empirical distributions are shown for the \emph{ADS} sample in Figure \ref{fig:ADS_pattern_freqs_by_pm_boxplots}. From this we see that __TODO__.
 
-To begin, we assume that all $H$ haploid genomes in the sample have the same co-methylation structure. That is equivalent to defining $\Big \{ P_{i^{(h, j)}} \Big \} := \Big \{ P_{i^{(j)}} \Big \}$ for all $h$. __TODO: Comment on this assumption__
+__TODO: Update figures to use $w_{1}, \ldots, w_{8}$ rather than $h1, \ldots h8$.__
 
-Naively, we might simulate a sample by simulating $H$ realisations of the Markov chain with transition matrices $\Big \{ P_{i^{(j)}} \Big \}$. However, this gives no control over the dependence between the methylation states at the $i^{th}$ locus over the $H$ haploid genomes in the $j^{th}$ sample. In fact, such a model will have the "correct" co-methylation structure but "incorrect" $\beta$-values. __TODO: Check this and demonstrate using `methsim`__
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/ADS_pattern_freqs_by_pm_boxplots.pdf}
+\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{ADS} sample. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\label{fig:ADS_beta_by_pm_boxplots}
+\end{figure}
 
-Instead, `methsim` simulates $R << H$ realisations of the Markov chain with transition probabilities given by $\Big \{ P_{i^{(j)}} \Big \}$. It then weights these realisations according to the observed heterogeneity for each region. __TODO: Describe the inuition of this weighting scheme as being that $w_{r}$ of the cells have identical methylation states for that region.
+__TODO: Limitations of this procedure__
 
 \subsubsection{Simulating multiple samples from the same group}
 
