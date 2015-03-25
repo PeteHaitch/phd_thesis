@@ -294,7 +294,7 @@ The above-described model, being spatially inhomogeneous, is not particularly am
 \label{fig:ADS_lor_by_pm_quantile_plots}
 \end{figure}
 
-These same distributions for all the _Ziller_, _Lister_, _Seisenberger_ and _Ziller_ datasets are shown in Figures \ref{fig:EPISCOPE_beta_by_pm_boxplots}, \ref{fig:EPISCOPE_lor_by_pm_quantile_plots}, \ref{fig:Lister_beta_by_pm_boxplots}, \ref{fig:Lister_lor_by_pm_quantile_plots},
+These same distributions for all the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ samples are shown in Figures \ref{fig:EPISCOPE_beta_by_pm_boxplots}, \ref{fig:EPISCOPE_lor_by_pm_quantile_plots}, \ref{fig:Lister_beta_by_pm_boxplots}, \ref{fig:Lister_lor_by_pm_quantile_plots},
 \ref{fig:Seisenberger_beta_by_pm_boxplots}, \ref{fig:Seisenberger_lor_by_pm_quantile_plots},
 \ref{fig:Ziller_merged_beta_by_pm_boxplots} and \ref{fig:Ziller_merged_lor_by_pm_quantile_plots} (__TODO: Are these other examples necessary?__).
 
@@ -389,22 +389,54 @@ In `methsim`, the routine to simulate $\{ \mathbf{{Z_{\tilde{h}}}} \}_{\tilde{h}
 
 \subsubsection{Simulating $\mathbf{W}$}
 
-- [ ] DONE
+- [x] DONE
 
-For each region we need to assign the vector of weights, $\mathbf{W_{r_{i}, \cdot}}$. To do so, `methsim` uses a heuristic procedure. For higher-order m-tuples, $m = 3$ or $4$ is recommended, `methsim` computes the relative frequency of the $2^{m}$ possible methylation patterns at each m-tuple with sufficient sequencing coverage. `methsim` then samples from this distribution, stratified by region-type; call these empirical distributions
-
-__TODO__: Really computing (and plotting) $w_{i | r_{(i, \ldots, i + m - 1)}}, \ldots, w_{i + m - 1 | r_{(i, \ldots, i + m - 1)}}$ not $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$. These empirical distributions are shown for the \emph{ADS} sample in Figure \ref{fig:ADS_pattern_freqs_by_pm_boxplots}. From this we see that __TODO__.
-
-__TODO: Update figures to use $w_{1}, \ldots, w_{8}$ rather than $h1, \ldots h8$.__
+For each region we need to assign the vector of weights, $\mathbf{W_{r_{i}, \cdot}}$. To do so, `methsim` uses a heuristic procedure. For higher-order m-tuples, $m = 3$ or $4$ is recommended, `methsim` computes the relative frequency of the $2^{m}$ possible methylation patterns at each m-tuple with sufficient sequencing coverage. `methsim` then samples from this distribution, stratified by region-type; call these empirical distributions $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$. Figure \ref{fig:ADS_pattern_freqs_by_pm_boxplots} shows elementwise boxplots of $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$, that is, it shows the distributions $w_{i | r_{(i, \ldots, i + m - 1)}}$ for $i = 1, \ldots, 2^{m}$.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/ADS_pattern_freqs_by_pm_boxplots.pdf}
-\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{ADS} sample. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:ADS_beta_by_pm_boxplots}
+\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}, i = 1, \ldots, 2^{m} = 8$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{ADS} sample. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\label{fig:ADS_pattern_freqs_by_pm_boxplots}
 \end{figure}
 
-__TODO: Limitations of this procedure__
+These same distributions for all the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ samples are shown in Figures \ref{fig:EPISCOPE_pattern_freqs_by_pm_boxplots}, \ref{fig:Lister_pattern_freqs_by_pm_boxplots}, \ref{fig:Seisenberger_pattern_freqs_by_pm_boxplots} and  \ref{fig:Ziller_pattern_freqs_by_pm_boxplots} (__TODO: Are these other examples necessary?__).
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_pattern_freqs_by_pm_boxplots.pdf}
+\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}, i = 1, \ldots, 2^{m} = 8$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{EPISCOPE} dataset. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\label{fig:EPISCOPE_pattern_freqs_by_pm_boxplots}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Lister_pattern_freqs_by_pm_boxplots.pdf}
+\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}, i = 1, \ldots, 2^{m} = 8$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{Lister} dataset. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\label{fig:Lister_pattern_freqs_by_pm_boxplots}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Seisenberger_pattern_freqs_by_pm_boxplots.pdf}
+\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}, i = 1, \ldots, 2^{m} = 8$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{Seisenberger} dataset. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\label{fig:Seisenberger_pattern_freqs_by_pm_boxplots}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Ziller_pattern_freqs_by_pm_boxplots.pdf}
+\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}, i = 1, \ldots, 2^{m} = 8$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{Ziller} dataset. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\label{fig:Ziller_pattern_freqs_by_pm_boxplots}
+\end{figure}
+
+From Figures \ref{fig:EPISCOPE_pattern_freqs_by_pm_boxplots}, \ref{fig:Lister_pattern_freqs_by_pm_boxplots}, \ref{fig:Seisenberger_pattern_freqs_by_pm_boxplots} and \ref{fig:Ziller_pattern_freqs_by_pm_boxplots} we see that, unsurprisingly, in UMRs that a single methylation pattern dominates, the completely unmethylated pattern. Outside of UMRs, we see that while there is generally a dominant methylation pattern at each m-tuple, there may be $2-4$ otheres that are observed at non-negligible frequencies. PMRs are the most heterogeneous and LMRs and other regions are quite similar.
+
+The above procedure has several obvious limitations. Firstly, we are restricted to analying m-tuples within individual reads and read-pairs. Secondly, as $m$ increases, and similarly as $IPD$ increases, there are fewer m-tuples with sufficient sequencing coverage. This means our data are heavily biased towards regions of high CpG density, which typically correspond to UMRs. Additionally, we know that m-tuples with small $IPDs$ are far more likely to be co-methylated than those with larger $IPDs$ and so we are biased towards sampling entirely unmethylated and entirely methylated methylation patterns. It is difficult to know how to adjust for these biases, which are unavoidable given current sequencing technologies. These estimates very likely underestimate the degree of within-sample heterogeneity and, consequently, weights based on sampling from the empirical distributions, $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$, likely result in overly homogeneous simulated methylomes.
+
+A second, more subtle, bias is due to sequencing errors, bisulfite-conversion errors and alignment errors. Using the simple relative frequency estimation procedure will result in errors like these being inferred as (rare) methylation patterns. `MPFE` ([http://bioconductor.org/packages/release/bioc/html/MPFE.html](http://bioconductor.org/packages/release/bioc/html/MPFE.html)) is an R package that uses an estimation procedure designed to deal with some of these errors. However, `MPFE` is intended for analysing amplicon bisulfite-sequencing data with high sequencing coverages, and it's more computationally demanding estimation procedure does not scale to whole-genome data.
+
+With all the above limitations in mind, `methsim` still uses the simple strategy of sampling the $\mathbf{W}$ from $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$. At present I do not have a better alternative and, as we shall see, the current procedure still procedure still produced realistic simulated data.
 
 \subsubsection{Simulating multiple samples from the same group}
 
