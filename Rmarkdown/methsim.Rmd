@@ -400,7 +400,7 @@ For each region we need to assign the vector of weights, $\mathbf{W_{r_{i}, \cdo
 \label{fig:ADS_pattern_freqs_by_pm_boxplots}
 \end{figure}
 
-These same distributions for all the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ samples are shown in Figures \ref{fig:EPISCOPE_pattern_freqs_by_pm_boxplots}, \ref{fig:Lister_pattern_freqs_by_pm_boxplots}, \ref{fig:Seisenberger_pattern_freqs_by_pm_boxplots} and  \ref{fig:Ziller_pattern_freqs_by_pm_boxplots} (__TODO: Are these other examples necessary?__).
+These same distributions for all the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ samples are shown in Figures \ref{fig:EPISCOPE_pattern_freqs_by_pm_boxplots}, \ref{fig:Lister_pattern_freqs_by_pm_boxplots}, \ref{fig:Seisenberger_pattern_freqs_by_pm_boxplots} and  \ref{fig:Ziller_merged_pattern_freqs_by_pm_boxplots} (__TODO: Are these other examples necessary?__).
 
 \begin{figure}[!htb]
 \centering
@@ -425,12 +425,12 @@ These same distributions for all the _EPISCOPE_, _Lister_, _Seisenberger_ and _Z
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Ziller_pattern_freqs_by_pm_boxplots.pdf}
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_pattern_freqs_by_pm_boxplots.pdf}
 \caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}, i = 1, \ldots, 2^{m} = 8$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{Ziller} dataset. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:Ziller_pattern_freqs_by_pm_boxplots}
+\label{fig:Ziller_merged_pattern_freqs_by_pm_boxplots}
 \end{figure}
 
-From Figures \ref{fig:EPISCOPE_pattern_freqs_by_pm_boxplots}, \ref{fig:Lister_pattern_freqs_by_pm_boxplots}, \ref{fig:Seisenberger_pattern_freqs_by_pm_boxplots} and \ref{fig:Ziller_pattern_freqs_by_pm_boxplots} we see that, unsurprisingly, in UMRs that a single methylation pattern dominates, the completely unmethylated pattern. Outside of UMRs, we see that while there is generally a dominant methylation pattern at each m-tuple, there may be $2-4$ otheres that are observed at non-negligible frequencies. PMRs are the most heterogeneous and LMRs and other regions are quite similar.
+From Figures \ref{fig:EPISCOPE_pattern_freqs_by_pm_boxplots}, \ref{fig:Lister_pattern_freqs_by_pm_boxplots}, \ref{fig:Seisenberger_pattern_freqs_by_pm_boxplots} and \ref{fig:Ziller_merged_pattern_freqs_by_pm_boxplots} we see that, unsurprisingly, in UMRs that a single methylation pattern dominates, the completely unmethylated pattern. Outside of UMRs, we see that while there is generally a dominant methylation pattern at each m-tuple, there may be $2-4$ otheres that are observed at non-negligible frequencies. PMRs are the most heterogeneous and LMRs and other regions are quite similar.
 
 The above procedure has several obvious limitations. Firstly, we are restricted to analying m-tuples within individual reads and read-pairs. Secondly, as $m$ increases, and similarly as $IPD$ increases, there are fewer m-tuples with sufficient sequencing coverage. This means our data are heavily biased towards regions of high CpG density, which typically correspond to UMRs. Additionally, we know that m-tuples with small $IPDs$ are far more likely to be co-methylated than those with larger $IPDs$ and so we are biased towards sampling entirely unmethylated and entirely methylated methylation patterns. It is difficult to know how to adjust for these biases, which are unavoidable given current sequencing technologies. These estimates very likely underestimate the degree of within-sample heterogeneity and, consequently, weights based on sampling from the empirical distributions, $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$, likely result in overly homogeneous simulated methylomes.
 
