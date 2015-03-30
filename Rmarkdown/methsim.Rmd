@@ -296,7 +296,7 @@ The above-described model, being spatially inhomogeneous, is not particularly am
 
 These same distributions for all the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ samples are shown in Figures \ref{fig:EPISCOPE_beta_by_pm_boxplots}, \ref{fig:EPISCOPE_lor_by_pm_quantile_plots}, \ref{fig:Lister_beta_by_pm_boxplots}, \ref{fig:Lister_lor_by_pm_quantile_plots},
 \ref{fig:Seisenberger_beta_by_pm_boxplots}, \ref{fig:Seisenberger_lor_by_pm_quantile_plots},
-\ref{fig:Ziller_merged_beta_by_pm_boxplots} and \ref{fig:Ziller_merged_lor_by_pm_quantile_plots} (__TODO: Are these other examples necessary?__).
+\ref{fig:Ziller_merged_beta_by_pm_boxplots} and \ref{fig:Ziller_merged_lor_by_pm_quantile_plots}.
 
 \begin{figure}[!htb]
 \centering
@@ -361,9 +361,15 @@ These same distributions for all the _EPISCOPE_, _Lister_, _Seisenberger_ and _Z
 
 [^extreme_B]: If $B_{r_{i}} = 0$ (resp. $B_{r_{i}} = 1$), `methsim` adds (resp. subtracts) a small value $\epsilon$. The default value is $\epsilon = 0.01$. The boundary values of $0$ and $1$ are common in $\beta_{i | r_{i}}$ and, were these retained, would result in methylomes with large regions that are uniformly unmethylated (resp. methylated).
 
-The second step requires further explanation. If there are an insufficient number of observations with the given $IPD$-region combination, then, by default, `methsim` samples $\Psi_{(i, i + 1)}$ from a Gaussian distribution[^loess_params]. By default, if there are less than __TOOD: how many?__ $LOR$ with the given combination of region-type and IPD then the Gaussian-approximation is used. The user may specify a different method for dealing with these rarer $IPD$-region combinations and, indeed, different methods are explored in the __RESULTS SECTION__.
+The second step requires further explanation. If there are no observations with the required $IPD$-region combination, then, by definition, `methsim` is unable to sample from the appropriate empirical distribution[^min_n]. Instead, when this occurs, `methsim` samples from a user-specified parametric distribution. __RESULTS SECTION__ explores different choices of this distribution __AND SHOWS WHAT__. The default option is a zero-mean Gaussian distribution, chosen so that "on average" the methylation state at adjacent CpGs with large $IPD$s are independent of one another. The default standard deviation of this Gaussian distribution is $2$; this value, while fairly arbitrary, reflects the median standard deviation of the $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$ distributions for each sample, which is remarkably constant across $r_{i}$ and samples[^ipd_stability] (__TODO: Format and reference table__).
 
-[^loess_params]: The mean, $\mu$, and standard deviation, $\sigma$, of this Gaussian distribution depend on both $IPD$ and $r_{i}$. A loess fit of $mean(LOR)$ (resp. $sd(LOR)$) as a function of $IPD$ is performed, stratified by region type. The values of $\mu$ (resp. $\sigma$) are then obtained by extrapolating the loess fit (__TODO: Update if changes made to `methsim` defaults__).
+[^min_n]: By default, `methsim` requires at least 100 observations in the  $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$ to try to avoid sampling from sparse empirical distributions.
+
+[^ipd_stability]: Figures \ref{fig:EPISCOPE_lor_by_pm_quantile_plots}, \ref{fig:Lister_lor_by_pm_quantile_plots}, \ref{fig:Seisenberger_lor_by_pm_quantile_plots} and \ref{fig:Ziller_merged_lor_by_pm_quantile_plots} show that the variability of these distributions is fairly constant across $IPD$ for a given $r_{i}$ and sample.
+
+```{r, eval = TRUE, echo = FALSE}
+knitr::kable(readRDS("../data/median_sd_LOR_distributions.rds"), align = "c", digits = 2)
+```
 
 Now that we have $B_{r_{i}}$ and $\Psi_{i, i + 1}$ for $1 \leq i \leq n - 1$ we can simulate realisations of $\mathbf{Z_{\tilde{h}}}$. To begin the process (i.e., when $i = 1$) $Z_{\tilde{h}, 1}$, is simulated from the "marginal" distribution, which is Bernoulli($B_{r_{1}}$). Then, we loop over $i = 2, \ldots, n - 1$ to simulate the remainder of the process. At each step we compute the transition probability, $p_{(i + 1) | i} = Pr(Z_{\tilde{h}, i + 1} = 1 | Z_{\tilde{h}, i}) = \frac{Pr(Z_{tilde{h}, i}, Z_{tilde{h}, i + 1} = 1)}{Pr(Z_{tilde{h}})}$, from $B_{r_{i}}, B_{r_{i + 1}}, \Psi_{(i, i + 1)}$ and the observed (simulated) value at the previous iteration, $Z_{\tilde{h}, i}$. Then, $Z_{\tilde{h}, i + 1}$ is simulated from the Bernoulli($p_{(i + 1) | i}$) distribution.
 
@@ -438,7 +444,7 @@ The above procedure has several obvious limitations. Firstly, we are restricted 
 
 A second, more subtle, bias is due to sequencing errors, bisulfite-conversion errors and alignment errors. Using the simple relative frequency estimation procedure will result in errors like these being inferred as (rare) methylation patterns. `MPFE` ([http://bioconductor.org/packages/release/bioc/html/MPFE.html](http://bioconductor.org/packages/release/bioc/html/MPFE.html)) is an R package that uses an estimation procedure designed to deal with some of these errors. However, `MPFE` is intended for analysing amplicon bisulfite-sequencing data with high sequencing coverages, and it's more computationally demanding estimation procedure does not scale to whole-genome data.
 
-With all the above limitations in mind, `methsim` still uses the simple strategy of sampling the $\mathbf{W}$ from $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$. At present I do not have a better alternative and, as we shall see, the current procedure still procedure still produced realistic simulated data. In the __RESULTS SECTION__ I also explore a simulation that simulates $n_{\bar{h}}$ independent realisations of $\mathbf{Z}$ where $n_{\tilde{h}} < n_{\bar{h}} \\l n_{h}$ and uniformly sets $\mathbf{W_{r_{i}, \cdot}} = (\frac{1}{n_{\bar{h}}, \ldots, \frac{1}{n_{\bar{h}})$.
+With all the above limitations in mind, `methsim` still uses the simple strategy of sampling the $\mathbf{W}$ from $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$. At present I do not have a better alternative and, as we shall see, the current procedure still procedure still produced realistic simulated data. In the __RESULTS SECTION__ I also explore a simulation that simulates $n_{\bar{h}}$ independent realisations of $\mathbf{Z}$ where $n_{\tilde{h}} < n_{\bar{h}} \\l n_{h}$ and uniformly sets $\mathbf{W_{r_{i}, \cdot}} = (\frac{1}{n_{\bar{h}}}, \ldots, \frac{1}{n_{\bar{h}}})$.
 
 \subsubsection{Simulating multiple samples from the same group}
 
