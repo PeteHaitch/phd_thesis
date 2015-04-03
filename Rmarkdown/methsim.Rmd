@@ -468,6 +468,18 @@ The result is an object storing the genomic co-ordinates and methylation pattern
 
 While the `SimulatedBS` object contains all the data on the methylation states of the reads, it is not always the most convenient or efficient format with which to work. For example, many downstream analyses only make use of $\beta$-values, so we might want to summarise our simulated data this way. `methsim` provides the `asMethPat()` function to convert the `SimulatedBS` object to a `MethPat` object containing methylation patterns at m-tuples of a given size; all the functionality of the `MethylationTuples` package is then available to the user, such as computing $\beta$-values with the `methLevel()` method.
 
+\subsection{Simulating multiple samples}
+
+- [x] DONE
+
+The above describes how to simulate a single whole-genome bisulfite-sequencing sample. If we wanted to simulate six independent samples then we could simply run this procedure six times, with a different `SimulateMethylomeParam` object for each realisation. However, we will generally be interested in simulating experiments where the samples are not  is some relationship amongst the samples. For example, suppose we want to simulate a two-group experiment with three samples per group. Further, suppose we want to include differentially methylated regions between the two groups. How do we simulate such an experiment?
+
+To simulate these type of experiments, we need to be able to control the variation between the `SimulatedBS` objects. In this example, we probably want the three samples in each group to be more similar to each other than to the three samples in the other group. Essentially, we need to be able to control the within-group and between-group variation. `methsim` controls this variation through the workflow show in __FIGURE__. If we want two samples two be very different from one another, then we would use two different `SimulateMethylomeParam` objects at the beginning. However, if we want to simulate two technical replicates, then we would use the same `SimulateMethylomeParam`, `SimulatedMethylome` and `SimulateBSParam` objects; the two samples have identical 'true' methylomes and they only diverge at the 'sequencing' step of the simulation.
+
+We might also consider more subtle ways of introducing variation. For example, we might use the same partitioning of the methylome and the same average methylation level for each region but vary the strength of co-methylation. This could be achieved by altering the $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$ distributions between two `SimulateMethylomeParam` objects while holding the rest constant. Or we might vary the weights, $W$, to simulate more or less heterogeneous samples.
+
+In __RESULTS SECTION__ I explore how much variation is created using these different techniques.
+
 \subsubsection{Simulating differential methylation}
 
 - [ ] DONE
