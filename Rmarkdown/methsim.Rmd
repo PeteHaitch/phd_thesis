@@ -462,6 +462,12 @@ For all reads that overlap a methylation locus in the 'true' methylome, a pseudo
 
 The result is an object storing the genomic co-ordinates and methylation patterns of every read that contains a methylation locus.
 
+\subsection{Construct the output}
+
+- [x] DONE
+
+While the `SimulatedBS` object contains all the data on the methylation states of the reads, it is not always the most convenient or efficient format with which to work. For example, many downstream analyses only make use of $\beta$-values, so we might want to summarise our simulated data this way. `methsim` provides the `asMethPat()` function to convert the `SimulatedBS` object to a `MethPat` object containing methylation patterns at m-tuples of a given size; all the functionality of the `MethylationTuples` package is then available to the user, such as computing $\beta$-values with the `methLevel()` method.
+
 \subsubsection{Simulating differential methylation}
 
 - [ ] DONE
