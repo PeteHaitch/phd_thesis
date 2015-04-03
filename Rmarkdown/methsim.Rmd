@@ -216,7 +216,7 @@ Simulating data with `methsim` involves 3 steps:
 
 `methsim` requires an input dataset from which to estimate key parameters. For the input dataset, `methsim` requires the methylation patterns at various sized m-tuples, which can be produced by the `methtuple` software.
 
-\subsection{Simulating the truth}
+\subsection{Simulating a single methylome}
 
 - [x] DONE
 
@@ -446,9 +446,21 @@ A second, more subtle, bias is due to sequencing errors, bisulfite-conversion er
 
 With all the above limitations in mind, `methsim` still uses the simple strategy of sampling the $\mathbf{W}$ from $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$. At present I do not have a better alternative and, as we shall see, the current procedure still procedure still produced realistic simulated data. In the __RESULTS SECTION__ I also explore a simulation that simulates $n_{\bar{h}}$ independent realisations of $\mathbf{Z}$ where $n_{\tilde{h}} < n_{\bar{h}} \\l n_{h}$ and uniformly sets $\mathbf{W_{r_{i}, \cdot}} = (\frac{1}{n_{\bar{h}}}, \ldots, \frac{1}{n_{\bar{h}}})$.
 
-\subsubsection{Simulating multiple samples from the same group}
+\subsection{Simulating reads}
 
-- [ ] DONE
+- [x] DONE
+
+Once we have our 'true' methylome, we want to simulate an assay of this sample. In theory this could be any type of methylation assay, but here we focus on simulating whole-genome bisulfite-sequencing data.
+
+`methsim` uses a simple method for simulating bisulfite-sequencing. The user specifies the desired read length and average sequencing coverage[^read_length], the error rate ($\epsilon$, which includes both sequencing error and bisulfite-conversion error), and provides the simulated 'true' methylome.
+
+The number of reads required is given by $n_{reads} = \frac{\text{average sequencing coverage}}{\text{read length}} \times \text{size of genome}$. The number of reads per chromosome is assigned proportional to the chromosome length. Then, the start of each read is sampled uniformly across the chromosome respective chromosome.
+
+[^read_length]: Currently only single-end data are supported. This isn't a big issue. Most paired-end bisulfite-sequencing datasets have overlapping mates, and so paired-end data can be crudely simulated by simply doubling the read length. Also, all reads must have the same length, i.e., no simulation of read trimming. I don't consider this feature a priority, but it could easily be implemented by generating read lengths from a probability distribution, e.g., Poisson.
+
+For all reads that overlap a methylation locus in the 'true' methylome, a pseudo-haplotype is sampled with probabilities given by $W_{i, \cdot}$. The methylation pattern of the sampled pseudo-haplotype is then copied, with probability $\epsilon$ that the methylation state at each locus is switched.
+
+The result is an object storing the genomic co-ordinates and methylation patterns of every read that contains a methylation locus.
 
 \subsubsection{Simulating differential methylation}
 
