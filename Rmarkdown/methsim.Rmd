@@ -264,6 +264,8 @@ I now describe each step in this process in greater detail.
 
 [^other]: `other` roughly corresponds to 'mostly methylated regions', although \citet{Burger:2013kq} do not describe these regions as such.
 
+__TODO: Figure showing `other` is MMRs. More generally, a figure showing the average methylation level in each of `UMR`, `LMR`, `PMR` and `other`.__
+
 \subsubsection{Simulating $\{ \mathbf{{Z_{\tilde{h}}}} \}_{\tilde{h} = 1}^{n_{\tilde{h}}}$}
 
 - [x] DONE
@@ -392,8 +394,6 @@ Let $\Psi_{i, i + 1} = 2$, and therefore $\psi = 2^{2} = 4$, and $B_{r_{i}} = B_
 0.122 & 0.178 \\
 0.178 & 0.522
 \end{smallmatrix} \Bigr)$, to 3 decimal places of precision. It is easily verified that $P^{(*)}$ has the desired cross-ratio and marginal sums.
-
-In `methsim`, the routine to simulate $\{ \mathbf{{Z_{\tilde{h}}}} \}_{\tilde{h} = 1}^{n_{\tilde{h}}}$ is available as the `simulate,SimulateMethylomeParam-method`. It is mostly written in C++ using the wonderful Rcpp package \citep{Eddelbuettel:2011to, Eddelbuettel:2013if}, which greatly speeds up the running time.
 
 \subsubsection{Simulating $\mathbf{W}$}
 
@@ -573,7 +573,6 @@ pryr::object_size(methpat)
 
 \section{Results}
 
--  __TODO: Figure showing 'rest of genome' is MMRs. More generally, a figure showing the average methylation level in each of `UMR`, `LMR`, `PMR` and `other`.
 - [ ] DONE
 
 A central pillar of `methsim` is that many of the simulation parameters are sampled from real data. At a bare minimum, the first test of `methsim` is that simulated data are similar to the real data on which they are based. To assess this, I compare several summary measures between the simulated data and the real data. The simplest of these are summaries are the distributions of $\beta$-values and within-fragment co-methylation, which are explicitly sampled in `methsim`. In contrast, the spatial correlation of $\beta$-values is not explicitly modelled in `methsim`; rather, we hope that `methsim` recapitulates this phenomenon by appropriate modelling of within-fragment co-methylation and choice of weights, $\mathbf{W}$.
@@ -599,6 +598,8 @@ Once it is established that `methsim` passes this minimal test, I use `methsim` 
 - [ ] DONE
 
 \subsubsection{Comparison to other methods}
+
+__TODO: Work the comparison to other methods into my conclusions__
 
 \citet{Lacey:2013iy} supply R scripts to implement their simulation method ([http://rrbs-sim.r-forge.r-project.org/](http://rrbs-sim.r-forge.r-project.org/)). __TODO: Try these scripts, see how long they take__. The running times reported in the original publication are shown in __TABLE__ for a single simulation. __TODO: To simulate a single RRBS dataset would take HOW LONG__. The simulation scripts could be made more user-friendly by creating an R package, rather than supplying the software as a collection of scripts, and would benefit from some documentation.
 
