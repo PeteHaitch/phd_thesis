@@ -574,9 +574,23 @@ pryr::object_size(methpat)
 \section{Results}
 
 -  __TODO: Figure showing 'rest of genome' is MMRs. More generally, a figure showing the average methylation level in each of `UMR`, `LMR`, `PMR` and `other`.
+- [ ] DONE
 
+A central pillar of `methsim` is that many of the simulation parameters are sampled from real data. At a bare minimum, the first test of `methsim` is that simulated data are similar to the real data on which they are based. To assess this, I compare several summary measures between the simulated data and the real data. The simplest of these are summaries are the distributions of $\beta$-values and within-fragment co-methylation, which are explicitly sampled in `methsim`. In contrast, the spatial correlation of $\beta$-values is not explicitly modelled in `methsim`; rather, we hope that `methsim` recapitulates this phenomenon by appropriate modelling of within-fragment co-methylation and choice of weights, $\mathbf{W}$.
 
-\subsection{Case study}
+Once it is established that `methsim` passes this minimal test, I use `methsim` to explore models of within-fragment co-methylation, the choice of the weights, $\mathbf{W}$, and their respective effects on the summary measures in order to identify areas of improvement in `methsim`. Finally, I demonstrate how `methsim` might be used to simulate data for use in a study comparing methods for identifying differential methylation.
+
+\subsection{Summary measures of simulated data}
+
+- [ ] DONE
+
+\subsection{Models of within-fragment co-methylation}
+
+- [ ] DONE
+
+\subsection{The choice of $\mathbf{W}$}
+
+\subsection{Simulating differential methylation}
 
 - [ ] DONE
 
