@@ -210,17 +210,39 @@ None of the published simulation methods satisfied both these requirements. This
 
 Simulating data with `methsim` involves 3 steps:
 
-1. Simulate the true methylome of each sample.
-2. Simulate reads, including sequencing error and bisulfite-conversion error, by sampling from the true methylome.
-3. Construct the output, be it reads, methylation patterns at m-tuples or $\beta$-values.
+1. Simulating the true methylome of each sample.
+2. Simulating reads, including sequencing error and bisulfite-conversion error, by sampling from the true methylome.
+3. Constructing the output, be it reads, methylation patterns at m-tuples or $\beta$-values.
 
 `methsim` requires an input dataset from which to estimate key parameters. For the input dataset, `methsim` requires the methylation patterns at various sized m-tuples, which can be produced by the `methtuple` software.
+
+This workflow is illustrated in __FIGURE__ and described in the remainder of this section.
+
+\subsection{Implementation}
+
+- [x] DONE
+
+`methsim` is written in R and builds on the `MethylationTuples` package described in __CHAPTER__, as well as several R packages available on Bioconductor and CRAN (see `DESCRIPTION` for a complete list. __TODO: Add citations of all packages used in thesis__).
+
+`methsim` makes extensive use of the S4 object system in R. The most important classes defined by `methsim` are `SimulateMethylomeParam`, `SimulatedMethylome`, `SimulateBSParam` and `SimulatedBS`. The most important methods are the `simulate()` methods defined for the `SimulateMethylomeParam` and `SimulateBSParam` classes. The role of these classes and methods in the workflow is illustrated in __FIGURE__.
+
+The `SimulateMethylomeParam` object contains the empirical distributions of key statistics from which the parameters for simulating the 'true' methylome are sampled. Therefore, the `SimulateMethylomeParam` should be based on a relevant sample. To help a new user get started, `methsim` includes `SimulateMethylomeParam` objects for the _ADS_, _ADS-adipose_ and _ADS-iPSC_ samples from the _Lister_ dataset. Alternatively, the user may process the BAM file for their sample with `methtuple` and then use the helper functions in `methsim` to construct a `SimulateMethylomeParam` object based on their sample of interest.
+
+To simulate a 'true' methylome, the user runs the `simulate()` method on the `SimulateMethylomeParam` object. This returns a `SimulatedMethylome` object.
+
+To simulate bisulfite-sequencing reads, the user first constructs a `SimulateBSParam`, which includes the `SimulatedMethylome`. The user then runs the `simulate()` method on the `SimulatedBSParam` object to create a simulated bisulfite-sequencing data in the form of a `SimulatedBS` object.
+
+Finally, we may wish to simplify the `SimulatedBS` object. For example, we may only require the $\beta$-values for our downstream analysis and not the  read-level data. `methsim` includes the `asMethPat()` function to convert the `SimulatedBS` object to a `MethPat` object (described in __CHAPTER__).
+
+__UP TO HERE: See if the remainder of this section needs re-jigging in light of the above changes to Implementation__
 
 \subsection{Simulating a single methylome}
 
 - [x] DONE
 
-As we have seen, DNA methylation is highly heterogeneous along the genome. Nonetheless, there are clear regions of "similarity", regions where we might hope to model it by a simple parametric model. `methsim` is based on the idea of segmenting the genome into "regions of similarity", fitting a simple model to each region and then "stitching" the results together. The idea of segmenting a globally heterogenous stochastic process into a series of locally homogeneous processes is not new. A hidden Markov model is an example of such a process; while the entire process may highly heterogeneous, conditional on the hidden states the process may be homogeneous. Hidden Markov models, and other models assuming local similarity in spite of global heterogeneity, have been used with great success in bioinformatics.
+As we have seen, DNA methylation is highly heterogeneous along the genome. Nonetheless, there are clear regions of "similarity", such as the unmethylated CpG islands and long partially methylated domains. In these locally-similar regions we might hope to model DNA methylation by a simple parametric model. `methsim` is based on the idea of segmenting the genome into "regions of similarity", fitting a simple model to each region and then "stitching" the results together to form the 'true' methylome.
+
+The idea of segmenting a globally heterogenous stochastic process into a series of locally homogeneous processes is not new. A hidden Markov model is an example of such a process; while the entire process may highly heterogeneous, conditional on the hidden states the process may be homogeneous. Hidden Markov models, and other models assuming local similarity in spite of global heterogeneity, have been used with great success in bioinformatics.
 
 `methsim` takes the following approach to simulating the true underlying methylome for each sample:
 
@@ -492,19 +514,6 @@ __Scattered thoughts below__
 2. Regionwise: Want to specify $mean(B_{r_{i}})$ (i.e., average $B$ across all loci in $r_{i}$). Could do this by applying (1) to all loci in the region or by specifying $B_{r_{i}}$ and hoping it just works out in the simulation.
 
 Perhaps both could be achieved by holding $Z$ fixed and varying $W$? Is that like assuming that the heterogeneity is causing the DMRs (or will it be interpreted that way)? Would tweaking $W$ to guarantee a particular $B$ be a computationally feasible strategy? Or would it be easier to specify the desired $B$ and simulate the region (this wouldn't guarantee $B$ is the desired value but should equal it "on average")?
-
-
-\subsection{Implementation}
-
-- [x] DONE
-
-`methsim` is written in R and builds on the `MethylationTuples` package described in __CHAPTER__, as well as several R packages available on Bioconductor and CRAN (see `DESCRIPTION` for a complete list. __TODO: Add citations of all packages used in thesis__).
-
-`methsim` makes extensive use of the S4 object system. The most important classes defined by `methsim` are `SimulateMethylomeParam`, `SimulatedMethylome`, `SimulateBSParam` and `SimulatedBS`. The most important methods are the `simulate()` methods defined for the `SimulateMethylomeParam` and `SimulateBSParam` classes. __FIGURE__ illustrates the `methsim` workflow to create simulate whole-genome bisulfite-sequencing data.
-
-Because `methsim` simulates data by sampling from empirical distributions of key statistics, it requires that the user supplies data from a relevant sample. To help a new user get started, `methsim` includes data for the _ADS_, _ADS-adipose_ and _ADS-iPSC_ samples in the form of `SimulateMethylomeParam` objects. Alternatively, the user may process the BAM file for their sample with `methtuple` and then use the helper functions in `methsim` to construct a `SimulateMethylomeParam` object.
-
-The next step is to simulate a 'true' methylome by applying the `simulate()` method to the `SimulateMethylomeParam` object. This returns a `SimulatedMethylome`, a schematic of which is __SHOWN BELOW__. The `SimulatedMethylome` object forms part of the `SimulateBSParam` object from which a `SimualtedMethylome` is created by calling the `simulate()` method.
 
 \subsubsection{Performance}
 
