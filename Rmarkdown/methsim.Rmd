@@ -496,15 +496,16 @@ Perhaps both could be achieved by holding $Z$ fixed and varying $W$? Is that lik
 
 \subsection{Implementation}
 
-- [ ] DONE
+- [x] DONE
 
-`methsim` is written in R and builds on the `MethylationTuples` package described in __CHAPTER__, as well as key R packages available on Bioconductor and CRAN (see `DESCRIPTION` for a complete list. __TODO: Add citations of all packages used in thesis__).
+`methsim` is written in R and builds on the `MethylationTuples` package described in __CHAPTER__, as well as several R packages available on Bioconductor and CRAN (see `DESCRIPTION` for a complete list. __TODO: Add citations of all packages used in thesis__).
 
 `methsim` makes extensive use of the S4 object system. The most important classes defined by `methsim` are `SimulateMethylomeParam`, `SimulatedMethylome`, `SimulateBSParam` and `SimulatedBS`. The most important methods are the `simulate()` methods defined for the `SimulateMethylomeParam` and `SimulateBSParam` classes. __FIGURE__ illustrates the `methsim` workflow to create simulate whole-genome bisulfite-sequencing data.
 
 Because `methsim` simulates data by sampling from empirical distributions of key statistics, it requires that the user supplies data from a relevant sample. To help a new user get started, `methsim` includes data for the _ADS_, _ADS-adipose_ and _ADS-iPSC_ samples in the form of `SimulateMethylomeParam` objects. Alternatively, the user may process the BAM file for their sample with `methtuple` and then use the helper functions in `methsim` to construct a `SimulateMethylomeParam` object.
 
-The next step is to simulate a 'true' methylome by applying the `simulate()` method to the `SimulateMethylomeParam` object. This returns a `SimulatedMethylome`, a schematic of which is __SHOWN BELOW__.
+The next step is to simulate a 'true' methylome by applying the `simulate()` method to the `SimulateMethylomeParam` object. This returns a `SimulatedMethylome`, a schematic of which is __SHOWN BELOW__. The `SimulatedMethylome` object forms part of the `SimulateBSParam` object from which a `SimualtedMethylome` is created by calling the `simulate()` method.
+
 
 
 \section{Results}
