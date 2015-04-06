@@ -506,7 +506,70 @@ Because `methsim` simulates data by sampling from empirical distributions of key
 
 The next step is to simulate a 'true' methylome by applying the `simulate()` method to the `SimulateMethylomeParam` object. This returns a `SimulatedMethylome`, a schematic of which is __SHOWN BELOW__. The `SimulatedMethylome` object forms part of the `SimulateBSParam` object from which a `SimualtedMethylome` is created by calling the `simulate()` method.
 
+\subsubsection{Performance}
 
+- [x] DONE
+
+Much of `methsim` is written in C++, using the wonderful Rcpp package \citep{Eddelbuettel:2011to, Eddelbuettel:2013if}, which greatly speeds up the running time of key procedures. Furthermore, several steps of the simulation can be run in parallel for each chromosome. Parallelism is implemented via the `BiocParallel` Bioconductor package \citep{BiocParallel}.
+
+The `SimulatedMethylome` and `SimulatedBS` objects are large in memory. This is to some extent unavoidable; we are simulating entire methylomes and whole-genome sequencing experiments. Some improvements in memory usage are possible by alternative implementations of key classes, however, these are generally at the expense of more complicated code and longer running times of associated methods. For example, long and repetitive vectors may be efficiently represented by run length encodings, however, it is slower to extract elements from these than simple numeric vectors.
+
+Shown below are the running times and memory usage involved in simulating a $30\times$ whole-genome bisulfite-sequencing sample using the _ADS_ `SimulateMethylomeParam` object included in `methsim`. Using eight CPU cores in parallel, it takes approximately seven minutes to simulate the underlying 'true' methylome and a further nine minutes to simulate a single whole-genome bisulfite-sequencing assay of this methylome.
+
+These results are indicative of simulating high-coverage whole-genome bisulfite-sequencing for human-sized genomes. Simulations using a smaller genome or lower sequencing coverage will have faster running times and lower memory usage.
+
+```r
+# Load necessary packages
+suppressPackageStartupMessages(library(methsim))
+suppressPackageStartupMessages(library(BiocParallel))
+suppressPackageStartupMessages(library(pryr))
+
+# Use up to 8 cores in parallel computations.
+BPPARAM <- MulticoreParam(workers = 8L)
+
+# Set seed for reproducibility.
+set.seed(666)
+
+# ADS: the SimulateMethylomeParam object.
+pryr::object_size(ADS)
+#> 22.5 MB
+
+# sm: the SimulatedMethylome object
+system.time(sm <- simulate(ADS, BPPARAM = BPPARAM))
+#>    user  system elapsed
+#> 839.505  19.612 417.271
+pryr::object_size(sm)
+#> 2.93 GB
+
+# sbsp: the SimulatedBSParam object.
+# NOTE: Basically all the memory used by the SimulatedBSParam object is the
+# SimulatedMethylome object.
+sbsp <- SimulateBSParam(SimulatedMethylome = sm,
+                        aveCov = 30,
+                        errorRate = 0.01,
+                        target = NULL)
+pryr::object_size(sbsp)
+#> 2.93 GB
+
+# sbs: the SimulatedBS object.
+system.time(sbs <- simulate(sbsp, BPPARAM = BPPARAM))
+#>     user   system  elapsed
+#> 2716.503  174.591  548.122
+pryr::object_size(sbs)
+#> 10.1 GB
+
+# methpat: the MethylationTuples::MethPat object of one-tuples.
+# NOTE: information is lost when a SimulatedBS object is coerced to a MethPat
+# object.
+system.time(methpat <- asMethPat(sbs,
+                                 sampleName = "sim_ADS",
+                                 size = 1L,
+                                 BPPARAM = BPPARAM))
+#>    user  system elapsed
+#> 557.900  34.779  48.944
+pryr::object_size(methpat)
+#> 451 MB
+```
 
 \section{Results}
 
