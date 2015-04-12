@@ -18,10 +18,10 @@ bibliography: ../latex/phd_thesis.bib
 
 This chapter briefly documents the 40 whole-genome bisulfite-sequencing samples that I use in my thesis. The `BAM` files for each sample underwent the same basic processing:
 
-1. Genetic variants were called using `Bis-SNP (v0.82.2)` via the `bissnp_easy_usage.pl` script.
+1. Genetic variants were called using the `bissnp_easy_usage.pl` script included with `Bis-SNP (v0.82.2)`.
 2. M-bias was estimated using `bismark_methylation_extractor` with the `--mbias_only` flag set. These output files were then analysed using the  `MethylationTuples` R package (see section \ref{sec:MethylationTuples}) and all read-positions with an CpG normalised read-position methylation level more than $0.03$ from the median, i.e., $|nrplml_{CpG} - median(rplm_{CpG})| > 0.03$, were excluded from methylation calling (read 1 and read 2 analysed separately where applicable).
 3. CpG methylation calling was performed using `methtuple (v1.4.0)` for m-tuples $\text{m} = 1, \ldots, 8$. CpG 2-tuples were called both with and without the `--all-combinations` flag; all other tuple sizes were called without the `--all-combinations` flag.
-4. A `MethPat` object was created for each of the EPISCOPE, Lister, Seisenberger and Ziller datasets for 1-tuples, 2-tuples, 2ac-tuples (2-tuples with `--all-combinations`), 3-tuples and 4-tuples. I did not create `MethPat` objects for m-tuples with $\text{m} > 4$ because the data are too sparse at this larger sizes to be generally useful.
+4. Sample-level m-tuples were combined at the dataset-level using the `MethylationTuples` R package (see \ref{sec:MethylationTuples}). Specifically, a `MethPat` object was created for each of the EPISCOPE, Lister, Seisenberger and Ziller datasets for 1-tuples, 2-tuples, 2ac-tuples (2-tuples with `--all-combinations`), 3-tuples and 4-tuples. I did not create `MethPat` objects for m-tuples with $\text{m} > 4$ because the data are too sparse at this larger sizes to be generally useful.
 
 __TODO__: I'd like to make available all the data and scripts necessary to reproduce my analyses, i.e., going from a `BAM` file to a `MethPat` objects, but it's a little daunting --- the folder containing __just the processed data__ (`/home/users/lab0605/hickey/methylation_m-tuples`) is $> 275$ GB alone.
 
@@ -31,9 +31,9 @@ The _Lister dataset_ refers to whole-genome bisulfite-sequencing libraries used 
 
 \subsection{Sample descriptions}
 
-The WGBS libraries from the \cite{Lister:2009hy} paper were the first published WGBS libraries from mammalian DNA. A focus of this paper was comparing DNA methylation levels in a somatic tissue, fetal lung fibroblasts (`IMR90`), with those from a pluripotent tissue, embryonic stem cells (`H1`). Each tissue was run in duplicate. While \cite{Lister:2009hy} refer to these "biological" replicates I believe that these are better described technical replicates since each replicate is from the same cell line; what distinguishes the replicates are the number of cell passages and the subsequent library preparations and sequencing. In any case, the published analyses pool these duplicates, which ignores all between-replicate variability.
+The methylC-seq libraries from the \cite{Lister:2009hy} paper were the first published whole-genome bisulfite-sequencing libraries of mammalian DNA. A focus of this paper was comparing DNA methylation levels in a somatic tissue, fetal lung fibroblasts (`IMR90`), with those from a pluripotent tissue, embryonic stem cells (`H1`). Each tissue was run in duplicate. While \cite{Lister:2009hy} refer to these "biological" replicates I believe that these are better described technical replicates since each replicate is from the same cell line; what distinguishes the replicates are the number of cell passages and the subsequent library preparations and sequencing. In any case, the published analyses pool these duplicates, which ignores all between-replicate variability.
 
-The WGBS libraries from the \cite{Lister:2011kg} include some created and published by other groups (see Table \ref{tab:Lister_dataset}). These samples include cell lines from differentiated cell lines, embryonic stem cell lines, pluripotent stem cell lines and _in vitro_ differentiated from pluripotent stem cells. There are no replicates for any of the 2011 samples.
+The methylC-seq libraries from the \cite{Lister:2011kg} include some created by the authors and some published by other groups (see Table \ref{tab:Lister_dataset}). These samples include cell lines from differentiated cell lines, embryonic stem cell lines, pluripotent stem cell lines and _in vitro_ differentiated from pluripotent stem cells. There are no replicates for any of the _Lister 2011_ samples.
 
 \begin{table}[!htb]
 \centering
@@ -66,15 +66,15 @@ There are a four 'mini datasets' within the Lister data that I make some use of 
 
 The second mini dataset I refer to as the _Lister-FF_ data and includes samples _FF_, _FF-iPSC\_6.9_, _FF-iPSC\_19.7_, _FF-iPSC\_19.11_ and _FF-iPSC\_11.11+BMP4_, all from the 2011 paper. The _FF_ sample, a foreskin fibroblast cell line, is the 'founder' of this this mini dataset. The _FF-iPSC\_6.9_, _FF-iPSC\_19.7_ and _FF-iPSC\_19.11_ are all induced pluripotent stem cell lines derived from `FF`. In fact, _FF-iPSC\_19.7_ and _FF-iPSC\_19.11_ are subclones derived from _FF-iPSC\_19_, whose methylome was not sequenced. I believe _FF-iPSC\_6.9_ is an independently derived iPSC cell line from _FF_, although this isn't made clear in the original publication. The _FF-iPSC\_19.11+BMP4_ sample is a trophoblast cell line derived by _in vitro_ differentiating the _FF-iPSC\_19.11_ by growing a clone of it in bone morphogenic protein 4 (_BMP4_).
 
-The third mini dataset I refer to as the _Lister-IMR90_ data and includes samples _IMR90\_r1_ (2009), _IMR90\_r2_ (2009) and _IMR90-iPSC_ (2011). The _IMR90-iPSC_ sample is an induced pluripotent stem cell line derived from the _IMR90_cell line.
+The third mini dataset I refer to as the _Lister-IMR90_ data and includes samples _IMR90\_r1_ (2009), _IMR90\_r2_ (2009) and _IMR90-iPSC_ (2011). The _IMR90-iPSC_ sample is an induced pluripotent stem cell line derived from the _IMR90_ cell line.
 
 The final mini dataset I refer to as the _Lister-H1_ data and includes samples _H1\_r1_ (2009), _H1\_r2_ (2009) and _H1+BMP4_ (2011). The _H1+BMP4_ sample is a trophoblast cell line derived by _in vitro_ differentiating the _H1_ by growing a clone of it in bone morphogenic protein 4 (BMP4).
 
 \subsection{Creation of \texttt{BAM} files}
 
-The aligned reads for the \cite{Lister:2009hy} data were downloaded from [http://neomorph.salk.edu/human_methylome/](http://neomorph.salk.edu/human_methylome/). The aligned reads for the \cite{Lister:2011kg} data were downloaded from [http://neomorph.salk.edu/ips_methylomes/](http://neomorph.salk.edu/ips_methylomes/). These samples were aligned against the hg18 build of the human reference genome.
+The aligned reads for the \cite{Lister:2009hy} data were downloaded from [http://neomorph.salk.edu/human_methylome/](http://neomorph.salk.edu/human_methylome/). The aligned reads for the \cite{Lister:2011kg} data were downloaded from [http://neomorph.salk.edu/ips_methylomes/](http://neomorph.salk.edu/ips_methylomes/). These samples had been aligned against the hg18 build of the human reference genome.
 
-I wrote Python scripts to convert these files to `SAM` files. These scripts are available from [https://github.com/PeteHaitch/Lister2BAM](https://github.com/PeteHaitch/Lister2BAM). These `SAM` files were then converted to `BAM` files with `SAMtools` \citep{Li:2009ka} and duplicate reads were marked using Picard's `MarkDuplicates` routine [http://broadinstitute.github.io/picard/](http://broadinstitute.github.io/picard/).
+As the aligned reads were in a custom file format, I wrote Python scripts to convert these files to the canonical `SAM` format. These scripts are available from [https://github.com/PeteHaitch/Lister2BAM](https://github.com/PeteHaitch/Lister2BAM). These `SAM` files were then converted to `BAM` files with `SAMtools` \citep{Li:2009ka} and duplicate reads were marked using Picard's `MarkDuplicates` routine ([http://broadinstitute.github.io/picard/](http://broadinstitute.github.io/picard/)).
 
 \section{EPISCOPE dataset}\label{sec:EPISCOPE_dataset}
 
@@ -115,11 +115,11 @@ E23VAT & PE         & $101$ bp    & $31\times$    \\ \bottomrule
 
 \subsection{Creation of \texttt{BAM} files}
 
-The sequencing data for these 12 samples were processed and aligned by Aaron Statham (Garvan Institute of Medical Research). Each sample was aligned to the human reference genome (hg19) using `Bismark` (`v0.8.3`) with the `Bowtie2` backend. The default alignment options were used, except that the maximum insert size for valid paired-end alignments was set to 1000 instead of 500 (`-X 1000`). Duplicate reads had already been removed from the `BAM` files that I received.
+The sequencing data for these 12 samples were processed and aligned by Aaron Statham (Garvan Institute of Medical Research, Sydney). Each sample was aligned to the human reference genome (hg19) using `Bismark` (`v0.8.3`) with the `Bowtie2` backend. The default alignment options were used, except that the maximum insert size for valid paired-end alignments was set to 1000 instead of 500 (`-X 1000`). Duplicate reads had already been removed from the `BAM` files that I received.
 
 \section{Seisenberger dataset}\label{sec:Seisenberger_dataset}
 
-The Seisenberger data are from a study of the dynamics of DNA methylation reprogramming in mouse primordial germ cells \cite{Seisenberger:2012ko}. These were a convenience sample provided to me by a colleague, Felix Krueger (Babraham Institude). I thank Felix who send my the `BAM` files containing processed and aligned reads.
+The Seisenberger data are from a study of the dynamics of DNA methylation reprogramming in mouse primordial germ cells \citep{Seisenberger:2012ko}. These were a convenience sample provided to me by a colleague, Felix Krueger (Babraham Institude). I thank Felix who send my the `BAM` files containing processed and aligned reads.
 
 \subsection{Sample descriptions}
 
@@ -133,8 +133,8 @@ I believe that the samples I received labelled _J1\_1_ and _E16.5\_male\_1_  in 
 \toprule
 Sample            & Tissue                     & Sequencing & Read length & Ave. coverage             \\ \midrule
 J1\_1             & ESC                        & PE         & $100$ bp    & $12\times$     \\
-E6.5\_epiblast\_1 & Epiblast                   & PE         & $101$ bp    & $13\times$     \\
-E16.5\_male\_1    & Male progenitor germ cells & PE         & $150$ bp    & $12\times$     \\ \bottomrule
+E6.5\_epiblast\_1 & Epiblast                   & PE         & $100$ bp    & $13\times$     \\
+E16.5\_male\_1    & Male progenitor germ cells & PE         & $100$ bp    & $12\times$     \\ \bottomrule
 \end{tabulary}
 \caption{Samples in Seisenberger dataset. The reported read lengths are prior to any trimming of the reads. All samples were first published in \citet{Seisenberger:2012ko}.}
 \label{tab:Seisenberger_dataset}
@@ -146,7 +146,7 @@ The sequencing data for these 3 samples were processed and aligned by Felix Krue
 
 \section{Ziller dataset}\label{sec:Ziller_dataset}
 
-The Ziller are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 8 WGBS libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research), who already had aligned and processed BAM files for these 19 libraries. These libraries in fact represent 19 sequencing runs of eight biological samples, which I was not aware of until the data had already been processed. Therefore, I have _post hoc_ merged the processed data from sequencing runs. This unfortunately reduces the power to detect genetic variants since the coverage of individual sequencing runs is lower than merged data, but does not adversely affect methylation calling since the number of methylated and unmethylated reads can be summed across sequencing runs.
+The Ziller are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 8 WGBS libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research, Sydney), who already had aligned and processed BAM files for these 19 libraries. These libraries in fact represent 19 sequencing runs of eight biological samples, which I was not aware of until the data had already been processed. Therefore, I have _post hoc_ merged the processed data from sequencing runs. This unfortunately reduces the power to detect genetic variants since the coverage of individual sequencing runs is lower than merged data, but does not adversely affect methylation calling since the number of methylated and unmethylated reads can be summed across sequencing runs.
 
 The eight biological samples are as follows: frontal cortex from two 'normal' women donors (_Frontal\_cortex\_normal\_1_ and _Frontal\_cortex\_normal\_2_) and from two women who had Alzheimer's disease (_Frontal\_cortex\_AD\_1_ and _Frontal\_cortex\_AD\_2_); a sample from a human liver carcinoma cell line (_HepG2\_cell\_line_); a new sample from the _IMR90_ lung fibroblast cell line (_IMR90\_cell\_line_); and samples from a colon cancer matched tumour-normal pair (_Colon\_Tumor\_Primary_ and _Colon\_Primary\_Normal_).
 
@@ -185,4 +185,4 @@ SRR949215 & Colon\_Primary\_Normal     & PE         & 101 bp         & $8\times$
 
 \section{CpG islands}
 
-I have used the CpG island definition from the hidden Markov model proposed by \citet{Wu:2010do}. The predicted CpG islands for the human reference genome (both hg18 and hg19) were downloaded from [http://rafalab.jhsph.edu/CGI/](http://rafalab.jhsph.edu/CGI/) on 29/10/2014. I used the supplied software to create the predicted CpG islands for the mouse reference genome (mm10).
+I have used the CpG island definition from the hidden Markov model proposed by \citet{Wu:2010do} and implemented in the `makeCGI` R package (`v1.2`). The predicted CpG islands for the human reference genome (both hg18 and hg19) were downloaded from [http://rafalab.jhsph.edu/CGI/](http://rafalab.jhsph.edu/CGI/) on 29/10/2014. I used the `makeCGI` R package to create the predicted CpG islands for the mouse reference genome (mm10) since these were not available for download.
