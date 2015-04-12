@@ -1,6 +1,17 @@
 \documentclass[11pt,a4paper,oneside]{book}	%fleqn,
 \usepackage{etex}
 
+% Chapter abstracts (http://tex.stackexchange.com/a/59138)
+\usepackage{changepage}% http://ctan.org/pkg/changepage
+\usepackage{lipsum}% http://ctan.org/pkg/lipsum
+\makeatletter
+\newenvironment{chapabstract}{%
+    \begin{center}%
+      \bfseries Overview
+    \end{center}}%
+   {\par}
+\makeatother
+
 \usepackage{longtable,rotating, amsmath, epic, graphics, bm}
 
 \usepackage{multirow, setspace, fullpage, graphicx, amssymb}

@@ -12,10 +12,9 @@ bibliography: ../latex/phd_thesis.bib
 
 \chapter{Biology background}\label{chap:biology_background}
 
-\section{Chapter overview}\label{sec:biology_background_chapter_overview}
-
-In this chapter I summarise the basic biology necessary for
-understanding my thesis. I introduce DNA methylation, describe some of its biological roles, and introduce assays for studying DNA methylation, with a particular focus on bisulfite-sequencing.
+\begin{chapabstract}
+I summarise the basic biology necessary for understanding my thesis. I introduce DNA methylation, describe some of its biological roles, and introduce assays for studying DNA methylation, with a particular focus on bisulfite-sequencing.
+\begin{end}
 
 \section{From DNA to genomes}\label{ref:from_dna_to_genomes}
 
@@ -318,7 +317,7 @@ Microarrays contain thousands, even millions, of short _oligonucleotide_ probes.
 
 The Illumina Infinium HumanMethylation450 BeadChip (_Illumina 450k_) provides a modern implementation of this type of assay for studying human DNA. This array assays $482,422$ cytosines, $99.3\%$ of these CpGs, across a wide variety of genomic features \citep{Stirzaker:2014cu}. There are well-established methods and software for analysing Illumina 450k data, which were recently reviewed by \citet{Dedeurwaerder:2014bt}.
 
-Genomics research was revolutionised by the development of cheap high-throughput sequencing technology, and the study of DNA methylation was no exception. In 2008, two papers were published describing methods for whole-genome shotgun sequencing of bisulfite-converted DNA using the nascent Illumina sequencing technology \citep{Cokus:2008fc, Lister:2008bh}. Whole-genome bisulfite-sequencing remains the gold standard assay for measuring genome-wide DNA methylation data.
+Genomics research was revolutionised by the development of cheap high-throughput sequencing technology, and the study of DNA methylation was no exception. In 2008, two papers were published describing methods for whole-genome shotgun sequencing of bisulfite-converted DNA using the nascent Solexa/Illumina sequencing technology \citep{Cokus:2008fc, Lister:2008bh}. Whole-genome bisulfite-sequencing remains the gold standard assay for measuring genome-wide DNA methylation data.
 
 \citet{Cokus:2008fc} termed their approach _BS-seq_ while \citet{Lister:2008bh} called their method _methylC-seq_. From a bioinformatics perspective, the main difference is that the _BS-seq_ protocol produces sequencing reads from four bisulfite-converted DNA strands --- the original top strand (_OT_), the complementary strand to the original top strand (_CTOT_), the original bottom strand (_OB_) and the complementary strand to the original bottom strand (_CTOB_) --- which require mapping to four different _in silico_ converted reference genomes, followed by a merge of the alignment results. In contrast, the _methylC-seq_ protocol only produces sequencing reads from two bisulfite-converted strands --- _OT_ and _OB_ --- and so only requires mapping to two different _in silico_ converted reference genomes, followed by a merge. The methylC-seq protocol is now the standard whole-genome bisulfite-sequencing protocol, due in part to the simpler bioinformatics analysis.
 
