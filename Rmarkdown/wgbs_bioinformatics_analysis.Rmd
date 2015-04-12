@@ -95,7 +95,7 @@ The above problems are general challenges of read mapping and are not specific t
 
 \subsection{PCR duplicates}\label{sec:pcr_duplicates}
 
-PCR amplification of the input DNA is a common step in creating a library for high-throughput sequencing. PCR amplification is often required to ensure that there is a sufficient amount of DNA for the sequencer to properly work. Unfortunately, it can introduce biases into the library that result in some molecules being over-represented or under-represented compared to their true frequency. This means that when we sequence the library that we might sequence multiple fragments that are all copies of the same original piece of DNA, which gives a biased sampling of our sample's genome. These multiple-sequenced fragments are called _PCR duplicates_.
+PCR amplification of the input DNA is a common step in creating a library for high-throughput sequencing. PCR amplification is often required to ensure that there is a sufficient amount of DNA for the sequencer to properly work. Unfortunately, it can introduce biases into the library that result in some molecules being over-represented or under-represented compared to their true frequency. This means that when we sequence the library that we might sequence multiple fragments that are all copies of the same original piece of DNA, which gives a biased sampling of our sample's genome. These multiply-sequenced fragments are called _PCR duplicates_.
 
 In bisulfite-sequencing data, PCR duplicates containing a methylation locus can result in a biased estimate of the methylation level at that locus. This is because the sequenced reads do not accurately represent the true methylation levels of the sample.
 
@@ -129,7 +129,7 @@ M-bias can be identified by plotting the read-position methylation level ($rpml$
 \label{fig:ADS_M-bias}
 \end{figure}
 
-If a sample is processed over multiple batches, then M-bias estimation (and methylation calling) should probably be performed separately for each batch and then combined, or in some manner that is 'batch aware'. For example, two libraries with DNA derived from the same cell line, but with separate library preparations and sequencing runs, will likely suffer from batch effects due to differences in the library preparations or differences with the sequencing runs. Unfortunately, the person analysing the data doesn't always know all the sample processing steps that may have introduced such batch effects and so these can be hard to deal with in practice.
+If a sample is processed over multiple batches, then M-bias estimation (and methylation calling) should be performed separately for each batch and then combined, or in some manner that is 'batch aware'. For example, two libraries with DNA derived from the same cell line, but with separate library preparations and sequencing runs, will likely suffer from batch effects due to differences in the library preparations or differences with the sequencing runs. Unfortunately, the person analysing the data doesn't always know all the sample processing steps that may have introduced such batch effects and so these can be hard to deal with in practice.
 
 The strongest source of M-bias in Illumina whole-genome bisulfite-sequencing data is at the 5' end of _read-2_, which sequences the 3' end of the DNA fragment. Because the DNA fragment is often shorter than the sum of the read lengths, the 3' end of the fragment often contains adapter sequence and other 'junk' sequence. The adapter sequence may contain cytosine bases, which will be misinterpreted as evidence of methylation \citep{Krueger:2012ks}. Similarly, "fill-in cytosines" are used in the construction of RRBS libraries to repair the ends of DNA fragments after cleavage by MspI; these would also be misinterpreted as evidence of methylation \citep{Krueger:2012ks}. Another source of M-bias is incomplete or uneven bisulfite-conversion.
 
@@ -236,7 +236,7 @@ A read survives if:
 A sequenced base survives if:
 
 1. The read-position of the base means that it is unlikely to be affected by M-bias.
-2. The base quality score greater than some threshold.
+2. The base quality score is greater than some threshold.
 3. The base is a 'bisulfite mismatch' (e.g., the sequenced base is a C or T at a C in the reference sequence) and not a 'non-bisulfite mismatch' (e.g., the sequenced base is an A or a G at a C in the reference sequence).
 
 [^read_filters]: A read that is not used to estimate $M$ and $U$ may still be used in other analyses, such as estimating copy number variation.
@@ -311,11 +311,19 @@ chr2       & $+$      & 450      & 1 & 2  \\ \bottomrule
 \label{tab:1-tuples}
 \end{table}
 
-While 1-tuples are the basis of most analyses of bisulfite-sequencing data, these do not make full use of the information available from bisulfite-sequencing data. Each bisulfite-sequencing read may contain multiple methylation loci, which I call an m-tuple. Furthermore, since each read is from a single cell[^chimeric_reads], we can study the methylation calls at m-tuples to learn about _epialleles_ and _epipolymorphisms_ (Chapter \ref{chap:wgbs_statistical_framework}) and _co-methylation_ (Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}). In order to study these concepts, we need software that can perform methylation calling at m-tuples.
+While 1-tuples are the basis of most analyses of bisulfite-sequencing data, they do not always give the complete picture of how DNA methylation is acting in the sample. To gain a clearer picture, we can exploit the fact that many bisulfite-sequencing reads contain multiple methylation loci (_m-tuples_) and that each read is from a single cell[^chimeric_reads]. An example of where this is useful is shown in Figure \ref{fig:incomplete_picture_1-tuples} where we have two regions, each with four methylation loci, that have identical methylation calls at 1-tuples yet very different overall methylation patterns. Further examples of where m-tuples are useful are in studying _epialleles_ and _epipolymorphisms_ (Chapter \ref{chap:wgbs_statistical_framework}) and _co-methylation_ (Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}).
 
 [^chimeric_reads]: This ignores chimeric reads, which are created when two DNA fragments ligate to one another during the library preparation. Certain bisulfite-sequencing protocols frequently produce chimeric reads. For example, using the post-bisulfite adapter tagging (PBAT) protocol \citep{Miura:2012fr} with a low input amount of DNA results in a huge number of chimeric reads (personal communication from Felix Krueger). The standard whole-genome bisulfite-sequencing protocol is not known to suffer from this issue.
 
-I wrote `methtuple` because I needed a tool to perform methylation calling at m-tuples and nothing was available that suited my purposes. Simultaneous with the development of `methtuple` there have been some software published with similar functionality. However, none of these do exactly what I require and some have what I consider to be severe deficiencies (Table \ref{tab:other_m-tuple_methylation_callers}). To the best of my knowledge, `methtuple` is the only software that can perform methylation calling at m-tuples from whole-genome bisulfite-sequencing data.
+\begin{figure}[!htb]
+\centering
+\centering
+\includegraphics[width=\textwidth]{../figures/incomplete_picture_1-tuples.pdf}
+\caption{Two regions, each with four methylation loci, that have identical $\beta$-values ($\beta = \frac{M}{M + U}$) at 1-tuples yet have very different overall methylation patterns.}
+\label{fig:incomplete_picture_1-tuples}
+\end{figure}
+
+In order to study these phenomena, we firstly need software that can perform methylation calling at m-tuples, which is why I wrote `methtuple`. When I began my PhD, there was no software capable of calling methylation patterns at arbitrarily sized m-tuples from whole-genome bisulfite-sequencing data. Simultaneous with the development of `methtuple`, there have been some software published with similar functionality. However, none of these do exactly what I require and some have what I consider to be severe deficiencies (Table \ref{tab:other_m-tuple_methylation_callers}). To the best of my knowledge, `methtuple` is the only software that can perform methylation calling at m-tuples from whole-genome bisulfite-sequencing data.
 
 \begin{table}[h]
 \centering
@@ -355,7 +363,7 @@ To illustrate several of the above-mentioned concepts, suppose we sequence a reg
 \centering
 \centering
 \includegraphics[width=0.6\textwidth]{../figures/methtuple_example1.pdf}
-\caption{Diagram of three-paired end reads --- \texttt{A}, \texttt{B} and \texttt{C} --- mapping to a region containing five methylation loci --- \texttt{1} $-$ \texttt{5}. The suffix \texttt{\_1} or \texttt{\_2} indicates whether it is \emph{read-1} or \emph{read-2}, respectively.}
+\caption{Diagram of three-paired end reads (\texttt{A}, \texttt{B} and \texttt{C}) mapping to a region containing five methylation loci (\texttt{1} $--$ \texttt{5}). The suffix \texttt{\_1} or \texttt{\_2} indicates whether it is \emph{read-1} or \emph{read-2}, respectively.}
 \label{fig:methtuple_example1}
 \end{figure}
 
