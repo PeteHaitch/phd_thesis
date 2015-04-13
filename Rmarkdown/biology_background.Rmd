@@ -124,7 +124,7 @@ However, DNA methylation is not found in all organisms, for example, it not dete
 
 When people speak of DNA methylation they are generally referring to methylation of the cytosine nucleobase. Even more specifically, they are referring to the molecule _5-methylcytosine_. 5-methylcytosine, abbreviated as _5mC_, is by far the most common form of DNA methylation in the animal and plant kingdoms[^other_DNAm]. However, I will continue to use the term _DNA methylation_ to describe the more specific 5mC, as is standard in the literature.
 
-[^other_DNAm]: Two additional examples of DNA methylation are N6-methyladenine (m6A) and N4-methylcytosine (m4C). N6-methyladenine is a methylated form of adenine, which is found in mRNA \citep[e.g.,]{Adams:1975ki} and DNA, although the latter only in bacterial DNA \citep{Ratel:2006dv}. N4-methylcytosine has also been detected in bacterial DNA \citep[e.g.,]{Ehrlich:1985bv, Ratel:2006dv}.
+[^other_DNAm]: Two additional examples of DNA methylation are N6-methyladenine (m6A) and N4-methylcytosine (m4C). N6-methyladenine is a methylated form of adenine, which is found in mRNA \citep[e.g.,][]{Adams:1975ki} and DNA, although the latter only in bacterial DNA \citep{Ratel:2006dv}. N4-methylcytosine has also been detected in bacterial DNA \citep[e.g.,][]{Ehrlich:1985bv, Ratel:2006dv}.
 
 A German chemist, W.G. Ruppel, first identified a methylated nucleic acid in 1898. Ruppel was studying _tuberculinic acid_, the poison of _Mycobacterium tuberculosis_[^tuberculosis] , and discovered that it contained a methylated nucleotide \citep{Ruppel:1899hc}. In 1925, Johnson and Coghill isolated 5-methylcytosine as a product of hydrolysis of tuberculinic acid, the nucleic acid of _Mycobacterium tuberculosis_ \citep{Johnson:1925js}. However, Johnson and Coghill's results were disputed for over twenty years by other researchers who were unable to replicate the original findings \citep{VISCHER:1949ty}.
 
@@ -224,7 +224,7 @@ One genome-wide study of 5hmC found that less than $1\%$ of all assayed cytosine
 
 \subsection{Writers, readers and erasers}\label{sec:writers_reads_and_erasers}
 
-A frequently used analogy when describing epigentic marks refers to 'writers', 'readers' and 'erasers' \citep[e.g.,]{Moore:2013in}. In the case of DNA methylation, writers catalyse the methyl group onto the DNA, readers recognise methylated DNA and erasers remove the methyl group from the DNA.
+A frequently used analogy when describing epigentic marks refers to 'writers', 'readers' and 'erasers' \citep[e.g.,][]{Moore:2013in}. In the case of DNA methylation, writers catalyse the methyl group onto the DNA, readers recognise methylated DNA and erasers remove the methyl group from the DNA.
 
 In mammalian cells, the writers are the DNA _methyltransferase_ (DNMT) enzymes. The DNMTs are commonly split into two groups, namely the maintenance methyltransferases and the _de novo_ methyltransferases.
 
@@ -265,7 +265,7 @@ Following treatment, DNA methylation can be assayed using standard techniques su
 
 An exception to this classification scheme are a new class of assays that seek to directly 'read' whether a position is methylated or unmethylated without requiring a pre-treatment of the DNA. For example, both \citet{Laszlo:2013kf} and \citet{Schreiber:2013in} measure the change in current as a DNA molecule passes through a nanopore to infer whether a cytosine is methylated.
 
-Almost all assays of DNA methylation measure a population average from a pool of hundreds or thousands of cells. For a diploid organism, this is an average over several distinct levels: the two DNA strands, the two homologous chromosomes within a diploid cell and the hundreds or thousand of cells used in the assay. Hundreds or thousands of cells are required in order to have sufficient material as input for the assay. Assays that require only a single cell as input do exist \citep[e.g.,]{Smallwood:2014kn, Guo:2013ih} but are still in development and not yet in widespread use.
+Almost all assays of DNA methylation measure a population average from a pool of hundreds or thousands of cells. For a diploid organism, this is an average over several distinct levels: the two DNA strands, the two homologous chromosomes within a diploid cell and the hundreds or thousand of cells used in the assay. Hundreds or thousands of cells are required in order to have sufficient material as input for the assay. Assays that require only a single cell as input do exist \citep[e.g.,][]{Smallwood:2014kn, Guo:2013ih} but are still in development and not yet in widespread use.
 
 The _resolution_ and _throughput_ of an assay are two key variables when choosing which to use for an experiment. The resolution of an assay is the scale on which DNA methylation can be measured[^resolution]. For example, a high resolution assay allows a researcher to quantify the level of DNA methylation at a single base whereas a low resolution assay might only allow for qualitative assessment (i.e. presence or absence) of DNA methylation at larger regions, such as CpG islands.
 

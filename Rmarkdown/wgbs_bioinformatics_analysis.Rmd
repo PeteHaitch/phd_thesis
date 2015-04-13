@@ -44,7 +44,7 @@ Using a tool such as `Trim Galore!` ([http://www.bioinformatics.babraham.ac.uk/p
 
 \section{Read mapping and post-processing of mapped reads}\label{sec:mapping_and_post-processing}
 
-Read mapping is complicated by the bisulfite-treatment of the DNA. Following bisulfite-treatment, the DNA fragments are mostly composed of three bases rather than four, which means there are many more sequence mismatches between a read and its true mapping location. Simply using standard read mapping software and allowing for more mismatches would result in many reads mapping to multiple locations in the reference genome. Instead, a field of read mapping software dedicated to bisulfite-sequencing data has developed. Several review articles have summarised and compared the various approaches \citep[e.g.,]{Chatterjee:2012ft, Krueger:2012ks, KundeRamamoorthy:2014fj}.
+Read mapping is complicated by the bisulfite-treatment of the DNA. Following bisulfite-treatment, the DNA fragments are mostly composed of three bases rather than four, which means there are many more sequence mismatches between a read and its true mapping location. Simply using standard read mapping software and allowing for more mismatches would result in many reads mapping to multiple locations in the reference genome. Instead, a field of read mapping software dedicated to bisulfite-sequencing data has developed. Several review articles have summarised and compared the various approaches \citep[e.g.,][]{Chatterjee:2012ft, Krueger:2012ks, KundeRamamoorthy:2014fj}.
 
 These bisulfite-sequencing read mappers take one of two approaches:
 
@@ -203,7 +203,7 @@ Recent papers using single-cell bisulfite-sequencing \citep{Guo:2013ih, Smallwoo
 
 For example, many studies of DNA methylation use whole blood as the sample tissue due to the ease with which it can be obtained. However, whole blood contains a mixture of cell types, each of which has a distinct methylation profile. This cellular heterogeneity can seriously bias downstream analyses and must be properly accounted for in any study exploring the relationship between differences in DNA methylation and a phenotype \citep{Jaffe:2014gy,Houseman:2014ds}. For example, \citet{Jaffe:2014gy} provide evidence that several reported relationships between age and DNA methylation are likely due to changes in the cell composition of whole blood with age and not due to DNA methylation changes _per se_.
 
-Methods to estimate the cellular heterogeneity bias and adjust for it are available \citep[e.g.,]{Jaffe:2014gy,Houseman:2014ds,Zou:2014gc}, although they have mostly been applied to DNA methylation arrays and not bisulfite-sequencing data. This is not to say that these problems don't exist for sequencing data, merely that these have not been as well-explored.
+Methods to estimate the cellular heterogeneity bias and adjust for it are available \citep[e.g.,][]{Jaffe:2014gy,Houseman:2014ds,Zou:2014gc}, although they have mostly been applied to DNA methylation arrays and not bisulfite-sequencing data. This is not to say that these problems don't exist for sequencing data, merely that these have not been as well-explored.
 
 \section{Methylation calling}\label{sec:methylation_calling}
 
