@@ -517,6 +517,7 @@ Again, the message from these plots is clear, $NIL = 0$ CpG 2-tuples inside CpG 
 \end{figure}
 
 \FloatBarrier
+
 \subsubsection{$NIL \geq 0$}\label{sec:cometh_nil_geq0}
 
 Figures \ref{fig:EPISCOPE_lor_min_cov_10_strand_collapsed_ac}, \ref{fig:Lister_lor_min_cov_10_strand_collapsed_ac}, \ref{fig:Seisenberger_lor_min_cov_10_strand_collapsed_ac} and \ref{fig:Ziller_lor_min_cov_10_strand_collapsed_ac} show the $LOR$ quantile plots for strand-collapsed $NIL \geq 0$ CpGs 2-tuples. By using $NIL \geq 0$ 2-tuples we can explore the effect of within-fragment co-methylation at greater $IPD$s, potentially beyond the crucial $IPD = \approx 150-170$ bp distance.
@@ -615,3 +616,78 @@ In theory, we could explore these higher-order dependencies of within-fragment c
 Another complexity that these analyses haved brushed over is the fact that the genome is not a 1D line but is rather a complex 3D structure whose shape also varies in time. Therefore, the relevant distance between two loci is not necessarily the number of nucleotides between them but may instead be the Euclidean distance in 3D space. Such complexities cannot be resolved with bisulfite-sequencing data alone but will require measures of the 3D structure of the genome, such as those provided by chromatin conformation capture technologies \citep{Dekker:2013hi}.
 
 The results of this chapter clearly demonstrate that DNA methylation has a highly complex dependence structure. These dependencies exist on individual DNA fragments and also manifest as correlations of aggregate measures of methylation, such as $\beta$-values. Bisulfite-sequencing give the highest resolution picture of this dependence structure. Nonetheless, this is still a rather limited picture, particularly for within-fragment co-methylation. Data from longer reads will be immensely useful in developing a better model of within-fragment co-methylation. In particular, reads that can span multiple nucleosomes will allow for co-methylation to be better tied in with and expand upon existing results on the relationship between nucleosomes and DNA methylation. Until such data are available, we can try to learn more about plausible models of DNA co-methylation through computational methods such as the simulation method described in the next chapter.
+
+# Problem with LOR estimates
+
+The simple estimator of within-fragment co-methylation is biased when the marginal probability of methylation is close to the boundary (0 or 1) unless the 2-tuple is sequenced at very high depth. I demonstrate this by simulating methylation patterns at 2-tuples as independent $binomail(1, p)$ random variables and showing that the simple LOR estimator is positively biased.
+
+```{r}
+# Function to simulate n 2-tuples with d sequencing coverage and marginal 
+# probabilities p1, p2
+f <- function(n, d, p1, p2) {
+  sapply(seq_len(n), function(i, d, p1, p2) {
+  z1 <- factor(rbinom(d, 1, p1), levels = c(0, 1))
+  z2 <- factor(rbinom(d, 1, p2), levels = c(0, 1))
+  x <- xtabs(~ z2 + z1, drop.unused.levels = FALSE)
+  log2(x[1, 1] + 0.5) + log2(x[2, 2] + 0.5) - 
+    log2(x[1, 2] + 0.5) - log2(x[2, 1] + 0.5)
+  }, d = d, p1 = p1, p2 = p2)
+}
+
+# Vary p1 with p2 = p1 at 30x coverage
+d <- 30
+n <- 1000
+p <- c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99)
+x <- lapply(p, function(p) {
+  f(n, d, p, p)
+})
+par(mfrow = c(3, 3))
+mapply(function(x, p) {
+  hist(x, main = paste0("p1 = p2 = ", p), xlim = c(-10, 10), breaks = 20)
+  abline(v = 0, col = "red", lty = 2)
+  }, x = x, p = p)
+title(paste("d = ", d), outer = TRUE, line = -1)
+
+# Vary p1 with p2 = 1 - p1
+d <- 30
+n <- 1000
+p <- c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99)
+x <- lapply(p, function(p) {
+  f(n, d, p, 1 - p)
+})
+par(mfrow = c(3, 3))
+mapply(function(x, p) {
+  hist(x, main = paste0("p1 = ", p, ", p2 = ", 1 - p), xlim = c(-10, 10), breaks = 20)
+  abline(v = 0, col = "red", lty = 2)
+  }, x = x, p = p)
+title(paste("d = ", d), outer = TRUE, line = -1)
+
+# Vary p1 with p2 = 0.5
+d <- 30
+n <- 1000
+p <- c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99)
+x <- lapply(p, function(p) {
+  f(n, d, p, 0.5)
+})
+par(mfrow = c(3, 3))
+mapply(function(x, p) {
+  hist(x, main = paste0("p1 = ", p, ", p2 = ", 0.5), xlim = c(-10, 10), breaks = 20)
+  abline(v = 0, col = "red", lty = 2)
+  }, x = x, p = p)
+title(paste("d = ", d), outer = TRUE, line = -1)
+
+# Vary p1 with p2 = p1 at 1000x coverage
+d <- 1000
+n <- 1000
+p <- c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99)
+x <- lapply(p, function(p) {
+  f(n, d, p, p)
+})
+par(mfrow = c(3, 3))
+mapply(function(x, p) {
+  hist(x, main = paste0("p1 = p2 = ", p), xlim = c(-10, 10), breaks = 20)
+  abline(v = 0, col = "red", lty = 2)
+  }, x = x, p = p)
+title(paste("d = ", d), outer = TRUE, line = -1)
+
+```
