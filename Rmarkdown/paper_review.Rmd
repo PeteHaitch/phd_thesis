@@ -34,7 +34,7 @@ A useful quote regarding mosaicism and epipolymorphism:
 
 
 ## \cite{Cokus:2008fc}
-\cite{Cokus:2008fc} published the BS-seq protocol for performing WGBS. Most of the results in this paper used BS-seq of wild-type _Arabidopsis Thaliana_ and DNMT mutants. They also report limited results from low-coverage BS-seq of mouse germ cells but these are not relevant to my discussion.
+\cite{Cokus:2008fc} published the BS-seq protocol for performing WGBS. Most of the results in this paper used BS-seq of wild-type _Arabidopsis thaliana_ and DNMT mutants. They also report limited results from low-coverage BS-seq of mouse germ cells but these are not relevant to my discussion.
 
 The authors used the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering and other post-processing of the reads. Most analyses were restricted to loci with at least 5x sequencing coverage.
 
@@ -53,7 +53,7 @@ Both the $~10$nt and $~167$nt periodicities can be seen by eye and were confirme
 
 ## \cite{Lister:2008bh}
 
-\cite{Lister:2008bh} published the methylC-seq protocol for performing WGBS. Like \cite{Cokus:2008fc}, \cite{Lister:2008bh} studied wild-type and DNMT-defective mutant _Arabidopsis Thaliana_ strains. Also like \cite{Cokus:2008fc}, much of the analysis is by visual comparison of summarised data.
+\cite{Lister:2008bh} published the methylC-seq protocol for performing WGBS. Like \cite{Cokus:2008fc}, \cite{Lister:2008bh} studied wild-type and DNMT-defective mutant _Arabidopsis thaliana_ strains. Also like \cite{Cokus:2008fc}, much of the analysis is by visual comparison of summarised data.
 
 The authors used the simple $m$ and $u$ read-counting estimators of $M$ and $U$, subject to some filtering and other post-processing of the reads. To identify methylcytosines in each sample, the authors used a simple Binomial model, $Bin(m_{i, j} + u_{i, j}, B_{i, j})$ . They defined $\epsilon_{j}$ as the "error rate" for the $j^{th}$ sample, which is the sequencing error rate + the bisulfite non-conversion rate and is assumed constant across all loci. They estimated $\epsilon_{j}$ from reads aligned to the unmethylated chloroplast genome of each sample and obtained values between $1.3-3.2\%$ per sample.
 

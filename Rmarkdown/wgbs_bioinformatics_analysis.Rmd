@@ -245,7 +245,7 @@ The reference sequence is typically the reference genome used in the alignment s
 
 \subsubsection{Whole-genome sequencing or genotyping of the sample}\label{sec:wgs_or_genotyping}
 
-The gold-standard is to perform whole-genome DNA sequencing of each sample. This data is then used to form a set of sample-specific methylation loci. However, this approach is also very expensive due to the extra sequencing requirements. A cheaper alternative is to genotype the sample on a genome-wide SNP microarray. This will give very accurate, very cheap genotypes at a large number of loci ($500,000--5,000,000$). However, it obviously cannot identify genetic differences that aren't on the array, such as novel sample-specific genetic variants.
+The gold-standard is to perform whole-genome DNA sequencing of each sample. This data is then used to form a set of sample-specific methylation loci. However, this approach is also very expensive due to the extra sequencing requirements. A cheaper alternative is to genotype the sample on a genome-wide SNP microarray. This will give very accurate, very cheap genotypes at a large number of loci ($500,000$ to $5,000,000$). However, it obviously cannot identify genetic differences that aren't on the array, such as novel sample-specific genetic variants.
 
 \subsubsection{Calling genetic variations directly from the bisulfite-sequencing data}\label{sec:wgbs_variant_calling}
 
