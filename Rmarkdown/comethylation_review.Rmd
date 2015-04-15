@@ -12,40 +12,45 @@ bibliography: ../latex/phd_thesis.bib
 
 \chapter{A critical review of co-methylation}\label{chap:co-methylation_review}
 
-__TODO: Review co-methylation in "Bell, J. T. et al. DNA methylation patterns associate with genetic and gene expression variation in HapMap cell lines. Genome Biol 12, R10 (2011)."
+__TODO: Review co-methylation in "Bell, J. T. et al. DNA methylation patterns associate with genetic and gene expression variation in HapMap cell lines. Genome Biol 12, R10 (2011).__"
 
-\section{Introduction}
-
+\begin{chapabstract}
 Co-methylation is the dependence structure of DNA methylation data. This dependence structure can be viewed from different perspectives and on different scales, which has led to several disparate definitions of co-methylation. In this chapter I critically review these definitions and put them in the statistical framework of Chapter \ref{chap:wgbs_statistical_framework}. I highlight various shortcomings of proposed methods, which led me to develop the methods and software described in  Chapter \ref{chap:co-methylation}. I also review how methods to detect differential methylation have sought to account for and exploit co-methylation.
+\end{chapabstract}
+
 
 \section{What is co-methylation and why study it?}\label{subsec:co-methylation_definition}
 
-I define co-methylation as the dependence structure of DNA methylation data. This broad definition encompasses several concepts that have variously been described as 'co-methylation', or similar. My definition is broader than "the presence of methylation over a stretch of neighbouring CpG positions" \citep{Schatz:2004cha} or "the relationship between the degree of methylation over distance" \citep{Eckhardt:2006gh}; it also includes the "correlation of two [loci] across many sample" \citep{Akulenko:2013fl} and the "_vertical_ (i.e., progenitor to descendant) correlation between the same CpG site in neighbouring cell types" \citep{Capra:2014uh}. A first important point to emphasise is that there exists both within-sample co-methylation and between-sample co-methylation.
+I define co-methylation as the dependence structure of DNA methylation data. This broad definition encompasses several similar concepts previously described in the literature. These include: "the presence of methylation over a stretch of neighbouring CpG positions" \citep{Schatz:2004cha}; "the relationship between the degree of methylation over distance" \citep{Eckhardt:2006gh}; the "correlation of two [loci] across many samples" \citep{Akulenko:2013fl}; and the "_vertical_ (i.e., progenitor to descendant) correlation between the same CpG site in neighbouring cell types" \citep{Capra:2014uh}.
 
-Within-sample co-methylation is the spatial dependence of DNA methylation along the genome within a single sample. Many researchers have observed that there is a strong spatial dependence of DNA methylation along a genome, that is, methylation loci near to one another in the genome tend to be similarly methylated \citep[e.g.,][]{Eckhardt:2006gh, Cokus:2008fc, Lister:2009hy, Lacey:2009by, Li:2010fb, Lyko:2010dr, Landan:2012kp}. Moreover, these studies found that the strength of this dependence itself depends on the distance between the loci and on the genomic context.
+It is important to understand that there exists both within-sample and between-sample co-methylation.
+
+Within-sample co-methylation is the spatial dependence of DNA methylation along the genome within a single sample. Many researchers have observed that there is a strong spatial dependence of DNA methylation along the genome, that is, methylation loci near to one another in the genome tend to be similarly methylated \citep[e.g.,][]{Eckhardt:2006gh, Cokus:2008fc, Lister:2009hy, Lacey:2009by, Li:2010fb, Lyko:2010dr, Landan:2012kp}. These studies also found that the strength of this dependence itself depends on the distance between the loci and on the genomic context.
 
 The fundamental level of within-sample co-methylation is the dependence structure of DNA methylation events occurring on the same DNA fragment, which I call _within-fragment co-methylation_. At a higher level is the _correlation of aggregate methylation levels_, such as the spatial correlation of $\beta$-values within a sample.
 
-Between-sample co-methylation is the relationship between methylation levels at a pair of loci across a set of samples[^concordance]. For example, \citet{Akulenko:2013fl} reported 187 pairs of genes whose methylation level was highly correlated (Pearson $|r| \geq 0.75$) across more than 300 breast cancer samples. Also note, however, that measures of within-sample co-methylation can themselves be compared between samples, which is discussed at the end of this chapter.
+Between-sample co-methylation is the relationship between methylation levels at a pair of loci across a set of samples[^concordance]. For example, \citet{Akulenko:2013fl} reported 187 pairs of genes whose methylation level was highly correlated (Pearson $|r| \geq 0.75$) across more than 300 breast cancer samples. It is worth noting that measures of within-sample co-methylation can themselves be compared between samples.
 
-[^concordance]: One measure of between-sample correlation of methylation levels that does not fall under my definition of co-methylation is the following: Consider a pair of samples, $j$ and $j'$, and compute the correlation between the set of $\beta$-values for sample $j$ against sample $j'$, i.e., $cor(\{\beta_{i, j}\}_{i = 1}^{i = N_{loci}}, \{\beta_{i, j'}\}_{i = 1}^{i = N_{loci}})$. This measure is often reported as evidence for the "concordance" of methylation levels between replicates, but is not what I consider a form of co-methylation.
+[^concordance]: One measure of between-sample correlation of aggregate methylation levels that does not fall under my definition of co-methylation is the following: Consider a pair of samples, $j$ and $j'$, and compute the correlation between the set of $\beta$-values for sample $j$ against sample $j'$, i.e., $cor(\{\beta_{i, j}\}_{i = 1}^{i = N_{loci}}, \{\beta_{i, j'}\}_{i = 1}^{i = N_{loci}})$. This measure is often reported as evidence for the "concordance" of methylation levels between replicates, but is not what I consider a form of co-methylation.
 
-There have been several attempts to analyse co-methylation, most with the aim of better understanding the biological processes that lay down and regulate DNA methylation. An increased understanding of co-methylation could also lead to cheaper and more efficient assays of DNA methylation. For example, we might identify methylation loci whose methylation status is highly predictive of the methylation level of a surrounding region and design an assay to interrogate those highly predictive loci. This idea is analogous to the use of tag-SNPs on whole-genome genotyping microarrays.
+There have been several attempts to analyse co-methylation, most with the aim of better understanding the biological processes that lay down and regulate DNA methylation. An increased understanding of co-methylation could also lead to cheaper and more efficient assays of DNA methylation. For example, we might identify methylation loci whose methylation status is highly predictive of the methylation level of a surrounding region and design an assay to interrogate those highly predictive loci. This idea is analogous to the use of tag-SNPs on genotyping microarrays.
 
 There are also reasons for studying co-methylation that are less to do with improving our biological understanding and more to do with improving statistical techniques for analysing DNA methylation data. If co-methylation can be better estimated and understood, then statistical techniques can be developed that explicitly account for and even exploit these dependencies to create more powerful and efficient analysis methods.
 
 A common difficulty in translating biological observations into mathematical or statistical language are vague, ambiguous or otherwise insufficiently detailed descriptions of the analyses performed. This is frequently coupled with a lack of software to implement the proposed method. These deficiencies can bring into question the results and certainly hinder the development of new analysis methods and software. Many of the papers reviewed in this chapter suffer from these deficiencies and in these cases I have made my best attempt at deciphering the methods, often via correspondence with the authors.
 
-\section{Correlations of aggregate measurements of methylation}
+\section{Correlations of aggregate methylation levels}
 \label{sec:previous_cor_of_agg_methylation}
 
-To date, most analyses of co-methylation have been based on analysing correlations of aggregate levels of methylation, such as $\beta$-values, within individual samples \citep{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Lyko:2010dr, Lacey:2013iy}. These analyses have an implicit assumption of stationarity, that is, that the correlation between two loci depends only on the distance between them and not the actual position of the loci in the genome.
+To date, most analyses of co-methylation have been based on analysing correlatiosn of aggregate methylation levels, such as $\beta$-values, within individual samples \citep{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Lyko:2010dr, Lacey:2013iy}. These analyses have an implicit assumption of stationarity, that is, that the correlation between two loci depends only on the distance between them and not the actual position of the loci in the genome.
 
 \subsection{\citet{Eckhardt:2006gh}}\label{sec:eckhardt}
 
-\citet{Eckhardt:2006gh} is one of the first publications to apply bisulfite-sequencing to a large number of regions and samples. Of particular relevance to a discussion of co-methylation, \citet{Eckhardt:2006gh} has been cited as evidence that "methylation levels are strongly spatially correlated" \citep{Hebestreit:2013ko} and that "proximal CpGs [have] similar methylation levels" \citep{Hansen:2011gu}. \citet{Eckhardt:2006gh} performed PCR-amplicon bisulfite-sequencing of $2,524$ amplicons on human chromosomes $6$, $20$ and $22$. PCR-amplicon bisulfite-sequencing is a labour-intensive assay and so it was a considerable effort to produce these data. Nonetheless, it is important to bear in mind that these data are nowhere near as comprehensive as data generated using modern-day whole-genome bisulfite-sequencing assays. Samples were provided by male and female donors across a wide variety of tissue types and ages, and were were generated to begin a catalogue of CpG methylation in various tissue types.
+\citet{Eckhardt:2006gh} is one of the first publications to apply bisulfite-sequencing to a large number of regions and samples. Of particular relevance to a discussion of co-methylation, \citet{Eckhardt:2006gh} is often cited as evidence of co-methylation. For example, \citet{Hebestreit:2013ko} cite \citet{Eckhardt:2006gh} as evidence that "methylation levels are strongly spatially correlated" and \citet{Hansen:2011gu} cite \citet{Eckhardt:2006gh} as evidence that"proximal CpGs [have] similar methylation levels".
 
-As part of their analysis, the authors analyse co-methylation, which they define as "the relationship between the degree of methylation over distance". They state that "we were able to establish a significant correlation for comethylation over short distances ($\leq 1,000$ bp), it deteriorated rapidly for distances $>2,000$ bp" and reference the plot reprinted in Figure \ref{fig:Eckhardt} in support of this claim. In Figure \ref{fig:Eckhardt}, the authors plot the "percentage identical methylation" against "distance in bp", which ranges from $0$ to $20,000$ bp, which is not a correlation in the usual sense of the word. Nowhere in the original paper is it clearly described what the "percentage identical methylation" is nor how it is computed[^beck].
+\citet{Eckhardt:2006gh} performed PCR-amplicon bisulfite-sequencing of $2,524$ amplicons on human chromosomes $6$, $20$ and $22$. PCR-amplicon bisulfite-sequencing is a labour-intensive assay and so it was a considerable effort to produce these data. Nonetheless, it is important to bear in mind that these data are nowhere near as comprehensive as data generated using modern whole-genome bisulfite-sequencing assays. The samples are a variety of human tissue types from multiple donors of different ages, both male and female.
+
+As part of their analysis, the authors explore co-methylation, which they define as "the relationship between the degree of methylation over distance". They state that "we were able to establish a significant correlation for comethylation over short distances ($\leq 1,000$ bp), it deteriorated rapidly for distances $>2,000$ bp" and reference the plot reprinted in Figure \ref{fig:Eckhardt} in support of this claim. In Figure \ref{fig:Eckhardt}, the authors plot the "percentage identical methylation" against "distance in bp", which ranges from $0$ to $20,000$ bp. This is not a correlation in the usual sense of the word. Nowhere in the original paper is it clearly described what the "percentage identical methylation" is nor how it is computed[^beck].
 
 \begin{figure}[!htb]
 \centering
@@ -54,13 +59,13 @@ As part of their analysis, the authors analyse co-methylation, which they define
 \label{fig:Eckhardt}
 \end{figure}
 
-[^beck]: An email discussion with the senior author, Stephan Beck, was unable to clarify the definition or method.
+[^beck]: An email discussion with the senior author, Professor Stephan Beck (University College London), was unable to clarify the definition or method.
 
 The average amplicon length is reported as $411$ bp with a standard deviation of $71$ bp. Therefore, it is impossible for the "percentage identical methylation" to have been obtained from methylation events co-occuring on the same amplicon, at least for those pairs separated by more than approximately $600$ bp.
 
 My best guess as to the definition of "percentage identical methylation" is that it is the proportion of pairs of identical methylation calls at different CpGs from (generally) different amplicons, that is, $Pr(Z_{h, i} = Z_{h', i'})$. I will refer to my best guess of "percentage identical methylation" as $PIM^{\ast}$, and now turn to some of its properties.
 
-Let $0 \leq p_{h} \leq 1$ be the genome-wide average CpG methylation level for the sample from which $Z_{i, h}$ is sampled, that is, $Pr(Z_{h, i} = 1) = p_{h}$. For two distinct CpGs sequenced on two (potentially) distinct amplicons, $Z_{h, i}$ and  $Z_{h', i'}$, we want to compute the probability that the methylation states are identical, that is, $Pr(Z_{h, i} = Z_{h', i'})$. Not only may the two CpGs be from distinct amplicons, but in the original analysis the amplicons themselves may be from distinct samples with different genome-wide average methylation levels. This most general setting is described by $Z_{h, i} \eqd \text{Bernoulli}(p_{h})$ and $Z_{h, i'} \eqd \text{Bernoulli}(p_{h'})$, with $cor(Z_{h, i}, Z_{h', i'}) = c$. In this setting we can compute the theoretical $PIM^{\ast}$ as follows:
+Let $0 \leq p_{h} \leq 1$ be the genome-wide average CpG methylation level for the sample from which $Z_{i, h}$ is sampled, that is, $Pr(Z_{h, i} = 1) = p_{h}$. For two distinct CpGs sequenced on two (potentially) distinct amplicons, $Z_{h, i}$ and  $Z_{h', i'}$, we want to compute the probability that the methylation states are identical, that is, $Pr(Z_{h, i} = Z_{h', i'})$. Not only may the two CpGs be from distinct amplicons, but in the original analysis the amplicons themselves may be from distinct samples with different genome-wide average methylation levels. This most general setting is described by $Z_{h, i} \eqd \text{Bernoulli}(p_{h})$ and $Z_{h', i'} \eqd \text{Bernoulli}(p_{h'})$, with $cor(Z_{h, i}, Z_{h', i'}) = c$. In this setting we can compute the theoretical $PIM^{\ast}$ as follows:
 
 \begin{align*}
 PIM^{\ast} &= Pr(Z_{h, i} = Z_{h', i'}) \\
@@ -72,13 +77,13 @@ PIM^{\ast} &= Pr(Z_{h, i} = Z_{h', i'}) \\
         &= (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'} + 2 c p_{h} (1 - p_{h})
 \end{align*}
 
-This result is proven in Appendix \ref{app:bernoulli_equal}.
+The proof of this result is given in Appendix \ref{app:bernoulli_equal}.
 
 In general, $PIM^{\ast} \in {[0, 1]}$ since it is a probability, which is already unlike a correlation coefficient that takes values in ${[{-1}, 1]}$. There are a few important special cases that are worth discussing:
 
 1. $PIM^{\ast}_{inid} = (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'}$: Independent and non-identically distributed (_inid_), i.e., $Z_{h, i} \eqd Bernoulli(p_{h})$ and $Z_{h, i'} \eqd Bernoulli(p_{h'})$ and with $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.
 2. $PIM^{\ast}_{did} = (1 - p)^{2} + p^{2} + 2 c p ( 1 - p)$: Dependent and identically distributed (_did_), i.e., $Z_{h, i}, Z_{h', i'} \eqd Bernoulli(p)$ and $cor(Z_{h, i}, Z_{h', i'}) = c \neq 0$.
-3. $PIM^{\ast}_{iid} = (1 - p)^{2} + p^{2}$: Independent and identically distributed (_iid_), i.e., $Z_{h, i}, Z_{h', i'} \eqd Bernoulli(p)$ and $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.
+3. $PIM^{\ast}_{iid} = (1 - p)^{2} + p^{2}$: Independent and identically distributed (_iid_), i.e., $Z_{h, i}, \allowbreak Z_{h', i'} \eqd Bernoulli(p)$ and $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.
 
 As for $PIM^{\ast}$, $PIM^{\ast}_{inid} \in [0, 1]$. In contrast, it is easy to show by differentiation that $PIM^{\ast}_{iid} \geq 0.5$ and that $PIM^{\ast}_{did} \geq 0.5 (c + 1)$, which is $> 0.5$ (resp. $< 0.5$) for $c > 0$ (resp. $c < 0$).
 
@@ -86,111 +91,29 @@ To return to the plot shown in Figure 3a; the "percentage identical methylation"
 
 Of course, the above discussion pre-supposes that what is labelled "percentage identical methylation" in Figure \ref{fig:Eckhardt} is mathematically equivalent to $PIM^{\ast}$. I believe this to be true but due to the aforementioned inadequacies of the method description it is not possible to verify this derivation.
 
-Quite apart from what exactly is plotted in Figure \ref{fig:Eckhardt}, the analysis is based on data from only $2,524$ amplicons, which is nowhere near a genome-wide analysis. Furthermore, methylation levels have been aggregated across multiple samples and so the profile in Figure \ref{fig:Eckhardt} does not represent any one sample but a pool of samples.
+Quite apart from what exactly is plotted in Figure \ref{fig:Eckhardt}, the analysis is based on data from only $2,524$ amplicons. These limited data cannot give a genome-wide picture of co-methylation. Furthermore, the data come from a variety of tissues and donors, which makes it difficult to know how applicable these results are for a particular tissue. Caution is warranted in extrapolating these results to general statements about the correlation of aggregate methylation levels.
 
 \subsection{\citet{Cokus:2008fc}}\label{sec:Cokus}
 
-\citet{Cokus:2008fc} published the BS-seq protocol for performing whole-genome bisulfite-sequencing. They demonstrated this technique by generating a genome-wide map of DNA methylation in wildtype  _Arabidopsis Thaliana_. They performed an autocorrelation analysis of the $\beta$-values for CG, CHG and CHH methylation[^arabidopsis]. The autocorrelation computes, for a set of distances ($0-5,000$ nt), the (Pearson) correlation coefficient of methylation levels for all pairs of methylation loci separated by each distance. To emphasise, I believe this analysis uses all pairs of methylation loci, that is, regardless of how many intervening methylation loci there are for each pair.
+\citet{Cokus:2008fc} published the BS-seq protocol for performing whole-genome bisulfite-sequencing. They demonstrated this technique by generating a genome-wide map of DNA methylation in wildtype  _Arabidopsis thaliana_. They performed an autocorrelation analysis of the $\beta$-values for CG, CHG and CHH methylation[^arabidopsis]. The autocorrelation computes, for a set of distances ($0-5,000$ bp), the (Pearson) correlation coefficient of methylation levels for all pairs of methylation loci separated by each distance. To emphasise, I believe this analysis uses all pairs of methylation loci, that is, regardless of how many intervening methylation loci there are for each pair.
 
 [^arabidopsis]: Many plant species, such as _A. thaliana_, have much higher levels of non-CG methylation than do mammals.
 
 \citet{Cokus:2008fc} found that methylation levels are highly correlated, particularly for CG methylation levels, and that the correlation decays as a function of genomic distance between methylation loci. From this they concluded that the "significant correlation between methylated cytosines for distances up to 5,000 nucleotides or more [were] probably a reflection of regional foci of methylation throughout the genome and of large blocks of pericentromeric heterochromatin". They also identified correlations between different methylation contexts, e.g., CG vs. CHG, which "suggest[s] complex interactions between the different types of methylation".
 
-The autocorrelation plots showed two periodicities, one of $\approx 167$ nucleotides and the other of $10$ nucleotides (CHH only). Both periodicities are visible in plots of the raw autocorrelations and are confirmed by a Fourier analysis of the autocorrelation signal.
+The autocorrelation plots showed two periodicities, one of $\approx 167$ bp and the other of $10$ bp (CHH only). Both periodicities are visible in plots of the raw autocorrelations and are confirmed by a Fourier analysis of the autocorrelation signal.
 
-[^CHH_only]: The $10$ nucleotide periodicity was later observed for CG and CHG methylation as well, at least for nucleosome bound DNA \citep{Chodavarapu:2010iqa}
+[^CHH_only]: The $10$ nucleotide period was later observed for CG and CHG methylation as well, at least for nucleosome bound DNA \citep{Chodavarapu:2010iqa}
 
-The $167$ nucleotide periodicity is "is similar to, but slightly shorter than, estimates of the average spacing of nucleosomes in plant chromatin" and Cokus et al. hypothesise that this periodicity is due to histones dictating access to DNA by the DNA methyltransferases.
+The $167$ bp period is "is similar to, but slightly shorter than, estimates of the average spacing of nucleosomes in plant chromatin" and Cokus et al. hypothesise that this periodicity is due to histones dictating access to DNA by the DNA methyltransferases.
 
-The $10$ nucleotide periodicity is equal to the length of one helical DNA turn. From this result Cokus et al. hypothesise that the DOMAINS REARRANGED METHYLASE 2 (_DRM2_), "the main enzyme controlling asymmetric methylation in _Arabidopsis_", contains two active sites that methylate sites $8-10$ nucleotides apart[^comethylation_def2], like its mammalian homologue, DNA methyltransferase 3 (_DNMT3_). The $10$ nucleotide CHH-only periodicity in the autocorrelation analysis of the $\beta$-values is also observed in a _within-fragment analysis_ (discussed in \ref{sec:previous_within-fragment_analyses})
+The $10$ bp period is equal to the length of one helical DNA turn. From this result Cokus et al. hypothesise that the DOMAINS REARRANGED METHYLASE 2 (_DRM2_), "the main enzyme controlling asymmetric methylation in _Arabidopsis_", contains two active sites that methylate sites $8$ to $10$ bp apart[^comethylation_def2], like its mammalian homologue, DNA methyltransferase 3 (_DNMT3_). The $10$ bp CHH-only period in the autocorrelation analysis of the $\beta$-values is also observed in a _within-fragment analysis_ (discussed in \ref{sec:previous_within-fragment_analyses})
 
-[^comethylation_def2]: This is also referred to as "co-methylation" by \citet{Jurkowska:2011dt}, here meaning the methylation of multiple loci in a single event. \citet{Jurkowska:2011dt} reviews a plausible biochemical model for how _DNMT3a_ could co-methylate two CpGs separated by $8-10$ nucleotides; this model includes both the scenario where both CpGs are on the same DNA strand and the scenario where the CpGs are on opposite strands.
-
-\subsection{\citet{Chodavarapu:2010iqa}\label{sec:chodavarapu}
-
-\citet{Chodavarapu:2010iqa} use MNase-seq to study nucleosome positioning and the relationship to DNA methylation, including co-methylation, in _Arabidopsis_ and an embryonic human stem cell line (_HSF1_). The authors plot a "weighted average methylation", which I presume to be a weighted version of the $\beta$-values, against the distance from predicted nucleosome start sites, which are obtained via MNase-seq. The nucleosome start sites anchor the methylation observations to a common grid and this plot is used to show that nucleosome bound DNA has a greater level of methylation than DNA that is not bound to nucleosomes. A $10$ nucleotide periodicity is readily observed in these plots, consistent with the discovery of $10$ nucleotide periodicities in the autocorrelation of $\beta$-values published by \cite{Cokus:2008fc}. Again, the observed periodicity is confirmed by analysing a Fourier transform of this correlation signal.
-
-In addition to the genome-wide analyses in both _Arabidopsis_ and human embryonic stem cell line (HSF1), the same method is used to examine promoters, genes, repeats, euchromatic regions and centromeric regions of _Arabidopsis_ and promoters, genes, repeats and CpG islands of the _HSF1_ sample, which confirmed the $10$ nucleotide periodicity. In fact, these results revealed that the $10$ nucleotide is common to all methylation types, including symmetric CpG methylation, at least for nucleosome-bound DNA. This led \citet{Chodavarapu:2010iqa} to discard their earlier hypothesis as to the source of the $10$ nucleotide periodicity \citep{Cokus:2008fc} in favour of one that "nucleosomes are to some extent dictating access to the DNA and therefore setting the register of methylation __for all DNA methyltransferases__" (emphasis mine) and not just for the DRM2 methyltransferase.
-
-\subsection{\citet{Li:2010fb}}\label{sec:li}
-
-\citet{Li:2010fb} compute "the correlation of methylation level of any two nearby CpGs and the relationship between spatial distance (from one CpG to another) and strength of this correlation". The authors conclude that "co-methylation deteriorates over distance and becomes nearly undetectable at distances $>1,000$ bp", citing their results as being consistent with those in \citet{Eckhardt:2006gh}. In addition to this genome-wide analysis, \citet{Li:2010fb} perform the same analysis for CpGs within 19 different genomic contexts such as upstream of a gene, untranslated region, coding DNA sequences and various repetitive elements. Somewhat surprisingly, they do not specifically compare CpG islands to non CpG islands, although some of these differences will be captured by the analysis of regions upstream of a gene, which include many CpG island promoters.
-
-Unfortunately, just as in \citet{Eckhardt:2006gh}, \citet{Li:2010fb} never define exactly what is being computed in their analysis of co-methylation and no software is available. All the co-methylation results are presented as supplementary figures, which lack figure legends and are supported by only very brief captions. So, once again, I have been forced to make my best guess as to what these figures show and how it was computed.
-
-Figure \ref{fig:Li6} plots the "correlation" against "distance of CpG" ($0 - 1000$), which I believe are the genome-wide co-methylation estimates over the range $0 - 1000$ bp. Based on the "$n = 18,936,995$" quoted in the header of panel (a) of this figure, which I interpret as the number of pairs used in this plot of "correlation" against "distance of CpG" ($0 - 1000$), I believe that what is shown are the correlations of pairs of CpG $\beta$-values where the pairs are separated by a common distance and have no intervening CpGs. If all pairs were used this $n$ would be much larger since there are more than twenty million CpGs on one strand of the haploid human genome. To emphasise, the correlation shown by \citet{Li:2010fb} is not the same as the autocorrelation computed in \citet{Cokus:2008fc} since \citet{Li:2010fb} only use pairs of adjacent CpGs whereas \citet{Cokus:2008fc} use all pairs of CpGs, regardless of the number of intervening CpGs.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.8\textwidth]{../figures/{journal.pbio.1000533.s006}.pdf}
-\caption{Co-methylation patterns for different genomic features. A reproduction of Supplementary Figure 6 from \citet{Li:2010fb} under the Creative Common Attribution (CCBY) licence.}
-\label{fig:Li6}
-\end{figure}
-
-The genome-wide analysis correlation plot contains a periodicity of approximately $170$ nucleotides, very similar to the $167$ nucleotide period identified in _Arabidopsis_ by \citet{Cokus:2008fc} (reproduced in Figure \ref{fig:Li7}). This is further evidence that nucleosome spacing effects the strength of co-methylation. However, \citet{Li:2010fb} found no evidence of higher frequency periods, such as the $10$ nucleotide period reported by \citet{Cokus:2008fc} and \citet{Chodavarapu:2010iqa}.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.8\textwidth]{../figures/Figure_S7.pdf}
-\caption{Transformation of methylation correlation at nearby CpG cytosines. A reproduction of Supplementary Figure 7 from \citet{Li:2010fb} under the Creative Common Attribution (CCBY) licence.}
-\label{fig:Li7}
-\end{figure}
-
-\subsection{\cite{Lyko:2010dr}}\label{sec:lyko}
-
-In their study of differential methylation in queen and worker honey bees (_Apis mellifera_), \citet{Lyko:2010dr} perform an autocorrelation analysis of CpG methylation. They report that the "correlation of methylation status of neighbouring CpGs increases sharply between 1 bp and 20 bp, then drops rapidly between 40 bp and 100 bp, and then slowly fades away". However, this analysis is fundamentally flawed.
-
-Figure \ref{fig:Lyko} reproduces the results for the co-methylation analysis. Note that the maximum value of the "CpG autocorrelation" is less than $0.015$ (panel (A) of Figure \ref{fig:Lyko}). I strongly suspect that the autocorrelation has been incorrectly computed. Specifically, what I believe has been computed is the autocorrelation of all positions in the genome, not just CpGs, where non-CpGs have been artificially assigned a $\beta$-value of zero. It does not make sense to include non-CpG positions, particularly non-cytosines that can never be methylated, in an analysis of CpG co-methylation.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.8\textwidth]{../figures/Lyko_Figure_S7.pdf}
-\caption{Periodicity of methylation patterns. (A) Autocorrelation of CpG methylation status over 1 kb. (B) Autocorrelation over 100 bp. Figures A and B show that the correlation of methylation status of neighboring CpGs increases sharply between 1 bp and 20 bp, then drops rapidly between 40 bp and 100 bp, and then slowly fades away. CpGs within a neighborhood of 2 bp to 100 bp are thus more likely to share the same methylation status than more distant CpGs. (C) Fourrier transform of autocorrelation showing a clear periodicity peak at 33 cycles per 100 bp (every 3 bp). (D) Distribution of codon position of mCs, and distribution of methylation level depending on the position. These two panels indicate that the distance between methylated CpGs is often a multiple of three and that the methylated cytosine corresponds most frequently to the first nucleotide of an arginine codon. A reproduction of Supplementary Figure 7 from \citet{Lyko:2010dr} under the Creative Common Attribution (CCBY) licence.}
-\label{fig:Lyko}
-\end{figure}
-
-While I don't have the data used in \citet{Lyko:2010dr}, I believe an example using the chromosome 22 data from the _FF_ sample demonstrates the point. Let $\bm{\beta^{\ast}}$ be the augmented vector of $\beta$-values, where:
-
-\begin{equation*}
-\beta^{\ast}_{i'} = \left\{
-  \begin{array}{ll}
-  0 & \text{if } i' \text{ is not a CpG}\\
-  \beta_{i} & \text{if } i' \text{ is a CpG}
-  \end{array}
-  \right.
-\end{equation*}
-
-Figure \ref{fig:FF_chr21_acf_beta_star} is a plot of the autocorrelation of the augmented vector, $\bm{\beta^{\ast}}$. We see that it is remarkably similar to that panel (a) of Figure \ref{fig:Lyko} --- the correlation first increases then decreases and the maximum correlation is very small, close to zero.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.8\textwidth]{../figures/FF_chr21_acf_beta_star.pdf}
-\caption{Autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \em{FF} sample.}
-\label{fig:FF_chr21_acf_beta_star}
-\end{figure}
-
-Furthermore, if we compute the Fourier transform of this autocorrelation we find a period of approximately 3 bp, identical to that reported by \citet{Lyko:2010dr} for honey bees (compare panel (c) of Figure \ref{fig:Lyko} and Figure \ref{fig:FF_chr21_acf_beta_star_fourier}). Like my earlier criticism of the co-methylation results of \citet{Lister:2009hy}, I believe the apparent $3$ bp periodicity is more likely due to the spacing of nucleotides in the genome than anything to do with their methylation state.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.8\textwidth]{../figures/FF_chr21_acf_beta_star_fourier.pdf}
-\caption{Fourier transformation of the autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \textit{FF} sample. Fourier transformation computed and plotted using the \texttt{spectrum} function in R. The period is defined as 1 / frequency. The maximum frequency is approximately $0.33$, which corresponds to a period of approximately $3$ bp.}
-\label{fig:FF_chr21_acf_beta_star_fourier}
-\end{figure}
-
-All of this casts serious doubt on the validity and interpretation of the co-methylation results in \citet{Lyko:2010dr}.
-
-\subsection{\citet{Lacey:2013iy}}\label{sec:lacey_2013}
-
-\citet{Lacey:2013iy} explore co-methylation in their paper on modelling and analysing reduced representation bisulfite-sequencing data (RRBS). To do so, \citeauthor{Lacey:2013iy} fit a Gaussian variogram model to the CpG $\beta$-values from chromosome 11 of a normal myotube cell line (_MTCTL2_). The empirical and fitted variograms asymptote for CpGs separated by around $3000$ bp (Figure 1d of \citet{Lacey:2013iy}, unable to be reproduced due to rights restrictions) and so they conclude that the methylation level of CpGs "show a strong correlation for sites in close proximity, decaying to near independence at distances beyond 3000 bp".
-
-Caution is warranted in extrapolating these results to statements about genome-wide co-methylation. Firstly, this analysis uses only approximately $60,000$ CpGs[^ncpgs], far fewer than the $25$ million CpGs in the haploid human genome. Secondly, these data are from a single sample from a single tissue, which cannot capture the sample-to-sample nor tissue-to-tissue variability in co-methylation. Finally, RRBS targets CpG dense regions of the genome with low levels of methylation and so these data do not capture co-methylation outside of these regions, where the majority of the CpGs are found and which are highly methylated.
-
-[^ncpgs]: The data for MTCTL2 are not publicly available so I estimated the number of sequenced CpGs on chromosome 11 from three comparable RRBS libraries (see Appendix \ref{app:lacey}).
+[^comethylation_def2]: This is also referred to as "co-methylation" by \citet{Jurkowska:2011dt}, here meaning the methylation of multiple loci in a single event. \citet{Jurkowska:2011dt} review a plausible biochemical model for how _DNMT3a_ could co-methylate two CpGs separated by $8$ to $10$ bp; this model includes both the scenario where both CpGs are on the same DNA strand and the scenario where the CpGs are on opposite strands.
 
 \subsection{\citet{Lister:2009hy}}\label{sec:lister_2009}
 
-\citet{Lister:2009hy} report an $8-10$ nucleotide periodicity in the occurrence "methylcytosines". Recall that \citet{Lister:2009hy} define a "methylcytosine" as a cytosine that has a non-zero $\beta$-value, as determined by a Binomial test (see Section \ref{sec:beta-value_interpretation} for details and a criticism of this concept). Hence, while this may appear to be a within-fragment analysis of co-methylation with it's reference to "methylcytosines", it in fact  based on $\beta$-values. However, unlike the other methods described in this section, the analysis is not based on a correlation of these $\beta$-values, but rather on patterns in the spacing of 'methylcytosines' along the genome, which leads to problems.
+\citet{Lister:2009hy} report an $8$ to $10$ bp period in the occurrence "methylcytosines". Recall that \citeauthor{Lister:2009hy} define a "methylcytosine" as a cytosine that has a non-zero $\beta$-value, as determined by a binomial test (see Section \ref{sec:beta-value_interpretation} for details and a criticism of this concept). With its reference to "methylcytosines", this may first appear to be a within-fragment analysis of co-methylation, but it is in fact based on $\beta$-values. However, unlike other methods described in this section, the analysis is not based on a correlation of these $\beta$-values, but rather on patterns in the spacing of "methylcytosines" along the genome. This leads to problems.
 
 \citet{Lister:2009hy} tabulate the number of neighbouring[^non_redundant] pairs of "methylcytosines" as a function of the $IPD$. These counts are plotted as a bar chart, with $IPD$ along the x-axis and count on the y-axis, along with a cubic spline fit to the counts. This is done separately for each combination of methylation context (CG, CHG and CHH) and genomic context (exonic, intronic or random) for a total of nine plots (reproduced in Figure \ref{fig:Lister_2009_Sup_Fig_9}).
 
@@ -203,11 +126,95 @@ Caution is warranted in extrapolating these results to statements about genome-w
 
 [^non_redundant]: I think that "neighbouring" is what is meant by "non-redundant pair-wise distances" in the caption of Supplementary Figure 9, but I am not certain.
 
-An $8-10$ nucleotide periodicity in the fitted cubic spline is observed in most, but not all, of these nine plots. This periodicity is very weak in several contexts and is absent for exonic CpGs. The weakness of the signal is partly attributable to the small sample sizes in the CHG and CHH contexts, since there are very few "methylcytosines" for these contexts in these human samples. Furthermore, the reported $8-10$ nucleotide periodicity is weaker than a $3$ nucleotide periodicity for "methylcytosines" at exonic CpGs; this $3$ nucleotide periodicity can clearly be observed in the raw counts, unlike the $8-10$ nucleotide periodicity, but is not commented on by the authors.
+An $8$ to $10$ bp period in the fitted cubic spline is observed in most, but not all, of these nine plots. This periodicity is very weak in several contexts and is absent for exonic CpGs. The weakness of the signal is partially attributable to the small number of "methylcytosines" in the CHG and CHH contexts in human samples. More importantly, the reported $8$ to $10$ bp periods are weaker than a $3$ bp period for "methylcytosines" at exonic CpGs. Unlike the $8$ to $10$ nucleotide period, the $3$ nucleotide period can clearly be observed in the raw counts, although the cubic spline smoother seemingly ignores it. \citeauthor{Lister:2009hy} do not comment on the $3$ bp period.
 
-Based on these nine plots, \citet{Lister:2009hy} draw parallels to the $10$ periodicity in the autocorrelation of CHH $\beta$-values observed by \citet{Cokus:2008fc} and speculate that "_DNMT3A_  may be responsible for catalysing the methylation at non-CG sites". However, I suspect that the results in these nine plots are in fact driven by periodicities in where cytosines are located in the genome rather than any periodicities in the actual methylation of these cytosines. That is not to say that there aren't periodicities in the methylation of cytosines, but that is not what is being measured in this analysis. To explain, these plots use the raw counts of "methylcytosines", which are not adjusted for the frequency of pairs of cytosines with a given $IPD$. If pairs of cytosines are observed more often at certain $IPD$s then even if methylation was totally independent of $IPD$ we would expect more pairs of "methylcytosines" at these same $IPD$s. Therefore, at a minimum, it is necessary to normalise the number of "methylcytosines" by the number of cytosines.
+Based on these nine plots, \citet{Lister:2009hy} draw parallels to the $10$ bp period in the autocorrelation of CHH $\beta$-values observed by \citet{Cokus:2008fc} and speculate that "_DNMT3A_  may be responsible for catalysing the methylation at non-CG sites". However, I suspect that the results in these nine plots are in fact driven by periodicities in where cytosines are located in the genome rather than any periodicities in the actual methylation of these cytosines. That is not to say that there aren't periodicities in the methylation of cytosines, but that is not what is being measured in this analysis. To explain, these plots use the raw counts of "methylcytosines", which are not adjusted for the frequency of pairs of cytosines with a given $IPD$. If pairs of cytosines are observed more often at certain $IPD$s then even if methylation was totally independent of $IPD$ we would expect more pairs of "methylcytosines" at these same $IPD$s. Therefore, at a minimum, it is necessary to normalise the number of "methylcytosines" by the number of cytosines.
 
-In fact, there are well known periodicities in the distribution of nucleotides in genomes. For example, in eukaryotic genomes there is a $10$ periodicity of G+C dinucleotides that acts out of phase with a $10$ nucleotide periodicity of A+T dinucleotides for nucleosome-bound DNA \citep{Segal:2006iz} and a "well-known period-3 oscillation in coding regions" of the genome \citep{Li:1997ts}; the former likely explains the $8-10$ nucleotide periodicity and the latter the $3$ nucleotide periodicity for exonic CpGs.
+In fact, there are well known periodicities in the distribution of nucleotides in genomes. For example, in eukaryotic genomes there is a $10$ bp period of G+C dinucleotides that acts out of phase with a $10$ bp period of A+T dinucleotides for nucleosome-bound DNA \citep{Segal:2006iz} and a "well-known period-3 oscillation in coding regions" of the genome \citep{Li:1997ts}; the former likely explains the $8$ to $10$ nucleotide period and the latter the $3$ bp period for exonic CpGs.
+
+\subsection{\citet{Chodavarapu:2010iqa}}\label{sec:chodavarapu}
+
+\citet{Chodavarapu:2010iqa} use MNase-seq to study nucleosome positioning and the relationship to DNA methylation, including co-methylation, in _Arabidopsis_ and an embryonic human stem cell line (_HSF1_). The authors plot a "weighted average methylation", which I presume to be a weighted version of the $\beta$-values, against the distance from predicted nucleosome start sites, which are obtained via MNase-seq. The nucleosome start sites anchor the methylation observations to a common grid and this plot is used to show that nucleosome bound DNA has a greater level of methylation than DNA that is not bound to nucleosomes. A $10$ bp periodicity is readily observed in these plots, consistent with the discovery of $10$ nucleotide periodicities in the autocorrelation of $\beta$-values published by \cite{Cokus:2008fc}. Again, the observed periodicity is confirmed by analysing a Fourier transform of this correlation signal.
+
+In addition to the genome-wide analyses, the same method is used to examine promoters, genes, repeats, euchromatic regions and centromeric regions of the _Arabidopsis_ sample and promoters, genes, repeats and CpG islands of the _HSF1_ sample, which confirmed the $10$ bp periodicity. In fact, these results revealed that the $10$ bp period is common to all methylation types, including symmetric CpG methylation, at least for nucleosome-bound DNA. This led \citeauthor{Chodavarapu:2010iqa} to discard their earlier hypothesis[^same_authors] as to the source of the $10$ bp period \citep{Cokus:2008fc} in favour of one that "nucleosomes are to some extent dictating access to the DNA and therefore setting the register of methylation __for all DNA methyltransferases__ [emphasis added]" and not just for the DRM2 methyltransferase.
+
+[^same_authors]: Many of the same authors contributed to \citet{Cokus:2008fc} and \citet{Chodavarapu:2010iqa}.
+
+\subsection{\citet{Li:2010fb}}\label{sec:li}
+
+\citet{Li:2010fb} compute "the correlation of methylation level of any two nearby CpGs and the relationship between spatial distance (from one CpG to another) and strength of this correlation". \citeauthor{Li:2010fb} conclude that "co-methylation deteriorates over distance and becomes nearly undetectable at distances $>1,000$ bp", and that their results are consistent with those in \citet{Eckhardt:2006gh}. In addition to this genome-wide analysis, \citet{Li:2010fb} perform the same analysis for CpGs within 19 different genomic contexts such as upstream of a gene, untranslated regions, coding DNA sequences and various repetitive elements. Somewhat surprisingly, they do not specifically compare CpG islands to non CpG islands, although some of these differences will be captured by the analysis of regions upstream of a gene, which include many CpG island promoters.
+
+Unfortunately, just as in \citet{Eckhardt:2006gh}, \citet{Li:2010fb} never define exactly what is being computed in their analysis of co-methylation and no software is available. All the co-methylation results are presented as supplementary figures, which lack figure legends and are supported by only very brief captions. So, once again, I have been forced to make my best guess as to what these figures show and how it was computed.
+
+Figure \ref{fig:Li6} plots the "correlation" against "distance of CpG" ($0 - 1000$), which I believe are estimates of the correlation of aggregate methylation levels over the range $0$ to $1000$ bp. Based on the "$n = 18,936,995$" quoted in the header of panel (a) of this figure, which I interpret as the number of pairs used in this plot of "correlation" against "distance of CpG" ($0 - 1000$), I believe that what is shown are the correlations of pairs of CpG $\beta$-values where the pairs are separated by a common distance and have no intervening CpGs. If all pairs were used, $n$ would be much larger since there are more than twenty million CpGs on one strand of the haploid human genome. To emphasise, the correlation computed by \citet{Li:2010fb} is not the same as the autocorrelation computed in \citet{Cokus:2008fc} since \citet{Li:2010fb} only use pairs of adjacent CpGs whereas \citet{Cokus:2008fc} use all pairs of CpGs, regardless of the number of intervening CpGs.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.8\textwidth]{../figures/{journal.pbio.1000533.s006}.pdf}
+\caption{Co-methylation patterns for different genomic features. A reproduction of Supplementary Figure 6 from \citet{Li:2010fb} under the Creative Common Attribution (CCBY) licence.}
+\label{fig:Li6}
+\end{figure}
+
+The plot of genome-wide correlations (panel (a) in Figure \ref{fig:Li6}) contains a period of approximately $170$ bp, very similar to the $167$ bp period identified in _Arabidopsis_ by \citet{Cokus:2008fc}. This is further evidence that nucleosome spacing effects the strength of co-methylation. However, \citet{Li:2010fb} found no evidence of higher frequency periods, such as the $10$ bp period reported by \citet{Cokus:2008fc} and \citet{Chodavarapu:2010iqa}.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.8\textwidth]{../figures/Figure_S7.pdf}
+\caption{Transformation of methylation correlation at nearby CpG cytosines. A reproduction of Supplementary Figure 7 from \citet{Li:2010fb} under the Creative Common Attribution (CCBY) licence.}
+\label{fig:Li7}
+\end{figure}
+
+\subsection{\cite{Lyko:2010dr}}\label{sec:lyko}
+
+In their study of differential methylation in queen and worker honey bees (_Apis mellifera_), \citet{Lyko:2010dr} perform an autocorrelation analysis of CpG methylation. They report that the "correlation of methylation status of neighbouring CpGs increases sharply between 1 bp and 20 bp, then drops rapidly between 40 bp and 100 bp, and then slowly fades away". However, this analysis is fundamentally flawed.
+
+Figure \ref{fig:Lyko} reproduces the results for the co-methylation analysis. Note that the maximum value of the "CpG autocorrelation" is less than $0.015$ (panel (A) of Figure \ref{fig:Lyko}). I strongly suspect that the autocorrelation has been incorrectly computed. Specifically, what I believe has been computed is the autocorrelation of all positions in the genome, not just CpGs, where non-CpGs have been artificially assigned a $\beta$-value of zero. It does not make sense to include non-CpG positions, particularly non-cytosines that can never be methylated, in an analysis of CpG co-methylation. I do not have the data used in \citet{Lyko:2010dr}, but the following example supports my conclusion. This example uses the chromosome 22 data from the _FF_ sample in the _Lister_ dataset (see Section \ref{sec:Lister_dataset} for full details of this sample).
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.8\textwidth]{../figures/Lyko_Figure_S7.pdf}
+\caption{Periodicity of methylation patterns. (A) Autocorrelation of CpG methylation status over 1 kb. (B) Autocorrelation over 100 bp. Figures A and B show that the correlation of methylation status of neighboring CpGs increases sharply between 1 bp and 20 bp, then drops rapidly between 40 bp and 100 bp, and then slowly fades away. CpGs within a neighborhood of 2 bp to 100 bp are thus more likely to share the same methylation status than more distant CpGs. (C) Fourrier transform of autocorrelation showing a clear periodicity peak at 33 cycles per 100 bp (every 3 bp). (D) Distribution of codon position of mCs, and distribution of methylation level depending on the position. These two panels indicate that the distance between methylated CpGs is often a multiple of three and that the methylated cytosine corresponds most frequently to the first nucleotide of an arginine codon. A reproduction of Supplementary Figure 7 from \citet{Lyko:2010dr} under the Creative Common Attribution (CCBY) licence.}
+\label{fig:Lyko}
+\end{figure}
+
+Let $\bm{\beta^{\ast}}$ be the augmented vector of $\beta$-values, where:
+
+\begin{equation*}
+\beta^{\ast}_{i'} = \left\{
+  \begin{array}{ll}
+  0 & \text{if } i' \text{ is not a CpG}\\
+  \beta_{i} & \text{if } i' \text{ is a CpG}
+  \end{array}
+  \right.
+\end{equation*}
+
+Figure \ref{fig:FF_chr21_acf_beta_star} is a plot of the autocorrelation of the augmented vector, $\bm{\beta^{\ast}}$ for the chromosome 22 data from the _FF_ sample. We see that it is remarkably similar to that panel (a) of Figure \ref{fig:Lyko}; the correlation first increases then decreases and the maximum correlation is very small, close to zero.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.8\textwidth]{../figures/FF_chr21_acf_beta_star.pdf}
+\caption{Autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \em{FF} sample.}
+\label{fig:FF_chr21_acf_beta_star}
+\end{figure}
+
+Furthermore, if we compute the Fourier transform of this autocorrelation we find a period of approximately 3 bp, identical to that reported by \citet{Lyko:2010dr} for honey bees (compare panel (c) of Figure \ref{fig:Lyko} and Figure \ref{fig:FF_chr21_acf_beta_star_fourier}). Like my earlier criticism of the co-methylation results of \citet{Lister:2009hy}, I believe the apparent $3$ bp period is more likely due to the spacing of nucleotides in the genome than anything to do with their methylation state.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.8\textwidth]{../figures/FF_chr21_acf_beta_star_fourier.pdf}
+\caption{Fourier transformation of the autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \textit{FF} sample. Fourier transformation computed and plotted using the \texttt{spectrum} function in R. The period is defined as 1 / frequency. The maximum frequency is approximately $0.33$, which corresponds to a period of approximately $3$ bp.}
+\label{fig:FF_chr21_acf_beta_star_fourier}
+\end{figure}
+
+All of this casts serious doubt on the validity and interpretation of the co-methylation results in \citet{Lyko:2010dr}.
+
+\subsection{\citet{Lacey:2013iy}}\label{sec:lacey_2013}
+
+\citet{Lacey:2013iy} explore co-methylation in their paper on modelling and analysing reduced representation bisulfite-sequencing data (RRBS). To do so, \citeauthor{Lacey:2013iy} fit a Gaussian variogram model to the CpG $\beta$-values from chromosome 11 of a normal myotube cell line (_MTCTL2_). The empirical and fitted variograms asymptote for CpGs separated by approximately $3000$ bp (Figure 1d of \citet{Lacey:2013iy}, unable to reproduce here due to rights restrictions) and so they conclude that the methylation level of CpGs "show a strong correlation for sites in close proximity, decaying to near independence at distances beyond 3000 bp".
+
+Caution is warranted in extrapolating these results to statements about genome-wide co-methylation. Firstly, this analysis uses only approximately $60,000$ CpGs[^ncpgs], far fewer than the $25$ million CpGs in the haploid human genome. Secondly, these data are from a single sample from a single tissue, which cannot capture the sample-to-sample nor tissue-to-tissue variability in co-methylation. Finally, RRBS targets CpG dense regions of the genome with low levels of methylation and so these data do not capture co-methylation outside of these regions, where the majority of the CpGs are found and which are highly methylated.
+
+[^ncpgs]: The data for MTCTL2 are not publicly available so I estimated the number of sequenced CpGs on chromosome 11 from three comparable RRBS libraries (see Appendix \ref{app:lacey}).
 
 \section{Within-fragment co-methylation}
 \label{sec:previous_within-fragment_analyses}
@@ -216,21 +223,21 @@ As discussed in Section \ref{sec:m-tuples}, bisulfite-sequencing allows for the 
 
 [^chimera]: Here I ignore the possibility of chimeric reads that may be artificially produced by DNA fragments ligating to one another during the library preparation or sequencing process.
 
-I call this _within-fragment co-methylation_, where 'fragment' refers to a fragment of DNA. More precisely, within-fragment co-methylation is the dependence of DNA methylation at methylation loci that occur on the same DNA fragment. It can be thought of as the dependence structure of the binary stochastic process $Z_{h} = (Z_{h, 1}, Z_{h, 2}, \ldots, Z_{h, N_{loci}})$. For example, we may wish to understand how $Z_{h, i}$ affects $Z_{h, i'}$ and to develop a simple, tractable model of this dependence structure. We can study what variables effect this dependence, such as the distance between methylation loci and the genomic context of the methylation loci. There is less previous work studying within-fragment co-methylation than there is for correlations of aggregate methylation levels.
+I call this _within-fragment co-methylation_, where 'fragment' refers to a fragment of DNA. More precisely, within-fragment co-methylation is the dependence of DNA methylation at methylation loci that occur on the same DNA fragment. It can be thought of as the dependence structure of the binary stochastic process $\mathbf{Z_{h}} = (Z_{h, 1}, Z_{h, 2}, \ldots, Z_{h, N_{loci}})$. There is less previous research studying within-fragment co-methylation than there is studying correlations of aggregate methylation levels. In Chapter \ref{chap:co-methylation} I extensively explore within-fragment co-methylation and how different variables affect this dependence, such as the distance between methylation loci and the genomic context of the methylation loci.
 
-If we could sequence entire chromosomes by single reads then we could analyse co-methylation between any set of methylation loci. However, the most commonly used technology for high-throughput bisulfite-sequencing, using Illumina's  sequencing technology, can only generate reads that span approximately $200-250$ bp at a maximum. We are therefore limited to studying co-methylation between methylation loci separated by at most $200-250$ bp. Note that assembling these reads into longer contigs will not solve this problem since the assembly cannot guarantee that the assembled reads actually originated from the same cell or haplotype.
+If we could sequence entire chromosomes by single reads, then we could analyse co-methylation between any set of methylation loci. However, the most commonly used technology for high-throughput bisulfite-sequencing, which is based on Illumina's sequencing technology, can only generate reads that span approximately $200$ to $250$ bp. We are therefore limited to studying within-fragment co-methylation between methylation loci separated by at most $200$ to $250$ bp[^assembly]. Long-read sequencing technologies (e.g., Pacific Biosciences, Roche 454 and Oxford Nanopore) would overcome this limitation but the lower throughput of these technologies, and the reliability with which they can identify methylcytosines, create new complications. An alternative solution, although completely hypothetical, is to use a technique that generates synthetic long reads, similar to those generated by Illumina's TruSeq Synthetic Long-Read technique[^moleculo].  
 
-Long-read sequencing technologies, such as Pacific Biosciences, Roche 454 and Oxford Nanopore, would overcome this limitation but the lower throughput of these technologies, and the reliability with which they can identify methylcytosines, create new complications. An alternative solution, although completely hypothetical, is to use a technique that generates synthetic long reads, similar to those generated by Illumina's TruSeq Synthetic Long-Read technique[^moleculo].  
+[^assembly]: NB Assembling these reads into longer contigs will not solve this problem since the assembly does not guarantee that the reads assembled into longer fragments actually originated from the same cell or haplotype.
 
-[^moleculo]: My understanding is that Illumina's TruSeq Synthetic Long-Read technique cannot be directly applied to bisulfite-sequencing for a number of technique reasons, including the fragility of large DNA fragments treated with sodium bisulfite.
+[^moleculo]: My understanding is that Illumina's TruSeq Synthetic Long-Read technique cannot be directly applied to bisulfite-sequencing for a number of technical reasons, including the fragility of large DNA fragments treated with sodium bisulfite.
 
 To summarise, current technologies mean that we are limited to studying within-fragment co-methylation at loci that are within regions of approximately $200-250$ nucleotides.
 
 \subsection{\citet{Cokus:2008fc}}\label{sec:cokus_within_fragment}
 
-As already discussed in Section \ref{sec:Cokus}, \citet{Cokus:2008fc} identify a $10$ nucleotide periodicity in the autocorrelation of $\beta$-values for CHH methylation from a whole-genome bisulfite-sequencing experiment of _Arabidopsis Thaliana_. They also reported they they find this same periodicity "when individual reads [were] examined directly".
+As discussed in Section \ref{sec:Cokus}, \citet{Cokus:2008fc} identify a $10$ bp period in the autocorrelation of $\beta$-values for CHH methylation from a whole-genome bisulfite-sequencing experiment of _Arabidopsis thaliana_. They also report that they find this same period "when individual reads are examined directly".
 
-The sequencing technology at the time of this publication produced very short reads, on average only $31$ nucleotides of usable sequence. For the within-fragment co-methylation results (reproduced in Figure \ref{fig:Cokus_2008_Sup_Fig_14}) \citeauthor{Cokus:2008fc} first identify all reads containing multiple CHH loci. Then, for a pair of CHH loci in the same read, they estimate the probability that the second CHH in the pair is methylated given that the first CHH in the pair is methylated. This is estimated by simply counting the number of times this occurs and dividing by the number of pairs of CHH loci that occur within the same read[^cokus_clarification]. They estimate this probability separately for each distance between CHH loci and separately for each of the five _Arabidopsis_ chromosomes. \citeauthor{Cokus:2008fc} then plot the average across the five chromosomes as a function of the number of nucleotides between the CHH loci. This plot includes pointwise $95\%$ confidence intervals, computed under an assumption of normality, and a running average of these averages. There is an approximate $10$ nucleotide periodicity evident in this plot, supporting the interpretation of the results observed in the autocorrelation of the $\beta$-values.
+The sequencing technology at the time of this publication produced very short reads, on average only $31$ bp of usable sequence. For the within-fragment co-methylation results, \citeauthor{Cokus:2008fc} first identify all reads containing multiple CHH loci. Then, for a pair of CHH loci in the same read, they estimate the probability that the second CHH in the pair is methylated given that the first CHH in the pair is methylated. This is estimated by simply counting the number of times this occurs and dividing by the number of pairs of CHH loci that occur within the same read[^cokus_clarification]. They estimate this probability separately for each distance between CHH loci and separately for each of the five _Arabidopsis_ chromosomes. \citeauthor{Cokus:2008fc} then plot the average across the five chromosomes as a function of the number of nucleotides between the CHH loci. The plot includes pointwise $95\%$ confidence intervals, computed under an assumption of normality, and a running average of these averages. This plot, reproduced in Figure \ref{fig:Cokus_2008_Sup_Fig_14}, shows evidence of an approximately $10$ bp period, supporting the interpretation of the results observed in the autocorrelation of the $\beta$-values.
 
 \begin{figure}[!htb]
 \centering
@@ -241,70 +248,89 @@ The sequencing technology at the time of this publication produced very short re
 
 [^cokus_clarification]: A read may contain multiple pairs of CHH loci and it is not clear whether \citeauthor{Cokus:2008fc} consider all pairs of CHH loci or only the first pair of CHH loci in a read. The number of pairs of CHH loci that occur within the same read is not the same as the number of reads containing multiple CHH loci. Either method should give similar results since there will be few 31 nucleotide reads containing multiple pairs of CHH loci.
 
-I consider these results to be based on a restricted definition of within-fragment co-methylation. To explain, these results tell us nothing about the probability that both CHH loci are _unmethylated_ nor the joint probability distribution of methylation for two CHH loci on the same fragment, but only about the probability that both CHH loci are methylated.
+I consider these results as based on a restricted definition of within-fragment co-methylation. To explain, these results tell us nothing about the probability that both CHH loci are _unmethylated_ nor the joint probability distribution of methylation for two CHH loci on the same fragment; they tell us only about the probability that both CHH loci are methylated.
 
-Specifically, \citet{Cokus:2008fc} only estimate the marginal probability that a CHH is methylated, $Pr(Z_{h, i} = 1)$, and the probability that two CHH loci on the same fragment are both methylated, $Pr(Z_{h, i'} = 1 | Z_{h, i} = 1)$, where $i < i'$. From these two quantities we can only estimate two of the four joint probabilities, $Pr(Z_{h, i} = x, Z_{h, i} = y)$, namely, $Pr(Z_{h, i} = 1, Z_{h, i'} = 1)$ and $Pr(Z_{h, i} = 1, Z_{h, i'} = 0)$. It does not allow estimation of $Pr(Z_{h, i} = 0, Z_{h, i'} = 0)$, nor of $Pr(Z_{h, i} = 0, Z_{h, i'} = 1)$, since these require estimates of $Pr(Z_{h, i'} = 0 | Z_{h, i} = 0)$. While it is trivial to additionally estimate $Pr(Z_{h, i'} = 0 | Z_{h, i} = 0)$, I argue in Section \ref{subsec:wf_cometh} that it is more useful and simpler to estimate the odds ratio, $\frac{Pr(Z_{h, i} = 1, Z_{h, i'} = 1) Pr(Z_{h, i} = 0, Z_{h, i'} = 0)}{Pr(Z_{h, i} = 1, Z_{h, i'} = 0) Pr(Z_{h, i} = 0, Z_{h, i'} = 1)}$, rather than the conditional probabilities, $Pr(Z_{h, i'} = 1 | Z_{h, i} = 1)$ and $Pr(Z_{h, i'} = 0 | Z_{h, i} = 0)$.
+Specifically, \citet{Cokus:2008fc} only estimate the marginal probability that a CHH is methylated, $Pr(Z_{h, i} = 1)$, and the probability that two CHH loci on the same fragment are both methylated, $Pr(Z_{h, i'} = 1 | Z_{h, i} = 1)$, where $i < i'$. From these two quantities we can only estimate two of the four joint probabilities, $Pr(Z_{h, i} = x, Z_{h, i} = y), x, y \in \{0, 1\}$, namely, $Pr(Z_{h, i} = 1, Z_{h, i'} = 1)$ and $Pr(Z_{h, i} = 1, Z_{h, i'} = 0)$. It does not allow estimation of $Pr(Z_{h, i} = 0, Z_{h, i'} = 0)$, nor of $Pr(Z_{h, i} = 0, Z_{h, i'} = 1)$, since these require estimates of $Pr(Z_{h, i'} = 0 | Z_{h, i} = 0)$. While it is trivial to additionally estimate $Pr(Z_{h, i'} = 0 | Z_{h, i} = 0)$, I argue in Section \ref{subsec:wf_cometh} that it is more useful and simpler to estimate the odds ratio, $\frac{Pr(Z_{h, i} = 1, Z_{h, i'} = 1) Pr(Z_{h, i} = 0, Z_{h, i'} = 0)}{Pr(Z_{h, i} = 1, Z_{h, i'} = 0) Pr(Z_{h, i} = 0, Z_{h, i'} = 1)}$, rather than the conditional probabilities, $Pr(Z_{h, i'} = 1 | Z_{h, i} = 1)$ and $Pr(Z_{h, i'} = 0 | Z_{h, i} = 0)$.
 
 Furthermore, by aggregating all pairs of CHH loci separated by a common distance and then estimating these probabilities, there is an implicit assumption that all such pairs on the same chromosome have the same conditional probability, $Pr(Z_{h, i'} = 1 | Z_{h, i} = 1)$. There is good reason to suspect that this is not true and that there exists significant pair-to-pair variability. For example, we know for CpGs that those within CpG islands have a vastly different probability of being methylated than do those outside of islands; it is reasonable to suspect that this is also true for CHH methylation in different regions of the _Arabidopsis_ genome and hence for the co-methylation of these same loci. This aggregation may also introduction artificial associations into the $2 \times 2$ contingency table from which these probabilities are estimated \citep{Good:1987ce}.
 
 \subsection{\citet{Lacey:2009by}}\label{sec:lacey_2009}
 
-\citet{Lacey:2009by} develop stochastic models of the replication of DNA methylation during mitosis (cell division) for a single double-stranded DNA molecule in humans. The most complex model, called the _neighbouring sites model_, uses a one-step Markov random field where the methylation state of one loci, $Z_{h, i}$, depends on that of its neighbours either side, $Z_{h, i - 1}$ and $Z_{h, i + 1}$. The physical distances between these neighbours, the $IPD$s, are not considered.
+\citet{Lacey:2009by} develop stochastic models of DNA methylation replication during mitosis (cell division) for a single double-stranded DNA molecule in humans. The most complex model, called the _neighbouring sites model_, uses a one-step Markov random field. Under this model, the methylation state of one locus, $Z_{h, i}$, depends on the methylation states of the adjacent loci, $Z_{h, i - 1}$ and $Z_{h, i + 1}$. The physical distances between these neighbours, the $IPD$s, are not considered.
 
-The neighbouring sites model requires an analysis of within-fragment co-methylation in order to estimate the transition probabilities. They estimate these parameters from two small regions, each approximately $200$ nucleotides in length and containing 13 and 14 CpGs, from 10 human ovarian carcinoma samples and a pool of somatic controls. These regions were sequenced using hairpin-bisulfite PCR, an assay that measures DNA methylation on both strands of a double-stranded DNA molecule[^hairpin_bs]. For each region, $12-16$ clones were sequenced per sample[^clones]
+The neighbouring sites model requires an analysis of within-fragment co-methylation in order to estimate the transition probabilities. They estimate these parameters from two small regions of 10 human ovarian carcinoma samples and a pool of somatic controls, each region approximately $200$ bp in length and containing 13 and 14 CpGs, respectively. These regions were sequenced using hairpin-bisulfite PCR, an assay that measures DNA methylation on both strands of a double-stranded DNA molecule[^hairpin_bs]. For each region, $12$ to $16$ clones were sequenced per sample[^clones]
 
 [^hairpin_bs]: This is unlike traditional bisulfite-sequencing, which only measures methylation along a single DNA strand.
 
 [^clones]: Essentially, $12-16$ reads were generated per sample.
 
-For each of these regions, \citet{Lacey:2009by} found that the methylation level of a CpG strongly depends on that of its neighbours. In other words, they found significant within-fragment co-methylation. They also found that the overall level of methylation of the CpGs in a region influenced the strength of the within-fragment co-methylation.
+For each of these regions, \citeauthor{Lacey:2009by} found that the methylation level of a CpG strongly depends on that of its neighbours. In other words, they found significant within-fragment co-methylation. They also found that the overall level of methylation of the CpGs in a region influenced the strength of the within-fragment co-methylation.
 
 In summary, this analysis uses high resolution measurements from a moderate number of clones from a moderate number of samples for a minuscule fraction of the human genome. While the methods and models are quite interesting, the data are so limited that the results obtained from these analyses cannot represent a genome-wide picture of within-fragment co-methylation.
 
 \subsection{\citet{Landan:2012kp}}\label{sec:landan}
 
-\citet{Landan:2012kp} is notable for its use of the within-read information available from bisulfite-sequencing data.  The authors explore the within-sample heterogeneity of methylation patterns at 4-tuples and 6-tuples of CpGs. They use ultra-deep (median coverage of each CpG in the target $> 10,000 \times$) bisulfite-sequencing of a 45 cancer-related CpG islands and study how methylation dynamics at this regions evolves over time. They also use these data to estimate co-methylation.
+\citet{Landan:2012kp} is notable for its use of the within-read information available from bisulfite-sequencing data. The authors explore the within-sample heterogeneity of methylation patterns at 4-tuples and 6-tuples of CpGs from ultra-deep bisulfite-sequencing (median coverage of each CpG in the target $> 10,000 \times$) of 45 cancer-related CpG islands and study how methylation dynamics at this regions evolves over time. \citeauthor{Landan:2012kp} also use these data to estimate co-methylation.
 
-As part of their analysis they compute "methylation linkage diagrams". For each pair of CpGs in their targeted regions, they create a $2 \times 2$ contingency table. The general form of the table is shown below in Table \ref{tab:landan}. They then compute the Pearson correlation of each table[^cor_equivalence], which estimates the correlation of methylation events at that pair of CpGs. Importantly, these are within-read measurements from a single sample and so these are estimates of within-read, within-sample co-methylation.
+As part of their analysis, citeauthor{Landan:2012kp} construct "methylation linkage diagrams" based on a Pearson correlation estimate of within-fragment co-methylation. For each CpG 2-tuple in their targeted regions, they create a $2 \times 2$ contingency table. The general form of the table is shown below in Table \ref{tab:landan}. They then compute the Pearson correlation of each table[^cor_equivalence], $r = \frac{mm_{i, i'} \times uu_{i, i'} - mu_{i, i'} \times um_{i, i'}}{sqrt{u\cdot_{i, i'} \times m\cdot_{i, i'} \times \cdot u_{i, i'} \times m_{i, i'}}}$. Importantly, $r$ is based on within-read measurements from a single sample and so these $r$ are estimates of within-read, within-sample co-methylation.
 
-[^cor_equivalence]: Since this is a correlation of two binary variables, it is equivalent to computing the _phi_ coefficient of each $2 \times 2$ table.  
+[^cor_equivalence]: The formula I give for $r$ is also known as the $\phi$ coefficient of a $2 \times 2$ table. The $\phi$ coefficient of a $2 \times 2$ table of binary variables, such as Table \ref{tab:landan}, is mathematically equivalent to the Pearson correlation coefficient of the same data.
 
 \begin{table}[h]
 \centering
-\begin{tabular}{@{}ccccc@{}}
-\cmidrule(l){3-5}
- &  & \multicolumn{3}{c}{Second CpG} \\ \cmidrule(l){3-5}
- &  & $m$ & $u$ & Total \\ \cmidrule(l){2-5}
-\multirow{3}{*}{First CpG} & $m$ & $n_{m, m}$ & $n_{m, u}$ & $n_{m, .}$ \\
- & $u$ & $n_{u, m}$ & $n_{u, u}$ & $n_{u, .}$ \\
- & Total & $n_{., m}$  & $n_{, u}$  & $n$ \\ \cmidrule(l){2-5}
+\begin{tabular}{@{}cccc@{}}
+\cmidrule(l){2-4}
+ & \multicolumn{3}{c}{Second CpG} \\
+ \cmidrule(l){2-4}
+\multirow{3}{*}{First CpG} & & & \\
+ & $uu_{i, i'}$       & $um_{i,i ''}$       & $u\cdot_{i, i'}$ \\
+ & $mu_{i, i'}$       & $mm_{i, i'}$       & $m\cdot_{i, i'}$ \\
+ & $\cdot u_{i, i'}$  & $\cdot m_{i, i'}$  & $d_{i, i'}$      \\ \cmidrule(l){2-4}
 \end{tabular}
-\caption{Summary of read counts at a CpG 2-tuple.}
+\caption{Summary of read counts at a CpG 2-tuple, $(i, i'), i \neq i'$. A dot ($\cdot$) indicates that this index is summed over, e.g., $u\cdot_{i, i + 1} = uu_{i, i + 1} + um_{i, i + 1}$.}
 \label{tab:landan}
 \end{table}
 
-These correlations are then plotted like a linkage disequilibrium heatmap to identify blocks of CpGs with significant co-methylation. From the analysis of this small set of regions they conclude that:
+So-called "methylation linkage diagrams" are created by plotting the Pearson correlation of each 2-tuple, $r_{(i, i')}$ as a heatmap (_à la_ heatmaps of linkage disequilibrium) to identify blocks of CpGs with significant co-methylation. It should be noted that the concepts of 'individual' and 'population' are rather different for "methylation linkage" than they are for genetic linkage (see Table \ref{tab:linkage}).
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+                    & Individual               & Population \\ \midrule
+Genetic linkage     & Person                   & Population \\
+Methylation linkage & (Haploid) genome of cell & Person     \\ \bottomrule
+\end{tabular}
+\caption{Notions of 'individual' and 'population' in traditional genetic linkage and the "methylation linkage" of \citet{Landan:2012kp}. NB 'person' could be any organism, e.g, 'mouse', 'dog', etc.}
+\label{tab:linkage}
+\end{table}
+
+From the methylation linkage analysis of these 45 regions, \citeauthor{Landan:2012kp} conclude that:
 
 > "[the] correlation between the methylation states of pairs of CpGs was generally very low. This lack of correlation suggests that methylation dynamics are typically independent for different CpGs, making the methylation state of one CpG (whether high or low) uninformative on the methylation state of nearby CpGs."
 
-As we will see in Chapter \ref{chap:co-methylation}, this is contradicted by my analyses of co-methylation.
+As we will see in Chapter \ref{chap:co-methylation}, this result is contradicted by my analyses of within-fragment co-methylation (__TODO__: Update once Chapter \ref{chap-comethylation} is updated.)
 
 \section{Between-sample co-methylation}
 \label{sec:between_sample_cometh}
 
-As is clear from the above, there are multiple definitions of within-sample co-methylation, each capturing variations on the idea of the correlation of methylation levels at pairs of loci within a single sample. A different concept is between-sample co-methylation, which is the correlation of methylation levels of a single pair of loci between a set of samples.
+As is now abundantly clear, there are multiple definitions of within-sample co-methylation. An almost orthogonal concept is between-sample co-methylation, the correlation of methylation levels for a single pair of loci between a set of samples.
 
-Since it is a loci-specific, population-level correlation, between-sample co-methylation is somewhat analogous to the idea of linkage disequilibrium between genetic loci. Briefly, for two loci, $(i, i')$, the correlation of aggregate methylation levels is computed across samples using, for example, the Pearson correlation coefficient, $r = cor(\bm{\beta_{i}}, \bm{\beta_{i'}})$, where $\bm{\beta_{i}} = (\beta_{i, 1}, \ldots, \beta_{i, N_{loci}})$.
+Between-sample co-methylation is somewhat analogous to the idea of linkage disequilibrium between genetic loci since it is a locus-specific correlation measured at the population level.
 
-The concept of between-sample co-methylation leads to the attractive idea of identifying "tag-loci", whose methylation level is a good proxy for the methylation level across a larger region. These tag-loci could act like tag-SNPs used in genome-wide association studies, which would allow researchers to assay a small subset of loci in the methylome and capture much of the methylation variability. This idea has been explored by \citet{Barrera:2012cq} with respect to the use of _HpaII_ sites as proxies for the methylation level of CpG islands.
+Since it is a loci-specific, population-level correlation, between-sample co-methylation is somewhat analogous to the idea of linkage disequilibrium between genetic loci. Briefly, for two loci, $(i, i')$, the correlation of aggregate methylation levels is computed across samples using, for example, the Pearson correlation coefficient, $r = cor(\bm{\beta_{i}}, \bm{\beta_{i'}})$, where $\bm{\beta_{i}} = (\beta_{i, 1}, \ldots, \beta_{i, N_{samples}})$.
 
-Unfortunately, unlike linkage disequilibrium, we cannot assume that between-sample co-methylation is identical across different tissues from the same individuals since DNA methylation, unlike DNA sequence, varies across tissues. Therefore, at best, we might hope to generate tissue-specific maps of between-sample co-methylation.
+The concept of between-sample co-methylation leads to the attractive idea of identifying "methylation tag-loci", whose methylation level is a good proxy for the methylation level across a larger region. These tag-loci could act like tag-SNPs used in genome-wide association studies, which would allow researchers to assay a small subset of loci in the methylome and capture much of the methylation variability. This idea has also been explored by \citet{Barrera:2012cq} with respect to the use of _HpaII_ sites as proxies for the methylation level of CpG islands.
+
+Unfortunately, unlike linkage disequilibrium, we cannot assume that between-sample co-methylation is identical between different tissues from the same individuals since DNA methylation, unlike DNA sequence, varies between tissues. Therefore, at best, we might hope to generate tissue-specific maps of between-sample co-methylation.
 
 In order to exploit between-sample co-methylation in this way, we also need to know the size of these co-methylation blocks, that is, the length of the regions over which between-sample co-methylation is sufficiently strong. The longer these blocks are, the more sparsely we can afford to sample individual methylomes.
 
 An example of between-sample co-methylation is given by \citet{Liu:dy}. The authors compute the correlation of pairs of $\beta$-values across samples to identify clusters of correlated CpGs and relate methylation changes at these clusters to nearby SNP genotypes. The resolution of their data is limited since it uses Illumina HumanMethylation450 array, but they conclude that "DNA methylation is correlated over regions with a median length of 274 bp from our data set". They also note that, "methylation codependency [co-methylation] itself varies across the genome", as is to be expected. No software is provided to implement the method.
 
-A simple way to estimate between-sample co-methylation is to create a matrix of $\beta$-values, $\bm{\beta}$, where the $(i, j)$ entry is $\beta_{i, j}$. Then, compute $R = cor(X^{T})$, whose $(k, l)$ entry is $cor(\bm{\beta_{., k}}, \bm{\beta_{., l}})$, where $\bm{\beta_{., k}}$ is the column vector of $\beta$-values for the $k^{th}$ methylation loci. This is what the R package, `coMET`   ([http://bioconductor.org/packages/devel/bioc/html/coMET.html](http://bioconductor.org/packages/devel/bioc/html/coMET.html)), does to estimate the between-sample co-methylation of Illumina HumanMethylation450 array data.
+__UP TO HERE: Work through the logic of this next paragraph__
+
+A simple way to estimate between-sample co-methylation is to create a matrix of $\beta$-values, $\bm{\beta}$, where the $(i, j)$ entry is $\beta_{i, j}$. Then, compute $R = cor(\bm{\beta})$, whose $(k, l)$ entry is $cor(\bm{\beta_{., k}}, \bm{\beta_{., l}})$, where $\bm{\beta_{., k}}$ is the column vector of $\beta$-values for the $k^{th}$ methylation loci. This is what the R package, `coMET`   ([http://bioconductor.org/packages/devel/bioc/html/coMET.html](http://bioconductor.org/packages/devel/bioc/html/coMET.html)), does to estimate the between-sample co-methylation of Illumina HumanMethylation450 array data.
 
 \section{Exploiting co-methylation in downstream analyses}
 \label{sec:exploiting_cometh}
