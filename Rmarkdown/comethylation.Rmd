@@ -551,7 +551,7 @@ Figures \ref{fig:EPISCOPE_lor_min_cov_10_strand_collapsed_ac}, \ref{fig:Lister_l
 \label{fig:Ziller_lor_min_cov_10_strand_collapsed_ac}
 \end{figure}
 
-__TODO: I need to re-write this section (bold). I'm really not yet sure if this result is biology or an artefact. My instinct says artefact but I haven't yet been able to prove this either way to my satisfaction
+__TODO__: I need to re-write this section. I'm really not yet sure if this result is biology or an artefact. My instinct says artefact but I haven't yet been able to prove this either way to my satisfaction
 These plots appear to show that there is a dramatic increase in within-fragment co-methylation at precisely these $IPD$s for paired-end samples from the Lister dataset. However, I am very skeptical as to the biological relevance of these results.
 
 There are three reasons for my skepticism. Firstly, similar results are not observed for any of the EPISCOPE samples nor any of the Ziller samples[^mouse_vs_man]. Secondly, the Lister samples with single-end sequencing have a similar spike in the estimated within-fragment co-methylation at the edge of the observable $IPD$s. However, for single-end data this corresponds to an $IPD \approx 60-80$ bp and we see no evidence of an increase in within-fragment co-methylation at these $IPD$s in any of the paired-end samples. This leads to my final reason, and what I think is the source of this artefact. Namely, estimates of within-fragment co-methylation are highly susceptible bias due to the incomplete removal of M-bias. This is particularly true for larger $IPD$s where the loci in the 2-tuples come from the ends of the reads, which are where M-bias is most prevalent.
@@ -622,15 +622,15 @@ The results of this chapter clearly demonstrate that DNA methylation has a highl
 The simple estimator of within-fragment co-methylation is biased when the marginal probability of methylation is close to the boundary (0 or 1) unless the 2-tuple is sequenced at very high depth. I demonstrate this by simulating methylation patterns at 2-tuples as independent $binomail(1, p)$ random variables and showing that the simple LOR estimator is positively biased.
 
 ```{r}
-# Function to simulate n 2-tuples with d sequencing coverage and marginal 
+# Function to simulate n 2-tuples with d sequencing coverage and marginal
 # probabilities p1, p2
-f <- function(n, d, p1, p2) {
+f <- function(n, d, p1, p2, offset = 0.5) {
   sapply(seq_len(n), function(i, d, p1, p2) {
   z1 <- factor(rbinom(d, 1, p1), levels = c(0, 1))
   z2 <- factor(rbinom(d, 1, p2), levels = c(0, 1))
   x <- xtabs(~ z2 + z1, drop.unused.levels = FALSE)
-  log2(x[1, 1] + 0.5) + log2(x[2, 2] + 0.5) - 
-    log2(x[1, 2] + 0.5) - log2(x[2, 1] + 0.5)
+  log2(x[1, 1] + offset) + log2(x[2, 2] + offset) -
+    log2(x[1, 2] + offset) - log2(x[2, 1] + offset)
   }, d = d, p1 = p1, p2 = p2)
 }
 
@@ -689,5 +689,17 @@ mapply(function(x, p) {
   abline(v = 0, col = "red", lty = 2)
   }, x = x, p = p)
 title(paste("d = ", d), outer = TRUE, line = -1)
-
 ```
+
+## Following chat with Terry
+
+These are my notes following a Skype conversion with Terry to discuss the issue.
+
+- [ ] Try a higher order Taylor expansion of the log odds-ratio to get e.g., $n^{1}$ or $n^{3/2}$ convergence. The $+\frac{1}{2}$ fudge-factor is motivated by such an expansion and perhaps it is possible to do better by a higher order expansion.
+  - [ ] First try showing the $c = \frac{1}{2}$ is optimal.
+- [ ] Read texts about this issue
+- [ ] Look for research papers on the general issue of dealing with bias in log odds-ratio estimates
+- [ ] What if I just increase the fudge-factor to increase the shrinkage/smoothing of the estimates? It'll shrink to zero alright, but what is the theoretical justification?
+- [ ] Check out the behaviour of the $\phi$ coefficient, i.e., Pearson's $r$ of the $2 \times 2$ table.
+  - Landan et al.: "Note that correlation values are subject to considerable noise when coverage is low or when m1 or m2 are close to 0 or 1."
+    - They don't define whether 'noise' means bias, variance, skewness, etc.
