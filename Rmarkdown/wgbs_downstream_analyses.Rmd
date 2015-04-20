@@ -15,7 +15,7 @@ bibliography: ../latex/phd_thesis.bib
 \begin{chapabstract}
 I discuss methods for the _downstream analysis_ of bisulfite-sequencing data. Downstream analyses proceed the processing of the raw data (Chapter \ref{chap:wgbs_bioinformatics_analysis}) to address the scientific questions of interest. Most downstream methods analyse methylation counts at 1-tuples, however, there is growing interest in analyses based on methylation patterns at m-tuples. I discuss the statistical questions underlying these downstream analyses. I pay particular attention to those based on m-tuples (m $> 1$) since these have received less attention in the literature.
 
-A barrier to analyses based on m-tuples has been a lack of software. To overcome this barrier, I introduce \code{MethylationTuples}, an R package for managing, analysing and visualising methylation patterns at m-tuples. \code{MethylationTuples} complements \code{methtuple} (Chapter \ref{chap:wgbs_bioinformatics_analysis}) by providing a framework for the manipulation and analysis of methylation patterns at m-tuples. I describe methods available in \code{MethylationTuples} for the downstream analysis of whole-genome bisulfite-sequencing data.
+A barrier to analyses based on m-tuples has been a lack of software. To overcome this barrier, I introduce \texttt{MethylationTuples}, an R package for managing, analysing and visualising methylation patterns at m-tuples. \texttt{MethylationTuples} complements \texttt{methtuple} (Chapter \ref{chap:wgbs_bioinformatics_analysis}) by providing a framework for the manipulation and analysis of methylation patterns at m-tuples. I describe methods available in \texttt{MethylationTuples} for the downstream analysis of whole-genome bisulfite-sequencing data.
 \end{chapabstract}
 
 \section{Methods based on 1-tuples}
@@ -99,7 +99,7 @@ The latter offers the opportunity to identify novel regions that are subject to 
 
 The idea of testing for differential methylation at _a priori_ defined regions is relatively straightforward. Suppose we have a two-group experiment and let $\widebar{B_{r}^{k}}$ be the true average level of methylation for the $r^{th}$ region in the $k^{th}$ group ($k = 0, 1$). The null hypothesis is that $\widebar{B_{r}^{0}} = \widebar{B_{r}^{1}}$ against the alternative hypothesis that $\widebar{B_{r}^{0}} \neq \widebar{B_{r}^{1}}$.
 
-We might estimate \widebar{B_{r}^{k}} by the group-wise average of the sample-wise weighted average of $\beta$-values for all methylation loci in the region, where the weights are proportional to the sequencing coverage. Then, identifying differential methylation at _a priori_ defined regions simply boils down to identifying differences in means, just as is the case for testing for DMCs. Again, this problem can be viewed as a 'stand-alone' test, such as a t-test, or framed as a regression problem to allow for the inclusion of additional covariates.
+We might estimate $\widebar{B_{r}^{k}}$ by the group-wise average of the sample-wise weighted average of $\beta$-values for all methylation loci in the region, where the weights are proportional to the sequencing coverage. Then, identifying differential methylation at _a priori_ defined regions simply boils down to identifying differences in means, just as is the case for testing for DMCs. Again, this problem can be viewed as a 'stand-alone' test, such as a t-test, or framed as a regression problem to allow for the inclusion of additional covariates.
 
 The above description brushes over some technicalities, such as how to handle CpGs with insufficient sequencing coverage. An alternative approach for testing _a priori_ defined regions for differential methylation is offered by `BiSeq` \citep{Hebestreit:2013ko}.
 
@@ -239,7 +239,7 @@ Methods designed to detect allele-specific methylation, specifically those that 
 
 Generally speaking, there are fewer software options for analysing methylation patterns at m-tuples (m $> 2$) than there are for analysing methylation patterns at 1-tuples. Furthermore, the available options are often difficult to extend since they are typically developed for a specific task and not for general computations with methylation patterns at m-tuples.
 
-I have also experienced considerable difficulty in applying some of these methods owing to poor software implementations. Two give two examples, `DMEAS` \citep{He:2013cj is only available as a Windows binary or as a Perl script that itself is only available as a PDF file and I have been unable to install `methclone` __TODO: Give reasons__.
+I have also experienced considerable difficulty in applying some of these methods owing to poor software implementations. Two give two examples, `DMEAS` \citep{He:2013cj is only available as a Windows binary or as a Perl script that itself is only available as a PDF file and I have been unable to install `methclone` due to compilation errors.
 
 `MethPipe` is perhaps the best documented and potentially extensible software for analysing methylation patterns at m-tuples. `MethPipe` is mostly written in C++ and is designed as a suite of tools for a complete 'pipeline' analysis of bisulfite-sequencing data. As such, it does not feature tools that are particularly amenable to interactive or exploratory analyses. In fact, I am unaware of any software that allows easy exploratory analyses of methylation patterns at m-tuples, which in part motivated the development of `MethylationTuples`.
 
@@ -254,7 +254,7 @@ I have made significant progress towards the first goal with `methtuple` (see Se
 
 \subsection{Design}
 
-`MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples, It is released under an Artistic-2.0 licence (__TODO: Why use this instead of MIT/GNU?__). I chose to write this software in R because it is a very popular language for data analysis, particularly in bioinformatics, and facilitates both batch and interactive usage. R is also my computational mother tongue and an R package is a convenient unit for sharing reusable code. To improve the performance of key functionality, parts of `MethylationTuples` are written in `C++`, making use of the wonderful `Rcpp` package \citep{Eddelbuettel:2011to,Eddelbuettel:2013if}.
+`MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples. It is released under an Artistic-2.0 license, consistent with core Bioconductor packages. I chose to write this software in R because it is a very popular language for data analysis, particularly in bioinformatics, and facilitates both batch and interactive usage. R is also my computational mother tongue and an R package is a convenient unit for sharing reusable code. To improve the performance of key functionality, parts of `MethylationTuples` are written in `C++`, making use of the wonderful `Rcpp` package \citep{Eddelbuettel:2011to,Eddelbuettel:2013if}.
 
 While initially developed to support my research into co-methylation (Chapter \ref{chap:co-methylation}), the data structures developed in `MethylationTuples` are well-suited to any analysis based on methylation patterns of m-tuples such as methylation entropy, allele-specific methylation and the identification of epialleles. Of course, `MethylationTuples` can equally be used to develop methods based on 1-tuples, such as identifying differential methylation, since 1-tuples are just a particular type of m-tuple.
 
@@ -262,7 +262,7 @@ While initially developed to support my research into co-methylation (Chapter \r
 
 [^bioc]: `MethylationTuples` has not yet been submitted to Bioconductor but its development is being published to [https://github.com/PeteHaitch/MethylationTuples](https://github.com/PeteHaitch/MethylationTuples).
 
-Bioconductor has excellent support for working with data defined on genomic ranges via the `IRanges` and `GenomicRanges` packages \citep{Lawrence:2013hi, Lawrence:2014gy}. However, genomic tuples, such as the co-ordinates of an m-tuples, do not naturally fit into this framework[^tuples_vs_ranges]. Therefore, I first wrote a Bioconductor package for working with genomic tuples, rather unimaginatively called `GenomicTuples`, first released as part of Bioconductor version 3.0 ([http://www.bioconductor.org/packages/3.0/bioc/html/GenomicTuples.html](http://www.bioconductor.org/packages/3.0/bioc/html/GenomicTuples.html)). In fact, `GenomicTuples` is heavily based on the `GenomicRanges` package, with modifications for tuple-specific operations. For example, there is a tuple-specific method for the `findOverlaps` generic function to identify genomic tuples with equal co-ordinates (i.e., \code{type = `equal'}). Since the classes in `GenomicTuples` extend those defined in `GenomicRanges`, these have excellent interoperability with existing Bioconductor infrastructure.
+Bioconductor has excellent support for working with data defined on genomic ranges via the `IRanges` and `GenomicRanges` packages \citep{Lawrence:2013hi, Lawrence:2014gy}. However, genomic tuples, such as the co-ordinates of an m-tuples, do not naturally fit into this framework[^tuples_vs_ranges]. Therefore, I first wrote a Bioconductor package for working with genomic tuples, rather unimaginatively called `GenomicTuples`, first released as part of Bioconductor version 3.0 ([http://www.bioconductor.org/packages/3.0/bioc/html/GenomicTuples.html](http://www.bioconductor.org/packages/3.0/bioc/html/GenomicTuples.html)). In fact, `GenomicTuples` is heavily based on the `GenomicRanges` package, with modifications for tuple-specific operations. For example, there is a tuple-specific method for the `findOverlaps` generic function to identify genomic tuples with equal co-ordinates (i.e., \texttt{type = `equal'}). Since the classes in `GenomicTuples` extend those defined in `GenomicRanges`, these have excellent interoperability with existing Bioconductor infrastructure.
 
 [^tuples_vs_ranges]: The difference between a genomic range and a genomic tuple  can be thought of as the difference between an interval and a set. Namely, an interval includes the co-ordinates in between the start and end whereas a set only includes those co-ordinates listed in the set. For example, the genomic interval `chr3:+:[10, 12]` includes the co-ordinates `chr3:10`, `chr3:11` and `chr3:12` on the forward strand, whereas the genomic 2-tuple `chr3:+:{10, 12}` only includes the co-ordinates `chr3:10` and `chr3:12` on the forward strand.
 
@@ -284,23 +284,20 @@ Figure \ref{fig:MethPat} is a schematic of a `MethPat` object storing methylatio
 
 A `MethPat` object can be constructed directly using the `MethPat()` constructor function or from the output files of `methtuple` via the `readMethtuple()` function.
 
-The `MethPat` object provides fast subsetting by rows (m-tuples) and columns (samples) via the `[` method. It also benefits from fast subsetting based on overlaps of m-tuples with genomic features via the `findOverlaps()`-based methods. Several other useful utility functions are:
-
-__UP TO HERE: Check these exist, update descriptions and add any new functions__
+The `MethPat` object provides fast subsetting by rows (m-tuples) and columns (samples) via the `[` method. It also benefits from fast subsetting based on overlaps of m-tuples with genomic features via the `findOverlaps()`-based methods. Several other useful utility functions for working with `MethPat` objects include:
 
 - `collapseStrand()`: Collapse strand-specific data by aggregating the counts. Only applicable to CpG methylation loci.
 - `combine()`: Combine multiple `MethPat` objects into one.
-- `filterOutVariants()`: Remove m-tuples that contain a known variant. Variants must be provided as a VCF.
-- `getCoverage()`: Compute the sequencing coverage of the m-tuples in each sample.
+- `filterOutVariants()`: Remove m-tuples that contain a known variant. Variants must be provided as a `VCF` file.
+- `findMTuples()`: Find m-tuples of a given size in a reference genome.
+- `getCoverage()`: Compute the sequencing coverage of each m-tuples in each sample.
 - `IPD()`: Compute the IPD vector for each m-tuple.
 - `methLevel()`: Compute $\beta$-values or $\mathcal{M}$-values. Only applicable to 1-tuples.
-- `MBias()` and associated methods and functions: Helper functions to perform a more systematic analysis of M-bias (see Section \ref{sec:identifying_m-bias}).
-- `plotBetaDensity()`: Plot the kernel density of the $\beta$-values for each sample, optionally stratified by a genomic feature, e.g., CpG islands.
 - `tuples()`: Extract the $pos_{1}, \ldots, pos_{m}$ of the m-tuples.
 
 These are in addition to the many useful methods inherited from the `GenomicRanges::SummarizedExperiment` class.
 
-In the `MethPat` class, its associated methods and other utility functions, the `MethylationTuples` package provides a toolbox for manipulating methylation patterns at m-tuples. Aside from providing the necessary infrastructure to analyse methylation patterns at m-tuples, `MethylationTuples` currently includes specific methods to analyse and visualise co-methylation (Chapter \ref{chap:co-methylation}) with the `cometh` and `methLevelCor` functions. I also plan to add methods for estimating epialleles and epipolymorphism. And it is my hope that `MethylationTuples` will provide a useful foundation on which others can implement their own methods for analysing methylation patterns at m-tuples.
+With the `MethPat` class, its associated methods and other utility functions, the `MethylationTuples` package provides a toolbox for manipulating methylation patterns at m-tuples. Aside from providing the necessary infrastructure to analyse methylation patterns at m-tuples, `MethylationTuples` currently includes specific methods to analyse and visualise co-methylation (Chapter \ref{chap:co-methylation}) with the `cometh()` and `methLevelCor()` methods. I also plan to add methods for estimating epialleles and epipolymorphism. It is my hope that `MethylationTuples` will provide a useful foundation on which others can implement their own methods for analysing methylation patterns at m-tuples.
 
 \subsection{Compatability with other Bioconductor packages}
 
@@ -308,9 +305,13 @@ Since `MethylationTuples` is based on core Bioconductor functionality, it is hig
 
 \subsection{Computational challenges and future directions}
 
-The challenges of working with large datasets in R are well-known. These are in large part due to R being designed as an 'in-memory' application and its implementation of 'copy-on-modify' semantics \citep{wickham2014advanced}. More generally with large datasets, there is often a trade-off to be made between storage efficiency and algorithm simplicity --- a more efficient way of storing the data may be less convenient to work with and _vice versa_.
+The challenges of working with large datasets in R are well-known. These are in large part due to R being designed as an 'in-memory' application and its implementation of 'copy-on-modify' semantics \citep{wickham2014advanced}. More generally, with large datasets, there is often a trade-off to be made between storage efficiency and algorithm simplicity; a more efficient way of storing the data may be less convenient to work with and _vice versa_.
 
-I have used the `MethylationTuples` package to analyses datasets containing up to 17 whole-genome bisulfite-sequencing samples (the Lister data), albeit using a server with $512$ Gb of (shared) memory. I have found the `MethPat` class to be a very convenient representation of the data, but one that does not coincide with the most efficient storage. This is more of a problem as the size of the m-tuples increases and the data become sparser. However, for values of $m < 5$, and particularly for 'dense' data, such as RRBS, this is far less of an issue. Shown in Table \ref{tab:methpat_sparsity} is the size of the `MethPat` objects in memory for the EPISCOPE whole-genome bisulfite-sequencing data with various sized m-tuples. It also highlights the sparsity of the data as the size of the tuples grows --- most entries are $0$ (meaning that particular methylation pattern was not observed in that particular sample) or `NA` (meaning that that m-tuple was not observed in that particular sample).
+I have used the `MethylationTuples` package to analyse various sized m-tuples from datasets containing up to 17 whole-genome bisulfite-sequencing samples (the _Lister_ data). I have found the `MethPat` class to be a very convenient representation of the data, however, it has also raised challenges that will apply for larger datasets.
+
+One such challenge is the size of a `MethPat` object in RAM. The `MethPat` class currently favours a simpler implementation at the expense of storage efficiency. The main inefficiency with the `MethPat` class is that the matrices storing the frequencies of each methylation pattern grow increasingly sparse as the size of the tuples increases.
+
+Shown in Table \ref{tab:methpat_sparsity} is the size of the `MethPat` objects in memory for the EPISCOPE whole-genome bisulfite-sequencing data with various sized m-tuples. Wee see that as the size of the m-tuples increases, the data become sparser --- most counts are 0 (meaning that particular methylation pattern was not observed in that particular sample) or `NA` (meaning that that m-tuple was not observed in that particular sample). However, for values of $m < 5$, and particularly for 'dense' data, such as RRBS, this is far less of an issue.
 
 \begin{table}[h]
 \centering
@@ -327,6 +328,12 @@ I have used the `MethylationTuples` package to analyses datasets containing up t
 \label{tab:methpat_sparsity}
 \end{table}
 
-The main inefficiency with the `MethPat` class is that the matrices storing the frequencies of each methylation pattern grow increasingly sparse as the size of the tuples increases. It may be possible to improve this by using a different approach to the internal storage of the data. For example, it may be possible to create an index so that the matrices storing the frequencies of methylation patterns can be re-ordered and stored as run-length encodings, a very space-efficient storage scheme.
+It will be possible to improve the storage efficiency by using a different approach to the internal storage of the data. For example, it may be possible to use sparse matrices to store the counts or to create an index so that counts can be re-ordered and stored as run-length encodings, a very space-efficient storage scheme.
 
-In the short term, my aim for `MethylationTuples` is to release a version to Bioconductor with the core infrastructure for manipulating data of methylation patterns at m-tuples. In the longer term, I would like to extend the set of downstream analyses of m-tuples that are available in the package and for other users to do the same with their own methods.
+In the short term, my aim for `MethylationTuples` is to release a version to Bioconductor with the core infrastructure for manipulating data of methylation patterns at m-tuples. In the longer term, I would like to extend the set of downstream analyses of m-tuples that are available in the package and to help users extend the package to add their own methods.
+
+\section{Summary}
+
+Most methods for downstream analyses of bisulfite-sequencing data have focused on the problem of identifying differential methylation using methylation calls at 1-tuples. However, there is a growing interest in questions related to the heterogeneity of DNA methylation and these might be better addressed by analyses based on methylation patterns at m-tuples.
+
+A barrier to these type of analyses has been a lack of software for extracting and manipulating these data. It is my hope that the `methtuple` and `MethylationTuples` software will prove useful in facilitating the development of methods for these new types of downstream analyses.

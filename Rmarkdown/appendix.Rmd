@@ -15,57 +15,6 @@ bibliography: ../latex/phd_thesis.bib
 
 \chapter{Appendix}\label{chap:appendix}
 
-\section{Chapter \ref{chap:wgbs_downstream_analyses}}
-
-\subsection{Equivalence of tests to identify DMCs in a one-group experiment}\label{app:one_group_equivalence}
-
-\subsubsection{Mathematical equivalence}
-
-The saturated log-linear model can be written as $\log(F_{a, b}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample} + \lambda_{a, b}^{meth_state,sample}$, where $F_{a, b}$ is the value of the $(a, b)$ element in the $n \times 2$ contingency table. The null hypothesis that the cytosine is not a DMC is then tested by testing for an association between `sample` and `meth_state`, i.e., whether the parameter $\lambda_{a, b}^{meth_state, sample}$ is significantly different from zero.
-
-This log-linear model can be reformulated as a logistic regression by noting that the log-odds (logits) for each row are $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \log(F_{a, 1}) - \log(F_{a, 2})$. Therefore,
-
-\begin{align*}
-\log(\frac{F_{a, 1}}{F_{a, 2}}) &= \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{1}^{sample} + \lambda_{a, 1} \\
-&- (\lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{2}^{sample} + \lambda_{a, 2}) \\
-&= \underbrace{(\lambda_{1}^{sample} - \lambda_{2}^{sample})}_{\alpha} + \underbrace{(\lambda_{a, 1} - \lambda_{a, 2})}_{\gamma_{i}}
-\end{align*}
-
-The expression $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \alpha + \gamma_{i}$ is a logistic regression model. We can test the null hypothesis that the cytosine is not a DMC by testing for a `sample`-effect on the log-odds, i.e., whether the parameter $\gamma_{i}$ is significantly different from zero.
-
-Regardless of whether we use the log-linear model or the logistic model, to test the null hypothesis that the cytosine is not a DMC we can compute the deviance[^deviance] of the reduced model and compare it to a $\chi^{2}$ random variable with $(2 - 1) \times (n - 1)$ degrees of freedom. For the log-linear regression the reduced model is $\log(F_{a, b}) = \lambda_{0} + \lambda_{a}^{meth_state} + \lambda_{b}^{sample}$ and for the logistric regression the reduced model is $\log(\frac{F_{a, 1}}{F_{a, 2}}) = \alpha$.
-
-[^deviance]: The deviance is the log-likelihood ratio statistic comparing the current model within a saturated model.
-
-\subsubsection{Computational equiavelence}
-
-The computational equivalence of using Pearson's $\chi^{2}$ test, the deviance of a log-linear model and the deviance of a logistic regression are shown in the following R code:
-
-```{r}
-# The data
-x <- cbind(M = c(38, 79, 59, 69, 44), U = c(1, 2, 1, 2, 46))
-names(dimnames(x)) <- c("sample", "meth_state")
-x
-
-# Using Pearson's chi-square test
-chisq.test(x)
-
-# Fitting a log-linear model to perform iterative proportional fitting to the
-# contingency table.
-loglin(x, margin = list("sample", "meth_state"))
-# An alternative formulation using loglm(), a convenient wrapper of loglin(),
-# from the MASS package.
-library(MASS)
-loglm(formula =  ~ sample + meth_state, data = x)
-
-# Fitting a generalised linear model with a binomial link using two different
-# formulations
-# (1) Using the array of frequencies
-glm(x ~ 1, family = binomial)
-# (2) Using relative frequencies (i.e., the beta-values) and weights (i.e.,
-  # the sequencing coverage).
-  glm(x[,1] / (x[, 1] + x[, 2]) ~ 1, family = binomial, weights = x[, 1] + x[, 2])
-```
 \section{Chapter \ref{chap:co-methylation_review}}\label{app:co-methylation_review}
 
 \subsection{The probability that two dependent Bernoulli random variables are identical}\label{app:bernoulli_equal}
