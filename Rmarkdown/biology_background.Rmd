@@ -80,7 +80,7 @@ A key question in biology, perhaps _the_ key question, is what determines an ind
 
 Variation between individual's genomes, be it at single nucleotides[^snvs_snps] or across larger regions[^indels], is one important source of phenotypic variation. Importantly, genetically-driven phenotypic variation is frequently _heritable_, meaning that phenotypes can be passed on from one generation to the generation via the genome.
 
-[^snvs_snps]: An individual nucleotide that is variable in the population is called a single nucletoide variant (_SNV_). A SNV that is frequently variable in the population, say at least $1\%$ of the population are variable at that site, is called a single nucleotide polymorphism (SNP). All SNPs are SNVs but the converse is not true.
+[^snvs_snps]: A base position that is variable in the population is called a single nucleotide variant (_SNV_). A SNV that is frequently variable in the population, say at least $1\%$ frequency, is called a single nucleotide polymorphism (SNP). All SNPs are SNVs but the converse is not true.
 
 [^indels]: An example of a larger genetic variant is an _indel_, which is a short insertion or deletion of sequence in an organism's DNA, usually with respect to a reference genome.
 
