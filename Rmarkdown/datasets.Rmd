@@ -58,7 +58,7 @@ H9                  & ESC                     & SE         & $85$ bp     & $9\ti
 H9\_Laurent         & ESC                     & PE         & $75$ bp     & $8\times$     & \citet{Laurent:2010iw}      \\
 HSF1                & ESC                     & SE         & $47$        & $5\times$     & \citet{Chodavarapu:2010iqa} \\ \bottomrule
 \end{tabulary}
-\caption{Samples in Lister dataset. The reported read lengths are prior to any trimming of the reads. Abbreviations: \em{iPSC} = induced pluripotent stem cell; \em{ESC} = embryonic stem cell; \em{IVD} = \em{in vitro} differentiated from pluripotent cell line \em{PE} = single-end sequencing; \em{PE} = paired-end sequencing.}
+\caption{Samples in Lister dataset. The reported read lengths are prior to any trimming of the reads. Abbreviations: \emph{iPSC} = induced pluripotent stem cell; \emph{ESC} = embryonic stem cell; \emph{IVD} = \emph{in vitro} differentiated from pluripotent cell line \emph{PE} = single-end sequencing; \emph{PE} = paired-end sequencing.}
 \label{tab:Lister_dataset}
 \end{table}
 

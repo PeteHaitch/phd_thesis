@@ -193,7 +193,7 @@ Figure \ref{fig:FF_chr21_acf_beta_star} is a plot of the autocorrelation of the 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/FF_chr21_acf_beta_star.pdf}
-\caption{Autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \em{FF} sample.}
+\caption{Autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \emph{FF} sample.}
 \label{fig:FF_chr21_acf_beta_star}
 \end{figure}
 
