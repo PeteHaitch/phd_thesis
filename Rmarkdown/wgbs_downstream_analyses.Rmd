@@ -28,6 +28,8 @@ The majority of downstream analysis methods use methylation patterns at 1-tuples
 
 By far the most common analysis of bisulfite-sequencing data is to identify differentially methylated cytosines (DMCs) and differentially methylated regions (DMRs). Consequently, there has been a flurry of methods proposed for identifying differential methylation \citep[e.g.,][]{Akalin:2012cm, Chen:2013eh, Chen:2014jb, Dolzhenko:2014bo, Gokhman:2014cp, Jaffe:2012gx, Lacey:2013iy, Lister:2009hy, Rijlaarsdam:2014hp, Sofer:2013bk, Xie:2014ez, Feng:2014iq, Hebestreit:2013ko, Sun:2014fk, Park:2014ho, Hansen:2012gr}. \citet{Robinson:2014jz} recently reviewed methods for identifying DMCs and DMRs and so I give but an overview of this important topic.
 
+All these methods are based on analysing $\mathbf{m}$ and $\mathbf{u}$ or $\mathbf{\beta}$.
+
 \subsubsection{Experimental design}\label{sec:experimental_design}
 
 In any analysis of differential methylation, we want the DMCs and DMRs to be both _biologically_ and _statistically_ significant; it's no good if all the differences are simply due to technical artefacts or random fluctuations. Key to ensuring biological relevance is good experimental design, such as the use of _replicates_ in each experimental group. A distinction is often made in the literature between _technical replicates_ and _biological replicates_. Briefly, biological replicates are experimental units that all undergo the same treatment and are used to estimate the within-group variability of the treatment. Technical replicates are repeated measurements of the same experimental unit, perhaps with slight variations in the sample preparation, and are used to estimate the variability of the sample preparation and measurement process.
@@ -109,7 +111,7 @@ The above description brushes over some technicalities, such as how to handle Cp
 
 Once these clusters are defined, the $\beta$-values in each cluster are smoothed for each sample using a local binomial likelihood smoother. This procedure will create a smoothed $\beta$-value for each CpG, even those with insufficient sequencing coverage. Then, for each CpG, `BiSeq` fits a beta regression model[^not_beta-binomial] to the smoothed $\beta$-values, which is tested for evidence of differential methylation at that cytosine (i.e., a test of whether the cytosine is a DMC).
 
-Based on these P-values, `BiSeq` then use a hierarchical testing procedure to control the false discovery rate at both the cluster-level and locus-level. This method is based on several papers by Yoav Benjamini and colleagues \citep{Benjamini:1997fh, Benjamini:2001ho, Benjamini:2006gd, Benjamini:2007cm}. It aims to first control the false discovery rate at the cluster-level and then refines the signal by trimming non-DMCs from those clusters that have been declared as differentially methylated. Finally, these differentially methylated clusters are _post hoc_ filtered to ensure they are _consistent_ (see Section \ref{sec:consistency_of_dmrs}).
+Based on these P-values, `BiSeq` then use a hierarchical testing procedure to control the false discovery rate at both the cluster-level and locus-level. This method is based on several papers by Yoav Benjamini and colleagues \citep{Benjamini:1997fh, Benjamini:2001ho, Benjamini:2006gd, Benjamini:2007cm}. It aims to first control the false discovery rate at the cluster-level and then refines the signal by trimming non-DMCs from those clusters that have been declared as differentially methylated. Finally, these differentially methylated clusters are _post hoc_ filtered to ensure they are _consistent_, i.e., that the differences in methylation are in the same direction.
 
 [^not_beta-binomial]: This is different to the beta-binomial regression framework described in Section \ref{sec:beta-binomial_models}.
 
@@ -117,9 +119,7 @@ Based on these P-values, `BiSeq` then use a hierarchical testing procedure to co
 
 Methods for identifying _data-driven_ DMRs are fairly _ad hoc_. The most common approach is to scan the genome for clusters of DMCs and declare these to be DMRs. The initial scan for DMCs will typically use a relaxed statistical significance threshold (i.e., below genome-wide significance). Notably, many of these methods do not include a formal statistical test of differential methylation at the region-level \citep[e.g.,][]{Lister:2009hy, Lister:2011kg, Hansen:2011gu, Feng:2014iq}.
 
-For example, \citet{Hansen:2011gu} start by testing all CpGs for differential methylation and retain all those with a P-value in the lowest $5\%$. They then declare putative DMRs to be contiguous runs of such CpGs that are within a given distance of one another and with "all differences in the same direction"[^consistency]. These putative DMRs may be subject to further filtering, such as requiring that they contain a minimum number of CpGs and span a minimum number of bases, and the merging of nearby putative DMRs into a single putative DMR \citep{Hansen:2011gu}.
-
-[^consistency]: This latter requirement is what I call the _consistency_ of the DMR (see Section \ref{sec:consistency_of_dmrs}).
+For example, \citet{Hansen:2011gu} start by testing all CpGs for differential methylation and retain all those with a P-value in the lowest $5\%$. They then declare putative DMRs to be contiguous runs of such CpGs that are within a given distance of one another and with "all differences in the same direction" (i.e., the region is consistent). These putative DMRs may be subject to further filtering, such as requiring that they contain a minimum number of CpGs and span a minimum number of bases, and the merging of nearby putative DMRs into a single putative DMR \citep{Hansen:2011gu}.
 
 It is challenging to perform valid statistical inference of differential methylation at these data-driven regions. We must be careful when 'double-dipping' into the data, whereby the same data are being used to define the regions as are being used to test their significance. These regions have been _selected_ because loci in these region display a difference and therefore tests of whether the region has a difference are biased towards rejecting the null hypothesis.
 
@@ -141,31 +141,21 @@ Finally, there are a class of methods that turn the problem of identifying data-
 
 [^between_sample_co-methylation]: See Chapter \ref{chap:co-methylation_review} for further details of between-sample co-methylation.
 
-\subsubsection{Consistency of DMRs}\label{sec:consistency_of_dmrs}
+\subsection{Differentially variable methlyation}\label{sec:variable_methylation}
 
-__UP TO HERE__
+It has been hypothesised that increased variability in DNA methylation indicates an epigentic _plasticity_ that may be highly relevant to common diseases, in particular, cancer \citep{Feinberg:2010dy}. Differential variability is distinct from differential methylation. Whereas the analysis of differential methylation is based on statistical tests of differences in means, the analysis of differential variability is based on statistical tests of differences in variances. Analogously, we define variably methylated cytosines (VMCs) and variably methylated regions (VMRs). To emphasise, a locus (resp. region) may be a DMC (resp. DMR) while not a VMC (resp. VMR) and _vice versa_.
 
-While not often explicitly stated, it is desirable that a DMR is _consistent_. The definition of consistency is best illustrated by a pathological example describing a region that is inconsistent. Suppose we have a one-group experiment with five samples[^one_by_five] and are studying a region with five CpGs, all of which are DMCs. However, the first CpG is differentially methylated in the first sample, the second CpG is differentially methylated in the second sample, etc. While the entire region is 'differentially methylated', the difference is not observed consistently in any one sample. A consistent region is therefore one where the differences are 'in the same direction'.
+\citet{Jaffe:2011hy} first developed formal statistical tests for differential variability of methylation for both the one-group and two-group experiments. These methods were developed for us with data from the CHARM array (see \ref{sec:enzyme_digestion_assays}). In a one-group experiment, a variably methylated region is one that has increased variability compared to 'similar' regions elsewhere in the genome. In a two-group experiment, a differentially variable locus is one where the variation in one group is significantly larger than that in the other group.
 
-[^one_by_five]: Equivalently, a five group experiment without replicates.
+Statistical tests of variances are well known to be more difficult than tests of means and require larger sample sizes. A more subtle difficulty is in dealing with outliers. An outlier in one group will greatly increase the variation in that group, but this does not necessarily mean that the locus is differentially methylated. It might, for example, be due to an error in the assay. It is not difficult to envisage an example where the two groups in fact have very similar variability when the outlier is excluded.
 
-Consistent DMRs are most easily identified in two-group experiments, where we can use the sign of the test statistic to determine the 'direction' of the signal. This is exactly what is done by, for example, \citet{Hansen:2011gu}.
+Tests of differential variability that are based on the F-test \citep[e.g.,][]{Hansen:2011gu} or Bartlett's test \citep[e.g.,][]{Teschendorff:2012hea} will be susceptible to calling loci with such outliers as being differentially variable. By contrast, `DiffVar` \citep{Phipson:2014ji} uses Levene's test \citep{Olkin:1960uu}, which is robust to outliers, to test for differential variability.
 
-In one-group experiments, the idea of consistency is similar, but not quite identical, to testing the homogeneity of odds ratios for all $n \times 2$ contingency tables in the region. For example, a region may be consistent but the strength of the effect may vary across the region, thus the odds ratios may vary.
-
-\section{Other downstream analyses using $\beta$-values}
-
-Two other common downstream analyses based on $\beta$-values are the identification of variable methylation and partially methylated domains.
-
-\subsection{Variable methyation}\label{sec:variable_methylation}
-
-Differential methylation is an analysis of the difference in means and seeks to identify differentially methylated regions (DMRs). Analogously, we can analyse differences in the variability of methylation profiles, which is known as differential variability, and those regions known as variably methylated regions (VMRs). It has been hypothesised that increased variability in DNA methylation indicates an epigentic _plasticity_ that may be highly relevant to common diseases, in particular, cancer \citep{Feinberg:2010dy}.
-
-In a one-group experiment, a variably methylated region is one that has increased variability compared to 'similar' regions elsewhere in the genome. In a two-group experiment, a differentially variable locus is one where the variation in one group is significantly larger than that in the other group. \citet{Jaffe:2011hy} first developed formal statistical tests for both the one-group and two-group experiments. These methods were developed for us with data from the CHARM array (see \ref{sec:enzyme_digestion_assays}).
-
-Statistical tests of variations are well known to be more difficult than tests of means and require larger sample sizes. A more subtle difficulty is in dealing with outliers. An outlier in one group will greatly increase the variation in that same group, but this does not necessarily mean that the locus is differentially methylated. It is not hard to envisage an example where the two groups in fact have very similar variability once the outlier is excluded. Tests of differential variability that are based on the F-test \citep[e.g.,][]{Hansen:2011gu} or Bartlett's test \citep[e.g.,][]{Teschendorff:2012hea} will be susceptible to calling such loci as differentially variable. By contrast, \citet{Phipson:2014ji} designed `DiffVar` to test for differential variability that is deliberately robust to such outliers by using Levene's test \citep{Olkin:1960uu}. Which approach is preferable will depend on the user's perspective as to whether such loci with outliers should be called as variably methylated.
+All these methods are based on analysing $\mathbf{m}$ and $\mathbf{u}$ or $\mathbf{\beta}$.
 
 \subsection{Partially methylated domains}\label{sec:pmds}
+
+__UP TO HERE: Re-write as "Epigenome segmentation"__
 
 Partially methylated domains, PMDs, are long stretches of the genome where the average methylation level, $B_{i}$, is away from the extremes of $0$ and $1$, typically in the range $0.20 - 0.70$. PMDs were first identified in the IMR90 genome by \citet{Lister:2009hy}. Using a simple sliding window algorithm, \citeauthor{Lister:2009hy} unexpectedly found that approximately $40\%$ of every autosome was a PMD and that the average length of these PMDs was a large 153 kb. They also showed that these PMDs were not simply due to a methylated population and an unmethylated subpopulation of cells in the sample. This did this by showing that inidividual reads mapped to these PMDs contained both methylated and unmethylated bases.
 
