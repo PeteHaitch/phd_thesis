@@ -142,9 +142,9 @@ z: z \in \mathcal{R}_{i} = \left\{
 By summing over the reads containing the $i^{th}$ locus we obtain the number of reads that are methylated at the $i^{th}$ locus ($m_{i}$) and unmethylated at the $i^{th}$ locus ($u_{i}$):
 
 \begin{align*}
-  m_{i} &= \sum_{r = 1}^{d_{i}} z_{i} \\
+  m_{i} &= \sum_{r = 1}^{d_{i}} z_{r, i} \\
         &= |\{z: z \in \mathcal{R}_{i}, z = 1 \}| \\
-  u_{i} &= \sum_{r = 1}^{d_{i}} (1 - z_{i}) \\
+  u_{i} &= \sum_{r = 1}^{d_{i}} (1 - z_{r, i}) \\
       &= |\{z: z \in \mathcal{R}_{i}, z = 0 \}
 \end{align*}
 
