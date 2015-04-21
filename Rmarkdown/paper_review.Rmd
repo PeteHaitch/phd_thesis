@@ -1065,6 +1065,20 @@ Again, it would be nice to see some justification for this default value.
 
 On first reading I don't really understand this. I think it's to induce between-group variability, i.e., DMRs.
 
+## \citet{Bell:2011fm}
+
+> measured methylation levels at 22,290 CpG dinucleotides in lymphoblastoid cell lines from 77 HapMap Yoruba individuals, for which genome-wide gene expression and genotype data were also available.
+
+Cite Eckhardt et al. and [http://www.ncbi.nlm.nih.gov/pubmed/19329998](http://www.ncbi.nlm.nih.gov/pubmed/19329998) as previous evidence that "Methylation is often found to be correlated across genomic regions at the scale of 1-2 kb".
+
+> We observed that methylation levels at probes located in close proximity (up to 2 kb apart) were highly correlated (Figure 1c), indicating that variation in methylation levels between individuals is correlated within cell type. Figure 1c also shows that pairs of CpG-sites that were both within a CGI showed greater evidence for co-methylation than pairs of CpG sites for which at least one was outside the CGI, controlling for distance, implying differential regulation of DNA methylation for CpGs inside and outside of CGIs.
+
+This is an estimate of between-sample co-methylation.
+
+## \citet{Ball:2009kh}
+
+> As CpGs in close proximity are known to be often co-methylated [cite Ekhardt et al.], we took advantage of the clonal feature of Illumina sequencing to investigate whether co-methylation occurs at the single-molecule level. Within probes spanning more than one CpG, sites with intermediate methylation levels (between 20% and 80%) displayed a positive correlation with the methylation states of neighboring CpGs on individual strands (Supplementary Fig. 3 online).
+
 # Review of simulation methods
 
 ### \cite{Feng:2014iq}
