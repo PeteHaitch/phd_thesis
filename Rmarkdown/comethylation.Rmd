@@ -276,7 +276,7 @@ When we aggregate over as many factors as we are in these genome-wide $NIL \geq 
 
 Comparing CpG islands to non-islands, Figures \ref{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}, \ref{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}, \ref{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI} and \ref{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}, we again see that the methylation levels of pairs of CpGs within islands are consistently more correlated than those outside of islands[^hepg2].
 
-[^hepg2]: The minor exception is the _HepG2\_cell\_line_ where the CGI and non-CGI lines intersect by $IPD = 1500$, but we have already seen that this sample has an unusual methylome compared to the other samples.
+[^hepg2]: The minor exception is the _HepG2\_cell\_line_ where the CpG island and non-island lines intersect by $IPD = 1500$, but we have already seen that this sample has an unusual methylome compared to the other samples.
 
 \begin{figure}[!htb]
 \centering
@@ -486,7 +486,7 @@ The above analyses are all based on the genome-wide distributions of within-frag
 
 Again, the message from these plots is clear, $NIL = 0$ CpG 2-tuples inside CpG islands have higher levels of within-fragment co-methylation on average than those 2-tuples outside of islands[^hepg2_2]. For each sample, the difference between the CpG island and non-island distributions is a vertical translation. For many samples this vertical shift means that the median $LOR$ for islands is approximately equal to the $75\%$ percentile for non-islands. The width of these distributions is not greatly affected by the CpG island status.
 
-[^hepg2_2]: Again, the minor exception is the _HepG2\_cell\_line_ where the CGI and non-CGI distributions approximately overlap by $IPD = 50$, but we have already seen that this sample has an unusual methylome compared to the other samples.
+[^hepg2_2]: Again, the minor exception is the _HepG2\_cell\_line_ where the CpG island and non-island distributions approximately overlap by $IPD = 50$, but we have already seen that this sample has an unusual methylome compared to the other samples.
 
 \begin{figure}[!htb]
 \centering
@@ -626,7 +626,7 @@ The simple estimator of within-fragment co-methylation is biased when the margin
 # probabilities p1, p2
 simTables <- function(K, mean_d, p1, p2) {
   .simTables <- function(mean_d, p1, p2) {
-    
+
     d <- rpois(1, mean_d)
     z1 <- factor(rbinom(d, 1, p1), levels = c(0, 1))
     z2 <- factor(rbinom(d, 1, p2), levels = c(0, 1))
@@ -656,7 +656,7 @@ MH <- function(x, offset = 0.5) {
   log(or_mh)
 }
 
-# Estimator of the (offset-adjusted) unconditional log odds ratio of the 
+# Estimator of the (offset-adjusted) unconditional log odds ratio of the
 # 2x2xK collapsed over K.
 LORCollapsed <- function(x, offset) {
   z <- apply(x, c(1, 2), sum)
@@ -670,7 +670,7 @@ simAndPlot <- function(K, mean_d, p1, p2) {
   x <- mapply(function(p1, p2, K, mean_d) {
     simTables(K = K, mean_d = mean_d, p1 = p1, p2 = p2)
   }, p1 = p1, p2 = p2, MoreArgs = list(K = K, mean_d = mean_d), SIMPLIFY = FALSE)
-  
+
   par(mfrow = c(3, 3))
   mapply(function(x, p1, p2) {
     hist(LOR(x), main = paste0("p1 = ", p1, ", p2 = ", p2), xlim = c(-8, 8), breaks = 16)
@@ -733,7 +733,7 @@ The Mantel-Haenszel estimator might be my best bet. Breslow (1981) says:
 
 > Breslow (1981, Biometrika 68, 73-84) has shown that the Mantel-Haenszel odds ratio is a consistent estimator of a common odds ratio in sparse stratifications (Greenland, S. & Robins, J. M. Biometrics 41, 55–68 (1985).)
 
-The Mantel-Haenszel estimator is an estimator of the common odds ratio for $2 \times 2 \times K$ tables. Therefore, using the MH estimator requires the assumption that all $2 \times 2$ tables have the same underlying odds ratio. The strata for co-methylation would be 'sample', 'IPD' and possibly 'region', where region is something like 'UMRs, LMRs, PMRs and other' or 'CGI and non-CGI'.
+The Mantel-Haenszel estimator is an estimator of the common odds ratio for $2 \times 2 \times K$ tables. Therefore, using the MH estimator requires the assumption that all $2 \times 2$ tables have the same underlying odds ratio. The strata for co-methylation would be 'sample', 'IPD' and possibly 'region', where region is something like 'UMRs, LMRs, PMRs and other' or 'CpG island and non-island'.
 
 Some good notes on MH estimator [http://isites.harvard.edu/fs/docs/icb.topic79671.files/stratcch1.pdf](http://isites.harvard.edu/fs/docs/icb.topic79671.files/stratcch1.pdf).
 
