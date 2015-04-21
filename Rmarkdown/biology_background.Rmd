@@ -40,7 +40,7 @@ DNA is able to self-replicate. This means that eukaryotic cells created during _
 
 The core of a nucleosome consists of four pairs of histones, H2A, H2B, H3 and H4, which are consequently known as the _core histones_. A fifth histone, H1/H5, is known as the _linker histone_. Each of these histones has a 'tail' consisting of a string of amino acids. These tails can undergo _post-translational modifications_, such as methylation, acetylation and phosphorylation, which can alter their interactions with DNA and nuclear proteins \citep{Alberts:2007vj}. Histone modifications are discussed in Section \ref{sec:epigenetics}.
 
-The nucleosomes are interconnected by _linker DNA_ to form the macromolecule called chromatin. The linker sequences are between $20$ to $60$ nucleotides in length, while approximately 147 nucleotides are wrapped around each nucleosome and a further 20 nucleotides wrapped around each additional H1/H5 histone \citep{Annunziato:2008ue}.
+The nucleosomes are interconnected by _linker DNA_ to form the macromolecule called chromatin. The linker sequences are between $20$ to $60$ basepairs of DNA (bp) in length, while approximately $147$ bp are wrapped around each nucleosome and a further $20$ bp wrapped around each additional H1/H5 histone \citep{Annunziato:2008ue}.
 
 Chromatin is frequently described as either 'closed' or 'open'. Closed chromatin, _heterochromatin_, is more tightly packed than the open _euchromatin_. Heterochromatin is associated with transcriptionally repressed regions of the genome because the machinery required to translate DNA to RNA is unable to physically access the DNA. In contrast, euchromatin is associated with transcriptionally active regions of the genome since its more open nature allows easier access for the translational machinery.
 
@@ -50,7 +50,7 @@ Basic descriptions of nucleosomes and chromatin are ripe with analogies. In one 
 
 \subsection{Genomes}\label{sec:genomes}
 
-As is clear from the above description, the genome is a complex three-dimensional structure. Nonetheless, in bioinformatics and computational biology, the genome is mostly considered as a single-stranded, one-dimensional string of the nucleobases _A_, _C_, _G_ and _T_.
+As is clear from the above description, the genome is a complex three-dimensional structure. Nonetheless, in bioinformatics and computational biology, the genome is mostly considered as a single-stranded, one-dimensional string of the bases _A_, _C_, _G_ and _T_.
 
 While eukaryotic genomes share the above-described features, and indeed share many regions of common DNA sequence, eukaryotic genomes come in many shapes and sizes. I only discuss the genomes of two species relevant to my thesis: _Homo sapiens_ (human) and _Mus musculus_ (house mouse).
 
@@ -78,7 +78,7 @@ Mouse strains used in medical research are highly inbred due to years of concert
 
 A key question in biology, perhaps _the_ key question, is what determines an individual's _phenotype_. An individual's phenotype is the set of its observable characteristics resulting from the interaction of its genotype with the environment. Two simple examples of phenotypes are height and weight. Both have a genetic component, e.g., the offspring of tall parents are on average taller than the offspring of short parents, but also have environmental components, such as the contribution of diet to weight. In medical research, a person's phenotype might be whether she is affected by a particular disease. It might also be some proxy, such as her blood pressure or the expression levels of particular genes.
 
-Variation between individual's genomes, be it at single nucleotides[^snvs_snps] or across larger regions[^indels], is one important source of phenotypic variation. Importantly, genetically-driven phenotypic variation is frequently _heritable_, meaning that phenotypes can be passed on from one generation to the generation via the genome.
+Variation between individual's genomes, be it at single base[^snvs_snps] or across larger regions[^indels], is one important source of phenotypic variation. Importantly, genetically-driven phenotypic variation is frequently _heritable_, meaning that phenotypes can be passed on from one generation to the generation via the genome.
 
 [^snvs_snps]: A base position that is variable in the population is called a single nucleotide variant (_SNV_). A SNV that is frequently variable in the population, say at least $1\%$ frequency, is called a single nucleotide polymorphism (SNP). All SNPs are SNVs but the converse is not true.
 
@@ -122,17 +122,17 @@ A major reason that DNA methylation is studied is that it is essential for norma
 
 However, DNA methylation is not found in all organisms, for example, it not detectable in yeast \citep{Capuano:2014cu}, and so is not essential for life. Furthermore, the level of DNA methylation varies widely amongst different organisms, with many having very low levels of methylation \citep{Capuano:2014cu}.
 
-When people speak of DNA methylation they are generally referring to methylation of the cytosine nucleobase. Even more specifically, they are referring to the molecule _5-methylcytosine_. 5-methylcytosine, abbreviated as _5mC_, is by far the most common form of DNA methylation in the animal and plant kingdoms[^other_DNAm]. However, I will continue to use the term _DNA methylation_ to describe the more specific 5mC, as is standard in the literature.
+When people speak of DNA methylation they are generally referring to methylation of the cytosine base. Even more specifically, they are referring to the molecule _5-methylcytosine_. 5-methylcytosine, abbreviated as _5mC_, is by far the most common form of DNA methylation in the animal and plant kingdoms[^other_DNAm]. However, I will continue to use the term _DNA methylation_ to describe the more specific 5mC, as is standard in the literature.
 
 [^other_DNAm]: Two additional examples of DNA methylation are N6-methyladenine (m6A) and N4-methylcytosine (m4C). N6-methyladenine is a methylated form of adenine, which is found in mRNA \citep[e.g.,][]{Adams:1975ki} and DNA, although the latter only in bacterial DNA \citep{Ratel:2006dv}. N4-methylcytosine has also been detected in bacterial DNA \citep[e.g.,][]{Ehrlich:1985bv, Ratel:2006dv}.
 
-A German chemist, W.G. Ruppel, first identified a methylated nucleic acid in 1898. Ruppel was studying _tuberculinic acid_, the poison of _Mycobacterium tuberculosis_[^tuberculosis] , and discovered that it contained a methylated nucleotide \citep{Ruppel:1899hc}. In 1925, Johnson and Coghill isolated 5-methylcytosine as a product of hydrolysis of tuberculinic acid, the nucleic acid of _Mycobacterium tuberculosis_ \citep{Johnson:1925js}. However, Johnson and Coghill's results were disputed for over twenty years by other researchers who were unable to replicate the original findings \citep{VISCHER:1949ty}.
+A German chemist, W.G. Ruppel, first identified a methylated nucleic acid in 1898. Ruppel was studying _tuberculinic acid_, the poison of _Mycobacterium tuberculosis_[^tuberculosis] , and discovered that it contained a methylated base \citep{Ruppel:1899hc}. In 1925, Johnson and Coghill isolated 5-methylcytosine as a product of hydrolysis of tuberculinic acid, the nucleic acid of _Mycobacterium tuberculosis_ \citep{Johnson:1925js}. However, Johnson and Coghill's results were disputed for over twenty years by other researchers who were unable to replicate the original findings \citep{VISCHER:1949ty}.
 
 [^tuberculosis]: _Mycobacterium tuberculosis_ was then known as _Tubercle bacillus_.
 
 In 1945, Hotchkiss ultimately proved Johnson and Coghill correct when he isolated _5-methylcytosine_ from nucleic acid prepared from cow thymus \citep{HOTCHKISS:1948va}. Using paper chromatography, Hotchkiss demonstrated that methylated cytosine existed and was distinct from conventional cytosine and uracil.
 
-The typical site of DNA methylation is at the C5 carbon position of a cytosine nucleotide. This modified cytosine is called _5-Methylcytosine_ or _5mC_. Figure \ref{fig:5mC} shows the structure of 5mC.
+The typical site of DNA methylation is at the C5 carbon position of a cytosine base. This modified cytosine is called _5-Methylcytosine_ or _5mC_. Figure \ref{fig:5mC} shows the structure of 5mC.
 
 \begin{figure}[!htb]
 \centering
@@ -149,18 +149,18 @@ Within a diploid cell, a particular cytosine may be unmethylated or methylated o
 
 \subsection{DNA methylation in mammals}\label{sec:dna_methylation_in_mammals}
 
-The importance of 5-methylcytosine in mammalian genomes is such it has been dubbed the "fifth base" of the DNA code \citep{Lister:2009boa}. In mammalian genomes, most cytosines are unmethylated except for those at _CpG dinucleotides_. A _CpG dinucleotide_, or more simply a _CpG_, is a cytosine followed by a guanine in the linear DNA sequence. The 'p' stands for the phosphate backbone of DNA and some authors omit it in favour of simply calling it CG methylation. A CpG is a palindromic sequence and is generally symmetrically methylated. Approximately 70% of CpGs are methylated in mammals \citep{Laird:2003kw}, meaning that the cytosine in the CpG dinucleotide is a 5-methylcytosine.
+The importance of 5-methylcytosine in mammalian genomes is such it has been dubbed the "fifth base" of the DNA code \citep{Lister:2009boa}. In mammalian genomes, most cytosines are unmethylated except for those at _CpG dinucleotides_. A CpG dinucleotide, or more simply a _CpG_, is a cytosine followed by a guanine in the linear DNA sequence. The 'p' stands for the phosphate backbone of DNA and some authors omit it in favour of simply calling it CG methylation. A CpG is a palindromic sequence and is generally symmetrically methylated. Approximately $70\%$ of CpGs are methylated in mammals \citep{Laird:2003kw}, meaning that the cytosine in the CpG dinucleotide is a 5-methylcytosine.
 
 \subsection{CpG dinucleotides}\label{cpg_dinucleotides}
 
-CpGs are underrepresented in the human genome. The _GC-content_ of the human genome, which is defined as the percentage of nucleotides that are either guanines or cytosines, is approximately $41\%$. If these nucleotides were uniformly distributed across the genome then we would expect about $4.1\%$ of _dinucleotides_, pairs of nucleotides, to be CpGs. Instead, only $1\%$ of dinucleotides are CpGs.
+CpGs are underrepresented in the human genome. The _GC-content_ of the human genome, which is defined as the percentage of bases that are either guanines or cytosines \citep{Benjamini:2012er}, is approximately $41\%$. If these bases were uniformly distributed across the genome then we would expect about $4.1\%$ of dinucleotides to be CpGs. Instead, only $1\%$ of dinucleotides are CpGs.
 
-One reason for the relative scarcity of CpGs is that methylated cytosines can spontaneously deaminate to thymines \citep{Scarano:1967ue}. Thus, over time, many methylated CpGs will become TpGs, leading to a genome-wide reduction in the proportion of CpGs and a genome-wide increase in the proportion of TpGs (see Figure \ref{fig:dinucleotide_frequency_hg19}). There are many other evolutionary pressures on the distribution of nucleotides in a genome. One effect of this is that the distribution of CpGs is far from uniform. In fact, CpGs tend to form clusters, which are termed CpG islands.
+One reason for the relative scarcity of CpGs is that methylated cytosines can spontaneously deaminate to thymines \citep{Scarano:1967ue}. Thus, over time, many methylated CpGs will become TpGs, leading to a genome-wide reduction in the proportion of CpGs and a genome-wide increase in the proportion of TpGs (see Figure \ref{fig:dinucleotide_frequency_hg19}). There are many other evolutionary pressures on the distribution of bases in a genome. One effect of this is that the distribution of CpGs is far from uniform. In fact, CpGs tend to form clusters, which are termed CpG islands.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/dinucleotide_frequency_hg19.pdf}
-\caption{Observed:expected ratio of dinucleotides in the human reference genome (hg19). The expected frequency is computed under an 'independence' model, based on the observed frequencies of each nucleotide.}
+\caption{Observed:expected ratio of dinucleotides in the human reference genome (hg19). The expected frequency is computed under an 'independence' model, based on the observed frequencies of each base.}
 \label{fig:dinucleotide_frequency_hg19}
 \end{figure}
 
@@ -182,7 +182,7 @@ Figure \ref{fig:IPD_frequency_polygon_hg19} is an alternative way to visualise t
 \label{fig:IPD_frequency_polygon_hg19}
 \end{figure}
 
-CpG islands contain the 20-40% of CpGs that are frequently unmethylated in mammalian genomes. CpG islands are important regulatory elements in the genome and are where most differences in DNA methylation between different cell types are found \citep{Wu:2010do}. The classical definition of a CpG island, given by \citet{GardinerGarden:1987we}, and used by the popular UCSC genome browser ([http://genome.ucsc.edu/cgi-bin/hgGateway](http://genome.ucsc.edu/cgi-bin/hgGateway)), is a region of the genome where:
+CpG islands contain the $20\%$ to $40\%$ of CpGs that are frequently unmethylated in mammalian genomes. CpG islands are important regulatory elements in the genome and are where most differences in DNA methylation between different cell types are found \citep{Wu:2010do}. The classical definition of a CpG island, given by \citet{GardinerGarden:1987we}, and used by the popular UCSC genome browser ([http://genome.ucsc.edu/cgi-bin/hgGateway](http://genome.ucsc.edu/cgi-bin/hgGateway)), is a region of the genome where:
 
 1. The (moving) average of GC-content is greater than $50\%$, and
 2. The observed-to-expected ratio of CpGs is greater than $0.6$, and
@@ -202,7 +202,7 @@ Other metaphors, these based on methylation levels rather than CpG density, incl
 
 \subsection{Non-CpG methylation}\label{sec:non_cpg_methylation}
 
-In humans, cytosine methylation in most cell types is found almost exclusively at CpGs \citep{Jones:2012jr}. There are, however, certain cell types with widespread non-CpG methylation. Non-CpG methylation is often classified as CHH methylation or CHG methylation, where H is the IUPAC code for any nucleotide except G ([http://www.bioinformatics.org/sms2/iupac.html](http://www.bioinformatics.org/sms2/iupac.html)). The rule-of-thumb for mammalian genomes is that non-CpG methylation is rare in somatic cells but common in pluripotent cells. Of course, there are exceptions to every rule, especially in biology.
+In humans, cytosine methylation in most cell types is found almost exclusively at CpGs \citep{Jones:2012jr}. There are, however, certain cell types with widespread non-CpG methylation. Non-CpG methylation is often classified as CHH methylation or CHG methylation, where H is the IUPAC code for any base except G ([http://www.bioinformatics.org/sms2/iupac.html](http://www.bioinformatics.org/sms2/iupac.html)). The rule-of-thumb for mammalian genomes is that non-CpG methylation is rare in somatic cells but common in pluripotent cells. Of course, there are exceptions to every rule, especially in biology.
 
 To give a few examples, \citet{Lister:2009hy} found that in a _fibroblast_ cell line that $99.98\%$ of cytosines that displayed statistically significant evidence of methylation occured at CpGs. In contrast, in an embryonic stem cell line, they found that $24.5\%$ of cytosines that displayed statistically significant evidence of methylation occured in a non-CpG context. However, it should also be noted that these non-CpG loci that were methylated had on average a much lower level of methylation than their CpG counterparts.
 
@@ -210,7 +210,7 @@ A subsequent paper from the same group extended this result. \citet{Lister:2011k
 
 An exception to the rule that non-CpG methylation is largely restricted to pluripotent cells is provided by \citet{Lister:2013et}, who found that neurons also have non-CpG methylation, albeit at a lower level ($1.3-1.5\%$ of all non-CpG cytosines were methylated).
 
-Overall, non-CpG methylation in humans is less well studied and less well understood than CpG methylation. This is partly due to sampling bias since commonly used assays for studying DNA methylation, such as the Illumina 27k and 450k microarrays, only measure CpG methylation. However, recent technological advances mean that cytosine methylation can be routinely assayed regardless of the sequence context (see Section \ref{sec:dna_methylation_assays}).
+Overall, non-CpG methylation in humans is less well studied and less well understood than CpG methylation. This is partly due to sampling bias since commonly used assays for studying DNA methylation, such as the Illumina 27k and 450k microarrays, measure almost exclusively CpG methylation. However, recent technological advances mean that cytosine methylation can be routinely assayed regardless of the sequence context (see Section \ref{sec:dna_methylation_assays}).
 
 Non-CpG methylation is very common in other organisms, such as plants. For example, \citet{Lister:2008bh} found that in the widely-studied _Arabidopsis thaliana_ that $45\%$ of cytosines that displayed statistically significant evidence of methylation are at CHG or CHH loci. However, they also found that the level of methylation at non-CpG loci is typically lower than that observed at CpG dinucleotides.
 
@@ -275,9 +275,9 @@ The throughput of an assay can be quantified in two ways. The first is per-sampl
 
 [^throughput1]: This might reasonably be argued as being a definition of resolution.
 
-The choice of which assay to use for an experiment is a trade-off between resolution, per-sample throughput and per-cost throughput. Experiments that use an assay with high-resolution and high per-sample throughput generally have fewer samples than experiments using a lower resolution assay or an assay with lower per-sample throughput.
+The choice of which assay to use for an experiment is a trade-off between resolution, per-sample throughput and per-cost throughput. Experiments that use an assay with high resolution and high per-sample throughput generally have fewer samples due to the associated higher costs than experiments using a lower resolution assay or an assay with lower per-sample throughput.
 
-In this section I will describe each of the pre-treatments but will focus on the bisulfite-conversion assays. In particular, I will describe in detail the 'gold standard' assay of DNA methylation, _whole-genome bisulfite-sequencing_, that combines the sodium bisulfite conversion pre-treatment with massively parallel sequencing to produce whole-genome maps of DNA methylation at base pair resolution.
+In this section I will describe each of the pre-treatments but will focus on the bisulfite-conversion assays. In particular, I will describe in detail the 'gold standard' assay of DNA methylation, _whole-genome bisulfite-sequencing_, that combines the sodium bisulfite conversion pre-treatment with massively parallel sequencing to produce whole-genome maps of DNA methylation at single-base resolution.
 
 \subsection{Enzyme digestion assays}\label{sec:enzyme_digestion_assays}
 
@@ -287,7 +287,7 @@ For example, the recognition site of the restriction enzyme _HpaII_ is `CCGC`. H
 
 Assays based on restriction enzyme were some of the first developed for studying DNA methylation. These were initially developed for studying a small number of loci although they have been extended to genome-scale analysis approaches \citep{Laird:2010iv}. One such genome-wide assays is _CHARM_, 'comprehensive high-throughput arrays for relative methylation' \citep{Irizarry:2008hg}). CHARM combines a methylation fractionation step --- be it _MeDIP_, _HpaII_, or as in the original publication, _McrBC_ --- with a tiling array and analysis techniques that leverage regional DNA methylation levels.
 
-While restriction enzyme assays do not typically provide single nucleotide resolution data, `methylCRF` \citep{Stevens:2013hv} is able to infer single CpG methylation levels by combining data from a restriction enzyme based assay (MRE-seq) with one based on affinity enrichment (MeDIP-seq) in a sophisticated statistical analysis.
+While restriction enzyme assays do not typically provide single-base resolution data, the `methylCRF` software \citep{Stevens:2013hv} is able to infer single CpG methylation levels by combining data from a restriction enzyme based assay (MRE-seq) with one based on affinity enrichment (MeDIP-seq) in a sophisticated statistical analysis.
 
 \subsection{Affinity enrichment assays}\label{sec:affinity_enrichment_assays}
 
@@ -363,11 +363,11 @@ One final class of bisulfite-conversion assays does not use microarrays or high-
 \subsubsection{Pros and cons of bisulfite-conversion assays}\label{sec:pros_and_cons_of_bs_assays
 }
 
-Bisulfite-conversion assays are considered the gold standard for studying DNA methylation since cytosine methylation can be detected at single-base resolution \citep{Stirzaker:2014cu}. In fact, single-molecule, base pair resolution is even possible for short DNA sequences when bisulfite-treated DNA is analysed with sequencing[^microarrays].
+Bisulfite-conversion assays are considered the gold standard for studying DNA methylation since cytosine methylation can be detected at single-base resolution \citep{Stirzaker:2014cu}. In fact, single-molecule, single-base resolution is even possible for short DNA sequences when bisulfite-treated DNA is analysed with sequencing[^microarrays].
 
-[^microarrays]: Microarray hybridisation assays can provide base pair resolution but not single molecule resolution. The signal from a microarray-based experiment a sample-wide average since, for each locus, the signal is relative to the proportion of DNA fragments in the sample methylated at that locus.
+[^microarrays]: Microarray hybridisation assays can provide single-base resolution but not single-molecule resolution. The signal from a microarray-based experiment a sample-wide average since, for each locus, the signal is relative to the proportion of DNA fragments in the sample methylated at that locus.
 
-Almost all bisulfite-based assays require a considerable amount of DNA, e.g., $1$ to $5$ $\mu$g for whole-genome bisulfite-sequencing, which is extracted from a population of cells. However, the minimal amount of DNA is being reduced with each technological advance. Recently, both \citet{Guo:2013ih} and \citet{Smallwood:2014kn} published single-cell bisulfite-sequencing assays, although they are not yet a commercially available sequencing assay. Furthermore, these are not yet proper genome-wide assays. The technique of \citet{Guo:2013ih} is adapted from RRBS and so only assays a small percentage of cytosines in the genome. And the technique of \citet{Smallwood:2014kn}, while intended as a genome-wide assay, can reportedly only "accurately measure DNA methylation at up to 48.4% of cpG sites" \citep{Smallwood:2014kn}.
+Almost all bisulfite-based assays require a considerable amount of DNA, e.g., $1$ to $5$ $\mu$g for whole-genome bisulfite-sequencing, which is extracted from a population of cells. However, the minimal amount of DNA is being reduced with each technological advance. Recently, both \citet{Guo:2013ih} and \citet{Smallwood:2014kn} published single-cell bisulfite-sequencing assays, although they are not yet a commercially available sequencing assay. Furthermore, these are not yet proper genome-wide assays. The technique of \citet{Guo:2013ih} is adapted from RRBS and so only assays a small percentage of cytosines in the genome. And the technique of \citet{Smallwood:2014kn}, while intended as a genome-wide assay, can reportedly only "accurately measure DNA methylation at up to $48.4\%$ of cpG sites" \citep{Smallwood:2014kn}.
 
 A recently discovered disadvantage of bisulfite-conversion assays is that they are unable to distinguish 5hmC from 5mC; 5-hydroxymethyl, like 5-methyl, similarly protects a cytosine from deamination to uracil. In effect, the detection of 5mC, and all subsequent inference, is confounded with that of 5hmC. For most experiments this isn't much of a problem --- most cells have very low levels of 5hmC and so there is little confounding --- however, in certain experiments this needs a more careful approach. To address this issue, \citet{Booth:2012fh} developed _oxidative bisulfite-sequencing_ (oxBS-seq) and \citet{Yu:2012ej} developed _Tet-assisted bisulfite sequencing_ (TAB-seq) for separate 5mC and 5hmC detection.
 
@@ -381,7 +381,7 @@ Another disadvantage of bisulfite-conversion assays is that they require knowled
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/bisulfite_CT_SNP.pdf}
-\caption{Sequence variation between the reference genome and the sample's genome can result in incorrect inferrence about the methylation state of the sample's genome. The locus in orange is a cytosine in the refererence genome but a thymine in the sample's genome. Because the read is compared against the reference genome, it may incorrectly inferred to be an unmethylated cytosine. The locus in purple is a thymine in the reference genome but an unmethylated cytosine in the sample's genome. Because the read is compared against the reference genome it may incorrectly inferred to be a thymine.}
+\caption{Sequence variation between the reference genome and the sample's genome can result in incorrect inference about the methylation state of the sample's genome. The locus in orange is a cytosine in the reference genome but a thymine in the sample's genome. Because the read is compared against the reference genome, it may incorrectly inferred to be an unmethylated cytosine. The locus in purple is a thymine in the reference genome but an unmethylated cytosine in the sample's genome. Because the read is compared against the reference genome it may incorrectly inferred to be a thymine.}
 \label{fig:bisulfite_CT_SNP.pdf}
 \end{figure}
 
@@ -391,10 +391,10 @@ The bisulfite-treatment of DNA can introduce biases and other problems. Three ex
 
 Ideally, an assay of DNA methylation could natively 'read' methylated cytosines as a distinct signal from unmethylated cytosines. This idea forms the basis of assays using the kinetics of DNA to infer the presence of DNA methylation and other DNA modifications. While very exciting, these assays do not yet scale to studying genome-wide DNA methylation levels in mammalian-sized genomes.
 
-The only commercially available assay in this class is the Pacific Biosciences SMRT technology \citep{Flusberg:2010hra}. It infers the presence of DNA modifications by comparing the time it takes to 'read' the modified form of a nucleotide, such as 5mC, to the time it takes to read its unmodified form.
+The only commercially available assay in this class is the Pacific Biosciences SMRT technology \citep{Flusberg:2010hra}. It infers the presence of DNA modifications by comparing the time it takes to 'read' the modified form of a base, such as 5mC, to the time it takes to read its unmodified form.
 
 \section{Summary}
 
 DNA methylation is an epigenetic modification with important roles in many biological systems. In mammals, CpGs are frequently methylated while non-CpG cytosines are less frequently methylated. Most unmethylated CpGs are found in CpG islands, which are important regulatory elements in the genome.
 
-Whole-genome bisulfite-sequencing provides single-nucleotide resolution data and is the gold standard assay for studying DNA methylation. Methods for analysing whole-genome bisulfite-sequencing data are the focus of my thesis. The following chapter describes the bioinformatics analysis of a bisulfite-sequencing experiment, including its many statistical and computational challenges.
+Whole-genome bisulfite-sequencing provides single-base resolution data and is the gold standard assay for studying DNA methylation. Methods for analysing whole-genome bisulfite-sequencing data are the focus of my thesis. The following chapter describes the bioinformatics analysis of a bisulfite-sequencing experiment, including its many statistical and computational challenges.
