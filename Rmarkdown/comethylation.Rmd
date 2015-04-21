@@ -745,3 +745,24 @@ Regarding the effect of the homogeneity on the Mantel-Haenszel estimator, Greenl
 > Under the homogeneity assumption, OR^MH is an almost fully efficient estimator of the common value, and remains a consistent estimator of this value even with sparse data, i.e. when the fineness of stratification results in many small cell counts. __As shown later, its convergence properties under heterogeneity are not as desirable, although even in this case it remains insensitive to small cells.__ [emphasis added]
 
 The _Miettenen_ estimator is like a generalised form of the Mantel-Haenszel estimator, but assumes each cell count is greater than approximately 4 (Greenland, S. Stat Med 1, 217–227 (1982)).
+
+## Plan of attack
+
+Following discussion with Terry (2015-04-21), this is my plan of attack to finish this chapter and the `methsim` chapter.
+
+- Read up on what happens with the MH estimator when the common odds ratio assumption is invalid.
+  - Is there a better estimator in this setting? The Miettennen estimator?
+- Demonstrate via simulation that the unconditional LOR estimator applied to $2 \times 2$ tables is biased when $d$ is small and the marginal probabilities are near the boundaries.
+  - Corrollary: Don't use the LOR estimates of within-fragment co-methylation from individual $2\times 2$ tables. I know they're biased, so there's no reason to show these results.
+- Demonstrate that the MH estimator applied to $2 \times 2 \times K$ tables is unbiased when $d$ is small (per-table) and the marginal probabilities are near the boundaries.
+  - Need to investigate the setting where the marginal probabilities are heterogeneous across the $K$ tables but with the same odds-ratio.
+  - Need to investigate the setting where the odds ratio __is not__ common to the $K$ tables; what does the MH estimator end up estimating?
+- Compute MH estimates (and standard errors) of within-fragment co-methylation for different stratification strategies.
+  - Stratify by IPD
+  - Stratify by IPD + chromosome
+  - Stratify by IPD + chromosome + chromosome arm
+  - Stratify by IPD + chromosome + chromosome arm + bin (Mb)
+  - Check whether the more-stratified estimates fall within a reasonable distance from the less-stratified estimates (i.e., with respect to standard errors of the less-stratified estimates).
+- Settle on the most appropriate level of stratification and apply to all samples.
+  - Discuss results.
+- `methsim`: Sample LORs from a Normal(mu, sigma^2) distribution, where mu (resp. sigma) is the MH estimator (resp. standard error? empirical variance of stratified MH estimators?) of within-fragment co-methylation for that IPD and region-type.
