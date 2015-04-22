@@ -12,17 +12,14 @@ bibliography: ../latex/phd_thesis.bib
 
 \chapter{Co-methylation}\label{chap:co-methylation}
 
-# TODOs
+\begin{chapabstract}
+I describe two measures of within-sample co-methylation, _within-fragment co-methylation_ and _correlation of $\beta$-values_. The exploration of within-fragment co-methylation leads to a study of methods for estimating meaningful summaries of dependence in sparse $2 \times 2 \times K$ contingency tables.
 
-- Try out Matthew Stephen's adaptive hierarchical shrinkage method on the estimated log odds ratios (see [https://github.com/stephens999/ash](https://github.com/stephens999/ash)).
+Using estimates of both within-fragment co-methylation and correlation of $\beta$-values, I explore how co-methylation is affected by the distance between methylation loci and the genomic context of the methylation loci. I apply these methods to 40 whole-genome bisulfite-sequencing samples to study the between-sample variability of co-methylation.
 
-## Chapter overview
+Throughout this chapter I focus on co-methylation of CpGs, although the methods described are also applicable to non-CpG methylation loci.
+\end{chapabstract}
 
-In this chapter I describe two measures of within-sample co-methylation, _within-fragment co-methylation_ and _correlation of $\beta$-values_. Using both these measures I explore how co-methylation is affected by the distance between methylation loci and the genomic context of the methylation loci. I apply these methods to 40 whole-genome bisulfite-sequencing samples to study the between-sample variability of co-methylation.
-
-Throughout this chapter I focus on co-methylation of CpGs, although the methods described are also applicable to non-CpG methylation loci. I do not explore co-methylation of non-CpG methylation loci because these loci are rarely methylated in the samples that I am studying.
-
-\FloatBarrier
 \section{Correlations of $\beta$-values}\label{subsec:beta_cor}
 
 Chapter \ref{chap:co-methylation_review} documented several previous analyses based on 'correlations' of aggregate methylation levels, such as $\beta$-values. What was lacking from these were clear descriptions of the proposed methods and software implementations. In this chapter I try to rectify the former and with the `MethylationTuples` I make available a software implementation of these methods.
@@ -308,16 +305,72 @@ Comparing CpG islands to non-islands, Figures \ref{fig:EPISCOPE_spearman_beta_co
 
 The $150-200$ bp periodicity is also evident from the $NIL \geq 0$ data and is particularly clear for the CpG pairs outside of CpG islands. This may be due to  different regulation of DNA methylation outside of CpG islands or simply because CpG islands have such consistently high correlations that these periodicities are not evident.
 
+\subsection{Summary}
+
+__TODO: Summarise the results for correlation of $\beta$-values.__
+
+A limitation to analysing co-methylation using correlations of $\beta$-values is that the analysis is based on correlations of measurements that are aggregates from many thousands of DNA molecules. We are not measuring co-methylation on the scale at which the biological process of DNA methylation acts, namely at the level of individual DNA molecules. As noted by \citet{Ball:2009kh}, "the clonal feature of Illumina sequencing [allows us] to investigate whether co-methylation occurs at the single-molecule level". Before doing so, I first explore the challenge of estimating meaningful measures of dependence in sparse $2 \times 2 \times K$ contingency tables. While perhaps not yet apparent, this will be essential for the analysis of within-fragment co-methylation.
+
 \FloatBarrier
+
+\section{Estimating dependence in sparse $2 \times 2 \times K$ contingency tables}
+
+Consider two binary random variables, $X$ and $Y$. Let $\pi_{ij}, i, j = 1, 2$ denote the probability that a subject has response $i$ for variable $X$ and response $j$ for variable $Y$. We wish to estimate the _odds ratio_, which is defined as $\psi = \frac{\pi_{11} \pi_{22}}{\pi_{12} \pi_{21}}$. There are many reasons why we might wish to estimate the odds ratio (__CITE__), but our interest here is __WHAT__.
+
+Suppose we observe $(X, Y)$ for $n$ samples. Denote by $n_{ij}, i, j = 1, 2$ the number of subjects with response $i$ for variable $X$ and response $j$ for variable $Y$. We use the 'dot' notation to denote the sum over the index it replaces, e.g., $n_{1 \cdot} = n_{11} + n_{12}$. The general form of this $2 \times 2$ contingency table is shown in Table \ref{tab:2x2}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}cccc@{}}
+\cmidrule(l){2-4}
+ & \multicolumn{3}{c}{Column} \\
+ \cmidrule(l){2-4}
+\multirow{3}{*}{Row} & & & \\
+ & $n_{11}$       & $n_{12}$       & $n_{1 \cdot}$ \\
+ & $n_{21}$       & $n_{22}$       & $n_{2 \cdot}$ \\
+ & $n_{\cdot 1}$  & $n_{\cdot 2}$  & $n_{\cdot \cdot} = n$ \\ \cmidrule(l){2-4}
+\end{tabular}
+\caption{Notation for a $2 \times 2$ contingency table.}
+\label{tab:2x2}
+\end{table}
+
+The simplest estimator of the odds ratio is the unconditional maximum likelihood estimator, $\widehat{\psi_{U}} = \frac{n_{11} n_{22}}{n_{12} n_{21}}$.
+
+- Go through the various estimators, their pros and cons.
+   - Conditional maximum likelihood estimator
+- Explain the advantage of the "0.5-adjusted" unconditional estimator.
+- Move to $2 \times 2 \times K$ tables
+  - Go through same comparison of estimators
+- Move to sparseness
+  - Asymptopia I and II
+  - Go through same comparison of estimators
+  - The homogeneity assumption
+
+ ## Setting for studying within-fragment co-methylation
+
+ - Asymptopia II with sparse tables
+ - Homogeneity??? Don't/can't know.
+
+ ## Simulation
+
+-
+
+## Summary
+
 \section{Within-fragment co-methylation}\label{subsec:wf_cometh}
 
 The key advantage of studying within-fragment co-methylation is that it measures the dependence of DNA methylation at the scale on which the biological process acts. I have developed a method based on odds-ratios to quantify the strength of co-methylation for a pair of methylation loci in a single sample.
 
 \subsection{Methods}
 
-Here I describe a simple method based on analysing methylation patterns at 2-tuples. For simplicity, I will use CpG 2-tuples, but the method is applicable to any methylation type. This method is implemented in the `cometh` function that is part of the `MethylationTuples` software.
+Here I describe a simple method based on analysing methylation patterns at 2-tuples. For simplicity, I will use CpG 2-tuples, but the method is applicable to any methylation type. This method is implemented in the `cometh()` function that is part of the `MethylationTuples` software.
 
-The aim of this analysis is to address the question of 'how are methylation states on individual DNA fragments correlated as a function of the distance between loci?'. There are two steps in this analysis:
+The aim of this analysis is to address the questions:
+
+1. How dependent are methylation states at nearby methylation loci on the same DNA fragment?
+2. What influences this dependence?
+
+There are two steps in this analysis:
 
 1. Define the 2-tuples.
 2. For each 2-tuple, estimates the dependence between the methylation state at the first locus and the second locus. For this I use the logarithm of the odds ratio ($LOR$).
@@ -628,17 +681,17 @@ __TODO: Move this code chunk to supplementary material and only include results 
 library(mipfp)
 
 # rtpois is a helper function to simulate n truncated Poisson(lambda) with
-# truncation specified by 'trunc'. 
-# It is adapted from a method for simulating zero-truncated Poisson suggested 
+# truncation specified by 'trunc'.
+# It is adapted from a method for simulating zero-truncated Poisson suggested
 # by Peter Dalgaard https://stat.ethz.ch/pipermail/r-help/2005-May/070680.html
 rtpois <- function(n, lambda, trunc) {
-  qpois(runif(n, ppois(trunc, lambda), 1), lambda) 
+  qpois(runif(n, ppois(trunc, lambda), 1), lambda)
 }
 
 # Function to simulate 2x2xK tables.
 # Each 2x2 table represents the counts of unmethylated (0) and methylated (1) states
 # at each CpG for each read.
-# The number of reads per table (i.e., 2x2 table sample size) is simulated 
+# The number of reads per table (i.e., 2x2 table sample size) is simulated
 # from a truncated Poisson(lambda) distribution; truncation is to simulate
 # minimum coverage cutoffs and is specified by the 'trunc' argument.
 # The marginal probabilities of each table are p1 = Prob(methylated at first CpG)
@@ -646,7 +699,7 @@ rtpois <- function(n, lambda, trunc) {
 # The odds ratio (or) is for each 2x2 table and should be of length K or 1 (in
 # which case all K tables have the same odds ratio).
 simTables <- function(K, lambda, trunc, p1, p2, or) {
-  
+
   # d is the sample size of each 2x2 table (i.e, the sequencing depth for the 2-tuple)
   d <- rtpois(n = K, lambda = lambda, trunc = trunc)
   if (length(p1) == 1L) {
@@ -660,8 +713,8 @@ simTables <- function(K, lambda, trunc, p1, p2, or) {
   }
   .simTables <- function(k, d, p1, p2, or) {
     # Compute joint probabilities
-    P <- mipfp::Ipfp(seed = matrix(c(or, 1, 1, 1), ncol = 2), 
-                     target.list = list(1, 2), 
+    P <- mipfp::Ipfp(seed = matrix(c(or, 1, 1, 1), ncol = 2),
+                     target.list = list(1, 2),
                      target.data = list(c(1 - p1, p1), c(1 - p2, p2)))$x.hat
     matrix(rmultinom(1, d, as.vector(P)), ncol = 2)
   }
@@ -682,7 +735,7 @@ LOR <- function(x, offset = 0.5) {
 MH <- function(x, offset = 0) {
   x <- x + offset
   # TODO: return the standard error
-  MM <- x[2, 2, ] 
+  MM <- x[2, 2, ]
   MU <- x[2, 1, ]
   UM <- x[1, 2, ]
   UU <- x[1, 1, ]
@@ -725,7 +778,7 @@ p1 <- c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99)
 p2 <- p1
 for (i in 1:9) {
   x <- simTables(K = K, lambda = lambda, trunc = trunc, p1 = p1[i], p2 = p2[i], or = or)
-  hist(LOR(x), main = paste0("p1 = ", p1[i], ", p2 = ", p2[i], ", lor = ", log2(or)), 
+  hist(LOR(x), main = paste0("p1 = ", p1[i], ", p2 = ", p2[i], ", lor = ", log2(or)),
        xlim = c(-10, 10), breaks = 20,
        xlab = expression(paste(log[2], "(odds ratio)")),
        freq = FALSE)
@@ -747,10 +800,10 @@ or <- 1
 p1 <- c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99)
 p2 <- p1
 for (i in 1:9) {
-  x <- simTables(K = K, lambda = lambda, trunc = trunc, p1 = p1[i], 
+  x <- simTables(K = K, lambda = lambda, trunc = trunc, p1 = p1[i],
                  p2 = p2[i], or = or)
-  hist(LOR(x), 
-       main = paste0("p1 = ", p1[i], ", p2 = ", p2[i], ", lor = ", log2(or)), 
+  hist(LOR(x),
+       main = paste0("p1 = ", p1[i], ", p2 = ", p2[i], ", lor = ", log2(or)),
        xlim = c(-10, 10), breaks = 20,
        xlab = expression(paste(log[2], "(odds ratio)")),
        freq = FALSE)
@@ -772,9 +825,9 @@ or <- 2^seq(-4, 4, 1)
 p1 <- runif(K)
 p2 <- runif(K)
 for (i in 1:9) {
-  x <- simTables(K = K, lambda = lambda, trunc = trunc, p1 = p1, p2 = p2, 
+  x <- simTables(K = K, lambda = lambda, trunc = trunc, p1 = p1, p2 = p2,
                  or = or[i])
-  hist(LOR(x), 
+  hist(LOR(x),
        main = paste0("p1 = U(0, 1), p2 = U(0, 1)", ", lor = ", log2(or[i])),
        xlim = c(-10, 10), breaks = 20,
        xlab = expression(paste(log[2], "(odds ratio)")),
@@ -783,7 +836,7 @@ for (i in 1:9) {
   abline(v = LORCollapsed(x), col = "orange", lwd = 3)
   abline(v = log2(or[i]), col = "black", lty = 2)
 }
-title(paste0("K = ", K, ", lambda = ", lambda, ", trunc = ", trunc), 
+title(paste0("K = ", K, ", lambda = ", lambda, ", trunc = ", trunc),
       outer = TRUE, line = -1)
 
 # Simulate and plot data when p1 ~ Uniform(0, 1), p2 = p1
@@ -807,13 +860,13 @@ for (i in 1:9) {
   abline(v = LORCollapsed(x), col = "orange", lwd = 3)
   abline(v = log2(or[i]), col = "black", lty = 2)
 }
-title(paste0("K = ", K, ", lambda = ", lambda, ", trunc = ", trunc), 
+title(paste0("K = ", K, ", lambda = ", lambda, ", trunc = ", trunc),
       outer = TRUE, line = -1)
 
 # Simulate and plot data when p1 ~ Beta(0.3, 0.2), p2 = p1.
 # 100 CpG pairs, 30x average coverage truncated at 10
 # log odds ratio = -4, -3, ..., 3, 4.
-# Beta(0.3, 0.2) is roughly like the genome-wide distribution of methylation 
+# Beta(0.3, 0.2) is roughly like the genome-wide distribution of methylation
 # levels (B).
 set.seed(666)
 par(mfrow = c(3, 3))
@@ -838,7 +891,7 @@ title(paste0("K = ", K, ", lambda = ", lambda, ", trunc = ", trunc), outer = TRU
 # Simulate and plot data when p1 ~ Beta(0.3, 0.2), p2 = p1.
 # 100 CpG pairs, 30x average coverage truncated at 10
 # log2(or) ~ Gaussian(log2(or_mean), 1)
-# Beta(0.3, 0.2) is roughly like the genome-wide distribution of methylation 
+# Beta(0.3, 0.2) is roughly like the genome-wide distribution of methylation
 # levels (B).
 set.seed(666)
 par(mfrow = c(3, 3))
@@ -864,7 +917,7 @@ title(paste0("K = ", K, ", lambda = ", lambda, ", trunc = ", trunc), outer = TRU
 # Simulate and plot data when p1 ~ Beta(0.3, 0.2), p2 = p1.
 # 1000 CpG pairs, 30x average coverage truncated at 10
 # log2(or) ~ Gaussian(log2(or_mean), 1)
-# Beta(0.3, 0.2) is roughly like the genome-wide distribution of methylation 
+# Beta(0.3, 0.2) is roughly like the genome-wide distribution of methylation
 # levels (B).
 set.seed(666)
 par(mfrow = c(3, 3))
@@ -890,7 +943,7 @@ title(paste0("K = ", K, ", lambda = ", lambda, ", trunc = ", trunc), outer = TRU
 # Simulate and plot data when p1 ~ Beta(0.3, 0.2), p2 = p1.
 # 1000 CpG pairs, 30x average coverage truncated at 10
 # log2(or) ~ Skewed-Gaussian(log2(or_mean), 1, -10)
-# Beta(0.3, 0.2) is roughly like the genome-wide distribution of methylation 
+# Beta(0.3, 0.2) is roughly like the genome-wide distribution of methylation
 # levels (B).
 library(sn)
 set.seed(666)
@@ -917,7 +970,7 @@ title(paste0("K = ", K, ", lambda = ", lambda, ", trunc = ", trunc), outer = TRU
 # Simulate and plot data when p1 ~ Beta(0.3, 0.2), p2 = p1.
 # 1000 CpG pairs, 30x average coverage truncated at 10
 # log2(or) ~ 0.5 * Gaussian(log2(or_mean), 1) + 0.5 * Gaussian(-log2(or_mean))
-# Beta(0.3, 0.2) is roughly like the genome-wide distribution of methylation 
+# Beta(0.3, 0.2) is roughly like the genome-wide distribution of methylation
 # levels (B).
 set.seed(666)
 par(mfrow = c(3, 3))
