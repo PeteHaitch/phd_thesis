@@ -288,7 +288,7 @@ As part of their analysis, citeauthor{Landan:2012kp} construct "methylation link
  & \multicolumn{3}{c}{Second CpG} \\
  \cmidrule(l){2-4}
 \multirow{3}{*}{First CpG} & & & \\
- & $uu_{i, i'}$       & $um_{i,i ''}$       & $u\cdot_{i, i'}$ \\
+ & $uu_{i, i'}$       & $um_{i,i'}$       & $u\cdot_{i, i'}$ \\
  & $mu_{i, i'}$       & $mm_{i, i'}$       & $m\cdot_{i, i'}$ \\
  & $\cdot u_{i, i'}$  & $\cdot m_{i, i'}$  & $d_{i, i'}$      \\ \cmidrule(l){2-4}
 \end{tabular}
