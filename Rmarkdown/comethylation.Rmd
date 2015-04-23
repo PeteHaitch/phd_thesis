@@ -368,32 +368,44 @@ The first asymptotic environment, $A1$, assumes that the number of $2 \times 2$ 
 
 \subsection{Homogeneity of odds ratios assumption}
 
-So far we have assumed a common odds ratio for the $K$ $2 \times 2$ tables.
+So far we have assumed a common odds ratio for the $K$ $2 \times 2$ tables. This is also known as the _homogeneity of odds ratios_ assumption. As noted by \cite{Liang:1985uw}, \citet{MANTEL:1959uf} did not explicitly assume homogeneity of the odds ratio in their original work. Nonetheless, it does raise the question of how to test this assumption and the effect on these estimators when this assumption is not true.
 
-__UP TO HERE__
+Under asymptotic environment $A2$, where the $2 \times 2$ tables are sparse, \citet{Liang:1985uw} developed three tests for the assumption of homogeneity of odds ratios and compared these with two tests for the same assumption but designed under $A1$. Unsurprisingly, \citeauthor{Liang:1985uw} found that the three conditional tests are more appropriate than either of the unconditional tests when the data are simulated under $A2$. The disadvantage of these conditional tests is the extra computation required to compute them. \citeauthor{Liang:1985uw} also note, however, that when both $K > 10$ and $n_{i \cdot} > 10$, the simplest test, an unconditional score test developed under $A1$ by \citet{Zelen:1971fo} and corrected by \citet{Halperin:1977vk}, has approximately the correct size at the nominal 0.05 level.
 
+\subsection{Simulation study}
 
-- Move to $2 \times 2 \times K$ tables
-  - Go through same comparison of estimators
-- Move to sparseness
-  - Asymptopia I and II
-  - Go through same comparison of estimators
-  - The homogeneity assumption
+We analyse the results of a simulation study to explore the effects of sparsity and heterogeneity of odds ratios on estimates of odds ratios in $2 \times 2 \times K$ contingency tables. The simulation requires that we specify several parameters shown below. In order to relate these back to DNA methylation, I also describe each parameter using the statistical framework proposed in Chapter \ref{chap:wgbs_statistical_framework}:
 
- ## Setting for studying within-fragment co-methylation
+- the number of tables, $K$. The number of 2-tuples.
+- the marginal probabilities, $\pi_{1 \cdot} = Pr(Z_{i})$ and $\pi_{\cdot 1} = Pr(Z_{i'})$. Some simulations use a common set of marginal probabilities across all tables but some simulate the marginal probabilities from a specified distribution.
+- the odds ratio of each table, $\psi_{k}$. Most simulations use a common odds ratio across the $K$ tables, $\psi_{k} = \psi$.
+- the sample size of each table, $n_{\cdot \cdot k} = d_{(i, i')}$. The number of reads containing both the $i^{th}$ and ${i'}^{th}$ methylation locus (sequencing depth). Most simulations use a truncated negative binomial distribution to model a bisulfite-sequencing experiment with mean sequencing depth of $30 \times$ but where only 2-tuples with at least $10 \times$ sequencing depth are used in downstream analyses[^nb_sim].
 
- - Asymptopia II with sparse tables
- - Homogeneity??? Don't/can't know.
+[^nb_sim]: In the simulation study, a larger cutoff results in higher quality data since we can simply keep simulating until we have $K$ tables with sufficient sequencing depth. In analysing real data, increasing the cutoff may be detrimental since we could end up with fewer than $K$ tables to analyse.
 
- ## Simulation
+__UP TO HERE: Insert simulation results__
 
--
+- Use parameters $n, \pi, \psi, \phi$ and not the ones from Chapter \ref{chap:wgbs_statistical_framework} since these are more succinct.
 
-## Summary
+\subsection{Summary}
 
-\section{Within-fragment co-methylation}\label{subsec:wf_cometh}
+__TODO__
+
+\section{Within-fragment co-methylation}\label{sec:wf_cometh}
 
 The key advantage of studying within-fragment co-methylation is that it measures the dependence of DNA methylation at the scale on which the biological process acts. I have developed a method based on odds-ratios to quantify the strength of co-methylation for a pair of methylation loci in a single sample.
+
+\subsection{Studying within-fragment co-methylation from sparse $2 \times 2 \times K$ contingency tables}
+
+- Asymptopia II with sparse tables
+- Homogeneity??? Don't/can't know.
+
+- Describe co-methylation in terms of $X$ and $Y$, the sparse $2 \times 2 \times K$ contingency tables, the marginal probabilities, and the odds ratios.
+
+We will be studying within-fragment co-methylation by analysing a large number of sparse $2 \times 2$ contingency tables. This puts us in the realm of asymptotic environment $A2$.
+Furthermore, the marginal probabilities of these tables, $\pi_{\cdot 1} = 1 - \pi_{\cdot 2}$ and $\pi_{1 \cdot} = 1 - \pi_{2 \cdot}$, will be very often close to the boundaries of zero and one. This is because in this case the marginal probability represents the probability that the methylation locus is methylated, and we have seen in Chapter \ref{chap:wgbs_statistical_framework} that these values, as estimated by $\beta$-values, have a bimodal distribution with each mode near the boundary.
+
+These extreme marginal probabilities give rise to sparse $2 \times 2$ tables. A property of these sparse $2 \times 2$ tables not yet discussed is that estimates of the odds ratio for these tables are very biased. We have seen this in __SIMULATION SETION__, but the intuitive explanation is that if both methylation loci are very likely to be methylated or unmethylated __BLAH BLAH BLAH__
 
 \subsection{Methods}
 
@@ -714,12 +726,25 @@ __TODO: Move this code chunk to supplementary material and only include results 
 # Requires the installation of methsim
 library(mipfp)
 
-# rtpois is a helper function to simulate n truncated Poisson(lambda) with
+# rtpois is a helper function to simulate n truncated Poisson(lambda) RVs with
 # truncation specified by 'trunc'.
 # It is adapted from a method for simulating zero-truncated Poisson suggested
 # by Peter Dalgaard https://stat.ethz.ch/pipermail/r-help/2005-May/070680.html
 rtpois <- function(n, lambda, trunc) {
   qpois(runif(n, ppois(trunc, lambda), 1), lambda)
+}
+
+# rtnbinom is a helper function to simulate n truncated NB(mu, size) RVs with
+# truncation specified by 'trunc'. It uses a more explicit approach to simulate # truncated RVs than rtpois() because the same trick doesn't immediately work
+# for NB-distributed RVs.
+rtnbinom <- function(n, mu, size, trunc) {
+  x <- rnbinom(n, size = size, mu = mu)
+  i <- x <= trunc
+  while (any(i)) {
+    x[i] <- rnbinom(sum(i), size = size, mu = mu)
+    i <- x <= trunc
+  }
+  x
 }
 
 # Function to simulate 2x2xK tables.
