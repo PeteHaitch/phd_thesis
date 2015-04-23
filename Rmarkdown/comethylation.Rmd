@@ -315,7 +315,17 @@ A limitation to analysing co-methylation using correlations of $\beta$-values is
 
 \section{Estimating dependence in sparse $2 \times 2 \times K$ contingency tables}
 
-Consider two binary random variables, $X$ and $Y$. Let $\pi_{ij}, i, j = 1, 2$ denote the probability that a subject has response $i$ for variable $X$ and response $j$ for variable $Y$. We wish to estimate the _odds ratio_, which is defined as $\psi = \frac{\pi_{11} \pi_{22}}{\pi_{12} \pi_{21}}$. There are many reasons why we might wish to estimate the odds ratio (__CITE__), but our interest here is __WHAT__.
+We will begin with an overview of the simplest case of estimating dependence in $2 \times 2$ contingency tables, i.e., $K = 1$. We will then progressively introduce the complications of sparsity, $K > 1$, and heterogeneity across the $K$ tables. We conclude with a simulation study highlighting the performance of several difference estimators and determining which is most appropriate for a study of within-fragment co-methylation.
+
+\subsection{$2 \times 2$ contingency tables}
+
+Consider two binary random variables, $X$ and $Y$. Let $\pi_{ij}, i, j = 1, 2$ denote the probability that a subject has response $i$ for variable $X$ and response $j$ for variable $Y$. We wish to estimate the _odds ratio_, which is defined as $\psi = \frac{\pi_{11} \pi_{22}}{\pi_{12} \pi_{21}}$. There are many reasons why we might wish to estimate the odds ratio (__CITE__), but our interest here is __WHAT__. Provided that all $\pi_{ij} > 0$, the odds ratio, $\psi$, can be interpreted as follows:
+
+- $\psi = 1$: $X$ is independent of $Y$.
+- $\psi > 1$: Subjects are more likely to have the same level for both $X$ and $Y$, e.g., subjects with $(X, Y) = (1, 1)$ or $(X, Y) = (2, 2)$ are more likely than subjects with $(X, Y) = (1, 2)$ or $(X, Y) = (2, 1)$.
+- $\psi < 1$: Subjects are more likely to have the the opposite level for $X$ than they do for $Y$, e.g., subjects with $(X, Y) = (1, 2)$ or $(X, Y) = (2, 1)$ are more likely than subjects with $(X, Y) = (1, 1)$ or $(X, Y) = (2, 2)$.
+
+The possible values of $\psi$ are highly skewed, with $0 < \psi < 1$ and $1 < \psi < \infty$ corresponding to the two distinct dependence scenarios. Rather than estimating $\psi$ directly, we will instead focus our attention on the _log odds ratio_, $\phi = \log{\psi}$. The log odds ratio is symmetric about 0, which makes statistical inference somewhat simpler. I will routinely switch between discussing the estimation of $\psi$ and $\phi$, noting that we can always convert one to the other by appropriate exponentiation or taking of logarithms.
 
 Suppose we observe $(X, Y)$ for $n$ samples. Denote by $n_{ij}, i, j = 1, 2$ the number of subjects with response $i$ for variable $X$ and response $j$ for variable $Y$. We use the 'dot' notation to denote the sum over the index it replaces, e.g., $n_{1 \cdot} = n_{11} + n_{12}$. The general form of this $2 \times 2$ contingency table is shown in Table \ref{tab:2x2}.
 
@@ -334,11 +344,35 @@ Suppose we observe $(X, Y)$ for $n$ samples. Denote by $n_{ij}, i, j = 1, 2$ the
 \label{tab:2x2}
 \end{table}
 
-The simplest estimator of the odds ratio is the unconditional maximum likelihood estimator, $\widehat{\psi_{U}} = \frac{n_{11} n_{22}}{n_{12} n_{21}}$.
+The simplest estimator of $\phi$ is the unconditional maximum likelihood estimator, $\widehat{\phi_{U}} = \log{\frac{n_{11} n_{22}}{n_{12} n_{21}}}$. The asymptotic standard error of $\widehat{\phi_{U}}$ is given by $\hat{\sigma}(\widehat{\phi_{U}}) = \sqrt{\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{22}}}$. The asymptotic distribution of $\widehat{\phi_{U}}$ as $n \to \infty$ is $Normal(\phi, \hat{\sigma}(\phi)^{2})$.
 
-- Go through the various estimators, their pros and cons.
-   - Conditional maximum likelihood estimator
-- Explain the advantage of the "0.5-adjusted" unconditional estimator.
+A problem with the estimator $\widehat{\phi_{U}}$ is that it is $0$ or $\infty$ if any $n_{ij} = 0$ and undefined if either the row or column sums are zero, events that have positive probabilities. We can avoid such problems by adding $\frac{1}{2}$ to each of the $n_{ij}$ and defining a modified estimator $\widehat{\phi_{0.5}} = \log{\frac{(n_{11} + 0.5) (n_{22} + 0.5)}{(n_{12} + 0.5) (n_{21} + 0.5)}}$ with corresponding asymptotic standard error $hat{\sigma}(\widehat{\phi_{0.5}}) = \sqrt{\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{22}}}$. \citet{Haldane:1956wq} and \citet{Anscombe:1956te} showed that $\widehat{\phi_{U}}$ and $\widehat{\phi_{0.5}}$ have the same asymptotic distribution around $\phi$ as $n \to \infty$ but that $\widehat{\phi_{0.5}}$ has reduced first-order bias. The modified estimator, $\widehat{\phi_{0.5}}$, is therefore generally recommended.
+
+Another alternative to $\widehat{\phi_{U}}$ is the _conditional_ maximum likelihood estimator, $\widehat{\phi_{C}}$. This is computed by first conditioning on ${n_{1 \cdot}, n_{\cdot 1}}$. Some algebra then leads to the conditional distribution of $n_{11}$, $f(n_{11}; n_{1 \cdot}, n_{\cdot, 1, \psi})$, which is a hypergeometric distribution \citep{Fisher:1935ug}. The maximum likelihood estimator of $\psi$, $\widehat{psi_{C}}$ is solved using iterative methods.
+
+The conditional estimator, $\widehat{\phi_{C}}$, works better than the unconditional estimator, $\widehat{\phi_{U}}$, when the sample size, $n$, is small \citep{Agresti:2007tf}. Estimation of the odds ratio is made more difficult when the contingency table is _sparse_. We say that a contingency table is sparse when some of the $n_{ij}$ are small. Sparsity can occur even when the sample size, $n$, is large. Sparsity becomes more of a problem as we move from a single $2 \times 2$ table to $K$ $2 \times 2$ tables or, equivalently, a $2 \times 2 \times K$ table.
+
+\subsection{$2 \times 2 \times K$ contingency tables}
+
+Suppose we now measure the same two binary variables $X$ and $Y$ in $K$ different strata. We summarise these data in a $2 \times 2 \times K$ contingency table, $\{n_{ijk} \}$, where the $k^{th}$ 'slice' of the table corresponds to the $2 \times 2$ table for the $k^{th}$ stratum. For now, we assume that the odds ratio, $\psi = \frac{\pi_{11k} \pi_{22k}}{\pi_{12k} \pi_{21k}}$, remains constant across the $K$ tables but we allow the marginal probabilities, $\pi_{\cdot 1k} = 1 - \pi_{\cdot 2k}, \pi_{1 \cdot k} = 1 - \pi_{2 \cdot k}$ to vary.
+
+We can again compute an unconditional maximum likelihood estimator, $\widehat{phi_{U}}$, a '0.5-adjusted' unconditional maximum likelihood estimator, $\widehat{phi_{0.5}}$, and a conditional maximum likelihood estimator, $\widehat{phi_{C}}$, of the log odds ratio $\phi = \log{\psi}$ \citep[see][]{Breslow:1981ta}.
+
+Another estimator of the common odds ratio, $\psi$, is the Mantel-Haenszel estimator \citep{MANTEL:1959uf}, $\widehat{\psi_{MH}} = \frac{\sum_{k} (n_{11k} n_{22k} / n_{\cdot \cdot k})}{n_{12k} n_{21k} / n_{\cdot \cdot k}}$. \citet{Robins:1986vh} derived a simple robust estimator of the variance for $\widehat{\phi_{MH}} = \log{\widehat{\psi_{MH}}}$, $\hat{\sigma}^{2}(\widehat{\phi_{MH}})$. This variance estimator did not appear until some 25 years after the initial publication of the Mantel-Haenszel estimator[^mh_variance]. This delay was in part due to the two asymptotic forms of $2 \times 2 \times K$ contingency tables.
+
+[^mh_estimator]: Other estimators had been proposed but were supplanted by the work of \citet{Robins:1986vh}.
+
+The first asymptotic environment, $A1$, assumes that the number of $2 \times 2$ tables, $K$, remains small while the the sample sizes in each strata, $n_{\cdot \cdot k}$, grows large. The second asymptotic environment, $A2$, assumes that $K$ grows while $n_{\cdot \cdot k}$ remains small. The variance estimator proposed by \citet{Robins:1986vh} is consistent under both $A1$ and $A2$. For our study of within-fragment co-methylation, $A2$ is the more relevant asymptotic environment.
+
+\citet{Breslow:1981ta} showed that under $A2$ neither the unconditional maximum likelihood estimator, $\widehat{\psi_{U}}$, nor the '0.5-adjusted' unconditional maximum likelihood estimator, $\widehat{\psi_{0.5}}$, converge to the true odds ratio. In contrast, both the Mantel-Haenszel estimator, $\widehat{\psi_{MH}}$, and the conditional maximum likelihood estimator, $\widehat{\psi_{C}}$, do convert to $\psi$, with $\widehat{\psi_{MH}}$ having the advantage of a simple closer form expression \citep{Breslow:1996uc}.
+
+\subsection{Homogeneity of odds ratios assumption}
+
+So far we have assumed a common odds ratio for the $K$ $2 \times 2$ tables.
+
+__UP TO HERE__
+
+
 - Move to $2 \times 2 \times K$ tables
   - Go through same comparison of estimators
 - Move to sparseness
@@ -993,6 +1027,8 @@ for (i in 1:9) {
   lines(density(log2(or)), col = "black", lty = 2)
 }
 title(paste0("K = ", K, ", lambda = ", lambda, ", trunc = ", trunc), outer = TRUE, line = -1)
+
+# TODO: Increase d for each table
 ```
 
 ## Following chat with Terry
