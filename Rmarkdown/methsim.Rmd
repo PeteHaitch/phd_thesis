@@ -280,7 +280,7 @@ The above-described model is not particularly amenable to analytical calculation
 
 Rather than directly modelling the transition probabilities, $\mathbf{p}$, `methsim` is parameterised $\mathbf{Z}$ by a vector of marginal probabilities, $\mathbf{B} = \{ Pr(Z_{i} = 1) \}$, and a vector of odds ratios, $\mathbf{\psi} = \{ \frac{Pr_{Z_{i + 1} = 1 | Z_{i} = 1} \times Pr_{Z_{i + 1} = 0 | Z_{i} = 0}}{Pr_{Z_{i + 1} = 1 | Z_{i} = 0} \times Pr_{Z_{i + 1} = 0 | Z_{i} = 1}} \} = \{ \frac{Pr_{Z_{i} = 1, Z_{i + 1} = 1} \times Pr_{Z_{i} = 0 , Z_{i + 1} = 0}}{Pr_{Z_{i} = 1 , Z_{i + 1} = 0} \times Pr_{Z_{i} = 0 , Z_{i + 1} = 1}} \}$. We can compute the transition probabilities, $\mathbf{p}$, from $\mathbf{B}$ and $\mathbf{\psi}$ as I now describe.
 
-For each 2-tuple, $(i, i + 1)$, `methsim` first constructs the joint probability matrix, $P_{i, i + 1}$ from the marginal probabilities, $B_{i}, B_{i + 1}$, and the odds ratio, $\psi_{i}. The general form of $P_{i, i + 1}$ is shown below:
+For each 2-tuple, $(i, i + 1)$, `methsim` first constructs the joint probability matrix, $P_{i, i + 1}$ from the marginal probabilities, $B_{i}, B_{i + 1}$, and the odds ratio, $\psi_{i}$. The general form of $P_{i, i + 1}$ is shown below:
 
 \begin{equation*}
 P_{i, i + 1} = \bordermatrix{~ & 1 - B_{i+1} & B_{i+1} \cr
@@ -300,7 +300,7 @@ Let $B_{i} = 0.7$, $B_{i + 1} = 0.6$ and $\psi_{i, i + 1} = 2$. To begin the ite
 
 Once $P_{i, i + 1}$ is computed, the desired transition probability is obtained by dividing the appropriate element of $P_{i, i + 1}$ by the appropriate marginal probability. To continue our example, suppose $Z_{i} = 0$, then the probability that $Z_{i + 1}$ is also to zero is given by $Pr(Z_{i + 1} = 0 | Z_{i} = 0) = \frac{Pr(Z_{i = 0}, Z_{i + 1} = 0)}{Pr(Z_{i} = 0)} = \frac{0.155}{0.3} = 0.517$ to three decimal places. In fact, `methsim` only stores $Pr(Z_{i + 1} = 1 | Z_{i} = 0)$ and $Pr(Z_{i + 1} = 1 | Z_{i} = 1)$ since Pr(Z_{i + 1} = 0 | Z_{i} = 0) = 1 - Pr(Z_{i + 1} = 1 | Z_{i} = 0)$ and $Pr(Z_{i + 1} = 0 | Z_{i} = 1) = 1 - Pr(Z_{i + 1} = 1 | Z_{i} = 1)$.
 
-To simulate values of $\mathbf{B}$ and $\mathbf{\psi}$, `methsim` uses the empirical distributions of their estimators, $\mathbf{\beta} and $\mathbf{\widehat{\psi}}$, in the input methylome. More specifically, $\mathbf{B}$ is based on $\beta_{i | r_{i}}$ and $\mathbf{\psi}$ is based on $\widehat{\psi_{IPD(i, i+1) | r_{i}}$, the empirical distributions of $\beta_{i}$ and $\psi_{IPD(i, i + 1)}$ conditional on the region type of the $i^{th}$ locus, $r_{i}$, and the intra-pair distance of the the $i^{th}$ and $(i + 1)^{th}$ locus, $IPD(i, i+1)$, respectively. These empirical distributions are shown for the \emph{ADS} sample in Figures \ref{fig:ADS_beta_by_pm_boxplots} and __FIGURE__.
+To simulate values of $\mathbf{B}$ and $\mathbf{\psi}$, `methsim` uses the empirical distributions of their estimators, $\mathbf{\beta}$ and $\mathbf{\widehat{\psi}}$, in the input methylome. More specifically, $\mathbf{B}$ is based on $\beta_{i | r_{i}}$ and $\mathbf{\psi}$ is based on $\widehat{\psi_{IPD(i, i+1) | r_{i}}}$, the empirical distributions of $\beta_{i}$ and $\psi_{IPD(i, i + 1)}$ conditional on the region type of the $i^{th}$ locus, $r_{i}$, and the intra-pair distance of the the $i^{th}$ and $(i + 1)^{th}$ locus, $IPD(i, i+1)$, respectively. These empirical distributions are shown for the \emph{ADS} sample in Figures \ref{fig:ADS_beta_by_pm_boxplots} and __FIGURE__.
 
 \begin{figure}[!htb]
 \centering
@@ -345,36 +345,32 @@ The result of this process is a `SimulatedBS` object storing the ID of each read
 
 \subsection{Construct the output}
 
-__UP TO HERE: See what below can be salvaged__
+The `SimulatedWGBS` object contains all the data from the simulation. However, it is not always the most convenient or efficient format with which to work. For example, many downstream analyses only make use of $\beta$-values, so we might want to summarise our simulated data this way. `methsim` provides the `asMethPat()` function to convert the `SimulatedWGBS` object to a `MethylationTuples::MethPat` object containing methylation patterns at m-tuples of a given size[^simplify]; all the functionality of the `MethylationTuples` package is then available to the user, such as computing $\beta$-values with the `methLevel()` method.
 
-- [x] DONE
-
-While the `SimulatedBS` object contains all the data on the methylation states of the reads, it is not always the most convenient or efficient format with which to work. For example, many downstream analyses only make use of $\beta$-values, so we might want to summarise our simulated data this way. `methsim` provides the `asMethPat()` function to convert the `SimulatedBS` object to a `MethPat` object containing methylation patterns at m-tuples of a given size; all the functionality of the `MethylationTuples` package is then available to the user, such as computing $\beta$-values with the `methLevel()` method.
+[^simplify]: Alternatively, the user may use the `simplify` argument of the `simulate()` method to return an already 'simplified' `MethylationTuples::MethPat` object rather than the `SimulatedWGBS` object.
 
 \subsection{Simulating multiple samples}
 
-- [x] DONE
+The above describes how to simulate a single whole-genome bisulfite-sequencing sample. If we wanted to simulate six independent samples then we could simply run this procedure six times, with a different `MethylomeParam` object for each realisation. However, we will generally be interested in simulating experiments where there is some relationship between the samples. For example, suppose we want to simulate a two-group experiment with three samples per group. Furthermore, suppose we want to include differentially methylated regions between the two groups. How do we simulate such an experiment?
 
-The above describes how to simulate a single whole-genome bisulfite-sequencing sample. If we wanted to simulate six independent samples then we could simply run this procedure six times, with a different `SimulateMethylomeParam` object for each realisation. However, we will generally be interested in simulating experiments where the samples are not  is some relationship amongst the samples. For example, suppose we want to simulate a two-group experiment with three samples per group. Further, suppose we want to include differentially methylated regions between the two groups. How do we simulate such an experiment?
+To simulate these type of experiments, we need to be able to control the variation between the `SimulatedWGBS` objects. In this example, we probably want the three samples in each group to be more similar to each other than to the three samples in the other group. Essentially, we need to be able to control the within-group and between-group variation.
 
-To simulate these type of experiments, we need to be able to control the variation between the `SimulatedBS` objects. In this example, we probably want the three samples in each group to be more similar to each other than to the three samples in the other group. Essentially, we need to be able to control the within-group and between-group variation. `methsim` controls this variation through the workflow show in __FIGURE__. If we want two samples two be very different from one another, then we would use two different `SimulateMethylomeParam` objects at the beginning. However, if we want to simulate two technical replicates, then we would use the same `SimulateMethylomeParam`, `SimulatedMethylome` and `SimulateBSParam` objects; the two samples have identical 'true' methylomes and they only diverge at the 'sequencing' step of the simulation.
+Biological variation is controlled through the `MethylomeParam` object and the method with which we simulate $\mathbf{B}$ and $\mathbf{\psi}$ through the `simulate()` method. Technical variation is controlled the `WGBSParam` object. If we want two samples to be very different from one another, then we would use two different `MethylomeParam` objects at the beginning of the process. However, if we want to simulate two technical replicates, then we would use the same `WGBSParam` objects; the two samples have identical 'true' methylomes and they only diverge at the 'sequencing' step of the simulation.
 
-We might also consider more subtle ways of introducing variation. For example, we might use the same partitioning of the methylome and the same average methylation level for each region but vary the strength of co-methylation. This could be achieved by altering the $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$ distributions between two `SimulateMethylomeParam` objects while holding the rest constant. Or we might vary the weights, $W$, to simulate more or less heterogeneous samples.
+We might also consider more subtle ways of introducing variation. For example, we might use the same `MethylomeParam` object but vary how we simulate $\mathbf{B}$ and $\mathbf{\psi}$ between calls to `simulate()`.
 
-In __RESULTS SECTION__ I explore how much variation is created using these different techniques.
 
-\subsubsection{Simulating differential methylation}
+and the same average methylation level for each region but vary the strength of co-methylation. This could be achieved by altering the $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$ distributions between two `SimulateMethylomeParam` objects while holding the rest constant. Or we might vary the weights, $W$, to simulate more or less heterogeneous samples.
 
-- [ ] DONE
+In Section ref{sec:results} I explore how much variation is created using these different techniques.
 
-An obvious application of `methsim` is to simulate data to be used in a study comparing methods for identifying differential methylation. This requires a particularly controllable method for inducing differences in `SimulatedMethylome` objects. The user wants to provide a set of methylation loci, either individual loci or as regions, and the expected difference in methylation levels at these regions.
+\subsubsection{Simulating differential methylation}\label{sec:sim_diff_meth}
 
-__Scattered thoughts below__
+An obvious application of `methsim` is to simulate data to be used in a study comparing methods for identifying differential methylation.
 
-1. Individual loci: Want to specify $B_{i} = \sum_{\tilde{h} = 1}^{n_{\tilde{h}}} W_{r_{i}, \tilde{h}} \times Z_{i, \tilde{h}}$, i.e., fix $\mathbf{W_{i, \cdot}}$ and $\mathbf{Z_{i, \cdot}}$.
-2. Regionwise: Want to specify $mean(B_{r_{i}})$ (i.e., average $B$ across all loci in $r_{i}$). Could do this by applying (1) to all loci in the region or by specifying $B_{r_{i}}$ and hoping it just works out in the simulation.
+One way of doing this would be to take a `SimulatedMethylome` object and create a modified copy where $\mathbf{B}$ has been perturbed by specified amounts at a set of specified loci. We could then simulate bisulfite-sequencing data from each `SimulatedMethylome` and study which analysis methods can identify these simulated DMCs and DMRs.
 
-Perhaps both could be achieved by holding $Z$ fixed and varying $W$? Is that like assuming that the heterogeneity is causing the DMRs (or will it be interpreted that way)? Would tweaking $W$ to guarantee a particular $B$ be a computationally feasible strategy? Or would it be easier to specify the desired $B$ and simulate the region (this wouldn't guarantee $B$ is the desired value but should equal it "on average")?
+__UP TO HERE: See what below can be salvaged__
 
 \subsubsection{Performance}
 
@@ -382,13 +378,15 @@ Perhaps both could be achieved by holding $Z$ fixed and varying $W$? Is that lik
 
 Much of `methsim` is written in C++, using the wonderful Rcpp package \citep{Eddelbuettel:2011to, Eddelbuettel:2013if}, which greatly speeds up the running time of key procedures. Furthermore, several steps of the simulation can be run in parallel for each chromosome. Parallelism is implemented via the `BiocParallel` Bioconductor package \citep{BiocParallel}.
 
-The `SimulatedMethylome` and `SimulatedBS` objects are large in memory. This is to some extent unavoidable; we are simulating entire methylomes and whole-genome sequencing experiments. Some improvements in memory usage are possible by alternative implementations of key classes, however, these are generally at the expense of more complicated code and longer running times of associated methods. For example, long and repetitive vectors may be efficiently represented by run length encodings, however, it is slower to extract elements from these than simple numeric vectors.
+The `SimulatedMethylome` and `SimulatedBS` objects are large in memory. This is to some extent unavoidable; we are simulating whole-genome bisulfite-sequencing sequencing experiments that produce an enormous amount of data.
 
-Shown below are the running times and memory usage involved in simulating a $30\times$ whole-genome bisulfite-sequencing sample using the _ADS_ `SimulateMethylomeParam` object included in `methsim`. Using eight CPU cores in parallel, it takes approximately seven minutes to simulate the underlying 'true' methylome and a further nine minutes to simulate a single whole-genome bisulfite-sequencing assay of this methylome.
+Shown below are the running times and memory usage involved in simulating a $30\times$ whole-genome bisulfite-sequencing sample using the _ADS_ `MethylomeParam` object included in `methsim`. Using up to 8 CPU cores in parallel, it takes less than 5 minutes to simulate the underlying 'true' methylome and a further __HOW LONG__ to simulate a single $30 \times$ sequencing coverage whole-genome bisulfite-sequencing assay of this methylome[^parallel].
 
-These results are indicative of simulating high-coverage whole-genome bisulfite-sequencing for human-sized genomes. Simulations using a smaller genome or lower sequencing coverage will have faster running times and lower memory usage.
+[^parallel]: NB the creation of the `SimulatedMethylome` via `simulate(ADS, BPPARAM)` currently only uses a single CPU.
 
-```r
+__UP TO HERE: simulate-WGBSParam-method seems to be causing a memory leek and resulting crash. Running valgrind in reduced problem to investigate.__
+
+```{r, echo = TRUE, eval = FALSE}
 # Load necessary packages
 suppressPackageStartupMessages(library(methsim))
 suppressPackageStartupMessages(library(BiocParallel))
@@ -400,29 +398,40 @@ BPPARAM <- MulticoreParam(workers = 8L)
 # Set seed for reproducibility.
 set.seed(666)
 
-# ADS: the SimulateMethylomeParam object.
+# ADS: the MethylomeParam object.
 pryr::object_size(ADS)
-#> 22.5 MB
+#> 16.5 MB
 
 # sm: the SimulatedMethylome object
-system.time(sm <- simulate(ADS, BPPARAM = BPPARAM))
+system.time(l_sm <- simulate(ADS, BPPARAM = BPPARAM))
+#> Currently only simulates CpG methylation.
+#> Currently only simulates unstranded methylomes.
+#> Simulating 1 methylome..
 #>    user  system elapsed
-#> 839.505  19.612 417.271
+#> 186.680   9.676 270.780
+sm <- l_sm[[1]]
 pryr::object_size(sm)
-#> 2.93 GB
+#> 676 MB
 
-# sbsp: the SimulatedBSParam object.
-# NOTE: Basically all the memory used by the SimulatedBSParam object is the
+# wgbsp: the WGBSParam object.
+# NOTE: Basically all the memory used by the WGBSParam object is the
 # SimulatedMethylome object.
-sbsp <- SimulateBSParam(SimulatedMethylome = sm,
-                        aveCov = 30,
-                        errorRate = 0.01,
-                        target = NULL)
-pryr::object_size(sbsp)
-#> 2.93 GB
+wgbsp <- WGBSParam(SimulatedMethylome = sm,
+                   AveCov = 30,
+                   ErrorRate = 0.01,
+                   SequencingType = 'SE',
+                   ReadLength = 100)
+pryr::object_size(wgbsp)
+#> 676 MB
 
 # sbs: the SimulatedBS object.
-system.time(sbs <- simulate(sbsp, BPPARAM = BPPARAM))
+system.time(sbs <- simulate(wgbsp, BPPARAM = BPPARAM))
+#> Simulating 1 bisulfite-sequencing sample...
+
+
+
+
+
 #>     user   system  elapsed
 #> 2716.503  174.591  548.122
 pryr::object_size(sbs)
@@ -440,6 +449,9 @@ system.time(methpat <- asMethPat(sbs,
 pryr::object_size(methpat)
 #> 451 MB
 ```
+
+These results are indicative of simulating high-coverage whole-genome bisulfite-sequencing for human-sized genomes. Simulations using a smaller genome or lower sequencing coverage will have faster running times and lower memory usage.
+
 
 \section{Results}
 
