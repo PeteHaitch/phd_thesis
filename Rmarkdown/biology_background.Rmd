@@ -10,7 +10,7 @@ output:
 bibliography: ../latex/phd_thesis.bib
 ---
 
-\chapter{Biology background}\label{chap:biology_background}
+\chapter{Introduction to genomics and DNA methylation}\label{chap:biology_background}
 
 \begin{chapabstract}
 I summarise the basic biology necessary for understanding my thesis. I introduce DNA methylation, describe some of its biological roles, and introduce assays for studying DNA methylation, with a particular focus on bisulfite-sequencing.

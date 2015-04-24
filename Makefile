@@ -3,7 +3,7 @@
 # TODO: Conclusion
 # TODO: Fix missing figures
 
-phd_thesis.pdf: introduction.tex biology_background.tex wgbs_bioinformatics_analysis.tex wgbs_statistical_framework.tex datasets.tex wgbs_downstream_analyses.tex comethylation_review.tex comethylation.tex methsim.tex appendix.tex
+phd_thesis.pdf: introduction.tex biology_background.tex wgbs_bioinformatics_analysis.tex wgbs_statistical_framework.tex datasets.tex wgbs_downstream_analyses.tex comethylation_review.tex comethylation.tex methsim.tex concluding_remarks.tex appendix.tex
 	mkdir -p pdf
 	cd latex; pdflatex phd_thesis; \
 	bibtex phd_thesis; \
@@ -120,6 +120,17 @@ methsim.pdf:
 	mkdir -p pdf
 	Rscript -e "rmarkdown::render('Rmarkdown/methsim.Rmd', output_format = 'pdf_document', output_file = '../methsim.pdf', output_dir = '../pdf')"
 
+concluding_remarks.md:
+	Rscript -e "knitr::knit('Rmarkdown/concluding_remarks.Rmd', 'markdown/concluding_remarks.md')"
+
+concluding_remarks.tex: concluding_remarks.md
+	mkdir -p latex
+	pandoc -o latex/concluding_remarks.tex markdown/concluding_remarks.md
+
+concluding_remarks.pdf:
+	mkdir -p pdf
+	Rscript -e "rmarkdown::render('Rmarkdown/concluding_remarks.Rmd', output_format = 'pdf_document', output_file = '../methsim.pdf', output_dir = '../pdf')"
+
 appendix.md:
 	Rscript -e "knitr::knit('Rmarkdown/appendix.Rmd', 'markdown/appendix.md')"
 
@@ -141,7 +152,7 @@ paper_reviews.pdf: phd_thesis.bib paper_reviews.md markdown/bibliography.md
 	mv latex/paper_reviews_sc.pdf pdf/paper_reviews.pdf
 	rm latex/paper_reviews_sc*
 
-phd_thesis.html: introduction.md biology_background.md wgbs_bioinformatics_analysis.md wgbs_statistical_framework.md datasets.md wgbs_downstream_analyses.md comethylation_review.md comethylation.md methsim.md appendix.md
+phd_thesis.html: introduction.md biology_background.md wgbs_bioinformatics_analysis.md wgbs_statistical_framework.md datasets.md wgbs_downstream_analyses.md comethylation_review.md comethylation.md methsim.md concluding_remarks.md appendix.md
 	echo "Citations aren't yet supported!"
 	mkdir -p html
 	pandoc -s --mathjax --table-of-contents --number-sections --bibliography=latex/phd_thesis.bib -o html/phd_thesis.html markdown/introduction.md markdown/biology_background.md markdown/wgbs_bioinformatics_analysis.md markdown/wgbs_statistical_framework.md markdown/datasets.md markdown/wgbs_downstream_analyses.md markdown/comethylation_review.md markdown/comethylation.md markdown/methsim.md markdown/appendix.md
