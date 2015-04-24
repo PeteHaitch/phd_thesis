@@ -138,3 +138,5 @@ __TODO__
 - `methsim`
 - `methtuples`
 - others
+
+__TODO: Add citations of all packages used in thesis__

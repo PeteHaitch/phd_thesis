@@ -1,5 +1,5 @@
 ---
-title: "Biology background"
+title: "Introduction to genomics and DNA methylation"
 output:
   pdf_document:
     fig_caption: yes
@@ -14,7 +14,7 @@ bibliography: ../latex/phd_thesis.bib
 
 \begin{chapabstract}
 I summarise the basic biology necessary for understanding my thesis. I introduce DNA methylation, describe some of its biological roles, and introduce assays for studying DNA methylation, with a particular focus on bisulfite-sequencing.
-\begin{end}
+\end{chapabstract}
 
 \section{From DNA to genomes}\label{ref:from_dna_to_genomes}
 

@@ -14,9 +14,9 @@ bibliography: ../latex/phd_thesis.bib
 
 \chapter{A simulation model of DNA methylation data}\label{chap:methsim}
 
-\section{Chapter overview}\label{sec:methsim_overview}
-
-In this chapter I argue for the utility, even necessity, of methodology and software for simulating DNA methylation data. I present the `methsim` software to simulate DNA methylation data. `methsim` incorporates a model of within-fragment co-methylation and simulates individual sequencing reads, which sets it apart from existing software. I describe the statistical model behind `methsim` and its software implementation. Finally, I provide examples of how `methsim` can be used to learn about DNA methylation and how it might be used to develop simulation studies to compare competing analysis methods.
+\begin{chapabstract}
+I present the `methsim` software to simulate DNA methylation data. `methsim` incorporates a model of within-fragment co-methylation and simulates individual sequencing reads, which sets it apart from existing software. I describe the statistical model behind `methsim` and its software implementation. Finally, I provide examples of how `methsim` can be used to learn about DNA methylation and how it might be used to develop simulation studies to compare competing analysis methods.
+\end{chapabstract}
 
 1. Introduction
   - Why simulation?
@@ -32,17 +32,17 @@ In this chapter I argue for the utility, even necessity, of methodology and soft
 
 - [x] DONE
 
-It can be difficult to design an experiment that can be used for validating or benchmarking different analysis strategies. In fact, the huge variety of experimental factors, and their possible values, can make such a task infeasible. But perhaps the bigger hurdle is that there are not attractive experiments to perform; why spend your time and money on an experiment where you "know the answer" when you could be spending that same time and money on investigating something new? In these scenarios and more, simulation studies play a vital role in applied statistics, where they can be used in the development, validation and benchmarking of different analysis methodologies.
+It can be difficult to design an experiment that can be used for validating or benchmarking different analysis strategies. In fact, the huge variety of experimental factors, and their possible values, can make such a task infeasible. But perhaps the bigger hurdle is that there are not attractive experiments to perform; why spend your time and money on an experiment where you 'know the answer' when you could be spending that same time and money on investigating some new biology? In these scenarios and others, simulation studies play a vital role in applied statistics, where they can be used in the development, validation and benchmarking of different analysis methodologies.
 
 The key advantage of simulated data is that we know the truth _a priori_. Moreover, we can manipulate the truth via parameters in the simulation model and can examine how a method performs under a variety of scenarios. And this manipulation is cheap, a mere matter of changing parameters and re-running a piece of software, which means that we can investigate a broad range of plausible scenarios.
 
-Simulation studies can provide many insights into the performance of a method. At the most basic level, if a method fails to work or performs poorly when applied to simulated data, then it is very unlikely to work well when applied to real data. We can also identify which scenarios are "easy", ones where most methods are able to identify the truth, and scenarios under which certain methods perform better than others. While simulated data can never fully capture the richness of "real" data, we can learn a lot about a method by studying how it performs when applied to simulated data.
+Simulation studies can provide many insights into the performance of a method. At the most basic level, if a method fails performs poorly when applied to 'easy' simulated data, then it is very unlikely to work well when applied to more complex real data. We can also identify which scenarios are 'easy' (ones where most methods are able to identify the truth) and scenarios under which certain methods perform better than others. While simulated data can never fully capture the richness of real data, we can learn a lot about a method by studying how it performs when applied to simulated data.
 
 Simulation methods may also be used to learn about the plausibility of hypothesised models of a phenomenon, be they mechanistic or stochastic. By simulating data from the proposed model, and comparing it to the real data, we can identify hypotheses that are incompatible with reality. This can also help identify shortcomings in the model so that it may be refined in an iterative manner.
 
 There are a few key criteria when designing a simulation method:
 
-1. Realism: The simulated data must be "similar" to the real data. While this is obvious, it is also often hard to pin down or agree upon what constitutes "similar enough".
+1. Realism: The simulated data must be 'similar' to the real data. While this is obvious, it is also often hard to pin down or agree upon what constitutes 'similar enough'.
 2. Cost: It should be fast and cheap to simulate data. The most common use of simulation models in applied statistics is to repeatedly generate datasets under a range of parameter settings. This requires that each simulation is fast and computationally cheap, otherwise it will be prohibitive to analyse the full space of scenarios. An exception to this rule may occur when the simulation model is used to test a proposed mechanistic or stochastic model of a phenomenon, such as in studies of molecular dynamics. Even then, however, the cost of a simulation should be less than the cost of performing the equivalent experiments, otherwise the simulation is generally not worth the effort.
 3. Usability: There __must__ be a software implementation. Simulation models exist to be simulated from; a simulation model without an implementation is next to useless. The implementation should give the user easy access to the key  parameters and have sensible default settings. The output of the software should be in a standard format or readily convertible to a simple, manipulable format.
 
@@ -214,95 +214,93 @@ Simulating data with `methsim` involves 3 steps:
 2. Simulating reads, including sequencing error and bisulfite-conversion error, by sampling from the true methylome.
 3. Constructing the output, be it reads, methylation patterns at m-tuples or $\beta$-values.
 
-`methsim` requires an input dataset from which to estimate key parameters. For the input dataset, `methsim` requires the methylation patterns at various sized m-tuples, which can be produced by the `methtuple` software.
-
-This workflow is illustrated in __FIGURE__ and described in the remainder of this section.
+`methsim` requires an input dataset from which to estimate key parameters. For the input dataset, `methsim` requires the methylation patterns at various sized m-tuples, which can be produced by the `methtuple` software. `methsim` can currently only simulate CpG methylation and assumes that the methylation states of all CpGs are strand symmetric.
 
 \subsection{Implementation}
 
 - [x] DONE
 
-`methsim` is written in R and builds on the `MethylationTuples` package described in __CHAPTER__, as well as several R packages available on Bioconductor and CRAN (see `DESCRIPTION` for a complete list. __TODO: Add citations of all packages used in thesis__).
+`methsim` is written in R and builds on the `MethylationTuples` package described in Chapter \ref{chap:wgbs_downstream_analyses}, as well as several R packages available on Bioconductor and CRAN (see the `DESCRIPTION` file for a complete list.).
 
-`methsim` makes extensive use of the S4 object system in R. The most important classes defined by `methsim` are `SimulateMethylomeParam`, `SimulatedMethylome`, `SimulateBSParam` and `SimulatedBS`. The most important methods are the `simulate()` methods defined for the `SimulateMethylomeParam` and `SimulateBSParam` classes. The role of these classes and methods in the workflow is illustrated in __FIGURE__.
+`methsim` makes extensive use of the S4 object system in R. The most important classes defined by `methsim` are `MethylomeParam`, `SimulatedMethylome`, `WGBSParam` and `SimulatedBS`. The most important methods are the `simulate()` methods defined for the `MethylomeParam` and `WGBSParam` classes.
 
-The `SimulateMethylomeParam` object contains the empirical distributions of key statistics from which the parameters for simulating the 'true' methylome are sampled. Therefore, the `SimulateMethylomeParam` should be based on a relevant sample. To help a new user get started, `methsim` includes `SimulateMethylomeParam` objects for the _ADS_, _ADS-adipose_ and _ADS-iPSC_ samples from the _Lister_ dataset. Alternatively, the user may process the BAM file for their sample with `methtuple` and then use the helper functions in `methsim` to construct a `SimulateMethylomeParam` object based on their sample of interest.
+The `MethylomeParam` object contains the empirical distributions of key statistics from which the parameters for simulating the 'true' methylome are sampled. Therefore, the `MethylomeParam` should be based on data from a relevant sample. To help a new user get started, `methsim` includes `MethylomeParam` objects for the _ADS_, _ADS-adipose_ and _ADS-iPSC_ samples from the _Lister_ dataset. Alternatively, the user may process the `BAM` file for their sample with `methtuple` and then use the helper functions in `methsim` to construct a `MethylomeParam` object based on their sample of interest.
 
 To simulate a 'true' methylome, the user runs the `simulate()` method on the `SimulateMethylomeParam` object. This returns a `SimulatedMethylome` object.
 
-To simulate bisulfite-sequencing reads, the user first constructs a `SimulateBSParam`, which includes the `SimulatedMethylome`. The user then runs the `simulate()` method on the `SimulatedBSParam` object to create a simulated bisulfite-sequencing data in the form of a `SimulatedBS` object.
+Once we have a 'true' methylome, we can simulate data from it. Currently, `methsim` supports the simulation of whole-genome bisulfite-sequencing reads via the `WGBSParam` class and associated `simulate()` method. Other assays, such as RRBS or microarrays may be supported in future releases. A `WGBSParam` object will contain a `SimulatedMethylome` object, along with parameters such as the read-length, sequencing coverage and error rate of the data to be simulated. When applied to a `WGBSParam` object, which includes a `SimulatedMethylome` object, the `simulate()` method can return a `SimulatedBS` object or a `MethylationTuples::MethPat` object[^namespace2]. A `SimulatedBS` object contains all simulated reads and is generally much larger than a `MethylationTuples::MethPat` object, which summarises the simulated reads for m-tuples of a particular size[^methpat]. `methsim` also includes a helper function, `asMethPat()`, to coerce a `SimulatedBS` object to a `MethylationTuples::MethPat` object.
 
-Finally, we may wish to simplify the `SimulatedBS` object. For example, we may only require the $\beta$-values for our downstream analysis and not the  read-level data. `methsim` includes the `asMethPat()` function to convert the `SimulatedBS` object to a `MethPat` object (described in __CHAPTER__).
+[^namespace2]: This uses the NAMESPACE notation of R: `MethylationTuples::MethPat` can be read as "the `MethPat` class is part of the `MethylationTuples` package". See Section \ref{sec:MethylationTuples} for details of this class.
 
-__UP TO HERE: See if the remainder of this section needs re-jigging in light of the above changes to Implementation__
+[^methpat]: Returning a `MethylationTuples::MethPat` object may be appropriate, for example, if all that is required for downstream analyses are methylation counts at 1-tuples.
 
 \subsection{Simulating a single methylome}
 
-- [x] DONE
+- [ ] DONE
 
-As we have seen, DNA methylation is highly heterogeneous along the genome. Nonetheless, there are clear regions of "similarity", such as the unmethylated CpG islands and long partially methylated domains. In these locally-similar regions we might hope to model DNA methylation by a simple parametric model. `methsim` is based on the idea of segmenting the genome into "regions of similarity", fitting a simple model to each region and then "stitching" the results together to form the 'true' methylome.
+As we have seen, DNA methylation is highly heterogeneous along the genome. Nonetheless, there are clear regions of "similarity", such as the unmethylated CpG islands and long partially methylated domains. In these locally-similar regions we might hope to model DNA methylation by a simple parametric model. `methsim` is based on the idea of segmenting the genome into 'regions of similarity', fitting a simple model to each region and then 'stitching' the results together to form the true methylome.
 
 The idea of segmenting a globally heterogenous stochastic process into a series of locally homogeneous processes is not new. A hidden Markov model is an example of such a process; while the entire process may highly heterogeneous, conditional on the hidden states the process may be homogeneous. Hidden Markov models, and other models assuming local similarity in spite of global heterogeneity, have been used with great success in bioinformatics.
 
 `methsim` takes the following approach to simulating the true underlying methylome for each sample:
 
 1. Segment the methylome into regions of similarity.
-2. Within each region simulate the binary methylation states from a simple parametric model.
-3. "Stitch" the resulting region-level simulations together[^stitch].
+2. Sample parameters for each methylation locus, $i$, based on step 1.
 
-[^stitch]: In practice, the stitching together of segments is incorporated into step 2.
-
-Suppose our sample contains $n_{h}$ haplotypes and, therefore, that our sample can be represented by[^strand_symmetric] $\mathbf{Z} = \{ \mathbf{Z_{h}} \}_{h = 1}^{h = n_{h}}$. We might try to simulate this sample by generating $n_{h}$ independent realisations of $\mathbf{Z_{h}}$. However, for a number of reasons, this is a little naive and ambitious. For example, under this naive model there is no control across haplotypes of the methylation patterns; although there exists between-haplotype heterogeneity, the $\mathbf{Z_{h}}$ are definitely not independent of one another.
-
-[^strand_symmetric]: Currently, `methsim` can only simulate CpG methylation and assumes that the methylation states of all CpGs are strand symmetric.
-
-Rather than try to explicitly model dependencies between the $\mathbf{Z_{h}}$, `methsim` uses the following heuristic procedure:
-
-1. Simulate $n_{\tilde{h}} \ll n_{h}$ independent realisations of $\mathbf{{Z_{\tilde{h}}}}$, where $\mathbf{Z_{\tilde{h}}}$ has the same stochastic properties as $\mathbf{Z_{h}}$. `methsim` uses a default value of $n_{\tilde{h}} = 8$.
-2. Within each region, $r_{i}$, assign each of $\mathbf{Z_{\tilde{h}}}$ a weight, $W_{r_{i}, \tilde{h}}$, where $\sum_{ \tilde{h} = 1}^{n_{ \tilde{h}}} W_{r_{i}, \tilde{h}} = 1$ and, by construction, $W_{r_{i}, 1} \geq \ldots \geq W_{r_{i}, n_{\tilde{h}}}$.
-
-For simplicity, `methsim` assumes that all $n_{\tilde{h}}$ realisations have the same parameters (discussed below; __TODO: Discuss implications of this assumption somewhere below__).
-
-The weights are interpreted as the proportion of $\{ Z_{h, i} \}_{h = 1}^{h = n_{h}}$ with the methylation pattern given by $Z_{\tilde{h}, i}$ for the $i^{th}$ methylation locus[^weights]. We write the matrix of weights for all methylation loci in the genome as $\mathbf{W} = \{ \mathbf{W_{r_{i}, \cdot}} \}_{i = 1}^{N_{loci}} = \{ \mathbf{W_{\cdot, \tilde{h}}} \}_{\tilde{h} = 1}^{n_{\tilde{h}}}$. In regions of low within-sample heterogeneity, such as those unmethylated regions with $B_{i} \approx 0$, this means we want $\mathbf{W_{r_{i}, \cdot}} \approx (1, 0, \ldots, 0)$, whereas in regions of high within-sample heterogeneity, such as partially methylated regions, we want a more dispersed $\mathbf{W_{r_{i}}, \cdot}$.
-
-[^weights]: Note that these weights are defined at the region-level so all loci in the region have the same weights.
-
-A simulated methylome is therefore described by $\{ \mathbf{{Z_{\tilde{h}}}} \}_{\tilde{h} = 1}^{n_{\tilde{h}}}$ and $\mathbf{W}$. For example, $B_{i} = \sum_{\tilde{h} = 1}^{n_{\tilde{h}}} W_{r_{i}, \tilde{h}} \times Z_{i, \tilde{h}}$.
-
-I now describe each step in this process in greater detail.
+I now describe each step in greater detail.
 
 \subsubsection{Segmenting the methylome}
 
 - [x] DONE
 
-`methsim` uses the the R/Bioconductor package, `MethylSeekR` \citep{Burger:2013kq}, to segment the input methylome into these regions of similarity. Initially published to discover regulatory motifs from bisulfite-sequencing data, `MethylSeekR` segments the genome into unmethylated regions (\emph{UMR}s), lowly-methylated regions (\emph{LMR}s) and partially methylated regions[^pmds] (\emph{PMR}s). It does this using a two-stage algorithm applied to the $\beta$-values from a sample:
+`methsim` uses the the R/Bioconductor package, `MethylSeekR` \citep{Burger:2013kq}, to segment the input methylome into regions of similarity. `MethylSeekR` was developed to discover regulatory motifs from bisulfite-sequencing data by segmenting the methylome into unmethylated regions (\emph{UMR}s), lowly-methylated regions (\emph{LMR}s) and partially methylated regions[^pmds] (\emph{PMR}s). It does this using a two-stage algorithm applied to the $\beta$-values from a sample:
 
 [^pmds]: Partially methylated regions are also commonly known as partially methylated domains, but I refer to them as regions for consistency with UMRs and LMRs.
 
 1. Identify partially methylated regions. A summary statistic, $\alpha$, which is based on the $\beta$-values in a sliding window of 100 CpGs, is used to identify PMRs. Briefly, a two-state hidden Markov model is fit to the $\alpha$ values to identify PMRs and non-PMRs.
 2. Identify UMRs and LMRs. The PMRs are masked from the genome and simple heuristics are used to identify UMRs and LMRs based on the average $\beta$-values in a window and the number of CpGs in the window.
 
-`methsim` uses the functionality of `MethylSeekR` to partition the genome into "regions of similarity", namely `UMR`, `LMR`, `PMR` or `other`[^other]. While a tailored algorithm may improve the segmentation process, the result produced by `MethylSeekR` is a reasonable approximation to segmenting into "regions of similarity". This can be seen in __FIGURES__  (__TODO: Figures showing that `MethylSeekR` gives a reasonable segmentation for the purposes of `methsim`)__). It should be noted that `methsim` also performs some post-processing of the `MethylSeekR` output so that the resulting segmentation is disjoint and exhaustive.
+`methsim` post-processes the segmentation provided by `MethylSeekR` to partition the methylome into regions of similarly, namely \emph{UMR}s, \emph{LMR}s, \emph{PMRS}s and \emph{other}s[^methylseekr_output]. Roughly speaking, _other_ regions are 'mostly methylated regions' (see Figures \ref{fig:EPISCOPE_beta_by_pm_boxplots}, \ref{fig:Lister_beta_by_pm_boxplots}, \ref{fig:Seisenberger_beta_by_pm_boxplots}, \ref{fig:Ziller_beta_by_pm_boxplots}), although \citet{Burger:2013kq} do not describe these regions as such.
 
-[^other]: `other` roughly corresponds to 'mostly methylated regions', although \citet{Burger:2013kq} do not describe these regions as such.
+[^methylseekr_output]: The output returned by `MethylSeekR` does not strictly partition the methylome since it is neither disjoint nor exhaustive.
 
-__TODO: Figure showing `other` is MMRs. More generally, a figure showing the average methylation level in each of `UMR`, `LMR`, `PMR` and `other`.__
+While a tailored algorithm may improve this segmentation process, the result produced by `MethylSeekR` is a reasonable approximation to segmenting the methylome into the required 'regions of similarity'.
 
-\subsubsection{Simulating $\{ \mathbf{{Z_{\tilde{h}}}} \}_{\tilde{h} = 1}^{n_{\tilde{h}}}$}
+\subsubsection{Parameterising the model}
 
-- [x] DONE
-
-`methsim` uses a two-state ($1 =$ methylated or $0 =$ unmethylated), one-step Markov chain to model $\mathbf{{Z_{\tilde{h}}}}$. This allows the incorporation of within-fragment co-methylation into the simulation. The choice of a one-step process is one of computational simplicity, although I will show that this is a reasonable approximation of within-fragment co-methylation.
+`methsim` uses a two-state ($1 =$ methylated or $0 =$ unmethylated), one-step Markov chain to model $\mathbf{Z} = \{ \mathbf{Z_{h}} \}_{h = 1}^{h = n_{h}}$. This allows the incorporation of within-fragment co-methylation into the simulation. The choice of a one-step process is one of computational simplicity, although I will show that this is a reasonable approximation of within-fragment co-methylation.
 
 In Chapter \ref{chap:co-methylation} I showed that the strength of within-fragment co-methylation varies as a function of the intra-pair distance and by the genomic context. I also showed that for a pair of CpGs separated by given IPD, and in the same genomic context, that there is a large amount of variability in the strength of within-fragment co-methylation.
 
-For these reasons I allow the transition probabilities to vary with $i$ and $r_{i}$, that is, I allow the Markov chain to be spatially inhomogeneous. In particular, I allow the transition probabilities, $p_{i^{(h, j)}, a, b} = Pr(Z_{h, i + 1, j} = b | Z_{h, i, j} = a)$, to depend on the intra-pair distance between the $i^{th}$ and $(i + 1)^{th}$ locus and on the region for this pair of loci[^context], $p_{i^{(h, j)}, a, b} = Pr(Z_{h, i + 1, j} | Z_{h, i, j}, r_{i}, IPD(i, i + 1))$, where $r_{i}$ is the region type (UMR, LMR, PMR or MMR) of the $i^{th}$ methylation locus.
+For these reasons I allow the transition probabilities, $\mathbf{p}$, to vary with $i$, that is, I allow the Markov chain to be spatially inhomogeneous. In particular, I allow the transition probabilities to depend on the intra-pair distance between the $i^{th}$ and $(i + 1)^{th}$ locus and on the region type, $r_{i}$ (_UMR_, _LMR_, _PMR_ or _other_), for this pair of loci[^context]. That is, $p_{i; a, b} = Pr(Z_{h, i + 1} = b | Z_{h, i} = a, IPD(i, i + 1), r_{i})$.
 
 [^context]: Actually, it only depends on the region of the $i^{th}$ locus. Most pairs of loci, $(i, i + 1)$, will lie in the same region. For pairs that span the boundary of two different regions I have arbitrarily chosen to use the region of the $i^{th}$ locus.
 
-The above-described model, being spatially inhomogeneous, is not particularly amenable to analytical calculations. However, it is very simple to simulate realisations from this model, requiring only a single loop over the set of loci on each chromosome. For a chromosome containing $n$ methylation loci there are $n - 1$ transition matrices, $P_{i^{(h)}}$, to estimate or otherwise assign. Again, I emphasise that `methsim` uses the same set of parameters for all $n_{\tilde{h}}$ "pseudo-haplotypes". Therefore, only one set of transition matrices need to be assigned.
+The above-described model is not particularly amenable to analytical calculations due to the spatial inhomogeneity. It is, however, relatively simple to simulate realisations from this model, requiring only a single loop over the set of loci on each chromosome. For a chromosome containing $n$ methylation loci, there are $n - 1$ transition matrices to estimate or otherwise assign.
 
-`methsim` assigns these transition probabilities based on $\beta_{i | r_{i}}$ and $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$, the empirical distributions of $\beta_{i}$ and $LOR_{IPD(i, i + 1)}$ conditional on the region type of the $i^{th}$ locus, $r_{i}$, and the intra-pair distance of the the $i^{th}$ and $(i + 1)^{th}$ locus, $IPD(i, i+1)$, respectively. These empirical distributions are shown for the \emph{ADS} sample in Figures \ref{fig:ADS_beta_by_pm_boxplots} and \ref{fig:ADS_lor_by_pm_quantile_plots}.
+Rather than directly modelling the transition probabilities, $\mathbf{p}$, `methsim` is parameterised $\mathbf{Z}$ by a vector of marginal probabilities, $\mathbf{B} = \{ Pr(Z_{i} = 1) \}$, and a vector of odds ratios, $\mathbf{\psi} = \{ \frac{Pr_{Z_{i + 1} = 1 | Z_{i} = 1} \times Pr_{Z_{i + 1} = 0 | Z_{i} = 0}}{Pr_{Z_{i + 1} = 1 | Z_{i} = 0} \times Pr_{Z_{i + 1} = 0 | Z_{i} = 1}} \} = \{ \frac{Pr_{Z_{i} = 1, Z_{i + 1} = 1} \times Pr_{Z_{i} = 0 , Z_{i + 1} = 0}}{Pr_{Z_{i} = 1 , Z_{i + 1} = 0} \times Pr_{Z_{i} = 0 , Z_{i + 1} = 1}} \}$. We can compute the transition probabilities, $\mathbf{p}$, from $\mathbf{B}$ and $\mathbf{\psi}$ as I now describe.
+
+For each 2-tuple, $(i, i + 1)$, `methsim` first constructs the joint probability matrix, $P_{i, i + 1}$ from the marginal probabilities, $B_{i}, B_{i + 1}$, and the odds ratio, $\psi_{i}. The general form of $P_{i, i + 1}$ is shown below:
+
+\begin{equation*}
+P_{i, i + 1} = \bordermatrix{~ & 1 - B_{i+1} & B_{i+1} \cr
+1 - B_{i} & Pr(Z_{i} = 0, Z_{i + 1} = 0) & Pr(Z_{i} = 0, Z_{i + 1} = 1) \cr
+B_{i} & Pr(Z_{i} = 1, Z_{i + 1} = 0) & Pr(Z_{i} = 1, Z_{i + 1} = 1) \cr}
+\end{equation*}
+
+`methsim` computes $P_{i, i + 1}$ using the iterative proportional fitting algorithm. Iterative proportional fitting is a general method "for constructing tables of numbers satisfying certain constraints" \citep{Speed:2005tg}. In the case of `methsim`, we use iterative proportional fitting to construct the _unique_ $2 \times 2$ array (the joint probability matrix) with specified margins (the marginal probabilities of each methylation state at each locus) and the specified cross-ratio (the odds-ratio). An example of this procedure is illustrative.
+
+Let $B_{i} = 0.7$, $B_{i + 1} = 0.6$ and $\psi_{i, i + 1} = 2$. To begin the iterative proportional fitting algorithm, form the matrix $P_{i, i + 1}^{(0)} = \Bigl(\begin{smallmatrix}
+\psi & 1 \\
+   1 & 1
+\end{smallmatrix} \Bigr)$. This matrix has the desired cross-ratio, $\psi$, but not the desired row and column margins. At each iteration of the algorithm, iterative proportional fitting adjusts the rows and columns such that the cross-ratio remains $\psi$ while the row and column margins converge towards the desired values. The algorithm continues in this manner, forming a series of $2 \times 2$ tables that converge pointwise (and uniquely) to a $2 \times 2$ table $P_{i, i + 1}^{(*)} \equiv P_{i, i + 1}$. For our example, $P_{i, i + 1}^{(*)} = \Bigl(\begin{smallmatrix}
+0.155 & 0.145 \\
+0.245 & 0.455
+\end{smallmatrix} \Bigr)$, to three decimal places of precision. It is easily verified that $P^{(*)}$ has the desired cross-ratio and marginal sums.
+
+Once $P_{i, i + 1}$ is computed, the desired transition probability is obtained by dividing the appropriate element of $P_{i, i + 1}$ by the appropriate marginal probability. To continue our example, suppose $Z_{i} = 0$, then the probability that $Z_{i + 1}$ is also to zero is given by $Pr(Z_{i + 1} = 0 | Z_{i} = 0) = \frac{Pr(Z_{i = 0}, Z_{i + 1} = 0)}{Pr(Z_{i} = 0)} = \frac{0.155}{0.3} = 0.517$ to three decimal places. In fact, `methsim` only stores $Pr(Z_{i + 1} = 1 | Z_{i} = 0)$ and $Pr(Z_{i + 1} = 1 | Z_{i} = 1)$ since Pr(Z_{i + 1} = 0 | Z_{i} = 0) = 1 - Pr(Z_{i + 1} = 1 | Z_{i} = 0)$ and $Pr(Z_{i + 1} = 0 | Z_{i} = 1) = 1 - Pr(Z_{i + 1} = 1 | Z_{i} = 1)$.
+
+To simulate values of $\mathbf{B}$ and $\mathbf{\psi}$, `methsim` uses the empirical distributions of their estimators, $\mathbf{\beta} and $\mathbf{\widehat{\psi}}$, in the input methylome. More specifically, $\mathbf{B}$ is based on $\beta_{i | r_{i}}$ and $\mathbf{\psi}$ is based on $\widehat{\psi_{IPD(i, i+1) | r_{i}}$, the empirical distributions of $\beta_{i}$ and $\psi_{IPD(i, i + 1)}$ conditional on the region type of the $i^{th}$ locus, $r_{i}$, and the intra-pair distance of the the $i^{th}$ and $(i + 1)^{th}$ locus, $IPD(i, i+1)$, respectively. These empirical distributions are shown for the \emph{ADS} sample in Figures \ref{fig:ADS_beta_by_pm_boxplots} and __FIGURE__.
 
 \begin{figure}[!htb]
 \centering
@@ -311,180 +309,43 @@ The above-described model, being spatially inhomogeneous, is not particularly am
 \label{fig:ADS_beta_by_pm_boxplots}
 \end{figure}
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/ADS_lor_by_pm_quantile_plots.pdf}
-\caption{$LOR_{(i, i + 1) | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{ADS} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:ADS_lor_by_pm_quantile_plots}
-\end{figure}
+__TODO: Figure of ADS within-fragment co-methylation__
 
-These same distributions for all the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ samples are shown in Figures \ref{fig:EPISCOPE_beta_by_pm_boxplots}, \ref{fig:EPISCOPE_lor_by_pm_quantile_plots}, \ref{fig:Lister_beta_by_pm_boxplots}, \ref{fig:Lister_lor_by_pm_quantile_plots},
-\ref{fig:Seisenberger_beta_by_pm_boxplots}, \ref{fig:Seisenberger_lor_by_pm_quantile_plots},
-\ref{fig:Ziller_merged_beta_by_pm_boxplots} and \ref{fig:Ziller_merged_lor_by_pm_quantile_plots}.
+These same distributions for all the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ samples are shown in __FIGURES__.
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_beta_by_pm_boxplots.pdf}
-\caption{$\beta_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{EPISCOPE} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:EPISCOPE_beta_by_pm_boxplots}
-\end{figure}
+There are several ways to simulate values of $\mathbf{B}$ and $\mathbf{\psi}$ based on these empirical distributions. The simplest is to sample each $B_{i}$ and $\psi_{i}$ directly from these empirical distributions. Alternatively, we could take a more model-based approach. For example, we could specify a  parametric model of the $B_{i}$ where all $i$ in a region have the same mean and variance (the mean and variance being based on the empirical distribution of $\beta$-values) or where the $B_{i}$ in each region come from an autoregressive process.
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_lor_by_pm_quantile_plots.pdf}
-\caption{$LOR_{(i, i + 1) | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{EPISCOPE} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:EPISCOPE_lor_by_pm_quantile_plots}
-\end{figure}
+The simulation of $\mathbf{\psi}$ requires further explanation. The empirical distributions of $\mathbf{\widehat{\psi}}$ will only include values for small $IPD$s since these are estimated from individual sequencing reads (see Chapter \ref{chap:co-methylation} for details). When simulating a methylome, we will encounter 2-tuples with much larger $IPD$s and the question is how to deal with these? Again, there are several options. We might assume a parametric form for the distribution of $\mathbf{\psi}$ as a function of $IPD$, such as a exponential decay towards $\psi = 1$ (corresponding to independence).
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Lister_beta_by_pm_boxplots.pdf}
-\caption{$\beta_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{Lister} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:Lister_beta_by_pm_boxplots}
-\end{figure}
+I explore different methods for simulating $\mathbf{B}$ and $\mathbf{\psi}$ in Section \ref{sec:results}.
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Lister_lor_by_pm_quantile_plots.pdf}
-\caption{$LOR_{(i, i + 1) | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{Lister} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:Lister_lor_by_pm_quantile_plots}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_beta_by_pm_boxplots.pdf}
-\caption{$\beta_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{Seisenberger} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:Seisenberger_beta_by_pm_boxplots}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_lor_by_pm_quantile_plots.pdf}
-\caption{$LOR_{(i, i + 1) | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{Seisenberger} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:Seisenberger_lor_by_pm_quantile_plots}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_beta_by_pm_boxplots.pdf}
-\caption{$\beta_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{Ziller} dataset. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:Ziller_merged_beta_by_pm_boxplots}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_lor_by_pm_quantile_plots.pdf}
-\caption{$LOR_{(i, i + 1) | r_{i}}$, the distribution of $\log_{2}$ odds-ratio estimates of within-fragment co-methylation for CpGs in each region type, for the \emph{Ziller} sample. Only 2-tuples with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:Ziller_merged_lor_by_pm_quantile_plots}
-\end{figure}
-
-`methsim` assigns these probabilities as follows:
-
-1. For each region, $r_{i}$, sample $B_{r_{i}}$ from $\beta_{i | r_{i}}$. This can be interpreted as $Pr(Z_{r_{i}} = 1)$, the marginal probability that a methylation locus in region $r_{i}$ is methylated, or, alternatively, as the average level of methylation for all methylation loci in the region[^extreme_B].
-2. For every pair of methylation loci, $(i, i + 1)$, $1 \leq i \leq (n - 1)$, sample $\Psi_{(i, i + 1)}$ from $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$. This can be interpreted as the odds that the $(i + 1)^{th}$ methylation locus has the same methylation state as the $i^{th}$ methylation locus.
-
-[^extreme_B]: If $B_{r_{i}} = 0$ (resp. $B_{r_{i}} = 1$), `methsim` adds (resp. subtracts) a small value $\epsilon$. The default value is $\epsilon = 0.01$. The boundary values of $0$ and $1$ are common in $\beta_{i | r_{i}}$ and, were these retained, would result in methylomes with large regions that are uniformly unmethylated (resp. methylated).
-
-The second step requires further explanation. If there are no observations with the required $IPD$-region combination, then, by definition, `methsim` is unable to sample from the appropriate empirical distribution[^min_n]. Instead, when this occurs, `methsim` samples from a user-specified parametric distribution. __RESULTS SECTION__ explores different choices of this distribution __AND SHOWS WHAT__. The default option is a zero-mean Gaussian distribution, chosen so that "on average" the methylation state at adjacent CpGs with large $IPD$s are independent of one another. The default standard deviation of this Gaussian distribution is $2$; this value, while fairly arbitrary, reflects the median standard deviation of the $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$ distributions for each sample, which is remarkably constant across $r_{i}$ and samples[^ipd_stability] (__TODO: Format and reference table__).
-
-[^min_n]: By default, `methsim` requires at least 100 observations in the  $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$ to try to avoid sampling from sparse empirical distributions.
-
-[^ipd_stability]: Figures \ref{fig:EPISCOPE_lor_by_pm_quantile_plots}, \ref{fig:Lister_lor_by_pm_quantile_plots}, \ref{fig:Seisenberger_lor_by_pm_quantile_plots} and \ref{fig:Ziller_merged_lor_by_pm_quantile_plots} show that the variability of these distributions is fairly constant across $IPD$ for a given $r_{i}$ and sample.
-
-```{r, eval = TRUE, echo = FALSE}
-knitr::kable(readRDS("../data/median_sd_LOR_distributions.rds"), align = "c", digits = 2)
-```
-
-Now that we have $B_{r_{i}}$ and $\Psi_{i, i + 1}$ for $1 \leq i \leq n - 1$ we can simulate realisations of $\mathbf{Z_{\tilde{h}}}$. To begin the process (i.e., when $i = 1$) $Z_{\tilde{h}, 1}$, is simulated from the "marginal" distribution, which is Bernoulli($B_{r_{1}}$). Then, we loop over $i = 2, \ldots, n - 1$ to simulate the remainder of the process. At each step we compute the transition probability, $p_{(i + 1) | i} = Pr(Z_{\tilde{h}, i + 1} = 1 | Z_{\tilde{h}, i}) = \frac{Pr(Z_{tilde{h}, i}, Z_{tilde{h}, i + 1} = 1)}{Pr(Z_{tilde{h}})}$, from $B_{r_{i}}, B_{r_{i + 1}}, \Psi_{(i, i + 1)}$ and the observed (simulated) value at the previous iteration, $Z_{\tilde{h}, i}$. Then, $Z_{\tilde{h}, i + 1}$ is simulated from the Bernoulli($p_{(i + 1) | i}$) distribution.
-
-In order to compute the transition probability, $p_{(i + 1) | i}$, `methsim` first uses the iterative proportional fitting algorithm \citet[see]{Speed:2005tg}[for an overview of the algorithm] to construct the joint probability matrix,
-
-\begin{equation*}
-P = \bordermatrix{~ & Pr(Z_{i+1} = 0) = 1 - B_{r_{i+1}} & Pr(Z_{i+1} = 1) = B_{r_{i+1}} \cr
-Pr(Z_{i} = 0) = 1 - B_{r_{i}} & Pr(Z_{i} = 0, Z_{i + 1} = 0) & Pr(Z_{i} = 0, Z_{i + 1} = 1) \cr
-Pr(Z_{i} = 1) = B_{r_{i}} & Pr(Z_{i} = 1, Z_{i + 1} = 0) & Pr(Z_{i} = 1, Z_{i + 1} = 1) \cr}
-\end{equation*}
-
-Iterative proportional fitting is a general method "for constructing tables of numbers satisfying certain constraints" \citep{Speed:2005tg}. `methsim` uses iterative proportional fitting to construct the _unique_ $2 \times 2$ array (the joint probability matrix) with specified margins (the marginal probabilities of each methylation state at each locus, $B_{r_{i}} = Pr(Z_{i} = 1), B_{r_{i + 1}} = Pr(Z_{i + 1} = 1)$) and the specified cross-product ratio (the odds-ratio, $\psi_{i, i + 1} = \log_{2}(\Psi_{i, i + 1})$).
-
-Once $P$ is formed, the appropriate element of it is divided by the appropriate marginal probability to obtain the transition probability. An example of this procedure is illustrative.
-
-Let $\Psi_{i, i + 1} = 2$, and therefore $\psi = 2^{2} = 4$, and $B_{r_{i}} = B_{r_{i + 1}} = 0.7$. To begin the iterative proportional fitting algorithm, form the matrix $P^{(0)} = \Bigl(\begin{smallmatrix}
-\psi & 1 \\
-   1 & 1
-\end{smallmatrix} \Bigr).$ This matrix has the desired cross-ratio, $\psi$, but not the desired row and column margins. At each iteration of the algorithm, iterative proportional fitting adjusts the rows and columns such that the cross-ratio remains $\psi$ while the row and column margins converge towards the desired values. The algorithm continues in this manner, forming a series of $2 \times 2$ tables that converge pointwise (and uniquely) to a $2 \times 2$ table $P^{(*)} \equiv P$. For our example, $P^{(*)} = \Bigl(\begin{smallmatrix}
-0.122 & 0.178 \\
-0.178 & 0.522
-\end{smallmatrix} \Bigr)$, to 3 decimal places of precision. It is easily verified that $P^{(*)}$ has the desired cross-ratio and marginal sums.
-
-\subsubsection{Simulating $\mathbf{W}$}
-
-- [x] DONE
-
-For each region we need to assign the vector of weights, $\mathbf{W_{r_{i}, \cdot}}$. To do so, `methsim` uses a heuristic procedure. For higher-order m-tuples, $m = 3$ or $4$ is recommended, `methsim` computes the relative frequency of the $2^{m}$ possible methylation patterns at each m-tuple with sufficient sequencing coverage. `methsim` then samples from this distribution, stratified by region-type; call these empirical distributions $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$. Figure \ref{fig:ADS_pattern_freqs_by_pm_boxplots} shows elementwise boxplots of $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$, that is, it shows the distributions $w_{i | r_{(i, \ldots, i + m - 1)}}$ for $i = 1, \ldots, 2^{m}$.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/ADS_pattern_freqs_by_pm_boxplots.pdf}
-\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}, i = 1, \ldots, 2^{m} = 8$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{ADS} sample. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:ADS_pattern_freqs_by_pm_boxplots}
-\end{figure}
-
-These same distributions for all the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ samples are shown in Figures \ref{fig:EPISCOPE_pattern_freqs_by_pm_boxplots}, \ref{fig:Lister_pattern_freqs_by_pm_boxplots}, \ref{fig:Seisenberger_pattern_freqs_by_pm_boxplots} and  \ref{fig:Ziller_merged_pattern_freqs_by_pm_boxplots} (__TODO: Are these other examples necessary?__).
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_pattern_freqs_by_pm_boxplots.pdf}
-\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}, i = 1, \ldots, 2^{m} = 8$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{EPISCOPE} dataset. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:EPISCOPE_pattern_freqs_by_pm_boxplots}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Lister_pattern_freqs_by_pm_boxplots.pdf}
-\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}, i = 1, \ldots, 2^{m} = 8$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{Lister} dataset. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:Lister_pattern_freqs_by_pm_boxplots}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_pattern_freqs_by_pm_boxplots.pdf}
-\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}, i = 1, \ldots, 2^{m} = 8$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{Seisenberger} dataset. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:Seisenberger_pattern_freqs_by_pm_boxplots}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_pattern_freqs_by_pm_boxplots.pdf}
-\caption{$w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}, i = 1, \ldots, 2^{m} = 8$, the distribution of the relative frequencies for all CpG 3-tuples in each region type, for the \emph{Ziller} dataset. Only CpGs with at least $5\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
-\label{fig:Ziller_merged_pattern_freqs_by_pm_boxplots}
-\end{figure}
-
-From Figures \ref{fig:EPISCOPE_pattern_freqs_by_pm_boxplots}, \ref{fig:Lister_pattern_freqs_by_pm_boxplots}, \ref{fig:Seisenberger_pattern_freqs_by_pm_boxplots} and \ref{fig:Ziller_merged_pattern_freqs_by_pm_boxplots} we see that, unsurprisingly, in UMRs that a single methylation pattern dominates, the completely unmethylated pattern. Outside of UMRs, we see that while there is generally a dominant methylation pattern at each m-tuple, there may be $2-4$ otheres that are observed at non-negligible frequencies. PMRs are the most heterogeneous and LMRs and other regions are quite similar.
-
-The above procedure has several obvious limitations. Firstly, we are restricted to analying m-tuples within individual reads and read-pairs. Secondly, as $m$ increases, and similarly as $IPD$ increases, there are fewer m-tuples with sufficient sequencing coverage. This means our data are heavily biased towards regions of high CpG density, which typically correspond to UMRs. Additionally, we know that m-tuples with small $IPDs$ are far more likely to be co-methylated than those with larger $IPDs$ and so we are biased towards sampling entirely unmethylated and entirely methylated methylation patterns. It is difficult to know how to adjust for these biases, which are unavoidable given current sequencing technologies. These estimates very likely underestimate the degree of within-sample heterogeneity and, consequently, weights based on sampling from the empirical distributions, $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$, likely result in overly homogeneous simulated methylomes.
-
-A second, more subtle, bias is due to sequencing errors, bisulfite-conversion errors and alignment errors. Using the simple relative frequency estimation procedure will result in errors like these being inferred as (rare) methylation patterns. `MPFE` ([http://bioconductor.org/packages/release/bioc/html/MPFE.html](http://bioconductor.org/packages/release/bioc/html/MPFE.html)) is an R package that uses an estimation procedure designed to deal with some of these errors. However, `MPFE` is intended for analysing amplicon bisulfite-sequencing data with high sequencing coverages, and it's more computationally demanding estimation procedure does not scale to whole-genome data.
-
-With all the above limitations in mind, `methsim` still uses the simple strategy of sampling the $\mathbf{W}$ from $w_{(i, \ldots, i + m - 1) | r_{(i, \ldots, i + m - 1)}}$. At present I do not have a better alternative and, as we shall see, the current procedure still procedure still produced realistic simulated data. In the __RESULTS SECTION__ I also explore a simulation that simulates $n_{\bar{h}}$ independent realisations of $\mathbf{Z}$ where $n_{\tilde{h}} < n_{\bar{h}} \\l n_{h}$ and uniformly sets $\mathbf{W_{r_{i}, \cdot}} = (\frac{1}{n_{\bar{h}}}, \ldots, \frac{1}{n_{\bar{h}}})$.
+The above-described model implicitly assumes that all $n_{h}$ haplotypes have the same marginal probabilities and co-methylation structure. We may extend this model to define $\mathbf{Z}$ as a _mixture_ of a small number of first-order Markov chains defined as in the above. Such a mixture model may be appropriate when simulating a sample that is a combination of cell types.
 
 \subsection{Simulating reads}
 
-- [x] DONE
-
 Once we have our 'true' methylome, we want to simulate an assay of this sample. In theory this could be any type of methylation assay, but here we focus on simulating whole-genome bisulfite-sequencing data.
 
-`methsim` uses a simple method for simulating bisulfite-sequencing. The user specifies the desired read length and average sequencing coverage[^read_length], the error rate ($\epsilon$, which includes both sequencing error and bisulfite-conversion error), and provides the simulated 'true' methylome.
+`methsim` uses a simple Poisson-based method for simulating bisulfite-sequencing. The user specifies the desired read length, the average sequencing coverage[^read_length], the error rate ($\epsilon$, which includes both sequencing error and bisulfite-conversion error), and provides the simulated 'true' methylome.
 
-The number of reads required is given by $n_{reads} = \frac{\text{average sequencing coverage}}{\text{read length}} \times \text{size of genome}$. The number of reads per chromosome is assigned proportional to the chromosome length. Then, the start of each read is sampled uniformly across the chromosome respective chromosome.
+The number of reads required is computed by $n_{reads} = \frac{\text{average sequencing coverage}}{\text{read length}} \times \text{size of genome}$. The number of reads per chromosome is assigned proportional to the chromosome length. Then, the start of each read is sampled uniformly across the chromosome respective chromosome. We only retain those reads that overlap a methylation locus.
 
-[^read_length]: Currently only single-end data are supported. This isn't a big issue. Most paired-end bisulfite-sequencing datasets have overlapping mates, and so paired-end data can be crudely simulated by simply doubling the read length. Also, all reads must have the same length, i.e., no simulation of read trimming. I don't consider this feature a priority, but it could easily be implemented by generating read lengths from a probability distribution, e.g., Poisson.
+[^read_length]: Currently only single-end data are supported. This isn't a big issue. Most paired-end bisulfite-sequencing datasets have overlapping mates, and so paired-end data can be approximated by simply doubling the read length. Also, all reads must currently have the same length, i.e., no simulation of read trimming. I don't consider this feature a priority, but it could easily be implemented by generating read lengths from a given probability distribution.
 
-For all reads that overlap a methylation locus in the 'true' methylome, a pseudo-haplotype is sampled with probabilities given by $W_{i, \cdot}$. The methylation pattern of the sampled pseudo-haplotype is then copied, with probability $\epsilon$ that the methylation state at each locus is switched.
+Suppose we have a simulated read, $z$, that overlaps the 3-tuple $(i, i + 1, i + 2)$. The methylation state along the read is simulated as follows:
 
-The result is an object storing the genomic co-ordinates and methylation patterns of every read that contains a methylation locus.
+1. Sample $z_{i}$ from a Bernoulli($B_{i}$) distribution[^mixture].
+2.
+  a. Sample $z_{i + 1}$ from a Bernoulli($p_{i}$) distribution, where $p_{i}$ is the appropriate transition probability given the simulated $z_{i}$.
+  b. Sample $z_{i + 2} from a Bernoulli($p_{i + 1}$) distribution, where $p_{i + 1}$ is the appropriate transition probability given the simulated $z_{i + 1}$.
+3. Each of element of the simulated $z$ is independently flipped with probability $\epsilon$ to simulate sequencing error.
+
+[^mixture]: If $\mathbf{Z}$ is a mixture of Markov chains then we first simulate which component the read comes from by sampling from a multinomial($w$) distribution, where $w$ is the vector of weights of each component. All subsequent steps will be simulated according to which component is sampled at this step.
+
+The result of this process is a `SimulatedBS` object storing the ID of each read that overlaps a methylation locus, along with the corresponding genomic co-ordinates and the methylation states.
 
 \subsection{Construct the output}
+
+__UP TO HERE: See what below can be salvaged__
 
 - [x] DONE
 
@@ -595,6 +456,10 @@ Once it is established that `methsim` passes this minimal test, I use `methsim` 
 \subsection{Models of within-fragment co-methylation}
 
 - [ ] DONE
+
+- Apparent co-methylation arises because of dependence of $B_{i}$, even when $Z_{i}$ are independent! E.g., set within-fragment co-methylation to zero but have $B_{i}$ fixed for a region results in independent $Z_{i}$ but dependent $B_{i}$.
+  - What to make of this?
+  - What if we sample $B_{i}$ from $\beta_{i | r_{i}}$ instead of using a fixed value for all loci in a region?
 
 \subsection{The choice of $\mathbf{W}$}
 
