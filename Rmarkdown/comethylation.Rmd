@@ -544,114 +544,139 @@ I have analysed all 40 samples in the EPISCOPE, Lister, Seisenberger and Ziller 
 1. $IPD$-only: A $2 \times 2 \times K$ table for each $IPD$.
 2. $IPD$-CGI: A $2 \times 2 \times K$ table for each $IPD$ and 'CpG island status' (CGI-status) combination. The CGI-status of each 2-tuple is whether it is _inside_ a CpG island or _outside_ a CpG island[^spanning].
 3. $IPD$-chromosome: A $2 \times 2 \times K$ table for each $IPD$ and chromosome combination.
-4. $IPD$-CGI-chromosome: A $2 \times 2 \times K$ table for each $IPD$, chromosome and CGI-status combination.
+
 
 [^spanning]: 2-tuples spanning the boundary of a CpG island are ignored. There are few such 2-tuples when $NIL = 0$. While there are considerably more such 2-tuples when $NIL \geq 0$, I have ignored these in favour of simplicity.
 
 No minimum sequencing coverage cutoff is required since the Mantel-Haenszel estimator appropriately downsweights 2-tuples with low sequencing coverage.
 
-We will first compare the results of chromosome-level estimates to genome-level estimates.
+We will first compare the results of chromosome-level estimates to genome-level estimates[^chrY].
 
-\subsubsection{Chromosome-level analyses}
+[^chrY]: Some female samples have apparent Y chromosome data, e.g., all the _EPISCOPE_ samples. This is indicative of mapping errors and such data should be ignored.
 
-__UP TO HERE: Plots should have $\widehat{\theta_{MH}}$, not $\psi$, on the y-axis__
+\subsubsection{Chromosome-level $NIL = 0$ analyses}
 
-__FIGURES__ show the results for the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, respectively. The estimated log odds ratio, $\widehat{\theta_{MH}}$ is plotted as a function of $IPD$. The genome-level estiamtes are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.
+Figure \ref{fig:EPISCOPE_MH_by_seqnames}, \ref{fig:Lister_MH_by_seqnames}, \ref{fig:Seisenberger_MH_by_seqnames} and \ref{fig:Ziller_merged_MH_by_seqnames} show the results using $NIL = 0$ 2-tuples for the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, respectively.
 
-#### These are the main points to write about
+Unsurprisingly, there is variation in the chromosome-level estimates for a given $IPD$. Overall, however, we see that the genome-level and chromosome-level estimates follow a similar trend for all samples[^mitochondria]: co-methylation is strongest for smaller $IPD$s, decaying fairly rapidly before levelling out by $IPD = 20$ to $50$. As the $IPD$ increases, we see more variation in the chromosome-level and genome-level estimates, but this is due to the smaller sample sizes we have for $NIL = 0$ 2-tuples with larger $IPD$s.
 
-- chromosome-level and genome-level qualitatively similar.
-- Chromosome-variation indicates uncaptured heterogeneity. Difficult to get at.
-- point out interesting chromosomes
+[^mitochondria]: The obvious outlier on each of these plots is the mitochondrial DNA. The mitochondria are typically almost completely unmethylated, i.e. the marginal probability of methylation at a CpG on the mitochondria is very close to zero, and so the concept of co-methylation is not particularly meaningful here.
 
+Notably, although the genome-level estimates decay as a function of $IPD$, $\widehat{\theta_{MH}}$ is almost entirely positive over the observable range of $IPD$s, suggesting that within-fragment co-methylation extends for at least a few hundred bp. Furthermore, in samples with sufficiently long paired-end reads, there is a hint of an upturn in the genome-wide $\widehat{\theta_{MH}}$ at approximately $IPD = 180$. This is approximately the distance between two CpGs on adjacent nucleosomes (see Section \ref{sec:nucleosome_and_chromatin}), and may be evidence of the three-dimensional structure of the genome affecting co-methylation.
 
-\subsubsection{Genome-wide analyses}
+- __TODO: Figure out why E18BUF is missing chrM data__
 
-- cgi vs. non-cgi
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_MH_by_seqnames.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL = 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\label{fig:EPISCOPE_MH_by_seqnames}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Lister_MH_by_seqnames.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL = 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\label{fig:Lister_MH_by_seqnames}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Seisenberger_MH_by_seqnames.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL = 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\label{fig:Seisenberger_MH_by_seqnames}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_MH_by_seqnames.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL = 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\label{fig:Ziller_merged_MH_by_seqnames}
+\end{figure}
+
+\FloatBarrier
+\subsubsection{Chromosome-level $NIL = 0$ analyses}
+
+The equivalent plots for the $NIL \geq 0$ 2-tuples paint a similar picture, as shown in Figures \ref{fig:EPISCOPE_ac_MH_by_seqnames}, \ref{fig:Lister_ac_MH_by_seqnames}, \ref{fig:Seisenberger_ac_MH_by_seqnames} and \ref{fig:Ziller_merged_ac_MH_by_seqnames}. In addition to the mitochondria, the estimates for X chromosome are frequently distinguishable from the rest of the chromosome-level estimates; e.g., the _ADS_-based samples (_ADS_, _ADS-adipose_ and _ADS-iPSC_), the _H9_-based samples (_H9_ and _H9\_Laurent_), the _IMR90_-based samples (_IMR90\_r1_, _IMR90\_r2_, _IMR90_cell_line_, _IMR90-iPSC_)
+
+- __TODO: Figure out what's going on with some of the EPISCOPE and Ziller samples that have a high autosome (chr21, I think)__
+
+In analysing $NIL \geq 0$ 2-tuples we are increasing the heterogeneity of the $K$ $2 \times 2$ tables, which makes more difficult the interpretation of these results. However, it does give the advantage of allowing the analysis of 2-tuples with larger $IPD$s. The short DNA fragments and read lengths of our data make it difficult to perform reliable chromosome-level inference in even the best samples for $IPD$s greater than 250$ to $300$. Retreating to a genome-level analysis suggests that within-fragment co-methylation is
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_ac_MH_by_seqnames.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\label{fig:EPISCOPE_ac_MH_by_seqnames}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Lister_ac_MH_by_seqnames.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL \geq 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\label{fig:Lister_ac_MH_by_seqnames}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Seisenberger_ac_MH_by_seqnames.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL \geq 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\label{fig:Seisenberger_ac_MH_by_seqnames}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_ac_MH_by_seqnames.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\label{fig:Ziller_merged_ac_MH_by_seqnames}
+\end{figure}
+
+\FloatBarrier
+\subsubsection{The effect of CpG islands}
+
+Since we must aggregate 2-tuples in order to perform any meaningful analysis of within-fragment co-methylation, there will obviously be unaccounted-for heterogeneity in our estimates. In general, it will be difficult to identify sources of this heterogeneity. One obvious candidate, however, are CpG islands.
+
+We now compare estimates of within-fragment co-methylation within CpG islands and outside of CpG islands. Figures \ref{fig:EPISCOPE_MH_by_CGI}, \ref{fig:Lister_MH_by_CGI}, \ref{fig:Seisenberger_MH_by_CGI} and \ref{fig:Ziller_merged_MH_by_CGI} show the results for $NIL = 0$ 2-tuples and Figures \ref{fig:EPISCOPE_ac_MH_by_CGI}, \ref{fig:Lister_ac_MH_by_CGI}, \ref{fig:Seisenberger_ac_MH_by_CGI} and \ref{fig:Ziller_merged_ac_MH_by_CGI} show the results for $NIL \geq 0$ 2-tuples. In order to simplify these figures, the chromosome-level estimates are not shown. We have seen that the genome-wide estimates capture the trend of the chromosome-level estimates, at least for the autosomes, and so these are sufficient for our purpose.
+
+__UP TO HERE: Discuss CGI results__
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_MH_by_CGI.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\label{fig:EPISCOPE_MH_by_CGI}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Lister_MH_by_CGI.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\label{fig:Lister_MH_by_CGI}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Seisenberger_MH_by_CGI.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\label{fig:Seisenberger_MH_by_CGI}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_MH_by_CGI.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\label{fig:Ziller_merged_MH_by_CGI}
+\end{figure}
+
+\subsubsection{Variation of within-fragment co-methylation between samples}
+
+__TODO: Do some sample comparisons, e.g., pluripotent vs. somatic, IMR90 decays superfast.__
+
 
 \subsection{Summary}
 
 
-
-__OLD STUFF BELOW HERE__
-
-I compute these genome-wide and after stratifying CpG 2-tuples by whether they are in a CpG island. These analyses are performed separately for each strand and also for strand-collapsed counts of methylation patterns.
-
-For any given $IPD$ there are hundreds of thousands of CpG pairs, and so there is a _distribution_ of co-methylation for any given $IPD$. For a given $IPD$ we can visualise the distribution of $LOR$ using a standard plot such as a histogram, kernel density estimate or boxplot. However, these $IPD$-specific plots don't give a sense of how $IPD$ affects within-fragment co-methylation. For this reason I instead plot selected quantiles --- $10\%, 25\%, 50\%, 75\% and 90\%$ --- of each $IPD$-specific $LOR$ distribution as a function of $IPD$. I refer to these as _quantile plots_ of $LOR$ as a function of $IPD$[^quantile]. These quantile plots may also be stratified by additional annotations such as genomic features.
-
-[^quantile]: Because the distributions of $LOR$ are approximately symmetric and unimodal, these quantiles give a fair summary of each of these distributions. The same would not be true of the highly asymmetric and multimodal distributions of Pearson's correlations, hence one reason for my preference of $LOR$ over Pearson's correlation.
-
-\FloatBarrier
-\subsubsection{Can we collapse by strand?}
-
-Figures \ref{fig:EPISCOPE_lor_min_cov_5}, \ref{fig:Lister_lor_min_cov_5}, \ref{fig:Seisenberger_lor_min_cov_5} and \ref{fig:Ziller_lor_min_cov_5} show the $LOR$ quantile plots for $NIL = 0$ CpGs 2-tuples stratified by strand. Since the distributions of $LOR$ are very similar for the two strands, I decided to use the strand-collapsed counts of methylation patterns in what follows. This is not to discount the possibility of 2-tuples with strand-specific differences in co-methylation, however, it does mean that it is generally safe to aggregate counts across strands.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_lor_min_cov_5.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-specific $NIL = 0$ CpG 2-tuples for samples from the EPISCOPE dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:EPISCOPE_lor_min_cov_5}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Lister_lor_min_cov_5.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-specific $NIL = 0$ CpG 2-tuples for samples from the Lister dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Lister_lor_min_cov_5}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_lor_min_cov_5.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-specific $NIL = 0$ CpG 2-tuples for samples from the Seisenberger dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Seisenberger_lor_min_cov_5}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_lor_min_cov_5.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-specific $NIL = 0$ CpG 2-tuples for samples from the Ziller dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Ziller_lor_min_cov_5}
-\end{figure}
-
-\FloatBarrier
-\subsubsection{$NIL = 0$}
-
-Figures \ref{fig:EPISCOPE_lor_min_cov_10_strand_collapsed}, \ref{fig:Lister_lor_min_cov_10_strand_collapsed}, \ref{fig:Seisenberger_lor_min_cov_10_strand_collapsed} and \ref{fig:Ziller_lor_min_cov_10_strand_collapsed} show the $LOR$ quantile plots for strand-collapsed $NIL = 0$ CpGs 2-tuples. Like for the correlations of $\beta$-values, two things immediately stand out. Firstly, for all samples the trend is that the strength of the within-fragment co-methylation decays as a function of $IPD$ --- 2-tuples with a larger $IPD$ are on average less co-methylated than2-tuples with a smaller $IPD$. Secondly, the estimated $LOR$s violently jump around for larger $IPD$s. The latter is simply due to the aforementioned lack of $NIL = 0$ pairs at larger $IPD$s with which to estimate these $LOR$s. Therefore, it is the trend in these plots that should be analysed.
-
-It is also obvious that longer paired-end reads are far more preferable to shorter single-end reads when studying within-fragment co-methylation. Even when using paired-end reads, getting to $IPD = 150$ with $NIL = 0$ pairs is challenging. This is unfortunate because it doesn't allow us to investigate the potential nucleosome-related $\approx 150-170$ bp periodicity of methylation levels using $NIL = 0$ pairs.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_lor_min_cov_10_strand_collapsed.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL = 0$ CpG 2-tuples for samples from the EPISCOPE dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:EPISCOPE_lor_min_cov_10_strand_collapsed}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Lister_lor_min_cov_10_strand_collapsed.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL = 0$ CpG 2-tuples for samples from the Lister dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Lister_lor_min_cov_10_strand_collapsed}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_lor_min_cov_10_strand_collapsed.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL = 0$ CpG 2-tuples for samples from the Seisenberger dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Seisenberger_lor_min_cov_10_strand_collapsed}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_lor_min_cov_10_strand_collapsed.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL = 0$ CpG 2-tuples for samples from the Ziller dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Ziller_lor_min_cov_10_strand_collapsed}
-\end{figure}
-
-The are some consistent patterns in comparing these quantile plots across samples. Those 2-tuples with a small $IPD$ have a median $LOR = 3-4$ meaning that the loci in these 2-tuples are $8-16\times$ more likely to have the same rather than opposite methylation states. However, we also see than for any given $IPD$ that there is considerable variation in $LOR$. For example, for all samples and $IPD$s, the $10\%$ and $90\%$ quantiles span $3-5$ (base 2) orders of magnitude.
-
-For each sample the $LOR$ distributions are consistently centred away from zero, meaning that over the observable $IPD$s the vast majority of 2-tuples are co-methylated. As $IPD$ increases, the CpG $NIL = 0$ 2-tuples become less co-methylated on average. However, the width of each sample's $LOR$ distributions remains relatively constant, so the variation in $LOR$ doesn't greatly depend on $IPD$.
+__OLD BUT POTENTIALLY USEFUL STUFF BELOW HERE__
 
 While the similarities between samples are obvious, the differences are somewhat harder to detect from these genome-wide summaries. The ADS and FF mini datasets provide us with an opportunity to discuss some potential biological differences in within-fragment co-methylation. In Figure \ref{fig:Lister_lor_min_cov_10_strand_collapsed} we see that the _ADS-iPSC_ sample has a consistently higher level of co-methylation than the _ADS_ and _ADS-adipose_ samples. Likewise, the _FF-iPSC\_6.9_, _FF-iPSC\_19.7_ and _FF-iPSC\_19.11_ have consistently higher levels of co-methylation than the _FF_  sample, although not the _FF-iPSC\_19.11+BMP4_ sample.
 
@@ -661,125 +686,6 @@ A second interpretation of this result is that it is due to 'reseting' of the me
 
 Taking the co-methylation results and the distribution of $\beta$-values together, I conclude that for the ADS and FF mini datasets the iPSC and iPSC-derived samples truly have higher levels of co-methylation and are also more homogeneous than their precursor cells.
 
-The above analyses are all based on the genome-wide distributions of within-fragment co-methylation. Again, we can stratify these by whether the CpG 2-tuples are inside or outside of a CpG island. Figures \ref{fig:EPISCOPE_lor_min_cov_10_strand_collapsed_CGI}, \ref{fig:Lister_lor_min_cov_10_strand_collapsed_CGI}, \ref{fig:Seisenberger_lor_min_cov_10_strand_collapsed_CGI} and \ref{fig:Ziller_lor_min_cov_10_strand_collapsed_CGI} are plots of $LOR$ distributions for $NIL = 0$ CpG 2-tuples stratified by whether the pair is inside or outside of a CpG island[^spanning]. Again, the substantial noise in these plots is due to a lack of $NIL = 0$ pairs with large $IPD$s, particularly inside CpG islands.
-
-Again, the message from these plots is clear, $NIL = 0$ CpG 2-tuples inside CpG islands have higher levels of within-fragment co-methylation on average than those 2-tuples outside of islands[^hepg2_2]. For each sample, the difference between the CpG island and non-island distributions is a vertical translation. For many samples this vertical shift means that the median $LOR$ for islands is approximately equal to the $75\%$ percentile for non-islands. The width of these distributions is not greatly affected by the CpG island status.
-
-[^hepg2_2]: Again, the minor exception is the _HepG2\_cell\_line_ where the CpG island and non-island distributions approximately overlap by $IPD = 50$, but we have already seen that this sample has an unusual methylome compared to the other samples.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_lor_min_cov_10_strand_collapsed_CGI.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed CpG 2-tuples stratified by CpG island status with $NIL = 0$ for samples from the EPISCOPE dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:EPISCOPE_lor_min_cov_10_strand_collapsed_CGI}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Lister_lor_min_cov_10_strand_collapsed_CGI.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed CpG 2-tuples stratified by CpG island status with $NIL = 0$ for samples from the Lister dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Lister_lor_min_cov_10_strand_collapsed_CGI}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_lor_min_cov_10_strand_collapsed_CGI.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed CpG 2-tuples stratified by CpG island status with $NIL = 0$ for samples from the Seisenberger dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Seisenberger_lor_min_cov_10_strand_collapsed_CGI}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_lor_min_cov_10_strand_collapsed_CGI.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed CpG 2-tuples stratified by CpG island status with $NIL = 0$ for samples from the Ziller dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Ziller_lor_min_cov_10_strand_collapsed_CGI}
-\end{figure}
-
-\FloatBarrier
-
-\subsubsection{$NIL \geq 0$}\label{sec:cometh_nil_geq0}
-
-Figures \ref{fig:EPISCOPE_lor_min_cov_10_strand_collapsed_ac}, \ref{fig:Lister_lor_min_cov_10_strand_collapsed_ac}, \ref{fig:Seisenberger_lor_min_cov_10_strand_collapsed_ac} and \ref{fig:Ziller_lor_min_cov_10_strand_collapsed_ac} show the $LOR$ quantile plots for strand-collapsed $NIL \geq 0$ CpGs 2-tuples. By using $NIL \geq 0$ 2-tuples we can explore the effect of within-fragment co-methylation at greater $IPD$s, potentially beyond the crucial $IPD = \approx 150-170$ bp distance.
-
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_lor_min_cov_10_strand_collapsed_ac.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL \geq 0$ CpG 2-tuples for samples from the EPISCOPE dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:EPISCOPE_lor_min_cov_10_strand_collapsed_ac}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Lister_lor_min_cov_10_strand_collapsed_ac.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL \geq 0$ CpG 2-tuples for samples from the Lister dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Lister_lor_min_cov_10_strand_collapsed_ac}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_lor_min_cov_10_strand_collapsed_ac.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL \geq 0$ CpG 2-tuples for samples from the Seisenberger dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Seisenberger_lor_min_cov_10_strand_collapsed_ac}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_lor_min_cov_10_strand_collapsed_ac.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL \geq 0$ CpG 2-tuples for samples from the Ziller dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Ziller_lor_min_cov_10_strand_collapsed_ac}
-\end{figure}
-
-__TODO__: I need to re-write this section. I'm really not yet sure if this result is biology or an artefact. My instinct says artefact but I haven't yet been able to prove this either way to my satisfaction
-These plots appear to show that there is a dramatic increase in within-fragment co-methylation at precisely these $IPD$s for paired-end samples from the Lister dataset. However, I am very skeptical as to the biological relevance of these results.
-
-There are three reasons for my skepticism. Firstly, similar results are not observed for any of the EPISCOPE samples nor any of the Ziller samples[^mouse_vs_man]. Secondly, the Lister samples with single-end sequencing have a similar spike in the estimated within-fragment co-methylation at the edge of the observable $IPD$s. However, for single-end data this corresponds to an $IPD \approx 60-80$ bp and we see no evidence of an increase in within-fragment co-methylation at these $IPD$s in any of the paired-end samples. This leads to my final reason, and what I think is the source of this artefact. Namely, estimates of within-fragment co-methylation are highly susceptible bias due to the incomplete removal of M-bias. This is particularly true for larger $IPD$s where the loci in the 2-tuples come from the ends of the reads, which are where M-bias is most prevalent.
-
-[^mouse_vs_man]: I exclude the Seisenberger data simply because these are of mice rather than humans. The Seisenberger data also display a dramatic increase in within-fragment co-methylattion but since this increase occurs at the edge of the observable $IPD$s, I am concerned it suffers from the same bias as the Lister data.
-
-As discussed in Section \ref{sec:m-bias}, the incomplete removal of M-bias is a real problem for reads that have undergone pre-trimming because this destroys the relationship between read-position and sequencing cycle. FIGURE shows that while there is considerable variation in the read lengths of the _ADS_ sample, which is indicative of aggressive pre-trimming of these reads, most reads are full length or close to it (TODO: Histogram of read lengths).
-
-To investigate my suspicion that these results are due to the incomplete removal of M-bias, I used an aggressive filtering strategy that attempts to only use read-positions that are unlikely to suffer from M-bias. I applied this to the _ADS_ sample. In this analysis I ignored read-positions $1-20$ and $55-80$ of both _read 1_ and _read 2_. Unfortunately, this is a situation where the M-bias filtering strategy of `methtuple` is a disadvantage. `methtuple` is designed to filter out specific read-positions and cannot 'exclude the first/last $n$ bases'. For example, using this aggressive strategy will have a detrimental effect for a read that has been pre-trimmed to $30$ bp, of which the last $10$ bp are affected by M-bias, because this filtering strategy will _retain_ read-positions $21-30$, which are exactly those affected by M-bias. Nevertheless, it is the best that can be done with the current version of the software[^methtuple_refactoring] and with such aggressively pre-trimmed data.
-
-[methtuple_refactoring]: We have now seen that both the 'filter specific read-positions' and 'filter the first/last $n$ read-positions' can lead to undesirable behaviour and so switching strategies is no saviour. The real solution is not to pre-trim reads and to instead use an aligner such as `bwa-meth` that can softclip these positions. Unfortunately, `bwa-meth` was only available after my data were already aligned and after `methtuple` was written. To use `methtuple` with `bwa-meth` output requires significant changes to `methtuple` because the `bwa-meth` output does not include anything analogous to the XM-tag of `Bismark`, which `methtuple` uses to do methylation calling.
-
-The results for the aggressively trimmed _ADS_ sample are shown in FIGURE.
-
-- TODO: Comment on these results and how we should interpret the Lister co-methylation results (particularly NIL >= 0)
-- TODO: Summarise the M-bias issue
-__
-
-Comparing CpG islands to non-islands we again, Figures \ref{fig:EPISCOPE_lor_min_cov_10_strand_collapsed_ac_CGI}, \ref{fig:Lister_lor_min_cov_10_strand_collapsed_ac_CGI}, \ref{fig:Seisenberger_lor_min_cov_10_strand_collapsed_ac_CGI} and \ref{fig:Ziller_lor_min_cov_10_strand_collapsed_ac_CGI}, see that the methylation levels of pairs of CpGs within islands are consistently more correlated than those outside of islands.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_lor_min_cov_10_strand_collapsed_ac_CGI.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL \geq 0$ CpG 2-tuples stratified by CpG island status for samples from the EPISCOPE dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:EPISCOPE_lor_min_cov_10_strand_collapsed_ac_CGI}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Lister_lor_min_cov_10_strand_collapsed_ac_CGI.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL \geq 0$ CpG 2-tuples stratified by CpG island status for samples from the Lister dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Lister_lor_min_cov_10_strand_collapsed_ac_CGI}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_lor_min_cov_10_strand_collapsed_ac_CGI.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL \geq 0$ CpG 2-tuples stratified by CpG island status for samples from the Seisenberger dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Seisenberger_lor_min_cov_10_strand_collapsed_ac_CGI}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_lor_min_cov_10_strand_collapsed_ac_CGI.pdf}
-\caption{$LOR$ as a function of $IPD$ for strand-collapsed $NIL \geq 0$ CpG 2-tuples stratified by CpG island status for samples from the Ziller dataset. The dark line plots the median of these distributions, the inner (darker) band the $25\% - 75\%$ percentiles, and the outer (lighter) bands the $10\% - 25\%$ and $75\% - 90\%$ percentiles. Both the x-axis and y-axis have been truncated for clarity.}
-\label{fig:Ziller_lor_min_cov_10_strand_collapsed_ac_CGI}
-\end{figure}
-
-\FloatBarrier
 \section{Summary}
 
 Correlations of $\beta$-values and estimates of within-fragment co-methylation are complementary methods to better understand the complex dependence structure of bisulfite-sequencing data. Which is more relevant depends on the question at hand. Within-fragment co-methylation seems closer to the biology because it measures the dependence of DNA methylation on the scale that the DNA methyltransferases act. However, the most common downstream analyses are based on $\beta$-values and so these correlations may be more relevant to analyses of DNA methylation data. Ultimately, the two measures are intertwined since the correlations of $\beta$-values are driven by co-methylation on individual DNA fragments. This idea is explored in greater detail in Chapter \ref{chap:methsim}.
@@ -795,23 +701,6 @@ In theory, we could explore these higher-order dependencies of within-fragment c
 Another complexity that these analyses haved brushed over is the fact that the genome is not a 1D line but is rather a complex 3D structure whose shape also varies in time. Therefore, the relevant distance between two loci is not necessarily the number of basepair between them but may instead be the Euclidean distance in 3D space. Such complexities cannot be resolved with bisulfite-sequencing data alone but will require measures of the 3D structure of the genome, such as those provided by chromatin conformation capture technologies \citep{Dekker:2013hi}.
 
 The results of this chapter clearly demonstrate that DNA methylation has a highly complex dependence structure. These dependencies exist on individual DNA fragments and also manifest as correlations of aggregate measures of methylation, such as $\beta$-values. Bisulfite-sequencing give the highest resolution picture of this dependence structure. Nonetheless, this is still a rather limited picture, particularly for within-fragment co-methylation. Data from longer reads will be immensely useful in developing a better model of within-fragment co-methylation. In particular, reads that can span multiple nucleosomes will allow for co-methylation to be better tied in with and expand upon existing results on the relationship between nucleosomes and DNA methylation. Until such data are available, we can try to learn more about plausible models of DNA co-methylation through computational methods such as the simulation method described in the next chapter.
-
-# Problem with LOR estimates
-
-The simple estimator of within-fragment co-methylation is biased when the marginal probability of methylation is close to the boundary (0 or 1) unless the 2-tuple is sequenced at very high depth. I demonstrate this by simulating methylation patterns at 2-tuples as independent $binomail(1, p)$ random variables and showing that the simple LOR estimator is positively biased.
-
-## Following chat with Terry
-
-These are my notes following a Skype conversion with Terry to discuss the issue.
-
-- [ ] Try a higher order Taylor expansion of the log odds-ratio to get e.g., $n^{1}$ or $n^{3/2}$ convergence. The $+\frac{1}{2}$ fudge-factor is motivated by such an expansion and perhaps it is possible to do better by a higher order expansion.
-  - [ ] First try showing the $c = \frac{1}{2}$ is optimal.
-- [ ] Read texts about this issue
-- [ ] Look for research papers on the general issue of dealing with bias in log odds-ratio estimates
-- [ ] What if I just increase the fudge-factor to increase the shrinkage/smoothing of the estimates? It'll shrink to zero alright, but what is the theoretical justification?
-- [ ] Check out the behaviour of the $\theta$ coefficient, i.e., Pearson's $r$ of the $2 \times 2$ table.
-  - Landan et al.: "Note that correlation values are subject to considerable noise when coverage is low or when m1 or m2 are close to 0 or 1."
-    - They don't define whether 'noise' means bias, variance, skewness, etc.
 
 ## Miscellaneous notes
 
@@ -850,13 +739,6 @@ Following discussion with Terry (2015-04-21), this is my plan of attack to finis
 
   In contrast to the MH estimator, the Miettenen estimator consistently estimates meaningful epimiological parameters. However, it "[requires] consideration in the selection of the weights".
 
-
-- [ ] Demonstrate via simulation that the unconditional LOR estimator applied to $2 \times 2$ tables is biased when $d$ is small and the marginal probabilities are near the boundaries.
-  - Corrollary: Don't use the LOR estimates of within-fragment co-methylation from individual $2\times 2$ tables. I know they're biased, so there's no reason to show these results.
-- [ ] Demonstrate that the MH estimator applied to $2 \times 2 \times K$ tables is unbiased when $d$ is small (per-table) and the marginal probabilities are near the boundaries.
-  - Need to investigate the setting where the marginal probabilities are heterogeneous across the $K$ tables but with the same odds-ratio.
-  - Need to investigate the setting where the odds ratio __is not__ common to the $K$ tables; what does the MH estimator end up estimating?
-
 - Run Woolf's test or Breslow-Day test of homogeneity of odds ratios (noting that these are not powerful tests).
 
 __In fact, Breslow himself advocates for the Tarone statistic in place of the Breslow-Day statistic (Breslow, N. E. JASA 91, 14–28 (1996)). Also, Woolf's test, Breslow-Day and Tarone's statistic are only appropriate in Asymptopia I (a small number of tables with large frequencies) and not in Asymptopia II (a large number of tables with small frequencies); see Liang and Self (1985) for Asymptopia II (the scenario I am in)__
@@ -868,8 +750,6 @@ This raises the question of how large the sample sizes in each table must be bef
 
 I have $K \\g 10$ ($K$ = number of $2 \times 2$ tables) and $d \geq 10$ ($d$ = sequencing coverage), so the unconditional test may well be fine.
 
-__TODO: Look up Liang-Self in Agresti's CDA (2013)__
-
 - Algorithm: If the null of homogeneity of odds ratio is rejected => stratify further(?), otherwise compute MH or Miettenen estimates of the log odds ratio (and standard errors) for different stratification strategies (see [https://stat.ethz.ch/pipermail/r-help/2007-February/126254.html](https://stat.ethz.ch/pipermail/r-help/2007-February/126254.html))
   - Stratify by IPD
   - Stratify by IPD + chromosome
@@ -878,4 +758,4 @@ __TODO: Look up Liang-Self in Agresti's CDA (2013)__
   - Check whether the more-stratified estimates fall within a reasonable distance from the less-stratified estimates (i.e., with respect to standard errors of the less-stratified estimates).
 - Settle on the most appropriate level of stratification and apply to all samples.
   - Discuss results.
-- `methsim`: Sample LORs from a Normal(mu, sigma^2) distribution, where mu (resp. sigma) is the MH estimator (resp. standard error? empirical variance of stratified MH estimators?) of within-fragment co-methylation for that IPD and region-type.
+- `methsim`: Sample LORs from a Normal($\mu$, $\sigma^2$) distribution, where mu (resp. sigma) is the MH estimator (resp. standard error? empirical variance of stratified MH estimators?) of within-fragment co-methylation for that IPD and region-type.
