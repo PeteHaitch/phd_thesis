@@ -634,43 +634,91 @@ In analysing $NIL \geq 0$ 2-tuples we are increasing the heterogeneity of the $K
 \FloatBarrier
 \subsubsection{The effect of CpG islands}
 
-Since we must aggregate 2-tuples in order to perform any meaningful analysis of within-fragment co-methylation, there will obviously be unaccounted-for heterogeneity in our estimates. In general, it will be difficult to identify sources of this heterogeneity. One obvious candidate, however, are CpG islands.
+Since we must aggregate 2-tuples in order to perform any meaningful analysis of within-fragment co-methylation, there will obviously be unaccounted-for heterogeneity in our estimates. In general, it will be difficult to identify sources of this heterogeneity. One obvious candidate, however, are CpG islands and so we compare estimates of within-fragment co-methylation within CpG islands and outside of CpG islands. In order to simplify the figures for these analyses, the chromosome-level estimates are not shown. We have seen that the genome-wide estimates capture the trend of the chromosome-level estimates, at least for the autosomes, and so these are sufficient for our purpose.
 
-We now compare estimates of within-fragment co-methylation within CpG islands and outside of CpG islands. Figures \ref{fig:EPISCOPE_MH_by_CGI}, \ref{fig:Lister_MH_by_CGI}, \ref{fig:Seisenberger_MH_by_CGI} and \ref{fig:Ziller_merged_MH_by_CGI} show the results for $NIL = 0$ 2-tuples and Figures \ref{fig:EPISCOPE_ac_MH_by_CGI}, \ref{fig:Lister_ac_MH_by_CGI}, \ref{fig:Seisenberger_ac_MH_by_CGI} and \ref{fig:Ziller_merged_ac_MH_by_CGI} show the results for $NIL \geq 0$ 2-tuples. In order to simplify these figures, the chromosome-level estimates are not shown. We have seen that the genome-wide estimates capture the trend of the chromosome-level estimates, at least for the autosomes, and so these are sufficient for our purpose.
+We observe that there is very little difference between genome-wide estimates of  $\theta$ inside and outside of CpG islands for 2-tuples with $NIL = 0$ (Figures \ref{fig:EPISCOPE_MH_by_CGI}, \ref{fig:Lister_MH_by_CGI}, \ref{fig:Seisenberger_MH_by_CGI}). This is perhaps a little surprising; CpG islands are typically more homogeneous in their average methylation levels and so we would reasonably expect their within-fragment methylation states are more dependent than elsewhere in the genome. However, the $NIL = 0$ results do not tell the full story.
 
-__UP TO HERE: Discuss CGI results__
+When we analyse $NIL = 0$ 2-tuples, we are only estimating the 'first-order' within-fragment co-methylation. But suppose that the methylation state of the current locus ($Z_{h, i}$) depends not only on the state at the previous locus ($Z_{h, i - 2}$) but also on the states at the two previous states ($Z_{h, i - 2}$ and $Z_{h, i - 3}$). Or it might depend on the states at both upstream and downstream loci (i.e. $Z_{h, i + i'}$ and $Z_{i - i''}$, $i', i'' > 0$). To summarise, the $NIL = 0$ analyses reduce heterogeneity by focusing on adjacent loci but cannot (by themselves) tell us whether within-fragment co-methylation is truly 'first-order'.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_MH_by_CGI.pdf}
-\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL = 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
 \label{fig:EPISCOPE_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_MH_by_CGI.pdf}
-\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL = 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
 \label{fig:Lister_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_MH_by_CGI.pdf}
-\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL = 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
 \label{fig:Seisenberger_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_MH_by_CGI.pdf}
-\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL = 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
 \label{fig:Ziller_merged_MH_by_CGI}
+\end{figure}
+
+To look for evidence of higher-order within-fragment co-methylation we turn to the analysis of $NIL \geq 0$ 2-tuples (Figures \ref{fig:EPISCOPE_ac_MH_by_CGI}, \ref{fig:Lister_ac_MH_by_CGI}, \ref{fig:Seisenberger_ac_MH_by_CGI} and \ref{fig:Ziller_merged_ac_MH_by_CGI}). We now see a fairly clear separation of the genome-wide estimates of $\theta$, with CpG islands being more co-methylated than the rest of the genome. Moreover, the estimates of $\theta$ within CpG islands are approximately constant with respect to $IPD$. Also notable is that the 2-tuples outside of CpG islands have fairly similar estimates of $\theta$ in both the $NIL = 0$ and $NIL \geq 0$ analyses.
+
+Taken together, these results suggests that within-fragment co-methylation in CpG islands depends on multiple loci and that the genomic distance between these loci is of little direct importance[^cpg_density1]. In contrast, within-fragment co-methylation outside of CpG islands depends mostly on the adjacent locus and the distance to that locus ($IPD$)[^cpg_density2]. We might try to estimate the order of within-fragment co-methylation in CpG islands by analysing 2-tuples with $NIL = a, a = 1, 2, \ldots$. This quickly becomes complicated, however, since there are $2^{a - 1}$ odds ratios to estimate for $NIL = a$ 2-tuples. We have not yet pursued refinement.
+
+[^cpg_density1]: The overall density of methylation loci is likely important, which of related to $IPD$s.
+
+[^cpg_density2]: The ratio $\frac{NIL > 0 \text{2-tuples}}{NIL \geq 0 \text{2-tuples}}$ is lower outside of CpG islands than inside CpG islands owing to the decreased density of CpGs outside of CpG islands. We therefore can't rule out that the similarity of $NIL = 0$ and $NIL \geq 0$ estimates outside of CpG islands is simply due to a lack of data.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_ac_MH_by_CGI.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\label{fig:EPISCOPE_ac_MH_by_CGI}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Lister_ac_MH_by_CGI.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\label{fig:Lister_ac_MH_by_CGI}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Seisenberger_ac_MH_by_CGI.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\label{fig:Seisenberger_ac_MH_by_CGI}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Ziller_ac_merged_MH_by_CGI.pdf}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\label{fig:Ziller_ac_merged_MH_by_CGI}
 \end{figure}
 
 \subsubsection{Variation of within-fragment co-methylation between samples}
 
-__TODO: Do some sample comparisons, e.g., pluripotent vs. somatic, IMR90 decays superfast.__
+The analyses so far have highlighted the broad similarities of within-fragment co-methylation between a diverse set of samples. Reasuringly, samples done in technical duplicate (_IMR90\_r1_ and _IMR90\_r2_; _H1\_r1_ and _H1\_r2_) have very similar genome-level estimates of $\theta$. Furthermore, biological samples assayed by different laboratores (_H9_ and _H9\_Laurent_; _IMR90\_r1, _IMR90\_r2_ and _IMR90\_cell\_line_) also have fairly similar genome-level estimates of $\theta$[^imr90_ac].
+
+[^imr90_ac]: Differences in the $NIL \geq 0$ results between the _IMR90\_r1, _IMR90\_r2_ and _IMR90\_cell\_line_ samples are due to the _IMR90\_cell\_line_ being sequenced with paired-end reads and therefore having many more $NIL > 0$ 2-tuples to analyse.
+
+There are of course differences, and we now turn our attention to these. The results of this section should be interpreted with some caution: few samples have replicates and so we will have little evidence to conclude what is driving any observed variation nor do we have sufficient power to definitely rule out large differences in co-methylation. Nonetheless, I will offer some hypotheses and support for these as appropriate.
+
+The _EPISCOPE_ dataset is the best dataset for studying between sample variation of within-fragment co-methylation. It has a fully crossed design of donors and tissues. The genome-level estimates of $\theta$ are similar across all 12 samples. Visually, the variation between tissues is greater than that between donors (the plots are more similar by column than by row). This is consistent with average methylation levels being more similar within tissues than within donors (__TODO: Cite__).
+
+Turning to the _Ziller_ dataset, there is little difference between the genome-level estimates of $\theta$ for _Colon\_Normal\_Primary_ and _Colon\_Tumour\_Primary_ nor between the various frontal cortex samples. This does not exclude the possibility that there exist more local differences in co-methylation but there is no evidence that within-fragment co-methylation is globally affected by the disease status in each case.
+
+The most interesting differences between samples occur in the _Lister_ dataset. Recall that the _Lister_ dataset contains four 'mini dataset': _Lister-ADS_, _Lister-FF_, _Lister-IMR90_ and _Lister-H1_ (see section \ref{sec:Lister_dataset}). In each mini datasets, the pluripotent cell lines (induced pluripotent stem cells or embryonic stem cells) have larger genome-level estimates of $\theta$ than do their precursor and differentiated forms. This suggests the pluripotent cell cells have stronger within-fragment co-methylation than do somatic or differentiated cells.
+
+__UP TO HERE: Comment on other pluripotent samples (H9, Seisenbergers); comments on IMR90 (decays superfast).__
 
 
 \subsection{Summary}
