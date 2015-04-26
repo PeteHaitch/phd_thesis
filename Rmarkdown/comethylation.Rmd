@@ -376,26 +376,84 @@ Under asymptotic environment $A2$, where the $2 \times 2$ tables are sparse, \ci
 
 - __TODO: Comment on the utility (or lack thereof) of homogeneity tests; i.e., rejecting the null is good evidence the null is wrong but failing to reject the null is not strong evidence that it is not wrong.__
 
-- __TODO: See how the variance estimator behaves in some of the more pathological simulations__
-
 \subsection{Simulation study}
 
-We analyse the results of a simulation study to explore the effects of sparsity and heterogeneity of odds ratios on estimates of odds ratios in $2 \times 2 \times K$ contingency tables. The simulation requires that we specify several parameters shown below. In order to relate these back to DNA methylation, I also describe each parameter using the statistical framework proposed in Chapter \ref{chap:wgbs_statistical_framework}:
+We analyse the results of a simulation study to explore the effects of sparsity and heterogeneity of odds ratios on estimates of odds ratios in $2 \times 2 \times K$ contingency tables. The simulation requires that we specify several parameters. In order to relate these back to DNA methylation, I describe each parameter using the statistical framework proposed in Chapter \ref{chap:wgbs_statistical_framework}:
 
 - the number of tables, $K$. The number of 2-tuples.
-- the marginal probabilities, $\pi_{1 +} = Pr(Z_{i})$ and $\pi_{+ 1} = Pr(Z_{i'})$. Some simulations use a common set of marginal probabilities across all tables but some simulate the marginal probabilities from a specified distribution.
+- the marginal probabilities, $\pi_{2 +} = Pr(Z_{i})$ and $\pi_{+ 2} = Pr(Z_{i'})$. Some simulations use a common set of marginal probabilities across all tables but some simulate the marginal probabilities from a specified distribution.
 - the odds ratio of each table, $\psi_{k}$. Most simulations use a common odds ratio across the $K$ tables, $\psi_{k} = \psi$.
-- the sample size of each table, $n_{+ + k} = d_{(i, i')}$. The number of reads containing both the $i^{th}$ and ${i'}^{th}$ methylation locus (sequencing depth). Most simulations use a truncated negative binomial distribution to model a bisulfite-sequencing experiment with mean sequencing depth of $30 \times$ but where only 2-tuples with at least $10 \times$ sequencing depth are used in downstream analyses[^nb_sim].
+- the sample size of each table, $n_{+ + k} = d_{(i, i')}$. The number of reads containing both the $i^{th}$ and ${i'}^{th}$ methylation locus (sequencing depth). Most simulations use a truncated negative binomial distribution to model the sequencing depth. The truncated negative binomial distribution is parameterised by the mean ($mu$), the dispersion parameter (size) and the truncation level (trunc). Unless otherwise noted, simulations use $\mu = 30$, $\text{size} = 10$ and $\text{trunc} = 9$, corresponding to an average sequencing depth of $30 \times$ but where only 2-tuples with at least $10 \times$ sequencing depth are used in downstream analyses[^nb_sim].
 
-[^nb_sim]: In the simulation study, a larger cutoff results in higher quality data since we can simply keep simulating until we have $K$ tables with sufficient sequencing depth. In analysing real data, increasing the cutoff may be detrimental since we could end up with fewer than $K$ tables to analyse.
+[^nb_sim]: In the simulation study, a larger value of 'trunc' results in higher quality data since we can simply keep simulating until we have $K$ tables with sufficient sequencing depth. In analysing real data, increasing this cutoff may be detrimental since we end up with fewer tables to analyse.
 
-__UP TO HERE: Insert simulation results__
+For each set of parameters, we generate $K$ $2 \times 2$ contingency tables having the desired marginal probabilities and odds ratio. We then compute the following statistics:
 
-- Use parameters $n, \pi, \psi, \theta$ and not the ones from Chapter \ref{chap:wgbs_statistical_framework} since these are more succinct.
+1. The $K$ 0.5-adjusted unconditional odds ratio estimates, $\widehat{\psi_{0.5}}$, from each $2 \times 2$ table.
+2. The unconditional odds ratio estimate from the $2 \times 2$ table formed by collapsing over $k$, $\widehat{\psi_{U}}$.
+3. The Mantel-Haenszel odds ratio estimate from the $2 \times 2 \times K$ table, $\widehat{\psi_{MH}}$.
+
+The results of each simulation are summarised by a plot of $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{MH}} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line[^density].
+
+[^density]: In many simulations $\psi$ is constant across the $K$ tables and therefore the density is degenerate.
+
+\subsubsection{Results}
+
+To begin, we explore the effect of the marginal probabilities, $\pi_{2 +}, \pi_{+ 2}$, when $\theta = 0$ ($\psi = 1$) identically across the $K$ tables (corresponding to independence of $X$ and $Y$) for $K = 100$ (Simulation 1, Figure \ref{fig:Simulation_1}), and Simulation 2a, $K = 1000$ (Figure \ref{fig:Simulation_2}). Under these parameters, we expect both $\widehat{\theta_{U}}$ and $\widehat{\theta_{MH}}$ to converge to the true value, $\theta = 0$, as $K \to \infty$. This is indeed what we observe, except when the marginal probabilities are uniformly near the boundaries ($\pi_{2 +} = \pi_{+ 2} = 0.01$ and $\pi_{2 +} = \pi_{+ 2} = 0.99$) and $K$ is smaller.
+
+By contrast, $\widehat{\theta_{0.5}}$ are highly biased estimates of $\theta$, even when $K = 1000$. The histograms of $\widehat{\theta_{0.5}}$ are not centred around the true value, $\theta = 0$, unless the marginal probabilities are well away from the boundaries ($0.25 < \pi_{2 +} = \pi_{+ 2} < 0.75$). The bias can be eliminated only by having ultra-deep sequencing coverage ($mean(d) = 10000 \times$), although the variation of $\widehat{\theta_{0.5}}$ across the $K = 1000$ tables remains non-negligible (Simulation 2b Figure \ref{fig:Simulation_2d}).
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Simulation_1.pdf}
+\caption{Simulation 1. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{MH}} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
+\label{fig:Simulation_1}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Simulation_2.pdf}
+\caption{Simulation 2a. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{MH}} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
+\label{fig:Simulation_2}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Simulation_2d.pdf}
+\caption{Simulation 2b. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{MH}} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
+\label{fig:Simulation_2d}
+\end{figure}
+
+Next we explore what happens when we allow the marginal probabilities, $\pi_{2 +}, \pi_{+ 2}$, to vary across the $K$ tables when $\theta$ is a fixed value (not necessarily zero) identically across the $K$ tables for $K = 100$. To do so, we simulate $\pi_{2 +}, \pi_{+ 2}$ \eqd Uniform(0, 1)$ for each $2 \times 2$ table. As is expected from the theory, Figure \ref{fig:Simulation_3} shows that the Mantel-Haenszel estimator does an excellent job of estimating the true value of $\theta$. By contrast, $\widehat{\theta_{U}}$, is well away from the true value and the distribution of $\widehat{\theta_{0.5}}$ is skewed and widely dispersed.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Simulation_3.pdf}
+\caption{Simulation 3. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{MH}} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
+\label{fig:Simulation_3}
+\end{figure}
+
+In a sense, the $\pi_{2 +}, \pi_{+ 2}$ \eqd Uniform(0, 1)$ assumption is too easy. As we have seen in Chapter \ref{chap:wgbs_statistical_framework}, the marginal probabilities of DNA methylation are mostly near the boundaries, not uniformly distributed. Furthermore, each methylation locus in a 2-tuple will likely have a similar marginal probability of methylation. To simulate this more realistic scenario, we simulate $\pi_{2 +} = \pi_{+ 2}$ \eqd Beta(0.3, 0.2)$, which has a similar shape to the genome-wide distribution of $\beta$-values observed in most mammalian genomes (Figure \ref{fig:Beta_marginals}). The results of this simulation (Simulation 4, Figure \ref{fig:Simulation_4}) are basically an exaggerated version of Simulation 3. The Mantel-Haenszel estimator, $\widehat{\theta_{MH}}$, remains an excellent estimator. The unconditional log odds ratio estimator of the collapsed table does an awful job, regularly returning $\widehat{\theta_{U}} > 0$ when in fact $\theta < 0$. The distribution of $\widehat{\theta_{0.5}}$ is even more widely dispersed and typically not centred around $\theta$.
+
+```{r Beta_marginals, echo = FALSE}
+hist(rbeta(1000, 0.3, 0.2))
+```
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Simulation_4.pdf}
+\caption{Simulation 4. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{MH}} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
+\label{fig:Simulation_4}
+\end{figure}
+
+We now explore what happens when the odds ratio is heterogeneous across the $K$ tables. __UP TO HERE__
+
 
 \subsection{Summary}
 
-__TODO__
+We conclude that we cannot estimate within-fragment co-methylation at individual 2-tuples using $\psi_{0.5}$ unless ultra-deep[^ultra-high_depth] sequencing is used ($d > 10000 \times$). The $\widehat{\theta_{0.5}}$ at typical sequencing depths ($d \approx 30$) are highly biased.
+
+[^ultra-high_depth]: Ultra-deep sequencing has its own problems such as an increased effect of PCR-bias.
 
 \section{Within-fragment co-methylation}\label{sec:wf_cometh}
 
