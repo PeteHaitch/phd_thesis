@@ -26,39 +26,39 @@ Chapter \ref{chap:co-methylation_review} documented several previous analyses ba
 
 \subsection{Methods}
 
-Here I describe two simple methods based on correlations of $\beta$-values. Both of these are implemented in the `methLevelCor` function that is part of the `MethylationTuples` software.
+Here I describe two simple methods based on correlations of $\beta$-values. Both of these are implemented in the `methLevelCor()` function that is part of the `MethylationTuples` software.
 
 The aim of this analysis is to address the question of 'how are aggregate methylation levels correlated as a function of the distance between loci?'. There are two steps in this analysis:
 
 1. Define the pairs of methylation loci.
 2. For each $IPD$, compute the correlation of $\beta$-values for all pairs of methylation loci separated by that $IPD$.
 
-Step (2) may be further stratified by the genomic context of the pair of CpGs, such as whether they are in a CpG island, or other variables of interest.
+The second step may be further stratified by the genomic context of the pair of CpGs, such as whether they are in a CpG island, or other variables of interest.
 
-The same analysis could be performed using $\mathcal{M}$-values rather than $\beta$-values, and this is available as an option in the `methLevelCor` function.
+The same analysis could be performed using $\mathcal{M}$-values rather than $\beta$-values, and this is available as an option in the `methLevelCor()` function.
 
 \subsubsection{Constructing the pairs}\label{sec:beta_pair_construction}
 
 I consider two different strategies for creating pairs of CpGs. Both strategies are based on CpGs in the reference genome after having filtered out those reference-specific CpGs. That is, I begin with $\mathcal{I}^{ref}$ and, based on the `Bis-SNP` output, I filter out loci that are not CpGs in the sample's genome. Rather than actually remove these sites, I simply set the corresponding $\beta$-value to `NA`. I also set the $\beta$-values of 'missing' CpGs, those without sufficient sequencing coverage to call a $\beta$-value, to `NA` so that these are still included in the set of CpGs.
 
-The first strategy creates all pairs of adjacent CpGs on the same chromosome and strand, which are then stratified by $IPD$ and any secondary variables, such as genomic context. For a chromosome with $N$ CpGs there are $(N - 1)$ pairs. I call this the 'adjacent pairs' or $NIL = 0$ strategy, since all pairs have no intervening loci ($NIL$ = number of intervening loci)^[nil0].
+The first strategy creates all pairs of adjacent CpGs on the same chromosome and strand, which are then stratified by $IPD$ and any secondary variables, such as genomic context. For a chromosome with $N_{loci}$ CpGs there are $(N_{loci} - 1)$ pairs. I call this the 'adjacent pairs' or $NIL = 0$ strategy, since all pairs have no intervening loci ($NIL$ = number of intervening loci)[^nil0].
 
 [^nil0]: Recall that this is with respect to the reference genome and not the sample genome.
 
 The second strategy uses all pairs of CpGs on the same chromosome and strand, which are then stratified by $IPD$ and any secondary variables, such as genomic context. In practice, the second strategy only uses pairs from a set of $IPD$s, e.g., $IPD = 2 - 2000$, otherwise the number of pairs becomes unwieldy. This is more like a traditional autocorrelation analysis of $\bm{\beta} = (\beta_{1}, \ldots, \beta_{N_{loci}})$, albeit of a vector of unequally spaced observations and with care taken to only use pairs on the same chromosome and strand. I refer to this as the $NIL \geq 0$ strategy. Using the $NIL \geq 0$ strategy, two pairs of CpGs with an identical $IPD$ may have a very different number of intervening CpGs.
 
-The interpretation of correlations computed using the $NIL \geq 0$ is complicated because the set of pairs are more heterogeneous than those under the $NIL = 0$ strategy. For this reason I prefer the $NIL = 0$ strategy, however, it is useful to consider and contrast the two strategies, which is what I have done in my thesis.
+The interpretation of correlations computed using the $NIL \geq 0$ is complicated because the set of pairs are more heterogeneous than those under the $NIL = 0$ strategy. For this reason I prefer the $NIL = 0$ strategy, however, it is useful to consider and contrast the two strategies, which is what I have done in what follows.
 
 \subsubsection{Stratifying by a genomic feature}\label{sec:pair_stratification}
 
-Even when using the $NIL = 0$ strategy, two pairs of CpGs with an identical $IPD$ may come from two regions of the genome that have very different methylation dynamics. In other words, the vector of $\beta$-values for a given sample is highly non-stationary --- the correlation between two loci depends on more than just the $IPD$. An obvious thing to investigate is how strong an influence the genomic context has on these correlations of $\beta$-values. To do this, we can stratify our analysis by a genomic feature. While this does not eliminate this non-stationarity, it may help identify factors that drive some of the heterogeneity.
+Even when using the $NIL = 0$ strategy, two pairs of CpGs with an identical $IPD$ may come from two regions of the genome that have very different methylation dynamics. In other words, the vector of $\beta$-values for a given sample is highly non-stationary; the correlation between two loci depends on more than just the $IPD$. An obvious thing to investigate is how strong an influence the genomic context has on these correlations of $\beta$-values. To do this, we can stratify our analysis by a genomic feature. While this does not eliminate this non-stationarity, it may help identify factors that drive some of the heterogeneity.
 
-For any genomic feature, a pair of loci may be inside, outside or spanning the boundary of the feature. Figure \ref{fig:feature_status} illustrates the 'feature status' of some pairs of loci. Note that a pair where each loci is in a different CpG island is declared to be inside the feature, i.e., elements need not be in the same feature but rather in the same type of feature. The genomic feature should partition the genome so that each loci is either inside or outside of the feature. Since the number of 'spanning pairs' is substantially fewer than those inside or outside of the feature, and the boundaries of the feature are oftentimes fuzzy, I have excluded these 'spanning pairs' in the results shown below.
+For any genomic feature, a pair of loci may be inside, outside or spanning the boundary of the feature. Figure \ref{fig:feature_status} illustrates the 'feature status' of some pairs of loci. Note that a pair where each locus is in a distinct feature from the same class is declared to be inside the feature, i.e. elements need not be in the same feature but rather in the same type of feature. The genomic feature should partition the genome so that each loci is either inside or outside of the feature. Since the number of 'spanning pairs' is substantially fewer than those inside or outside of the feature, and the boundaries of the feature are oftentimes fuzzy, I have excluded these 'spanning pairs' in the results shown below.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/feature_status.pdf}
-\caption{Schematic illustrating the `feature status' of four pairs of methylation loci. The circles represent loci and the grey bars a genomic feature, such as CpG islands. Each pair's `feature status' is determined by whether both loci are outside of the feature (outside), one locus is inside and one outside of the feature (spanning), or both inside the feature (inside). Note that the rightmost pair is `inside' even though the two loci that comprise the pair are in different elements of the genomic feature.}
+\caption{Schematic illustrating the `feature status' of four pairs of methylation loci. The circles represent loci and the grey bars a genomic feature, such as CpG islands. Each pair's feature status is determined by whether both loci are outside of the feature (outside), one locus is inside and one outside of the feature (spanning), or both inside the feature (inside). Note that the rightmost pair is `inside' even though the two loci that comprise the pair are in different elements of the genomic feature.}
 \label{fig:feature_status}
 \end{figure}
 
@@ -66,20 +66,20 @@ For any genomic feature, a pair of loci may be inside, outside or spanning the b
 
 Three commonly used correlation coefficients are Pearson's $r$ \citep{Pearson:1895vt}, Spearman's $\rho$ \citep{Spearman:1904eg} and Kendall's $\tau$ \citep{KENDALL:1938bv}. Briefly, Pearson's product-moment correlation is designed to detect linear relationships between two variables. However, it is not robust to outliers, which motivates the use of Spearman's and Kendall's rank-based correlation coefficients. Spearman's $\rho$ is simply the Pearson product-moment correlation of the ranks of the data while Kendall's $\tau$ is based on the relative frequency of concordantly ranked pairs.
 
-Owing to the size of whole-genome bisulfite-sequencing data, I have chosen to only compute Pearson's $r$ and Spearman's $\rho$, which are much faster to compute than Kendall's $\tau$. The `methLevelCor` function in the `MethylationTuples` will compute a confidence interval, $95\%$ by default, for the Pearson correlation. This feature is not yet available when using Spearman's or Kendall's correlation coefficient.
+Owing to the size of whole-genome bisulfite-sequencing data, I have chosen to only compute Pearson's $r$ and Spearman's $\rho$, which are much faster to compute than Kendall's $\tau$. The `methLevelCor()` function in the `MethylationTuples` package will compute a confidence interval, $95\%$ by default, for the Pearson correlation. This feature is not yet available when using Spearman's or Kendall's correlation coefficient.
 
 \subsubsection{Interpretation of correlation}\label{sec:interpretation_of_correlation}
 
 Before computing correlations and trying to interpret these, it is a good idea to look at the data from which these correlations are computed. Figure \ref{fig:ADS_beta_scatterplots} shows kernel density smoothed scatterplots for pairs of $\beta$-values separated by $IPD = 2, 20, 200, 2000$ with $NIL = 0$ or $NIL \geq 0$ from the _ADS_ sample. It highlights two major problems.
 
-Firstly, the bimodality of the distribution of $\beta$-values means that the points concentrate in the corners of the plot --- $(0, 0), (0, 1), (1, 0)$ and $(1, 1)$. A correlation coefficient is not well suited to summarising these distributions of points. Secondly, when using the $NIL = 0$ strategy, as the $IPD$ increases, the number of points in each scatterplot decreases and so the correlations are very unstable.
+Firstly, the bimodality of the distribution of $\beta$-values means that the points concentrate in the corners of the plot: $(0, 0), (0, 1), (1, 0)$ and $(1, 1)$. A correlation coefficient is not well suited to summarising these distributions of points. Secondly, when using the $NIL = 0$ strategy, as the $IPD$ increases, the number of points in each scatterplot decreases and so the correlations are very unstable.
 
-In summary, the correlations of pairs of $\beta$-values should be cautiously interpreted, bearing in mind that these are rather crude summaries of the underyling scatterplots that hide many details.
+In summary, the correlations of pairs of $\beta$-values should be cautiously interpreted, bearing in mind that these are somewhat crude summaries that hide many details of the underyling scatterplots.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/ADS_beta_scatterplots.pdf}
-\caption{Kernel density smoothed scatterplots for pairs of CpG $\beta$-values, $(\beta_{1}, \beta_{2})$, from the ADS sample. $\beta$-values are computed using strand-collapsed counts. $n$ is the number of pairs in each scatterplot.  The Spearman correlation of each scatterplot is also reported. Individual plots created using the \texttt{smoothScatter} function in R.}
+\caption{Kernel density smoothed scatterplots for pairs of CpG $\beta$-values, $(\beta_{1}, \beta_{2})$, from the ADS sample. $\beta$-values are computed using strand-collapsed counts. $n$ is the number of pairs in each scatterplot.  The Spearman correlation of each scatterplot is also reported. Individual plots created using the \texttt{smoothScatter()} function in R.}
 \label{fig:ADS_beta_scatterplots}
 \end{figure}
 
@@ -123,7 +123,7 @@ Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_5}, \ref{fig:Lister_spearma
 \FloatBarrier
 \subsubsection{Choice of correlation coefficient}
 
-Figures \ref{fig:EPISCOPE_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed}, \ref{fig:Lister_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed}, \ref{fig:Seisenberger_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed} and \ref{fig:Ziller_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed} compares the Pearson correlation coefficient to the Spearman correlation coefficient. The two correlation coefficient give qualitatively similar results, however, the Spearman correlation is consistently smaller in magnitude than the Pearson correlation.
+Figures \ref{fig:EPISCOPE_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed}, \ref{fig:Lister_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed}, \ref{fig:Seisenberger_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed} and \ref{fig:Ziller_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed} compare the Pearson correlation coefficient to the Spearman correlation coefficient. The two correlation coefficient give qualitatively similar results, however, the Spearman correlation is consistently smaller in magnitude than the Pearson correlation.
 
 I have elected to use Spearman's correlation coefficient in what follows because it is more robust to outliers than Pearson's correlation \citep{Kraemer:2006te}. However, this does not remove the general limitations of using correlation coefficients (discussed in Section \ref{sec:interpretation_of_correlation}).
 
@@ -156,17 +156,17 @@ I have elected to use Spearman's correlation coefficient in what follows because
 \end{figure}
 
 \FloatBarrier
-\subsubsection{$NIL = 0$}
+\subsection{$NIL = 0$ CpG pairs}
 
-Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI} and \ref{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed_CI} show the Spearman correlations of strand-collapsed $\beta$-values for $NIL = 0$ pairs of CpGs. Two things immediately stand out. Firstly, for all samples the trend is that the strength of the correlation decays as a function of $IPD$ --- pairs of CpGs separated larger distances are on average less correlated than pairs of CpGs separated by shorter distances. Secondly, the estimated correlations violently jump around for larger $IPD$s. The latter is simply due to the aforementioned lack of $NIL = 0$ pairs at larger $IPD$s with which to estimate these correlations. Therefore, it is the trend, rather than the individual values, that should be analysed in these plots.
+Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI} and \ref{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed_CI} show the Spearman correlations of strand-collapsed $\beta$-values for $NIL = 0$ pairs of CpGs. Two things immediately stand out. Firstly, for all samples the trend is that the strength of the correlation decays as a function of $IPD$; pairs of CpGs separated larger distances are on average less correlated than pairs of CpGs separated by shorter distances. Secondly, the estimated correlations violently jump around for larger $IPD$s. The latter is simply due to the aforementioned lack of $NIL = 0$ pairs at larger $IPD$s with which to estimate these correlations. Therefore, it is the trend, rather than the individual values, that should be analysed in these plots.
 
-The are some consistent patterns in comparing these trends across samples. The correlations very quickly drop well below $0.5$, within approximately $50$ bp for all the EPISCOPE and Seisenberger samples and most of the Lister and Ziller samples. Samples that are exceptions to this trend --- _ADS_, _ADS-adipose_, _ADS-iPSC_, _FF_, _IMR90\_r1_, _IMR90\_r2_, _IMR90\_cell\_line_ and _HepG2\_cell\_line_ --- have a slower decay in these correlations and remain more highly correlated over $IPD = 2, \ldots, 1500$. These same samples are also notable because they have significant amounts of intermediate methylation (Section \ref{sec:genome-wide_distribution_of_beta_values}). I believe this is what drives the stronger and slowly decaying correlations. The scatterplots of $\beta$-values for these samples will have more $\beta$-values in the middle of the scatterplot, and fewer in the corners, hence the stronger correlations.
+The are some consistent patterns in comparing these trends across samples. The correlations very quickly drop well below $0.5$, within approximately $50$ bp for all the _EPISCOPE_ and _Seisenberger_ samples and most of the _Lister_ and _Ziller_ samples. Samples that are exceptions to this trend (_ADS_, _ADS-adipose_, _ADS-iPSC_, _FF_, _IMR90\_r1_, _IMR90\_r2_, _IMR90\_cell\_line_ and _HepG2\_cell\_line_) have a slower decay in these correlations and remain more highly correlated over $IPD = 2, \ldots, 1500$. These same samples are also notable because they have significant amounts of intermediate methylation (Section \ref{sec:genome-wide_distribution_of_beta_values}). I believe this is what drives the stronger and more slowly decaying correlations. The scatterplots of $\beta$-values for these samples will have more $\beta$-values in the middle of the scatterplot, and fewer in the corners, hence the stronger correlations.
 
 Most samples have a correlation close to $1$ for neighbouring CpGs ($IPD = 2$). The notable exceptions are the embryonic stem cell replicates, _H1\_r1_ and _H1\_r2_ (Lister dataset), which begin with a maximum correlation of only around $0.5$. This is not observed in the other embryonic stem cells _H9_, _H9\_Laurent_, _HSF1_ and _J1\_1_), which makes it difficult to know whether $\beta$-values of embryonic stem cells are truly less correlated than other cell types.
 
 The trend of the correlations for all these samples plateaus out close to zero, slightly higher for those samples with significant intermediate methylation. However, it should not be concluded from this that the methylation of CpGs separated by more than a few hundred base pairs are uncorrelated. Recall that these results are only for $NIL = 0$ pairs of CpGs, which are increasingly rare for larger $IPD$s. These results tell us about the 'first-order' correlations of $\beta$-values, which decay very quickly but whose importance also decreases quite quickly owing to the vast majority of CpGs being within $100$ bp of another CpG (e.g., Figure \ref{fig:IPD_ECDF_hg19} for humans).
 
-One final aspect of these genome-wide plots bears mentioning. There are hints of an approximately $150-200$ bp periodicity in these plots. This is a similar scale to the previously reported periodicities in correlations of $\beta$-values (see Chapter \ref{chap:co-methylation_review}). While this periodicity can readily be detected by eye, it is somewhat more difficult to verify using traditional methods based on Fourier analysis of the signal. The chief reason is that the data are very noisy beyond the second or third putative cycle due to the limited data at these larger $IPD$s.
+One final aspect of these genome-wide plots bears mentioning. There are hints of an approximately $150$ to $200$ bp periodicity in these plots. This is a similar scale to the previously reported periodicities in correlations of $\beta$-values (see Chapter \ref{chap:co-methylation_review}). While this periodicity can readily be detected by eye, it is somewhat more difficult to verify using traditional methods based on Fourier analysis of the signal. The chief reason is that the data are very noisy beyond the second or third putative cycle due to the limited data at these larger $IPD$s.
 
 To address this problem, we might try smoothing the raw correlations, for example, by using LOESS \citep{Cleveland:1979fu}, and then looking for periodicities in the smoothed values. However, this is only helpful when the data are corrupted by a small amount of noise, certainly not the extreme noise we see for $IPD > 1000$ in most samples. Furthermore, smoothing introduces problems of its own, such as choosing the smoothing bandwidth in such a way as to not introduce or destroy real periodicities. Even if we can automatically choose these smoothing parameters in an unbiased manner, we are still stuck with only observing a handful of periods of this size from $NIL = 0$ pairs. So while these periodicities are 'obvious' in the plots, they are rather more difficult to detect without visualising the raw data.
 
@@ -235,7 +235,7 @@ The message from these plots is clear, $\beta$-values of $NIL = 0$ pairs within 
 \end{figure}
 
 \FloatBarrier
-\subsubsection{$NIL \geq 0$}\label{sec:nil_geq_0_beta_cors}
+\subsection{$NIL \geq 0$ CpG pairs}\label{sec:nil_geq_0_beta_cors}
 
 Figures \ref{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}, \ref{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}, \ref{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI} and \ref{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI} are the plots of CpG $\beta$-value correlations against $IPD$ for $NIL \geq 0$ pairs. In contrast to the $NIL = 0$ results, the correlations here are relatively stable, at least for $IPD = 2, \ldots, 2000$[^ipd_choice]. This is because there are many more $NIL \geq 0$ pairs than there are $NIL = 0$ pairs.
 
@@ -271,7 +271,7 @@ When we aggregate over as many factors as we are in these genome-wide $NIL \geq 
 \label{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}
 \end{figure}
 
-Comparing CpG islands to non-islands, Figures \ref{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}, \ref{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}, \ref{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI} and \ref{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}, we again see that the methylation levels of pairs of CpGs within islands are consistently more correlated than those outside of islands[^hepg2].
+Comparing CpG islands to non-islands, we again see that the methylation levels of pairs of CpGs within islands are consistently more correlated than those outside of islands[^hepg2] (Figures \ref{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}, \ref{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}, \ref{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI} and \ref{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}).
 
 [^hepg2]: The minor exception is the _HepG2\_cell\_line_ where the CpG island and non-island lines intersect by $IPD = 1500$, but we have already seen that this sample has an unusual methylome compared to the other samples.
 
@@ -303,40 +303,35 @@ Comparing CpG islands to non-islands, Figures \ref{fig:EPISCOPE_spearman_beta_co
 \label{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 
-The $150-200$ bp periodicity is also evident from the $NIL \geq 0$ data and is particularly clear for the CpG pairs outside of CpG islands. This may be due to  different regulation of DNA methylation outside of CpG islands or simply because CpG islands have such consistently high correlations that these periodicities are not evident.
+The $150$ to $200$ bp periodicity is also evident from the $NIL \geq 0$ data and is particularly clear for the CpG pairs outside of CpG islands. This may be due to  different regulation of DNA methylation outside of CpG islands or simply because CpG islands have such consistently high correlations that these periodicities are not evident.
 
-\subsection{Summary}
+\subsection{Limitations}
 
-__TODO: Summarise the results for correlation of $\beta$-values.__
-
-A limitation to analysing co-methylation using correlations of $\beta$-values is that the analysis is based on correlations of measurements that are aggregates from many thousands of DNA molecules. We are not measuring co-methylation on the scale at which the biological process of DNA methylation acts, namely at the level of individual DNA molecules. As noted by \citet{Ball:2009kh}, "the clonal feature of Illumina sequencing [allows us] to investigate whether co-methylation occurs at the single-molecule level". Before doing so, I first explore the challenge of estimating meaningful measures of dependence in sparse $2 \times 2 \times K$ contingency tables. While perhaps not yet apparent, this will be essential for the analysis of within-fragment co-methylation.
+A limitation in to these analyses is they are based on correlations of measurements that are aggregates from many thousands of DNA molecules. We are not measuring co-methylation on the scale at which the biological process of DNA methylation acts, namely at the level of individual DNA molecules. As noted by \citet{Ball:2009kh}, "the clonal feature of Illumina sequencing [allows us] to investigate whether co-methylation occurs at the single-molecule level". We explore this topic in Section \ref{sec:wf_cometh}, but before doing so we first must first discuss the challenge of estimating meaningful measures of dependence in sparse $2 \times 2 \times K$ contingency tables. While perhaps not yet apparent, this will be essential for the analysis of within-fragment co-methylation.
 
 \FloatBarrier
 
 \section{Estimating dependence in sparse $2 \times 2 \times K$ contingency tables}\label{sec:sparse_2x2xK_tables}
 
-We will begin with an overview of the simplest case of estimating dependence in $2 \times 2$ contingency tables, i.e., $K = 1$. We will then progressively introduce the complications of sparsity, $K > 1$, and heterogeneity across the $K$ tables. We conclude with a simulation study highlighting the performance of several difference estimators and determining which is most appropriate for a study of within-fragment co-methylation.
+We will begin with an overview of the simplest case, estimating dependence in a $2 \times 2$ contingency table ($K = 1$). We will then progressively introduce the complications of sparsity, $K > 1$, and heterogeneity across the $K$ tables. We conclude with a simulation study highlighting the performance of several different estimators of dependence in sparse $2 \times 2 \times K$ contingency tables and determining which is most appropriate for a study of within-fragment co-methylation.
 
 \subsection{$2 \times 2$ contingency tables}
 
-Consider two binary random variables, $X$ and $Y$. Let $\pi_{ij}, i, j = 1, 2$ denote the probability that a subject has response $i$ for variable $X$ and response $j$ for variable $Y$. We wish to estimate the _odds ratio_, which is defined as $\psi = \frac{\pi_{11} \pi_{22}}{\pi_{12} \pi_{21}}$. There are many reasons why we might wish to estimate the odds ratio (__CITE__), but our interest here is __WHAT__. Provided that all $\pi_{ij} > 0$, the odds ratio, $\psi$, can be interpreted as follows:
-
-__TODO: Some reasons to use the odds ratio. Firstly, the ``possible range of values of the [log] OR is not influenced by the marginal distributions of the variables involved'' \citep{Kraemer:2004el}. Another way of putting this is that given an odds ratio and a set of marginal probabilities, there exists one and only one $2 \times 2$ table satisfying these constraints \citep{plackett1981analysis}.__
+Consider two binary random variables, $X$ and $Y$. Let $\pi_{ij}$ denote the probability that a subject has response $i$ for variable $X$ and response $j$ for variable $Y$ ($i, j, = 1, 2$). We wish to estimate the _odds ratio_, which is defined as $\psi = \frac{\pi_{11} \pi_{22}}{\pi_{12} \pi_{21}}$. The odds is a convenient summary of dependence in a $2 \times 2$ table.Provided that all $\pi_{ij} > 0$, the odds ratio, $\psi$, can be interpreted as follows:
 
 - $\psi = 1$: $X$ is independent of $Y$.
 - $\psi > 1$: Subjects are more likely to have the same level for both $X$ and $Y$, e.g., subjects with $(X, Y) = (1, 1)$ or $(X, Y) = (2, 2)$ are more likely than subjects with $(X, Y) = (1, 2)$ or $(X, Y) = (2, 1)$.
 - $\psi < 1$: Subjects are more likely to have the the opposite level for $X$ than they do for $Y$, e.g., subjects with $(X, Y) = (1, 2)$ or $(X, Y) = (2, 1)$ are more likely than subjects with $(X, Y) = (1, 1)$ or $(X, Y) = (2, 2)$.
 
-The possible values of $\psi$ are highly skewed, with $0 < \psi < 1$ and $1 < \psi < \infty$ corresponding to the two distinct dependence scenarios. Rather than estimating $\psi$ directly, we will instead focus our attention on the _log odds ratio_, $\theta = \log{\psi}$. The log odds ratio is symmetric about 0, which makes statistical inference somewhat simpler. I will routinely switch between discussing the estimation of $\psi$ and $\theta$, noting that we can always convert one to the other by appropriate exponentiation or taking of logarithms.
+The odds ratio is not perfece, however. For one, the possible values of $\psi$ are highly skewed, with $0 < \psi < 1$ and $1 < \psi < \infty$ corresponding to the two distinct dependence scenarios. Rather than estimating $\psi$ directly, we will instead focus our attention on the _log odds ratio_, $\theta = \log{\psi}$. The log odds ratio is symmetric about 0, which makes statistical inference somewhat simpler. I will routinely switch between discussing the estimation of $\psi$ and $\theta$, noting that we can always convert one to the other by appropriate exponentiation or taking of logarithms.
 
-Suppose we observe $(X, Y)$ for $n$ samples. Denote by $n_{ij}, i, j = 1, 2$ the number of subjects with response $i$ for variable $X$ and response $j$ for variable $Y$. We use the 'dot' notation to denote the sum over the index it replaces, e.g., $n_{1 +} = n_{11} + n_{12}$. The general form of this $2 \times 2$ contingency table is shown in Table \ref{tab:2x2}.
+Suppose we observe $(X, Y)$ for $n$ samples. Denote by $n_{ij} the number of subjects with response $i$ for variable $X$ and response $j$ for variable $Y$. We use the 'plus' notation to denote the sum over the index it replaces, e.g., $n_{1 +} = n_{11} + n_{12}$. The general form of this $2 \times 2$ contingency table is shown in Table \ref{tab:2x2}.
 
 \begin{table}[h]
 \centering
 \begin{tabular}{@{}cccc@{}}
 \cmidrule(l){2-4}
  & \multicolumn{3}{c}{Column} \\
- \cmidrule(l){2-4}
 \multirow{3}{*}{Row} & & & \\
  & $n_{11}$       & $n_{12}$       & $n_{1 +}$ \\
  & $n_{21}$       & $n_{22}$       & $n_{2 +}$ \\
@@ -346,21 +341,19 @@ Suppose we observe $(X, Y)$ for $n$ samples. Denote by $n_{ij}, i, j = 1, 2$ the
 \label{tab:2x2}
 \end{table}
 
-The simplest estimator of $\theta$ is the unconditional maximum likelihood estimator, $\widehat{\theta_{U}} = \log{\frac{n_{11} n_{22}}{n_{12} n_{21}}}$. The asymptotic standard error of $\widehat{\theta_{U}}$ is given by $\hat{\sigma}(\widehat{\theta_{U}}) = \sqrt{\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{22}}}$. The asymptotic distribution of $\widehat{\theta_{U}}$ as $n \to \infty$ is $Normal(\theta, \hat{\sigma}(\theta)^{2})$.
+The simplest estimator of $\theta$ is the unconditional maximum likelihood estimator, $\widehat{\theta_{U}} = \log{\frac{n_{11} n_{22}}{n_{12} n_{21}}}$. The asymptotic standard error of $\widehat{\theta_{U}}$ is given by $\hat{\sigma}(\widehat{\theta_{U}}) = \sqrt{\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{22}}}$. The asymptotic distribution of $\widehat{\theta_{U}}$ as $n \to \infty$ is $Gaussian(\theta, \hat{\sigma}(\theta)^{2})$.
 
 A problem with the estimator $\widehat{\theta_{U}}$ is that it is $0$ or $\infty$ if any $n_{ij} = 0$ and undefined if either the row or column sums are zero, events that have positive probabilities. We can avoid such problems by adding $\frac{1}{2}$ to each of the $n_{ij}$ and defining a modified estimator $\widehat{\theta_{0.5}} = \log{\frac{(n_{11} + 0.5) (n_{22} + 0.5)}{(n_{12} + 0.5) (n_{21} + 0.5)}}$ with corresponding asymptotic standard error $hat{\sigma}(\widehat{\theta_{0.5}}) = \sqrt{\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{22}}}$. \citet{Haldane:1956wq} and \citet{Anscombe:1956te} showed that $\widehat{\theta_{U}}$ and $\widehat{\theta_{0.5}}$ have the same asymptotic distribution around $\theta$ as $n \to \infty$ but that $\widehat{\theta_{0.5}}$ has reduced first-order bias. The modified estimator, $\widehat{\theta_{0.5}}$, is therefore generally recommended.
 
-Another alternative to $\widehat{\theta_{U}}$ is the _conditional_ maximum likelihood estimator, $\widehat{\theta_{C}}$. This is computed by first conditioning on ${n_{1 +}, n_{+ 1}}$. Some algebra then leads to the conditional distribution of $n_{11}$, $f(n_{11}; n_{1 +}, n_{+, 1, \psi})$, which is a hypergeometric distribution \citep{Fisher:1935ug}. The maximum likelihood estimator of $\psi$, $\widehat{psi_{C}}$ is solved using iterative methods.
+Another alternative to $\widehat{\theta_{U}}$ is the _conditional_ maximum likelihood estimator, $\widehat{\theta_{C}}$. This is computed by first conditioning on ${n_{1 +}, n_{+ 1}}$. Some algebra then leads to the conditional distribution of $n_{11}$, $f(n_{11}; n_{1 +}, n_{+, 1, \psi})$, which is a hypergeometric distribution \citep{Fisher:1935ug}. The maximum likelihood estimator of $\psi$, $\widehat{\psi_{C}}$ is solved using iterative methods. The conditional estimator, $\widehat{\theta_{C}} = \log{\widehat{\psi_{C}}}$, works better than the unconditional estimator, $\widehat{\theta_{U}}$, when the sample size, $n$, is small \citep{Agresti:2007tf}.
 
-The conditional estimator, $\widehat{\theta_{C}}$, works better than the unconditional estimator, $\widehat{\theta_{U}}$, when the sample size, $n$, is small \citep{Agresti:2007tf}. Estimation of the odds ratio is made more difficult when the contingency table is _sparse_. We say that a contingency table is sparse when some of the $n_{ij}$ are small. Sparsity can occur even when the sample size, $n$, is large. Sparsity becomes more of a problem as we move from a single $2 \times 2$ table to $K$ $2 \times 2$ tables or, equivalently, a $2 \times 2 \times K$ table.
+Estimation of the odds ratio is made more difficult when the contingency table is _sparse_. We say that a contingency table is sparse when some of the $n_{ij}$ are small. Sparsity can occur even when the sample size, $n$, is large. Sparsity becomes more of a problem as we move from a single $2 \times 2$ table to $K$ $2 \times 2$ tables or, equivalently, a $2 \times 2 \times K$ table.
 
 \subsection{$2 \times 2 \times K$ contingency tables}
 
 Suppose we now measure the same two binary variables $X$ and $Y$ in $K$ different strata. We summarise these data in a $2 \times 2 \times K$ contingency table, $\{n_{ijk} \}$, where the $k^{th}$ 'slice' of the table corresponds to the $2 \times 2$ table for the $k^{th}$ stratum. For now, we assume that the odds ratio, $\psi = \frac{\pi_{11k} \pi_{22k}}{\pi_{12k} \pi_{21k}}$, remains constant across the $K$ tables but we allow the marginal probabilities, $\pi_{+ 1k} = 1 - \pi_{+ 2k}, \pi_{1 + k} = 1 - \pi_{2 + k}$ to vary.
 
 We can again compute an unconditional maximum likelihood estimator, $\widehat{\psi_{U}}$, a '0.5-adjusted' unconditional maximum likelihood estimator, $\widehat{\psi_{0.5}}$, and a conditional maximum likelihood estimator, $\widehat{\psi_{C}}$, of the log odds ratio $\theta = \log{\psi}$ \citep[see][]{Breslow:1981ta}.
-
-__TODO: Is the unconditional maximum likelihood estimator the same as `LORCollapsed()`?__
 
 Another estimator of the common odds ratio, $\psi$, is the Mantel-Haenszel estimator \citep{MANTEL:1959uf}, $\widehat{\psi_{MH}} = \frac{\sum_{k} (n_{11k} n_{22k} / n_{+ + k})}{n_{12k} n_{21k} / n_{+ + k}}$. \citet{Robins:1986vh} derived a simple robust estimator of the variance for $\widehat{\theta_{MH}} = \log{\widehat{\psi_{MH}}}$, $\hat{\sigma}^{2}(\widehat{\theta_{MH}})$. This variance estimator did not appear until some 25 years after the initial publication of the Mantel-Haenszel estimator[^mh_variance]. This delay was in part due to the two asymptotic forms of $2 \times 2 \times K$ contingency tables.
 
@@ -374,18 +367,18 @@ The first asymptotic environment, $A1$, assumes that the number of $2 \times 2$ 
 
 So far we have assumed a common odds ratio for the $K$ $2 \times 2$ tables. This is also known as the _homogeneity of odds ratios_ assumption. As noted by \cite{Liang:1985uw}, \citet{MANTEL:1959uf} did not explicitly assume homogeneity of the odds ratio in their original work. Nonetheless, it does raise the question of how to test this assumption and the effect on these estimators when this assumption is not true.
 
-Under asymptotic environment $A2$, where the $2 \times 2$ tables are sparse, \citet{Liang:1985uw} developed three tests for the assumption of homogeneity of odds ratios and compared these with two tests for the same assumption but designed under $A1$. Unsurprisingly, \citeauthor{Liang:1985uw} found that the three conditional tests are more appropriate than either of the unconditional tests when the data are simulated under $A2$. The disadvantage of these conditional tests is the extra computation required to compute them. \citeauthor{Liang:1985uw} also note, however, that when both $K > 10$ and $n_{i +} > 10$, the simplest test, an unconditional score test developed under $A1$ by \citet{Zelen:1971fo} and corrected by \citet{Halperin:1977vk}, has approximately the correct size at the nominal 0.05 level.
+Under asymptotic environment $A2$, where the $2 \times 2$ tables are sparse, \citet{Liang:1985uw} developed three tests for the assumption of homogeneity of odds ratios and compared these with two tests for the same assumption but designed under $A1$. Unsurprisingly, \citeauthor{Liang:1985uw} found that the three conditional tests are more appropriate than either of the unconditional tests when the data are simulated under $A2$. The disadvantage of these conditional tests is the extra computation required. \citeauthor{Liang:1985uw} also note, however, that when both $K > 10$ and $n_{i +} > 10$, the simplest test, an unconditional score test developed under $A1$ by \citet{Zelen:1971fo} and corrected by \citet{Halperin:1977vk}, has approximately the correct size at the nominal 0.05 level.
 
-- __TODO: Comment on the utility (or lack thereof) of homogeneity tests; i.e., rejecting the null is good evidence the null is wrong but failing to reject the null is not strong evidence that it is not wrong.__
+- __TODO: Find the reference (I think it's Agresti) for the discussion on the utility (or lack thereof) of homogeneity tests; i.e., rejecting the null is good evidence the null is wrong but failing to reject the null is not strong evidence that it is not wrong.__
 
 \subsection{Simulation study}\label{subsec:simulation_study}
 
 We analyse the results of a simulation study to explore the effects of sparsity and heterogeneity of odds ratios on estimates of odds ratios in $2 \times 2 \times K$ contingency tables. The simulation requires that we specify several parameters. In order to relate these back to DNA methylation, I describe each parameter using the statistical framework proposed in Chapter \ref{chap:wgbs_statistical_framework}:
 
 - the number of tables, $K$. The number of 2-tuples.
-- the marginal probabilities, $\pi_{2 +} = Pr(Z_{i})$ and $\pi_{+ 2} = Pr(Z_{i'})$. Some simulations use a common set of marginal probabilities across all tables but some simulate the marginal probabilities from a specified distribution.
+- the marginal probabilities, $\pi_{2 +} = Pr(Z_{i})$ and $\pi_{+ 2} = Pr(Z_{i'})$. Some simulations use a common set of marginal probabilities across all tables but others simulate the marginal probabilities from a specified distribution.
 - the odds ratio of each table, $\psi_{k}$. Most simulations use a common odds ratio across the $K$ tables, $\psi_{k} = \psi$.
-- the sample size of each table, $n_{+ + k} = d_{(i, i')}$. The number of reads containing both the $i^{th}$ and ${i'}^{th}$ methylation locus (sequencing depth). Most simulations use a truncated negative binomial distribution to model the sequencing depth. The truncated negative binomial distribution is parameterised by the mean ($mu$), the dispersion parameter (size) and the truncation level (trunc). Unless otherwise noted, simulations use $\mu = 30$, $\text{size} = 10$ and $\text{trunc} = 9$, corresponding to an average sequencing depth of $30 \times$ but where only 2-tuples with at least $10 \times$ sequencing depth are used in downstream analyses[^nb_sim].
+- the sample size of each table, $n_{+ + k} = d_{(i, i')}$. The number of reads containing both the $i^{th}$ and ${i'}^{th}$ methylation locus (sequencing depth). Most simulations use a truncated negative binomial distribution to model the sequencing depth. The truncated negative binomial distribution is parameterised by the mean ($\mu$), the dispersion parameter (size) and the truncation level (trunc). Unless otherwise noted, simulations use $\mu = 30$, $\text{size} = 10$ and $\text{trunc} = 9$, corresponding to an average sequencing depth of $30 \times$ but where only 2-tuples with at least $10 \times$ sequencing depth are used in downstream analyses[^nb_sim].
 
 [^nb_sim]: In the simulation study, a larger value of 'trunc' results in higher quality data since we can simply keep simulating until we have $K$ tables with sufficient sequencing depth. In analysing real data, increasing this cutoff may be detrimental since we end up with fewer tables to analyse.
 
@@ -401,7 +394,7 @@ The results of each simulation are summarised by a plot of $\widehat{\theta_{0.5
 
 \subsubsection{Results}
 
-To begin, we explore the effect of the marginal probabilities, $\pi_{2 +}, \pi_{+ 2}$, when $\theta = 0$ ($\psi = 1$) identically across the $K$ tables (corresponding to independence of $X$ and $Y$) for $K = 100$ (Simulation 1, Figure \ref{fig:Simulation_1}), and Simulation 2a, $K = 1000$ (Figure \ref{fig:Simulation_2}). Under these parameters, we expect both $\widehat{\theta_{U}}$ and $\widehat{\theta_{MH}}$ to converge to the true value, $\theta = 0$, as $K \to \infty$. This is indeed what we observe, except when the marginal probabilities are uniformly near the boundaries ($\pi_{2 +} = \pi_{+ 2} = 0.01$ and $\pi_{2 +} = \pi_{+ 2} = 0.99$) and $K$ is smaller.
+To begin, we explore the effect of the marginal probabilities, $\pi_{2 +}, \pi_{+ 2}$, when $\theta = 0$ ($\psi = 1$) identically across the $K$ tables (corresponding to independence of $X$ and $Y$) for $K = 100$ (Simulation 1, Figure \ref{fig:Simulation_1}), and $K = 1000$ (Simulation 2a, Figure \ref{fig:Simulation_2}). Under this simulation, we expect both $\widehat{\theta_{U}}$ and $\widehat{\theta_{MH}}$ to converge to the true value, $\theta = 0$, as $K \to \infty$. This is indeed what we observe, except when the marginal probabilities are uniformly near the boundaries ($\pi_{2 +} = \pi_{+ 2} = 0.01$ and $\pi_{2 +} = \pi_{+ 2} = 0.99$) and $K$ is smaller.
 
 By contrast, $\widehat{\theta_{0.5}}$ are highly biased estimates of $\theta$, even when $K = 1000$. The histograms of $\widehat{\theta_{0.5}}$ are not centred around the true value, $\theta = 0$, unless the marginal probabilities are well away from the boundaries ($0.25 < \pi_{2 +} = \pi_{+ 2} < 0.75$). The bias can be eliminated only by having ultra-deep sequencing coverage ($mean(d) = 10000 \times$), although the variation of $\widehat{\theta_{0.5}}$ across the $K = 1000$ tables remains non-negligible (Simulation 2b Figure \ref{fig:Simulation_2d}).
 
@@ -426,7 +419,7 @@ By contrast, $\widehat{\theta_{0.5}}$ are highly biased estimates of $\theta$, e
 \label{fig:Simulation_2d}
 \end{figure}
 
-Next we explore what happens when we allow the marginal probabilities, $\pi_{2 +}, \pi_{+ 2}$, to vary across the $K$ tables when $\theta$ is a fixed value (not necessarily zero) identically across the $K$ tables for $K = 100$. To do so, we simulate $\pi_{2 +}, \pi_{+ 2} \eqd Uniform(0, 1)$ for each $2 \times 2$ table. As is expected from the theory, Figure \ref{fig:Simulation_3} shows that the Mantel-Haenszel estimator does an excellent job of estimating the true value of $\theta$. By contrast, $\widehat{\theta_{U}}$, is well away from the true value and the distribution of $\widehat{\theta_{0.5}}$ is skewed and widely dispersed.
+Next we explore what happens when we allow the marginal probabilities, $\pi_{2 +}, \pi_{+ 2}$, to vary across the $K$ tables when $\theta$ is a fixed value identically across the $K$ tables for $K = 100$ ($\theta$ not necessarily zero). To do so, we simulate $\pi_{2 +}, \pi_{+ 2} \eqd Uniform(0, 1)$ for each $2 \times 2$ table. As is expected from the theory, Figure \ref{fig:Simulation_3} shows that the Mantel-Haenszel estimator does an excellent job of estimating the true value of $\theta$. By contrast, $\widehat{\theta_{U}}$, is well away from the true value and the distribution of $\widehat{\theta_{0.5}}$ is skewed and widely dispersed.
 
 \begin{figure}[!htb]
 \centering
@@ -435,7 +428,7 @@ Next we explore what happens when we allow the marginal probabilities, $\pi_{2 +
 \label{fig:Simulation_3}
 \end{figure}
 
-In a sense, the $\pi_{2 +}, \pi_{+ 2} \eqd Uniform(0, 1)$ assumption is too easy. As we have seen in Chapter \ref{chap:wgbs_statistical_framework}, the marginal probabilities of DNA methylation are mostly near the boundaries, not uniformly distributed. Furthermore, each methylation locus in a 2-tuple will likely have a similar marginal probability of methylation. To simulate this more realistic scenario, we simulate $\pi_{2 +} = \pi_{+ 2} \eqd Beta(0.3, 0.2)$, which has a similar shape to the genome-wide distribution of $\beta$-values observed in most mammalian genomes (Figure \ref{fig:Beta_marginals}). The results of this simulation (Simulation 4, Figure \ref{fig:Simulation_4}) are basically an exaggerated version of Simulation 3. The Mantel-Haenszel estimator, $\widehat{\theta_{MH}}$, remains an excellent estimator. The unconditional log odds ratio estimator of the collapsed table does an awful job, regularly returning $\widehat{\theta_{U}} > 0$ when in fact $\theta < 0$. The distribution of $\widehat{\theta_{0.5}}$ is even more widely dispersed and typically not centred around $\theta$.
+In a sense, the $\pi_{2 +}, \pi_{+ 2} \eqd Uniform(0, 1)$ assumption is too easy. As we have seen in Chapter \ref{chap:wgbs_statistical_framework}, the marginal probabilities of DNA methylation are mostly near the boundaries, not uniformly distributed on the unit interval. Furthermore, each methylation locus in a 2-tuple will likely have a similar marginal probability of methylation. To simulate this more realistic scenario, we simulate $\pi_{2 +} = \pi_{+ 2} \eqd Beta(0.3, 0.2)$, which has a similar shape to the genome-wide distribution of $\beta$-values observed in most mammalian genomes (Figure \ref{fig:Beta_marginals}). The results of this simulation (Simulation 4, Figure \ref{fig:Simulation_4}) are basically an exaggerated version of Simulation 3. The Mantel-Haenszel estimator, $\widehat{\theta_{MH}}$, remains an excellent estimator; the unconditional log odds ratio estimator of the collapsed table does an awful job, regularly returning $\widehat{\theta_{U}} > 0$ when in fact $\theta < 0$; and the distribution of $\widehat{\theta_{0.5}}$ is even more widely dispersed and typically not centred around $\theta$.
 
 ```{r Beta_marginals, echo = FALSE}
 hist(rbeta(1000, 0.3, 0.2))
@@ -448,15 +441,15 @@ hist(rbeta(1000, 0.3, 0.2))
 \label{fig:Simulation_4}
 \end{figure}
 
-We now explore what happens when the odds ratio is heterogeneous across the $K$ tables. Although results are shown for $\widehat{\theta_{0.5}}$ and $\widehat{\theta_{U}}$, we do not discuss these estimators further since they perform poorly in even the simpler scenarios.
+We now explore what happens when the odds ratio is heterogeneous across the $K$ tables. Although results are shown for $\widehat{\theta_{0.5}}$ and $\widehat{\theta_{U}}$, we do not discuss these estimators further since we have seen that these perform poorly in even the simplest simulation scenarios.
 
 In these remaining simulations, all parameters are as for Simulation 4 except that the true log odds ratio of each table, $\theta_{k}$, comes from the following distributions:
 
 - Simulation 5 and Simulation 6: $\theta_{k} \eqd Gaussian(\phi_{0}, 1)$, where $\theta_{0} = -4, \ldots, 4$ is identical across the $K$ tables.
-- Simulation 7:$\theta_{k} \eqd Skewed-Gaussian(\theta_{0}, 1, -10)$, where $\theta_{0} = -4, \ldots, 4$ is identical across the $K$ tables.
-- Simulation 8: $\theta_{k} \eqd 0.5 Gaussian(- \theta_{0}, 1) + 0.5 Gaussian(\theta_{0}, 1)$.
+- Simulation 7:$\theta_{k} \eqd Skewed\text{-}Gaussian(\theta_{0}, 1, -10)$, where $\theta_{0} = -4, \ldots, 4$ is identical across the $K$ tables.
+- Simulation 8: $\theta_{k} \eqd 0.5 \times Gaussian(- \theta_{0}, 1) + 0.5 \times Gaussian(\theta_{0}, 1)$.
 
-Simulations 5, 6 and 7 (Figures \ref{fig:Simulation_5}, \ref{fig:Simulation_6} and \ref{fig:Simulation_7}) demonstrate that the Mantel-Haenszel estimator, $\widehat{\theta_{MH}}$, is a reasonable estimator of the centre of the distribution of log odds ratios. It performs better in Simulation 5, where the distribution of $\theta$ is symmetric, as opposite to Simulation 7, where the distribution of $\theta$ is skewed. Unsurprisingly, $\widehat{\theta_{MH}}$ does a better job as $K \to \infty$. It should be emphasised, however, that the asymptotic variance of the estimator, $hat{\sigma}(\widehat{\theta_{MH}})^{2}$ is not an estimate of the variance of the true odds ratios, $var(\theta)$. We can see that the asymptotic $95 \%$ confidence interval of $\widehat{\theta_{MH}}$ only covers a small amount of the variation in the $\theta$.
+Simulations 5, 6 and 7 (Figures \ref{fig:Simulation_5}, \ref{fig:Simulation_6} and \ref{fig:Simulation_7}) demonstrate that the Mantel-Haenszel estimator, $\widehat{\theta_{MH}}$, is a reasonable estimator of the centre of the distribution of log odds ratios. It performs better in Simulation 5 and 6, where the distribution of $\theta$ is symmetric, as opposed to Simulation 7, where the distribution of $\theta$ is skewed. Unsurprisingly, $\widehat{\theta_{MH}}$ does a better job as $K \to \infty$. It should be emphasised, however, that the asymptotic variance of the estimator, $\hat{\sigma}(\widehat{\theta_{MH}})^{2}$ is not an estimate of the variance of the true odds ratios, $var(\theta)$. We can see that the asymptotic $95 \%$ confidence interval of $\widehat{\theta_{MH}}$ only covers a small amount of the variation in the $\theta$.
 
 \begin{figure}[!htb]
 \centering
@@ -492,11 +485,11 @@ Finally, Simulation 8 (Figure \ref{fig:Simulation_8}) shows that if the distribu
 
 We summarise the results of the simulation study with respect to our aim of estimating within-fragment co-methylation from whole-genome bisulfite-sequencing data.
 
-This simulation study demonstrates that we cannot estimate within-fragment co-methylation at individual 2-tuples using the simple estimator $\theta_{0.5}$ unless ultra-deep[^ultra-high_depth] sequencing is used ($d > 10000 \times$). The distributions of $\widehat{\theta_{0.5}}$ at typical sequencing depths ($d \approx 30$) are highly biased and dispersed, even under very simple simulation scenarios. Therefore, some degree of aggregation is required in order to study within-fragment co-methylation.
+This simulation study demonstrates that we cannot estimate within-fragment co-methylation at individual 2-tuples using the simple estimator odds ratio estimator, $\theta_{0.5}$, unless ultra-deep[^ultra-high_depth] sequencing is used ($d > 10000 \times$). The distributions of $\widehat{\theta_{0.5}}$ at typical sequencing depths ($d \approx 30$) are highly biased and dispersed, even under very simple simulation scenarios. Therefore, some degree of aggregation is required in order to study within-fragment co-methylation.
 
-[^ultra-high_depth]: Ultra-deep sequencing has its own problems such as an increased effect of PCR-bias.
+[^ultra-high_depth]: Ultra-deep sequencing has its own problems, such as an increased effect of PCR-bias.
 
-Suppose we aggregate $K$ 2-tuples to form a $2 \times 2 \times K$ contingency table. When little can be assumed about this $2 \times 2 \times K$ contingency table, the Mantel-Haenszel estimator is the most appropriate of those considered. Firstly, it is highly robust to different marginal probabilities across the $K$ tables. Secondly, when the odds ratios are heterogeneous across the $K$ tables, the Mantel-Haenszel estimator will estimate the 'average' effect.
+Suppose that we aggregate $K$ 2-tuples to form a $2 \times 2 \times K$ contingency table. When little can be assumed about this $2 \times 2 \times K$ contingency table, the Mantel-Haenszel estimator is the most appropriate of those considered. Firstly, it is highly robust to different marginal probabilities across the $K$ tables. Secondly, when the odds ratios are heterogeneous across the $K$ tables, the Mantel-Haenszel estimator will estimate the 'average' effect.
 
 Of course, the utility of this 'average' will depend on the distribution of $\theta$, which is unknown in practice. However, we might explore its variability by computing the Mantel-Haenszel estimate under a range of aggregation strategies (i.e. across different $k$).
 
@@ -506,7 +499,7 @@ Of course, the utility of this 'average' will depend on the distribution of $\th
 
 Here I describe a simple method to study within-fragment co-methylation by analysing methylation patterns at 2-tuples. For simplicity, I will use CpG 2-tuples, but the method is applicable to any methylation type. This method is to be implemented in the `cometh()` function that is part of the `MethylationTuples` software[^cometh].
 
-[^cometh]: At the time of writing, this is available as a stand along `mantelhaen()` function, but it will ultimately one of several strategies of estimating within-fragment co-methylation using the `cometh()` function.
+[^cometh]: At the time of writing, this is available as a stand along `mantelhaen()` function, but it will soon be one of several strategies of estimating within-fragment co-methylation using the `cometh()` function.
 
 The aim of this analysis is to address the questions:
 
@@ -525,13 +518,13 @@ Answers to the latter two are informed by Section \ref{sec:sparse_2x2xK_tables}.
 
 \subsubsection{How to define the 2-tuples}
 
-The construction of 2-tuples is very similar to constructing the pairs of methylation levels, described in Section \ref{sec:beta_pair_construction}. However, we are now limited to analysing co-methylation of loci that can be captured within a single read. With current technology this means we are limited to studying within-fragment co-methylation for 2-tuples with $IPD \lessapprox 250$. As in Section \ref{subsec:beta_cor}, we will consider 2-tuples with $NIL = 0$ and $NIL \geq 0$.
+The construction of 2-tuples is very similar to constructing the pairs of methylation levels, described in Section \ref{sec:beta_pair_construction}. However, we are now limited to analysing co-methylation of loci that can be captured within a single read. With current technology this means we are limited to studying within-fragment co-methylation for 2-tuples with $IPD$ less than approximately $250$. As in Section \ref{subsec:beta_cor}, we will consider 2-tuples with $NIL = 0$ and $NIL \geq 0$.
 
 \subsubsection{How to aggregate the 2-tuples?}
 
 The counts of methylation patterns at each 2-tuple can be summarised by a $2 \times 2$ contingency table. The sequencing depth of each 2-tuple is typically low. Furthermore, for each locus in the 2-tuple, the marginal probability that it is methylated is very often close to zero or one. Therefore, in light of the results in Section \ref{subsec:simulation_study}, we must aggregate these $2 \times 2$ tables in order to perform any useful inference.
 
-The ideal level of aggregation combines those 2-tuples with homogeneous odds ratios. Of course, this information is unknown to us. Instead, we will aggregate by chromosome to explore the variation of co-methylation across chromosomes and compare these to genome-wide estimates. The resulting estimates must be interpreted as the 'average' degree of within-fragment co-methylation across the aggregation levels.
+The ideal level of aggregation combines those 2-tuples with homogeneous odds ratios. Of course, this information is unknown to us. Instead, we will aggregate by chromosome to explore the variation of co-methylation across chromosomes and compare these to genome-level estimates. The resulting estimates must be interpreted as the 'average' degree of within-fragment co-methylation across the aggregation levels.
 
 \subsubsection{Which estimator to use?}
 
@@ -545,7 +538,6 @@ I have analysed all 40 samples in the EPISCOPE, Lister, Seisenberger and Ziller 
 2. $IPD$-CGI: A $2 \times 2 \times K$ table for each $IPD$ and 'CpG island status' (CGI-status) combination. The CGI-status of each 2-tuple is whether it is _inside_ a CpG island or _outside_ a CpG island[^spanning].
 3. $IPD$-chromosome: A $2 \times 2 \times K$ table for each $IPD$ and chromosome combination.
 
-
 [^spanning]: 2-tuples spanning the boundary of a CpG island are ignored. There are few such 2-tuples when $NIL = 0$. While there are considerably more such 2-tuples when $NIL \geq 0$, I have ignored these in favour of simplicity.
 
 No minimum sequencing coverage cutoff is required since the Mantel-Haenszel estimator appropriately downsweights 2-tuples with low sequencing coverage.
@@ -556,15 +548,13 @@ We will first compare the results of chromosome-level estimates to genome-level 
 
 \subsubsection{Chromosome-level $NIL = 0$ analyses}
 
-Figure \ref{fig:EPISCOPE_MH_by_seqnames}, \ref{fig:Lister_MH_by_seqnames}, \ref{fig:Seisenberger_MH_by_seqnames} and \ref{fig:Ziller_merged_MH_by_seqnames} show the results using $NIL = 0$ 2-tuples for the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, respectively.
+Figure \ref{fig:EPISCOPE_MH_by_seqnames}, \ref{fig:Lister_MH_by_seqnames}, \ref{fig:Seisenberger_MH_by_seqnames} and \ref{fig:Ziller_merged_MH_by_seqnames} show the results using $NIL = 0$ CpG 2-tuples for the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, respectively.
 
-Unsurprisingly, there is variation in the chromosome-level estimates for a given $IPD$. Overall, however, we see that the genome-level and chromosome-level estimates follow a similar trend for all samples[^mitochondria]: co-methylation is strongest for smaller $IPD$s, decaying fairly rapidly before levelling out by $IPD = 20$ to $50$. As the $IPD$ increases, we see more variation in the chromosome-level and genome-level estimates, but this is due to the smaller sample sizes we have for $NIL = 0$ 2-tuples with larger $IPD$s.
+Unsurprisingly, there is variation in the chromosome-level estimates for a given $IPD$. Overall, however, we see that the genome-level and chromosome-level estimates follow a similar trend for all samples[^mitochondria]: co-methylation is strongest for smaller $IPD$s, decaying fairly rapidly before levelling out by $IPD = 20$ to $50$. As the $IPD$ increases, we see more variation in the chromosome-level and genome-level estimates, but this is due to the smaller sample sizes we have for 2-tuples with $NIL = 0$ at larger $IPD$s.
 
 [^mitochondria]: The obvious outlier on each of these plots is the mitochondrial DNA. The mitochondria are typically almost completely unmethylated, i.e. the marginal probability of methylation at a CpG on the mitochondria is very close to zero, and so the concept of co-methylation is not particularly meaningful here.
 
 Notably, although the genome-level estimates decay as a function of $IPD$, $\widehat{\theta_{MH}}$ is almost entirely positive over the observable range of $IPD$s, suggesting that within-fragment co-methylation extends for at least a few hundred bp. Furthermore, in samples with sufficiently long paired-end reads, there is a hint of an upturn in the genome-wide $\widehat{\theta_{MH}}$ at approximately $IPD = 180$. This is approximately the distance between two CpGs on adjacent nucleosomes (see Section \ref{sec:nucleosome_and_chromatin}), and may be evidence of the three-dimensional structure of the genome affecting co-methylation.
-
-- __TODO: Figure out why E18BUF is missing chrM data__
 
 \begin{figure}[!htb]
 \centering
@@ -606,7 +596,7 @@ In analysing $NIL \geq 0$ 2-tuples we are increasing the heterogeneity of the $K
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_ac_MH_by_seqnames.pdf}
-\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. \textbf{TODO: Figure out why E18BUF is missing chrM data}}
 \label{fig:EPISCOPE_ac_MH_by_seqnames}
 \end{figure}
 
@@ -634,11 +624,11 @@ In analysing $NIL \geq 0$ 2-tuples we are increasing the heterogeneity of the $K
 \FloatBarrier
 \subsubsection{The effect of CpG islands}
 
-Since we must aggregate 2-tuples in order to perform any meaningful analysis of within-fragment co-methylation, there will obviously be unaccounted-for heterogeneity in our estimates. In general, it will be difficult to identify sources of this heterogeneity. One obvious candidate, however, are CpG islands and so we compare estimates of within-fragment co-methylation within CpG islands and outside of CpG islands. In order to simplify the figures for these analyses, the chromosome-level estimates are not shown. We have seen that the genome-wide estimates capture the trend of the chromosome-level estimates, at least for the autosomes, and so these are sufficient for our purpose.
+Since we must aggregate 2-tuples in order to perform any meaningful analysis of within-fragment co-methylation, there will obviously be unaccounted-for heterogeneity in our estimates. In general, it will be difficult to identify sources of this heterogeneity. One obvious candidate, however, are CpG islands and so we compare estimates of within-fragment co-methylation inside CpG islands and outside of CpG islands. In order to simplify the figures for these analyses, the chromosome-level estimates are not shown. We have seen that the genome-wide estimates capture the trend of the chromosome-level estimates, at least for the autosomes, and so these are sufficient for our purpose.
 
 We observe that there is very little difference between genome-wide estimates of  $\theta$ inside and outside of CpG islands for 2-tuples with $NIL = 0$ (Figures \ref{fig:EPISCOPE_MH_by_CGI}, \ref{fig:Lister_MH_by_CGI}, \ref{fig:Seisenberger_MH_by_CGI}). This is perhaps a little surprising; CpG islands are typically more homogeneous in their average methylation levels and so we would reasonably expect their within-fragment methylation states are more dependent than elsewhere in the genome. However, the $NIL = 0$ results do not tell the full story.
 
-When we analyse $NIL = 0$ 2-tuples, we are only estimating the 'first-order' within-fragment co-methylation. But suppose that the methylation state of the current locus ($Z_{h, i}$) depends not only on the state at the previous locus ($Z_{h, i - 2}$) but also on the states at the two previous states ($Z_{h, i - 2}$ and $Z_{h, i - 3}$). Or it might depend on the states at both upstream and downstream loci (i.e. $Z_{h, i + i'}$ and $Z_{i - i''}$, $i', i'' > 0$). To summarise, the $NIL = 0$ analyses reduce heterogeneity by focusing on adjacent loci but cannot (by themselves) tell us whether within-fragment co-methylation is truly 'first-order'.
+When we analyse 2-tuples with $NIL = 0$, we are only estimating the 'first-order' within-fragment co-methylation. But suppose that the methylation state of the current locus ($Z_{h, i}$) depends not only on the state at the previous locus ($Z_{h, i - 1}$) but also on the states at the two previous states ($Z_{h, i - 2}$ and $Z_{h, i - 3}$). Or it might depend on the states at both upstream and downstream loci (i.e. $Z_{h, i + i'}$ and $Z_{i - i''}$, $i', i'' > 0$). To summarise, the $NIL = 0$ analyses reduce heterogeneity by focusing on adjacent loci but cannot (by themselves) tell us whether within-fragment co-methylation is truly 'first-order'.
 
 \begin{figure}[!htb]
 \centering
@@ -668,9 +658,9 @@ When we analyse $NIL = 0$ 2-tuples, we are only estimating the 'first-order' wit
 \label{fig:Ziller_merged_MH_by_CGI}
 \end{figure}
 
-To look for evidence of higher-order within-fragment co-methylation we turn to the analysis of $NIL \geq 0$ 2-tuples (Figures \ref{fig:EPISCOPE_ac_MH_by_CGI}, \ref{fig:Lister_ac_MH_by_CGI}, \ref{fig:Seisenberger_ac_MH_by_CGI} and \ref{fig:Ziller_merged_ac_MH_by_CGI}). We now see a fairly clear separation of the genome-wide estimates of $\theta$, with CpG islands being more co-methylated than the rest of the genome. Moreover, the estimates of $\theta$ within CpG islands are approximately constant with respect to $IPD$. Also notable is that the 2-tuples outside of CpG islands have fairly similar estimates of $\theta$ in both the $NIL = 0$ and $NIL \geq 0$ analyses.
+To look for evidence of higher-order within-fragment co-methylation we turn to the analysis of 2-tuples with $NIL \geq 0$ (Figures \ref{fig:EPISCOPE_ac_MH_by_CGI}, \ref{fig:Lister_ac_MH_by_CGI}, \ref{fig:Seisenberger_ac_MH_by_CGI} and \ref{fig:Ziller_merged_ac_MH_by_CGI}). We now see a fairly clear separation of the genome-wide estimates of $\theta$, with CpG islands being more co-methylated than the rest of the genome. Moreover, the estimates of $\theta$ within CpG islands are approximately constant with respect to $IPD$. Also notable is that the 2-tuples outside of CpG islands have fairly similar estimates of $\theta$ in both the $NIL = 0$ and $NIL \geq 0$ analyses.
 
-Taken together, these results suggests that within-fragment co-methylation in CpG islands depends on multiple loci and that the genomic distance between these loci is of little direct importance[^cpg_density1]. In contrast, within-fragment co-methylation outside of CpG islands depends mostly on the adjacent locus and the distance to that locus ($IPD$)[^cpg_density2]. We might try to estimate the order of within-fragment co-methylation in CpG islands by analysing 2-tuples with $NIL = a, a = 1, 2, \ldots$. This quickly becomes complicated, however, since there are $2^{a - 1}$ odds ratios to estimate for $NIL = a$ 2-tuples. We have not yet pursued refinement.
+Taken together, these results suggests that within-fragment co-methylation in CpG islands depends on multiple loci and that the genomic distance between these loci is of little direct importance[^cpg_density1]. In contrast, within-fragment co-methylation outside of CpG islands depends mostly on the adjacent locus and the distance to that locus ($IPD$)[^cpg_density2]. We might try to estimate the order of within-fragment co-methylation in CpG islands by analysing m-tuples with $\text{m} > 2$. This quickly becomes complicated, however, since there are $2^{\text{m} - 1}$ odds ratios to estimate for m-tuples. We have therefore not yet pursued this refinement.
 
 [^cpg_density1]: The overall density of methylation loci is likely important, which of related to $IPD$s.
 
@@ -699,9 +689,9 @@ Taken together, these results suggests that within-fragment co-methylation in Cp
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Ziller_ac_merged_MH_by_CGI.pdf}
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_ac_MH_by_CGI.pdf}
 \caption{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta_{MH}}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
-\label{fig:Ziller_ac_merged_MH_by_CGI}
+\label{fig:Ziller_merged_ac_MH_by_CGI}
 \end{figure}
 
 \subsubsection{Variation of within-fragment co-methylation between samples}
@@ -710,100 +700,38 @@ The analyses so far have highlighted the broad similarities of within-fragment c
 
 [^imr90_ac]: Differences in the $NIL \geq 0$ results between the _IMR90\_r1, _IMR90\_r2_ and _IMR90\_cell\_line_ samples are due to the _IMR90\_cell\_line_ being sequenced with paired-end reads and therefore having many more $NIL > 0$ 2-tuples to analyse.
 
-There are of course differences, and we now turn our attention to these. The results of this section should be interpreted with some caution: few samples have replicates and so we will have little evidence to conclude what is driving any observed variation nor do we have sufficient power to definitely rule out large differences in co-methylation. Nonetheless, I will offer some hypotheses and support for these as appropriate.
+There are of course differences, and we now turn our attention to these. The results of this section should be interpreted with some caution: few samples have replicates and so we will have little evidence to conclude what is driving any observed variation nor do we have sufficient power to definitively rule out large differences in co-methylation. Nonetheless, I will offer some hypotheses and support for these as appropriate.
 
-The _EPISCOPE_ dataset is the best dataset for studying between sample variation of within-fragment co-methylation. It has a fully crossed design of donors and tissues. The genome-level estimates of $\theta$ are similar across all 12 samples. Visually, the variation between tissues is greater than that between donors (the plots are more similar by column than by row). This is consistent with average methylation levels being more similar within tissues than within donors (__TODO: Cite__).
+The _EPISCOPE_ dataset is the best dataset for studying between sample variation of within-fragment co-methylation. It has a fully crossed design of donors and tissues. The genome-level estimates of $\theta$ are similar across all 12 samples. Visually, the variation between tissues is greater than that between donors (the plots are more similar by column than by row).
 
 Turning to the _Ziller_ dataset, there is little difference between the genome-level estimates of $\theta$ for _Colon\_Normal\_Primary_ and _Colon\_Tumour\_Primary_ nor between the various frontal cortex samples. This does not exclude the possibility that there exist more local differences in co-methylation but there is no evidence that within-fragment co-methylation is globally affected by the disease status in each case.
 
-The most interesting differences between samples occur in the _Lister_ dataset. Recall that the _Lister_ dataset contains four 'mini dataset': _Lister-ADS_, _Lister-FF_, _Lister-IMR90_ and _Lister-H1_ (see section \ref{sec:Lister_dataset}). In each mini datasets, the pluripotent cell lines (induced pluripotent stem cells or embryonic stem cells) have larger genome-level estimates of $\theta$ than do their precursor and differentiated forms. This suggests the pluripotent cell cells have stronger within-fragment co-methylation than do somatic or differentiated cells.
+The most interesting differences between samples occur in the _Lister_ dataset. Recall that the _Lister_ dataset contains four 'mini datasets': _Lister-ADS_, _Lister-FF_, _Lister-IMR90_ and _Lister-H1_ (see section \ref{sec:Lister_dataset}). In each mini datasets, the pluripotent cell lines (induced pluripotent stem cells or embryonic stem cells) have larger genome-level estimates of $\theta$ than do their precursor forms[^bmp4]. This difference is less pronounced, even absent, in the samples differentiated _in vitro_ with BMP4 from the induced pluripotent stem cell lines (iPSCs).
 
-__UP TO HERE: Comment on other pluripotent samples (H9, Seisenbergers); comments on IMR90 (decays superfast).__
+This suggests the pluripotent cell cells have stronger within-fragment co-methylation than do somatic or differentiated cells. Consistent with this is that the _H9_, _H9\_Laurent_ and _J1_ samples (embryonic stem cell lines), the _E6.5\_epiblast\_1_ sample (epiblasts derived from day 6.5 embryos) and the _E16.5\_male\_1_ (male progenitor germ cells derived from day 16.5 embryos) all have relatively high genome-wide estimates of $\theta$.
 
+[^bmp4]: The difference is less pronounced in the samples differentiated _in vitro_ with BMP4, e.g., comparing _FF-iPSC\_19.11_ with _FF-iPSC\_19.11+BMP4_.
 
-\subsection{Summary}
+One explanation of this result, at least for the iPSCs, is that it is due to 'reseting' of the methylome during embryonic development induction of pluripotency \citep{Lister:2011kg, Stricker:2013kl}. This explanation does not immediately carry over the the embryonic stem cell lines, although there is extensive reprogramming of DNA methylation during embryogenesis, which may be relevant \citep{Seisenberger:2013jq}.
 
+A second observation on the results for the _Lister_ dataset is that genome-level estimates of $\theta$ decay particularly rapidly in the somatic cell lines (_ADS_, _ADS-adipose_, _FF_, _IMR90\_r1_ and _IMR90\_r2_). This is recapituled in the _IMR90\_cell\_line_ sample from the _Ziller_ dataset.
 
-__OLD BUT POTENTIALLY USEFUL STUFF BELOW HERE__
+The reduced within-fragment co-methylation in the somatic cell lines may be due to culturing of the cells. As a population of cells develops from a single cell, there are errors in copying the DNA methylation patterns from mother to daughter cell. These errors disrupt the co-methylation of 2-tuples. If the iPSC and iPSC-derived cell lines have had less (developmental) time between the laying down of the original DNA methylation pattern and the point at which they were sequenced, then there is a lower probability that the co-methylation has been disrupted by replication errors. There are also reports that DNA methylation profiles differ widely between cell lines and their precursor primary tissues \cite{Nestor:2015db}, which very likely also effect co-methylation.
 
-While the similarities between samples are obvious, the differences are somewhat harder to detect from these genome-wide summaries. The ADS and FF mini datasets provide us with an opportunity to discuss some potential biological differences in within-fragment co-methylation. In Figure \ref{fig:Lister_lor_min_cov_10_strand_collapsed} we see that the _ADS-iPSC_ sample has a consistently higher level of co-methylation than the _ADS_ and _ADS-adipose_ samples. Likewise, the _FF-iPSC\_6.9_, _FF-iPSC\_19.7_ and _FF-iPSC\_19.11_ have consistently higher levels of co-methylation than the _FF_  sample, although not the _FF-iPSC\_19.11+BMP4_ sample.
+\subsection{Limitations}
 
-I can think of two possible interpretations of this result. Firstly, iPSCs may have a more regulated methylome than do somatic cells. The fact that these same iPSCs have very little intermediate methylation could be seen as support of this interpretation. However, this same lack of intermediate methylation may simply reflect that the iPSC samples are a more homogeneous population of cells. It would be possible to have a sample with no within-fragment co-methylation but where all $\beta$-values are 0 or 1, e.g., a sample where all cells are perfect clones of a cell whose CpG methylation states are independent of one another.
-
-A second interpretation of this result is that it is due to 'reseting' of the methylome upon induction of pluripotency \citep{Lister:2011kg, Stricker:2013kl}. As a population of cells develops from a single cell, there are errors in copying the DNA methylation patterns from mother to daughter cell. These errors disrupt the co-methylation of 2-tuples. If the iPSC and iPSC-derived cell lines have had less (developmental) time between the laying down of the original DNA methylation pattern and the point at which they were sequenced, then there is a lower probability that the co-methylation has been disrupted by replication errors. However, high levels of within-fragment co-methylation does not on its own imply that the sample is homogeneous. It would be possible to have a sample with high levels of within-fragment co-methylation that also has high levels of intermediate methylation, e.g., a sample with multiple distinct clonal subpopulations where each subpopulation has high levels of co-methylation but  also has a distinct methylome.
-
-Taking the co-methylation results and the distribution of $\beta$-values together, I conclude that for the ADS and FF mini datasets the iPSC and iPSC-derived samples truly have higher levels of co-methylation and are also more homogeneous than their precursor cells.
+A major challenge in analysing within-fragment co-methylation is the susceptibility of estimates of $\theta$ to M-bias, particularly when the $IPD$ is large and measurements are taken towards the ends of reads. As noted in Section \ref{sec:m-bias}, it is difficult to properly account for M-bias in pre-trimmed data such as the _Lister_ dataset. Since we can do little about data that has already been pre-trimmed, we are forced to be cautious in our interpretation of within-fragment co-methylation for 2-tuples with larger $IPD$s from these datasets. This is particularly relevant to the apparent increase in within-fragment co-methylation for $NIL \geq 0$ CpG 2-tuples with $IPD \approx 180$. This result is tantalisingly similar to the periodicity we see in the correlations of $\beta$-values and the approximate spacing of nucleosomes in human DNA (see Section \ref{sec:nucleosome_and_chromatin}). However, it is not as apparent in other paired-end samples, and this is only likely to be resolved with longer reads that can span multiple nucleosomes.
 
 \section{Summary}
 
-Correlations of $\beta$-values and estimates of within-fragment co-methylation are complementary methods to better understand the complex dependence structure of bisulfite-sequencing data. Which is more relevant depends on the question at hand. Within-fragment co-methylation seems closer to the biology because it measures the dependence of DNA methylation on the scale that the DNA methyltransferases act. However, the most common downstream analyses are based on $\beta$-values and so these correlations may be more relevant to analyses of DNA methylation data. Ultimately, the two measures are intertwined since the correlations of $\beta$-values are driven by co-methylation on individual DNA fragments. This idea is explored in greater detail in Chapter \ref{chap:methsim}.
+Correlations of $\beta$-values and estimates of within-fragment co-methylation are complementary methods to better understand the complex dependence structure of DNA methylatin data. Which is more relevant depends on the question at hand. Within-fragment co-methylation seems closer to the biology because it measures the dependence of DNA methylation on the scale that the DNA methyltransferases act. However, the most common downstream analyses are based on $\beta$-values and so these correlations may be more relevant to analyses of DNA methylation data. Ultimately, the two measures are intertwined since the correlations of $\beta$-values will in part be driven by co-methylation on individual DNA fragments. This idea is explored in greater detail in Chapter \ref{chap:methsim}.
 
-A major challenge in interpreting within-fragment co-methylation is its susceptibility to M-bias or, rather, the difficulty of accounting for M-bias in pre-trimmed data. Since we can do nothing about data that has already been pre-trimmed, we are forced to be cautious in our interpretation of within-fragment co-methylation for 2-tuples with larger $IPD$s. This is particularly relevant to the increase in within-fragment co-methylation for $NIL \geq 0$ CpG 2-tuples with $IPD \approx 150-170$. This result is tantalisingly similar to the periodicity we see in the correlations of $\beta$-values and the approximate spacing of nucleosomes in human DNA (see Section \ref{sec:nucleosome_and_chromatin}). However, I do not feel comfortable concluding that this is truly what we are observing because of the potential for these systematic biases to create an artificial signal. Furthermore, we do not detect this signal any of the EPISCOPE samples, which are some of the best quality data I have and, being samples from human tissues rather than cell lines, are arguably more biologically relevant.
+The presented analyses only measure pairwise dependencies. More specifically, the $NIL = 0$ results measure the 'first-order' dependence whereas the $NIL \geq 0$ measure a mixture of different orders of dependences but all are done in a pairwise manner. I find the $NIL = 0$ results easier interpret but they clearly do not tell the whole story.
 
-The presented analyses only measure pairwise dependencies. More specifically, the $NIL = 0$ results measure the 'first-order' or 'one-step' correlations of $\beta$-values whereas the $NIL \geq 0$ measure a mixture of different orders of dependences but all are done in a pairwise manner. I find the $NIL = 0$ results easier interpret but they clearly do not tell the whole story.
+By comparing the $NIL = 0$ and $NIL \geq 0$ results, we see that the strength of the dependency itself depends on not just the distance between the two CpGs, but the number of intervening CpGs. This is most noticeable for within-fragment co-methylation. This indicates that these dependencies are more than 'first-order'. Moreover, the differences in dependencies between CpG islands and non-islands indicates that the 'order' of these dependencies itself varies across the genome. All this means that the DNA methylation measurements for a single sample form a complicated and highly non-stationary process with variable order dependencies.
 
-By comparing the $NIL = 0$ and $NIL \geq 0$ results we see that the strength of the dependency itself depends on not just the distance between the two CpGs but the number of intervening CpGs. This indicates that these dependencies are more than 'first-order'. Moreover, the differences in dependencies between CpG islands and non-islands indicates that the 'order' of these dependencies itself varies across the genome. All this means that the DNA methylation measurements for a single sample form a complicated and highly non-stationary process with variable order dependencies.
+In theory, we could explore these higher-order dependencies of within-fragment co-methylation by analysing m-tuples with $\text{m} > 2$. However, the complexity of the challenge increases exponentially as $2^{\text{m}}$. Moreoever, the $IPD$ vector now has $(m - 1)$ dimensions, which makes it difficult to visualise the strength of co-methylation as a function of $IPD$.
 
-In theory, we could explore these higher-order dependencies of within-fragment co-methylation by analysing m-tuples with $\text{m} > 2$. However, the complexity of the challenge increases exponentially with m. For example, even when analysing 3-tuples there are four $LOR$s for each $2 \times 2 \times 2$ contingency table and the $IPD$ vector now has two dimensions, meaning that the results have to be visualised over a surface.
+Another complexity that these analyses have brushed over is the fact that the genome is not a one-dimensional line but is rather a complex three-dimensional structure whose shape also varies in time. Therefore, the relevant distance between two loci is not necessarily the number of bp between them but may instead be the Euclidean distance in three-dimensional space. Such complexities cannot be resolved with bisulfite-sequencing data alone but will require measures of the three-dimensional structure of the genome, such as those provided by chromatin conformation capture technologies \citep[e.g.,][]{Dekker:2013hi}.
 
-Another complexity that these analyses haved brushed over is the fact that the genome is not a 1D line but is rather a complex 3D structure whose shape also varies in time. Therefore, the relevant distance between two loci is not necessarily the number of basepair between them but may instead be the Euclidean distance in 3D space. Such complexities cannot be resolved with bisulfite-sequencing data alone but will require measures of the 3D structure of the genome, such as those provided by chromatin conformation capture technologies \citep{Dekker:2013hi}.
-
-The results of this chapter clearly demonstrate that DNA methylation has a highly complex dependence structure. These dependencies exist on individual DNA fragments and also manifest as correlations of aggregate measures of methylation, such as $\beta$-values. Bisulfite-sequencing give the highest resolution picture of this dependence structure. Nonetheless, this is still a rather limited picture, particularly for within-fragment co-methylation. Data from longer reads will be immensely useful in developing a better model of within-fragment co-methylation. In particular, reads that can span multiple nucleosomes will allow for co-methylation to be better tied in with and expand upon existing results on the relationship between nucleosomes and DNA methylation. Until such data are available, we can try to learn more about plausible models of DNA co-methylation through computational methods such as the simulation method described in the next chapter.
-
-## Miscellaneous notes
-
-Agresti in Categorical Data Analysis:
-
-> In terms of bias and mean square error, Gart and Zweiful (1967) and Haldane (1955) showed the amended [i.e, add 0.5 to each count] estimators of the [odds-ratio log odds-ratio] behave well (see also Problem 12.4)
-
-The Mantel-Haenszel estimator might be my best bet. Breslow (1981) says:
-
-> The principal conclusion to be drawn from these results is that one should avoid using two of the standard techniques of odds ratio estimation with sparse data.
-
-> The bias of the empirical logit estimator [i.e., + 0.5 to each cell], on the other hand, is sufficient erratic that the possibility of correction seems remote.
-
-> Breslow (1981, Biometrika 68, 73-84) has shown that the Mantel-Haenszel odds ratio is a consistent estimator of a common odds ratio in sparse stratifications (Greenland, S. & Robins, J. M. Biometrics 41, 55–68 (1985).)
-
-The Mantel-Haenszel estimator is an estimator of the common odds ratio for $2 \times 2 \times K$ tables. Therefore, using the MH estimator requires the assumption that all $2 \times 2$ tables have the same underlying odds ratio. The strata for co-methylation would be 'sample', 'IPD' and possibly 'region', where region is something like 'UMRs, LMRs, PMRs and other' or 'CpG island and non-island'.
-
-Some good notes on MH estimator [http://isites.harvard.edu/fs/docs/icb.topic79671.files/stratcch1.pdf](http://isites.harvard.edu/fs/docs/icb.topic79671.files/stratcch1.pdf).
-
-An offset of 0.5 eliminates the first-order bias of the maximum likelihood estimator of the (log) odds ratio (Walter, S. D. Biostatistics (1987).)
-
-Regarding the effect of the homogeneity on the Mantel-Haenszel estimator, Greenland, S. Stat Med 1, 217–227 (1982):
-
-> Under the homogeneity assumption, OR^MH is an almost fully efficient estimator of the common value, and remains a consistent estimator of this value even with sparse data, i.e. when the fineness of stratification results in many small cell counts. __As shown later, its convergence properties under heterogeneity are not as desirable, although even in this case it remains insensitive to small cells.__ [emphasis added]
-
-The _Miettenen_ estimator is like a generalised form of the Mantel-Haenszel estimator, but assumes each cell count is greater than approximately 4 (Greenland, S. Stat Med 1, 217–227 (1982)).
-
-## Plan of attack
-
-Following discussion with Terry (2015-04-21), this is my plan of attack to finish this chapter and the `methsim` chapter.
-
-- [x] Finish reading Greenland (1982).
-  - What happens with the MH estimator when the common odds ratio assumption is invalid. Is there a better estimator in this setting?
-
-  > As a consequence, when there is heterogeneity, the expectation of MH varies with the overall and stratum-specific case-control ratios. The usual common odds ratio estimators share this disconcerting property \citep{Greenland:1982uk}.
-
-  In contrast to the MH estimator, the Miettenen estimator consistently estimates meaningful epimiological parameters. However, it "[requires] consideration in the selection of the weights".
-
-- Run Woolf's test or Breslow-Day test of homogeneity of odds ratios (noting that these are not powerful tests).
-
-__In fact, Breslow himself advocates for the Tarone statistic in place of the Breslow-Day statistic (Breslow, N. E. JASA 91, 14–28 (1996)). Also, Woolf's test, Breslow-Day and Tarone's statistic are only appropriate in Asymptopia I (a small number of tables with large frequencies) and not in Asymptopia II (a large number of tables with small frequencies); see Liang and Self (1985) for Asymptopia II (the scenario I am in)__
-
-Liang, K.-Y. & Self, S. G. Biometrika (1985) advocate for a conditional test of homogeneity of odds ratios when the data are sparse (Asymptopia II) but note that:
-
-> The problem with the conditional approach is its complexity. It is clear that when the sample size of each table increases, the computation of T2, T4 or T5 [ the conditional tests] becomes a burden which, eventually, will be prohibitive.
-This raises the question of how large the sample sizes in each table must be before the unconditional score test T1 is reasonable to use. Further simulation results suggest that even when the number of cases and controls are as small as 10 with as many as 10 tables, the large-sample chi-squared approximation is adequate in that the observed sizes are near to the nominal 0 05 level.
-
-I have $K \\g 10$ ($K$ = number of $2 \times 2$ tables) and $d \geq 10$ ($d$ = sequencing coverage), so the unconditional test may well be fine.
-
-- Algorithm: If the null of homogeneity of odds ratio is rejected => stratify further(?), otherwise compute MH or Miettenen estimates of the log odds ratio (and standard errors) for different stratification strategies (see [https://stat.ethz.ch/pipermail/r-help/2007-February/126254.html](https://stat.ethz.ch/pipermail/r-help/2007-February/126254.html))
-  - Stratify by IPD
-  - Stratify by IPD + chromosome
-  - Stratify by IPD + chromosome + chromosome arm
-  - Stratify by IPD + chromosome + chromosome arm + bin (Mb)
-  - Check whether the more-stratified estimates fall within a reasonable distance from the less-stratified estimates (i.e., with respect to standard errors of the less-stratified estimates).
-- Settle on the most appropriate level of stratification and apply to all samples.
-  - Discuss results.
-- `methsim`: Sample LORs from a Normal($\mu$, $\sigma^2$) distribution, where mu (resp. sigma) is the MH estimator (resp. standard error? empirical variance of stratified MH estimators?) of within-fragment co-methylation for that IPD and region-type.
+In summary, the results of this chapter demonstrate that DNA methylation has a  complex dependence structure and identify several drivers of these complexity. Co-methylation exists along individual DNA fragments and also manifests as correlations of aggregate measures of methylation. While it is the highest resolution assay for studying DNA methylation, bisulfite-sequencing can still only give a rather limited picture of co-methylation, particularly of within-fragment co-methylation. Data from longer reads will be immensely useful in to advancing our understanding of DNA methylation dynamics. In particular, reads that can span multiple nucleosomes will allow for co-methylation to be better tied in with, and expand upon, existing results on the relationship between nucleosomes and DNA methylation. Until such data are available, we can try to learn more about plausible models of DNA co-methylation through computational methods such as the simulation method described in the next chapter.
