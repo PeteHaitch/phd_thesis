@@ -86,8 +86,8 @@ The data are from three human donors across four different tissues, for a total 
 
 - _BUF_: Buffy coat layer, which are leukocytes and platelets derived by centrifugation of a whole blood sample.
 - _SA_: Subcutaneous adidose tissue, which is fat found just below the skin. Unlike visceral adipose tissue, subcutaneous adipose tissue is thought to be protective against obesity-related metabolic dysfunction \citep{Chau:2014do}.
-- _VA_: Visceral adipose tissue, which is located inside the abdominal cavity, packed between the organs and is associated with metabolic dysfunction \citep{Chau:2014do}.
-- _VAT_: Visceral adipocytes, which are derived from the VA tissue.
+- _VA_: Visceral adipocytes, which are derived from _VAT_.
+- _VAT_: Visceral adipose tissue, which is located inside the abdominal cavity, packed between the organs and is associated with metabolic dysfunction \citep{Chau:2014do}.
 
 The data are summarised in Table \ref{tab:EPISCOPE_dataset}.
 
