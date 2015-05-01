@@ -26,9 +26,14 @@ The genome is the genetic material of an organism. In most organisms, the genome
 
 \subsection{DNA}\label{sec:DNA}
 
-The double helix is the most common, and most famous, structure of DNA. In the double helix, the two strands of DNA run in opposite directions to each other and are therefore _anti-parallel_. One strand is called the 5' strand (pronounced "5 prime strand" and also known as the sense strand, Crick strand or top strand) and the other strand called the 3' strand (pronounced "3 prime strand" and also known as the antisense strand, Watson strand or bottom strand). Along each strand of the double helix are the four DNA nucleobases (_bases_): adenine (_A_), cytosine (_C_), guanine (_G_) and thymine (_T_). These bases form _complementary_ base pairings, _A_ with _T_ and _C_ with _G_, along the DNA double helix. This is illustrated in Figure \ref{fig:double_helix}.
+The double helix is the most common, and most famous, structure of DNA. In the double helix, the two strands of DNA run in opposite directions to each other and are therefore _anti-parallel_. One strand is called the 5' strand (pronounced "5 prime strand" and also known as the sense strand, Crick strand or top strand) and the other strand called the 3' strand (pronounced "3 prime strand" and also known as the antisense strand, Watson strand or bottom strand). Along each strand of the double helix are the four DNA nucleobases (_bases_): adenine (_A_), cytosine (_C_), guanine (_G_) and thymine (_T_). These bases form _complementary_ base pairings, _A_ with _T_ and _C_ with _G_, along the DNA double helix. This is illustrated in Figure \ref{fig:dna_simple2}.
 
-![Simple diagram of double-stranded DNA showing complementary base pairings. By Forluvoft (Own work) [Public domain], via Wikimedia Commons [http://commons.wikimedia.org/wiki/File%3ADNA_simple2.svg](http://commons.wikimedia.org/wiki/File%3ADNA_simple2.svg)\label{fig:double_helix}](../figures/DNA_simple2.pdf)
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.7\textwidth]{../figures/DNA_simple2.pdf}
+\caption[DNA double helix]{Simple diagram of double-stranded DNA showing complementary base pairing. By Forluvoft (Own work) [Public domain], via Wikimedia Commons \url{http://commons.wikimedia.org/wiki/File\%3ADNA_simple2.svg}}
+\label{fig:double_helix}
+\end{figure}
 
 A gene is a sequence of DNA that is _transcribed_ to produce a functional product in the form of ribonucleic acid, _RNA_. RNA may in turn be translated into a protein sequence or perform other roles in the regulation of gene expression. It is important to note here than not all DNA is transcribed into RNA, which is not to say that untranscribed DNA is unimportant. For instance, there are untranscribed _regulatory sequences_ of DNA that determine whether a nearby gene is transcribed. There is also _junk DNA_ that is of little consequence to the organism \citep{Alberts:2007vj}. Conversely, not all transcribed DNA is a gene. DNA transcription is _permissive_ and there are many DNA sequences that are transcribed by accident or in error.
 
@@ -137,7 +142,7 @@ The typical site of DNA methylation is at the C5 carbon position of a cytosine b
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.3\textwidth]{../figures/5-Methylcytosine.pdf}
-\caption{Chemical structure of 5-methylcytosine. "5-methylcytosine". By Yikrazuul (Own work) [Public domain], via Wikimedia Commons \url{http://commons.wikimedia.org/wiki/File:5-Methylcytosine.svg}}
+\caption[Chemical structure of 5-methylcytosine]{Chemical structure of 5-methylcytosine. "5-methylcytosine". By Yikrazuul (Own work) [Public domain], via Wikimedia Commons \url{http://commons.wikimedia.org/wiki/File:5-Methylcytosine.svg}}
 \label{fig:5mC}
 \end{figure}
 
@@ -160,7 +165,7 @@ One reason for the relative scarcity of CpGs is that methylated cytosines can sp
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/dinucleotide_frequency_hg19.pdf}
-\caption{Observed:expected ratio of dinucleotides in the human reference genome (hg19). The expected frequency is computed under an 'independence' model, based on the observed frequencies of each base.}
+\caption[Dinucleotide frequencies in the human genome]{Observed:expected ratio of dinucleotides in the human reference genome (hg19). The expected frequency is computed under an 'independence' model, based on the observed frequencies of each base.}
 \label{fig:dinucleotide_frequency_hg19}
 \end{figure}
 
@@ -170,7 +175,7 @@ One way to explore the distribution of CpGs in the human genome is to look at th
 
 \begin{figure}[htbp]
 \includegraphics[width=\textwidth]{../figures/IPD_ECDF_hg19.pdf}
-\caption{Plot of the empirical cumulative distribution function of distance between adjacent CpGs in the human reference genome (hg19). The observed distances are contrasted with those under the 'expected' model whereby CpGs are distributed uniformly at random with probability equal to the observed frequency of Cpgs on each chromosome.}
+\caption[ECDF of distances between CpGs in hg19]{Plot of the empirical cumulative distribution function of distance between adjacent CpGs in the human reference genome (hg19). The observed distances are contrasted with those under the 'expected' model whereby CpGs are distributed uniformly at random with probability equal to the observed frequency of Cpgs on each chromosome.}
 \label{fig:IPD_ECDF_hg19}
 \end{figure}
 
@@ -178,7 +183,7 @@ Figure \ref{fig:IPD_frequency_polygon_hg19} is an alternative way to visualise t
 
 \begin{figure}[htbp]
 \includegraphics[width=\textwidth]{../figures/IPD_frequency_polygon_hg19.pdf}
-\caption{The frequency of the observed distances between adjacent CpGs in the human reference genome (hg19).}
+\caption[Frequency of distances between CpGs in hg19]{The frequency of the observed distances between adjacent CpGs in the human reference genome (hg19).}
 \label{fig:IPD_frequency_polygon_hg19}
 \end{figure}
 
@@ -303,7 +308,7 @@ When bisulfite-treated DNA is amplified by PCR, the uracils are converted to thy
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/bisulfite-conversion.pdf}
-\caption{The effect of bisulfite-treatment of DNA. The double-stranded DNA is denatured and each strand undergoes bisulfite-treatment. Methylated cytosines remain as cytosines while unmethylated cytosines become uraciles. These bisulfite-converted DNA strands then undergo PCR amplification which converts the uracils to thymines. Note that while there are four possible PCR products, some bisulfite-sequencing protocols do not sample PCR products from the \textit{CTOT} or \textit{CTOB} strands. \textit{OT} = original top strand; \textit{OB} = original bottom strand; \textit{CTOT} = complementary to the original top strand; \textit{CTOB} = complementary to the original bottom strand. This figure is adapted from \citet{Krueger:2012ks}.}
+\caption[Schematic of bisulfite-conversion]{The effect of bisulfite-treatment of DNA. The double-stranded DNA is denatured and each strand undergoes bisulfite-treatment. Methylated cytosines remain as cytosines while unmethylated cytosines become uraciles. These bisulfite-converted DNA strands then undergo PCR amplification which converts the uracils to thymines. Note that while there are four possible PCR products, some bisulfite-sequencing protocols do not sample PCR products from the \textit{CTOT} or \textit{CTOB} strands. \textit{OT} = original top strand; \textit{OB} = original bottom strand; \textit{CTOT} = complementary to the original top strand; \textit{CTOB} = complementary to the original bottom strand. This figure is adapted from \citet{Krueger:2012ks}.}
 \label{fig:bisulfite-conversion}
 \end{figure}
 
@@ -325,6 +330,8 @@ Whole-genome bisulfite-sequencing remains an expensive assay, which limits its u
 
 \begin{table}[h]
 \centering
+\caption[Percentage of reads without CpGs]{The percentage of reads that do not contain any CpGs for each sample in the \emph{Lister} dataset. Paired-end reads are counted as a single read and as such have a lower percentage of reads without CpGs. See Chapter \ref{chap:datasets} for a description of the \emph{Lister} dataset.}
+\label{tab:reads_without_cpgs}
 \begin{tabular}{@{}rc@{}}
 \toprule
 Sample              & Reads with no CpG \\ \midrule
@@ -346,8 +353,6 @@ H1\_r2              & $59 \%$                \\
 H1\_r1              & $62 \%$                \\
 HSF1                & $72 \%$                \\ \bottomrule
 \end{tabular}
-\caption{The percentage of reads that do not contain any CpGs for each sample in the \emph{Lister} dataset. Paired-end reads are counted as a single read and as such have a lower percentage of reads without CpGs. See Chapter \ref{chap:datasets} for a description of the \emph{Lister} dataset.}
-\label{tab:reads_without_cpgs}
 \end{table}
 
 Several assays have been developed to perform targeted high-throughput bisulfite-sequencing. The targeted nature of these assays are their obvious advantage and disadvantage; only a subset of the genome needs be sequenced but you only obtain information about methylation for that subset. Depending on the experiment, this tradeoff may be worthwhile, and these assays have been successfully used in a number of studies such as the BLUEPRINT Epigenome project ([http://www.blueprint-epigenome.eu](http://www.blueprint-epigenome.eu)) and the NIH Roadmap Epigenomics Mapping Consortium ([http://www.roadmapepigenomics.org](http://www.roadmapepigenomics.org))
@@ -381,7 +386,7 @@ Another disadvantage of bisulfite-conversion assays is that they require knowled
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/bisulfite_CT_SNP.pdf}
-\caption{Sequence variation between the reference genome and the sample's genome can result in incorrect inference about the methylation state of the sample's genome. The locus in orange is a cytosine in the reference genome but a thymine in the sample's genome. Because the read is compared against the reference genome, it may incorrectly inferred to be an unmethylated cytosine. The locus in purple is a thymine in the reference genome but an unmethylated cytosine in the sample's genome. Because the read is compared against the reference genome it may incorrectly inferred to be a thymine.}
+\caption[Sequence variation confounds methylation calling]{Sequence variation between the reference genome and the sample's genome can result in incorrect inference about the methylation state of the sample's genome. The locus in orange is a cytosine in the reference genome but a thymine in the sample's genome. Because the read is compared against the reference genome, it may incorrectly inferred to be an unmethylated cytosine. The locus in purple is a thymine in the reference genome but an unmethylated cytosine in the sample's genome. Because the read is compared against the reference genome it may incorrectly inferred to be a thymine.}
 \label{fig:bisulfite_CT_SNP.pdf}
 \end{figure}
 
