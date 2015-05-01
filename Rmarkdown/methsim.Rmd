@@ -15,22 +15,10 @@ bibliography: ../latex/phd_thesis.bib
 \chapter{A simulation model of DNA methylation data}\label{chap:methsim}
 
 \begin{chapabstract}
-I present the `methsim` software to simulate DNA methylation data. `methsim` incorporates a model of within-fragment co-methylation and simulates individual sequencing reads, which sets it apart from existing software. I describe the statistical model behind `methsim` and its software implementation. Finally, I provide examples of how `methsim` can be used to learn about DNA methylation and how it might be used to develop simulation studies to compare competing analysis methods.
+This chapter describes the `methsim` software to simulate DNA methylation data. `methsim` incorporates a model of within-fragment co-methylation and simulates individual sequencing reads, which sets it apart from existing software. We explore different parameter choices and highlight promising directions of research, such as using `methsim` to simulate data in order to compare methods for identifying differential methylation.
 \end{chapabstract}
 
-1. Introduction
-  - Why simulation?
-2. Literature review
-  - Simulating reads vs. $\beta$-values
-  -
-3. Methods
-  - Implementation
-4. Case study
-5. Conclusions
-
 \section{Introduction}\label{sec:methsim_introduction}
-
-- [x] DONE
 
 It can be difficult to design an experiment that can be used for validating or benchmarking different analysis strategies. In fact, the huge variety of experimental factors, and their possible values, can make such a task infeasible. But perhaps the bigger hurdle is that there are not attractive experiments to perform; why spend your time and money on an experiment where you 'know the answer' when you could be spending that same time and money on investigating some new biology? In these scenarios and others, simulation studies play a vital role in applied statistics, where they can be used in the development, validation and benchmarking of different analysis methodologies.
 
@@ -50,8 +38,6 @@ There is a lack of gold-standard datasets in the field of DNA methylation for th
 
 \section{Literature review}\label{sec:methsim_lit_review}
 
-- [x] DONE
-
 The simulation methods described here can be thought to lie on a spectrum with model-based methods at one end and re-sampling based methods at the other end[^model-based]. It is often simpler to simulate from a model-based simulation, particularly if the model is a well-studied parametric distribution. However, this simplicity often comes at the cost of increased assumptions, whose validity may be questionable. Simulations based on sampling of real data may reduce the number of assumptions required. However, care must be taken in selecting the units to be sampled so that the sampling process is efficient and so that the sampled data don't grossly distort within- and between-sample dependencies.
 
 Any procedure for simulating DNA methylation data should obviously be tailored to its purpose. For example, if the study is comparing alignment software for bisulfite-sequencing data then the simulation software should produce `FASTQ` files with realistic base quality score profiles and sequencing errors. On the other hand, it may be sufficient to simulate some aggregate data, such as $\beta$-values, when the simulated data are to be used for comparing methods to identify differential methylation.
@@ -60,7 +46,6 @@ Any procedure for simulating DNA methylation data should obviously be tailored t
 
 \subsection{Methods for simulating bisulfite-sequencing reads}
 
-- [x] DONE
 
 All of the currently available methods for simulating bisulfite-sequencing reads are designed for the comparison of alignment strategies and are model-based. These are not suitable for comparisons of downstream analysis methods.
 
@@ -80,13 +65,11 @@ Other software for simulating individual bisulfite-sequencing reads are `FastqTo
 
 \subsection{Methods for simulating aggregate methylation levels}
 
-- [x] DONE
-
 The most widely studied downstream analysis problem is that of identifying differential methylation, which is done by comparing summary measures of methylation, such as $\beta$-values, between two or more groups. It is therefore generally not necessary to simulate individual reads, but is sufficient to directly simulate these aggregated measures, when simulating data for these studies.
 
-Most papers that propose a new method for downstream analysis of bisulfite-sequencing data include a simulation section. Generally, such a simulation method exists to support claims about the performance of the proposed method and is not a major feature of the paper. Consequently, the simulation model is often only briefly described and a software implementation is rarely made available. In fact, until recently, of the methods reviewed in this section, only that of \citet{Lacey:2013iy} had a software implementation available[^WGBSSuite]. As I was writing this chapter, the `WGBSSuite` software was published \citep{Rackham:2015bv}. `WGBSSuite` is the only software specifically published for the purpose of simulating whole-genome bisulfite-sequencing data when comparing methods for identifying differential methylation. `WGBSSuite` is available for download as a collection of R scripts[^WGBSSuite].
+Most papers that propose a new method for downstream analysis of bisulfite-sequencing data include a simulation section. Generally, such a simulation method exists to support claims about the performance of the proposed method and is not a major feature of the paper. Consequently, the simulation model is often only briefly described and a software implementation is rarely made available. In fact, until recently, of the methods reviewed in this section, only that of \citet{Lacey:2013iy} had a software implementation available. As I was writing this chapter, the `WGBSSuite` software was published \citep{Rackham:2015bv}. `WGBSSuite` is the only software specifically published for the purpose of simulating whole-genome bisulfite-sequencing data when comparing methods for identifying differential methylation. `WGBSSuite` is available for download as a collection of R scripts[^WGBSSuite].
 
-[^WGBSSuite]: Unfortunately, `WGBSSuite` is not available as an R package, which is the "fundamental unit of reproducible R code" ([http://r-pkgs.had.co.nz/](http://r-pkgs.had.co.nz/)) and would greatly simplify the installation and use of the software. Furthermore, no licence file is included in the download, meaning that it is unclear how the user is permitted to use `WGBSSuite` and whether they may modify or redistribute the code. (__TODO: Update if I received a response. I emailed the developer, Owen Rackham, asking him to add a licence. He is considering my request.__)
+[^WGBSSuite]: Unfortunately, `WGBSSuite` is not available as an R package, which is the "fundamental unit of reproducible R code" ([http://r-pkgs.had.co.nz/](http://r-pkgs.had.co.nz/)) and would greatly simplify the installation and use of the software. Furthermore, no license file is included in the download, meaning that it is unclear how the user is permitted to use `WGBSSuite` and whether they may modify or redistribute the code.
 
 Fortunately, these simulation methods follow a common framework, even if the details differ:
 
@@ -99,15 +82,13 @@ A popular choice of parametric model in this framework is the beta-binomial mode
 
 \subsubsection{Simulating methylation loci}
 
-- [x] DONE
-
 \citet{Lacey:2013iy} and \citet{Rackham:2015bv} are notable in that they choose to simulate the locations of CpGs rather than simply using their locations in a reference genome. Both papers use hidden Markov models to simulate genomes with regions of high and low CpG density.
 
-I do not think this a useful or necessary step. In fact, I think it is counterproductive. While in truth the set of methylation loci do vary between samples due to genetic variation, it is a reasonable approximation to consider the positions of these loci as fixed. If sequence variation is required then it is easily accommodations by sampling from the set of methylation loci in the reference genome. And it is counterproductive because the aim of the simulation model is to realistically simulate methylation _levels_, not the _locations_ of these loci. Furthermore, almost all downstream analyses are _reference-based_ (see Section \ref{sec:methylated_or_unmethylated}), so it is desirable to know how these methods perform with respect to the relevant reference genome, not some simulated genome in which the location of methylation loci vary from simulation to simulation.
+I do not think this a useful or necessary step and may even be counterproductive. While in truth the set of methylation loci do vary between samples due to genetic variation, it is a reasonable approximation to consider the positions of these loci as fixed. If sequence variation is required then it is easily accommodations by sampling from the set of methylation loci in the reference genome. Furthermore, the aim of the simulation model is to realistically simulate methylation _levels_, not the _locations_ of these loci.
+
+Almost all downstream analyses are _reference-based_ (see Section \ref{sec:methylated_or_unmethylated}), so it is desirable to know how these methods perform with respect to the relevant reference genome, not some simulated genome in which the location of methylation loci vary from simulation to simulation.
 
 \subsubsection{Simulating $B_{i, j}$}
-
-- [x] DONE
 
 Recall that $B_{i, j}$ is the underlying _true_ methylation level at locus $i$ in sample $j$. In the context of simulating data for comparing differential methylation calling methods, we want these to be group-specific. That is, we want to specify $B_{i, j^{k}}$, where $j^{k}$ indicates that sample $j$ comes from group $k$. For non-differentially methylated loci all $k$ groups have identical $B_{i, j^{k}} = B_{i, j^{0}}$; differentially methylated loci are simulated by setting $B_{i, j^{k}} \neq B_{i, j^{k'}}$ for some $k \neq k'$.
 
@@ -123,21 +104,15 @@ An alternative to specifying a parametric distribution for the $B_{i, j}$ is to 
 
 \subsubsection{Simulating sequence depth}
 
-- [x] DONE
-
-The sequencing depth at each methylation loci, $m_{i, j} + u_{i, j}$, may be sampled from real data \citep[e.g.]{Feng:2014iq, Chen:2014jb, Dolzhenko:2014bo}, or simulated from a parametric distribution such as the Poisson \citep{Rackham:2015bv}, a rounded Gaussian distribution \citep{Xu:2013eg}, or a rounded mixture of Gamma distributions \citep{Lacey:2013iy}.
+The sequencing depth at each methylation loci, $d_{i, j}$, may be sampled from real data \citep[e.g.]{Feng:2014iq, Chen:2014jb, Dolzhenko:2014bo}, or simulated from a parametric distribution such as the Poisson \citep{Rackham:2015bv}, a rounded Gaussian distribution \citep{Xu:2013eg}, or a rounded mixture of Gamma distributions \citep{Lacey:2013iy}.
 
 The most sophisticated approach to simulation of sequencing depth in bisulfite-sequencing experiments is given by \citet{Lacey:2013iy}. In addition to using a mixture of distributions to capture both the low-coverage and high-coverage modes observed in RRBS sequencing coverage, \citet{Lacey:2013iy} model the correlation of sequencing depth across samples for a given region. They do this by using a Normal copula to make the set of sequencing depths a jointly dependent set of random variables. While this is undoubtably sophisticated, the effect of correlated versus uncorrelated sequencing depths in a simulation model is not explored in the paper and so the benefits are unclear. Moreover, it is simpler, and likely more computationally efficient, to include such correlations by a sensible sampling of sequencing depths from real data.
 
 \subsubsection{Simulating the observed methylation levels}
 
-- [x] DONE
-
-The final step is to simulate the read counts, $M_{i, j}$ and $U_{i, j}$. These are based on the true underlying methylation level, $B_{i, j}$, and the sequencing depth, $m_{i, j} + u_{i, j}$. In the beta-binomial model this is done by binomial sampling where $M_{i, j} \eqd binomial(m_{i, j} + u_{i, j}, B_{i, j})$. In addition to binomial read sampling, the `WGBSSuite` software also implements (truncated) negative binomial read sampling \citep{Rackham:2015bv}, which essentially introduces overdispersion in the read counts.
+The final step is to simulate the read counts, $M_{i, j}$ and $U_{i, j}$. These are based on the true underlying methylation level, $B_{i, j}$, and the sequencing depth, $d_{i, j}$. In the beta-binomial model, this is done by binomial sampling where $M_{i, j} \eqd binomial(m_{i, j} + u_{i, j}, B_{i, j})$. In addition to binomial read sampling, the `WGBSSuite` software also implements (truncated) negative binomial read sampling \citep{Rackham:2015bv}, which essentially introduces overdispersion in the read counts.
 
 \subsubsection{Simulating differentially methylated regions}
-
-- [x] DONE
 
 As we have seen, the simulation of a differentially methylated locus is straightforward; for a given locus ($i$) simply vary $B_{i, j_{k}}$ across the $k$ groups. The simulation of a differentially methylated region is more complex.
 
@@ -152,11 +127,9 @@ In principal we can simulate a differentially methylated region by simply simula
 
 \subsection{Simulating co-methylation}
 
-- [x] DONE
-
 A key feature ignored by the majority of simulation methods, with the notable exceptions of \citet{Lacey:2013iy} and \citet{Rackham:2015bv}, is co-methylation. The methylation states of neighbouring loci are highly dependent and, consequently, the $B_{i, j}$ of nearby loci are highly dependent. To be clear, the majority of studies using simulated DNA methylation data have failed to model a very important feature of DNA methylation data, co-methylation.
 
-As demonstrated in Chapter \ref{chap:co-methylation}, the physical process of co-methylation is at the level of individual DNA fragments, not at the level of aggregate methylation levels. The observed correlations of $\beta$-values are driven by this within-fragment co-methylation. However, a simulation model of DNA methylation data need not induce correlations at the level of individual DNA fragments. Indeed, if the model does not simulate the individual fragments then it cannot simulate within-fragment co-methylation, but it still may be able to capture correlations of methylation levels by inducing dependence in the $B_{i, j}$. For example, under the Beta-Binomial model these correlations could be induced by forcing the $\mu_{i, j}$ to be spatially dependent. This idea takes its inspiration from \citet{Jaffe:2012gx} who simulate spatially correlated DNA methylation microarray data by imposing an autocorrelation structure via a lag-1 autoregressive model of the simulated $\beta$-values.
+Most simulation methods do not simulate individual reads and so cannot simulate within-fragment co-methylation. Instead, they capture correlations of methylation levels by inducing dependence in the $B_{i, j}$. For example, under the Beta-Binomial model these correlations could be induced by forcing the $\mu_{i, j}$ to be spatially dependent. This idea takes its inspiration from \citet{Jaffe:2012gx} who simulate spatially correlated DNA methylation microarray data by imposing an autocorrelation structure via a lag-1 autoregressive model of the simulated $\beta$-values.
 
 \citet{Lacey:2013iy} take a different approach, but one that still results in correlated $B_{i, j_{k}}$ across $i$, within group $k$. To begin, they compute $\beta$-values from chromosome 11 for a single normal myotube cell line that was sequenced with RRBS. They then fit a Gaussian variogram to these $\beta$-values, which shows "a strong correlation for sites in close proximity, decaying to near independence at distances beyong 3000 bp". To simulate spatially correlated $B_{i, j}$ they use an iterative process:
 
@@ -169,13 +142,9 @@ The second step uses a method published by \citet{Zaykin:2002ko}. The transforme
 
 \subsubsection{Other model-based simulations}
 
-- [x] DONE
-
 A separate class of model-based simulation methods are those that simulate the $\beta$-values directly, i.e., without simulating sequencing depth \citet[e.g.,]{Jaffe:2012gx, Chen:2013eh, Chen:2014jb, }. These models are designed for simulating microarray data and not sequencing data, since they do not include the variability due to variation in sequencing depth. Of these methods, only \citet{Jaffe:2012gx} simulate correlation amongst the $B_{i, j_{k}}$.
 
 \subsection{Methods based on re-sampling real data}
-
-- [x] DONE
 
 A simulation may also be based entirely on re-sampling of real data[^synthetic]. This type of simulated data is attractive because through careful sampling it can capture behaviour that is otherwise very difficult, if not impossible, to capture in a parametric model. At the same time, however, if the sampling units are poorly chosen or the sampling strategy is incorrect, then it may ignore these same features or, worse still, introduce artefacts into the simulated data.
 
@@ -193,8 +162,6 @@ Due to the correlation structure of the $\beta$-values, the co-methylation, it i
 
 \subsection{Summary}
 
-- [x] DONE
-
 My initial interest in simulation methods was to explore models of co-methylation, particularly at the level of individual DNA fragments. This requires two key capabilities:
 
 1. Simulation of individual reads.
@@ -206,8 +173,6 @@ None of the published simulation methods satisfied both these requirements. This
 
 \section{Methods}
 
-- [x] DONE
-
 Simulating data with `methsim` involves 3 steps:
 
 1. Simulating the true methylome of each sample.
@@ -216,19 +181,19 @@ Simulating data with `methsim` involves 3 steps:
 
 `methsim` requires an input dataset from which to estimate key parameters. For the input dataset, `methsim` requires the methylation patterns at various sized m-tuples, which can be produced by the `methtuple` software. `methsim` can currently only simulate CpG methylation and assumes that the methylation states of all CpGs are strand symmetric.
 
+In what follows we will simulate data based on the _ADS_ methylome from the _Lister_ dataset. We focus on simulating autosomal data, since the sex chromosomes and mitochondrial DNA have very different methylation dynamics.
+
 \subsection{Implementation}
 
-- [x] DONE
-
-`methsim` is written in R and builds on the `MethylationTuples` package described in Chapter \ref{chap:wgbs_downstream_analyses}, as well as several R packages available on Bioconductor and CRAN (see the `DESCRIPTION` file for a complete list.).
+`methsim` is written in R and builds on the `MethylationTuples` package described in Chapter \ref{chap:wgbs_downstream_analyses}, as well as several R packages available on Bioconductor and CRAN (see the `DESCRIPTION` file for a complete list.). It is currently a very experimental package and is therefore not yet published on Biocondutor, but its development can be followed at [https://github.com/PeteHaitch/methsim](https://github.com/PeteHaitch/methsim).
 
 `methsim` makes extensive use of the S4 object system in R. The most important classes defined by `methsim` are `MethylomeParam`, `SimulatedMethylome`, `WGBSParam` and `SimulatedBS`. The most important methods are the `simulate()` methods defined for the `MethylomeParam` and `WGBSParam` classes.
 
 The `MethylomeParam` object contains the empirical distributions of key statistics from which the parameters for simulating the 'true' methylome are sampled. Therefore, the `MethylomeParam` should be based on data from a relevant sample. To help a new user get started, `methsim` includes `MethylomeParam` objects for the _ADS_, _ADS-adipose_ and _ADS-iPSC_ samples from the _Lister_ dataset. Alternatively, the user may process the `BAM` file for their sample with `methtuple` and then use the helper functions in `methsim` to construct a `MethylomeParam` object based on their sample of interest.
 
-To simulate a 'true' methylome, the user runs the `simulate()` method on the `SimulateMethylomeParam` object. This returns a `SimulatedMethylome` object.
+To simulate a true methylome, the user runs the `simulate()` method on the `MethylomeParam` object. This returns a `SimulatedMethylome` object.
 
-Once we have a 'true' methylome, we can simulate data from it. Currently, `methsim` supports the simulation of whole-genome bisulfite-sequencing reads via the `WGBSParam` class and associated `simulate()` method. Other assays, such as RRBS or microarrays may be supported in future releases. A `WGBSParam` object will contain a `SimulatedMethylome` object, along with parameters such as the read-length, sequencing coverage and error rate of the data to be simulated. When applied to a `WGBSParam` object, which includes a `SimulatedMethylome` object, the `simulate()` method can return a `SimulatedBS` object or a `MethylationTuples::MethPat` object[^namespace2]. A `SimulatedBS` object contains all simulated reads and is generally much larger than a `MethylationTuples::MethPat` object, which summarises the simulated reads for m-tuples of a particular size[^methpat]. `methsim` also includes a helper function, `asMethPat()`, to coerce a `SimulatedBS` object to a `MethylationTuples::MethPat` object.
+Once we have a true methylome, we can simulate data from it. `methsim` currently supports the simulation of whole-genome bisulfite-sequencing reads via the `WGBSParam` class and associated `simulate()` method. Other assays, such as RRBS or microarrays could in principle be supported. A `WGBSParam` object will contain a `SimulatedMethylome` object, along with parameters such as the read-length, sequencing coverage and error rate of the data to be simulated. When applied to a `WGBSParam` object, the `simulate()` method returns a `SimulatedBS` object or a `MethylationTuples::MethPat` object[^namespace2]. A `SimulatedBS` object contains all simulated reads and is generally a large object (on the order of $10$ GB). By contrast, the `MethylationTuples::MethPat` object, which summarises the simulated reads for m-tuples of a particular size[^methpat], is much smaller (on the order of $100$ MB) but does not contain the full information of the simulation since read-level data are lost. `methsim` also includes a helper function, `asMethPat()`, to coerce a `SimulatedBS` object to a `MethylationTuples::MethPat` object.
 
 [^namespace2]: This uses the NAMESPACE notation of R: `MethylationTuples::MethPat` can be read as "the `MethPat` class is part of the `MethylationTuples` package". See Section \ref{sec:MethylationTuples} for details of this class.
 
@@ -236,31 +201,27 @@ Once we have a 'true' methylome, we can simulate data from it. Currently, `meths
 
 \subsection{Simulating a single methylome}
 
-- [ ] DONE
-
-As we have seen, DNA methylation is highly heterogeneous along the genome. Nonetheless, there are clear regions of "similarity", such as the unmethylated CpG islands and long partially methylated domains. In these locally-similar regions we might hope to model DNA methylation by a simple parametric model. `methsim` is based on the idea of segmenting the genome into 'regions of similarity', fitting a simple model to each region and then 'stitching' the results together to form the true methylome.
+As we have seen, DNA methylation is highly heterogeneous along the genome. Nonetheless, there are clear regions of "similarity", such as the unmethylated CpG islands and long partially methylated domains. In these locally-similar regions we might hope to model DNA methylation by a simple parametric model. `methsim`, like other simulation methods, is based on the idea of segmenting the genome into 'regions of similarity', fitting a simple model to each region and then 'stitching' the results together to form the true methylome.
 
 The idea of segmenting a globally heterogenous stochastic process into a series of locally homogeneous processes is not new. A hidden Markov model is an example of such a process; while the entire process may highly heterogeneous, conditional on the hidden states the process may be homogeneous. Hidden Markov models, and other models assuming local similarity in spite of global heterogeneity, have been used with great success in bioinformatics.
 
 `methsim` takes the following approach to simulating the true underlying methylome for each sample:
 
 1. Segment the methylome into regions of similarity.
-2. Sample parameters for each methylation locus, $i$, based on step 1.
+2. Sample parameters for each methylation locus, $i$, based on the segmentation.
 
 I now describe each step in greater detail.
 
 \subsubsection{Segmenting the methylome}
 
-- [x] DONE
-
 `methsim` uses the the R/Bioconductor package, `MethylSeekR` \citep{Burger:2013kq}, to segment the input methylome into regions of similarity. `MethylSeekR` was developed to discover regulatory motifs from bisulfite-sequencing data by segmenting the methylome into unmethylated regions (\emph{UMR}s), lowly-methylated regions (\emph{LMR}s) and partially methylated regions[^pmds] (\emph{PMR}s). It does this using a two-stage algorithm applied to the $\beta$-values from a sample:
 
-[^pmds]: Partially methylated regions are also commonly known as partially methylated domains, but I refer to them as regions for consistency with UMRs and LMRs.
+[^pmds]: Partially methylated regions are also commonly known as partially methylated domains, but we will refer to them as 'regions' for consistency with UMRs and LMRs.
 
 1. Identify partially methylated regions. A summary statistic, $\alpha$, which is based on the $\beta$-values in a sliding window of 100 CpGs, is used to identify PMRs. Briefly, a two-state hidden Markov model is fit to the $\alpha$ values to identify PMRs and non-PMRs.
 2. Identify UMRs and LMRs. The PMRs are masked from the genome and simple heuristics are used to identify UMRs and LMRs based on the average $\beta$-values in a window and the number of CpGs in the window.
 
-`methsim` post-processes the segmentation provided by `MethylSeekR` to partition the methylome into regions of similarly, namely \emph{UMR}s, \emph{LMR}s, \emph{PMRS}s and \emph{other}s[^methylseekr_output]. Roughly speaking, _other_ regions are 'mostly methylated regions' (see Figures \ref{fig:EPISCOPE_beta_by_pm_boxplots}, \ref{fig:Lister_beta_by_pm_boxplots}, \ref{fig:Seisenberger_beta_by_pm_boxplots}, \ref{fig:Ziller_beta_by_pm_boxplots}), although \citet{Burger:2013kq} do not describe these regions as such.
+`methsim` post-processes the segmentation provided by `MethylSeekR` to partition the methylome into regions of similarity, namely \emph{UMR}s, \emph{LMR}s, \emph{PMRS}s and \emph{other}s[^methylseekr_output]. Roughly speaking, _other_ regions are 'mostly methylated regions' (see Figures \ref{fig:EPISCOPE_beta_by_pm_boxplots}, \ref{fig:Lister_beta_by_pm_boxplots}, \ref{fig:Seisenberger_beta_by_pm_boxplots}, \ref{fig:Ziller_beta_by_pm_boxplots}), although \citet{Burger:2013kq} do not describe these regions as such.
 
 [^methylseekr_output]: The output returned by `MethylSeekR` does not strictly partition the methylome since it is neither disjoint nor exhaustive.
 
@@ -268,17 +229,15 @@ While a tailored algorithm may improve this segmentation process, the result pro
 
 \subsubsection{Parameterising the model}
 
-`methsim` uses a two-state ($1 =$ methylated or $0 =$ unmethylated), one-step Markov chain to model $\mathbf{Z} = \{ \mathbf{Z_{h}} \}_{h = 1}^{h = n_{h}}$. This allows the incorporation of within-fragment co-methylation into the simulation. The choice of a one-step process is one of computational simplicity, although I will show that this is a reasonable approximation of within-fragment co-methylation.
+`methsim` uses a two-state ($1 =$ methylated or $0 =$ unmethylated), one-step Markov chain to model $\mathbf{Z} = \{ \mathbf{Z_{h}} \}_{h = 1}^{h = n_{h}}$. This allows the incorporation of within-fragment co-methylation into the simulation. The choice of a one-step process is one of computational simplicity and is a reasonable approximation for most of the genom given the available data (see Chapter \ref{chap:co-methylation}).
 
-In Chapter \ref{chap:co-methylation} I showed that the strength of within-fragment co-methylation varies as a function of the intra-pair distance and by the genomic context. I also showed that for a pair of CpGs separated by given IPD, and in the same genomic context, that there is a large amount of variability in the strength of within-fragment co-methylation.
-
-For these reasons I allow the transition probabilities, $\mathbf{p}$, to vary with $i$, that is, I allow the Markov chain to be spatially inhomogeneous. In particular, I allow the transition probabilities to depend on the intra-pair distance between the $i^{th}$ and $(i + 1)^{th}$ locus and on the region type, $r_{i}$ (_UMR_, _LMR_, _PMR_ or _other_), for this pair of loci[^context]. That is, $p_{i; a, b} = Pr(Z_{h, i + 1} = b | Z_{h, i} = a, IPD(i, i + 1), r_{i})$.
+In Chapter \ref{chap:co-methylation} we saw that the strength of within-fragment co-methylation varies as a function of the intra-pair distance and by the genomic context. For this reason I allow the transition probabilities, $\mathbf{p}$, to vary with $i$, that is, I allow the Markov chain to be spatially inhomogeneous. In particular, I allow the transition probabilities to depend on the intra-pair distance between the $i^{th}$ and $(i + 1)^{th}$ locus and on the region type, $r_{i}$ (_UMR_, _LMR_, _PMR_ or _other_), for this pair of loci[^context]. That is, $p_{i; a, b} = Pr(Z_{h, i + 1} = b | Z_{h, i} = a, IPD(i, i + 1), r_{i})$.
 
 [^context]: Actually, it only depends on the region of the $i^{th}$ locus. Most pairs of loci, $(i, i + 1)$, will lie in the same region. For pairs that span the boundary of two different regions I have arbitrarily chosen to use the region of the $i^{th}$ locus.
 
 The above-described model is not particularly amenable to analytical calculations due to the spatial inhomogeneity. It is, however, relatively simple to simulate realisations from this model, requiring only a single loop over the set of loci on each chromosome. For a chromosome containing $n$ methylation loci, there are $n - 1$ transition matrices to estimate or otherwise assign.
 
-Rather than directly modelling the transition probabilities, $\mathbf{p}$, `methsim` is parameterised $\mathbf{Z}$ by a vector of marginal probabilities, $\mathbf{B} = \{ Pr(Z_{i} = 1) \}$, and a vector of odds ratios, $\mathbf{\psi} = \{ \frac{Pr_{Z_{i + 1} = 1 | Z_{i} = 1} \times Pr_{Z_{i + 1} = 0 | Z_{i} = 0}}{Pr_{Z_{i + 1} = 1 | Z_{i} = 0} \times Pr_{Z_{i + 1} = 0 | Z_{i} = 1}} \} = \{ \frac{Pr_{Z_{i} = 1, Z_{i + 1} = 1} \times Pr_{Z_{i} = 0 , Z_{i + 1} = 0}}{Pr_{Z_{i} = 1 , Z_{i + 1} = 0} \times Pr_{Z_{i} = 0 , Z_{i + 1} = 1}} \}$. We can compute the transition probabilities, $\mathbf{p}$, from $\mathbf{B}$ and $\mathbf{\psi}$ as I now describe.
+Rather than directly modelling the transition probabilities, $\mathbf{p}$, `methsim` is parameterised by a vector of marginal probabilities, $\mathbf{B} = \{ Pr(Z_{i} = 1) \}$, and a vector of odds ratios, $\mathbf{\psi} = \{ \frac{Pr_{Z_{i + 1} = 1 | Z_{i} = 1} \times Pr_{Z_{i + 1} = 0 | Z_{i} = 0}}{Pr_{Z_{i + 1} = 1 | Z_{i} = 0} \times Pr_{Z_{i + 1} = 0 | Z_{i} = 1}} \} = \{ \frac{Pr_{Z_{i} = 1, Z_{i + 1} = 1} \times Pr_{Z_{i} = 0 , Z_{i + 1} = 0}}{Pr_{Z_{i} = 1 , Z_{i + 1} = 0} \times Pr_{Z_{i} = 0 , Z_{i + 1} = 1}} \}$. We can compute the transition probabilities, $\mathbf{p}$, from $\mathbf{B}$ and $\mathbf{\psi}$.
 
 For each 2-tuple, $(i, i + 1)$, `methsim` first constructs the joint probability matrix, $P_{i, i + 1}$ from the marginal probabilities, $B_{i}, B_{i + 1}$, and the odds ratio, $\psi_{i}$. The general form of $P_{i, i + 1}$ is shown below:
 
@@ -298,9 +257,11 @@ Let $B_{i} = 0.7$, $B_{i + 1} = 0.6$ and $\psi_{i, i + 1} = 2$. To begin the ite
 0.245 & 0.455
 \end{smallmatrix} \Bigr)$, to three decimal places of precision. It is easily verified that $P^{(*)}$ has the desired cross-ratio and marginal sums.
 
-Once $P_{i, i + 1}$ is computed, the desired transition probability is obtained by dividing the appropriate element of $P_{i, i + 1}$ by the appropriate marginal probability. To continue our example, suppose $Z_{i} = 0$, then the probability that $Z_{i + 1}$ is also to zero is given by $Pr(Z_{i + 1} = 0 | Z_{i} = 0) = \frac{Pr(Z_{i = 0}, Z_{i + 1} = 0)}{Pr(Z_{i} = 0)} = \frac{0.155}{0.3} = 0.517$ to three decimal places. In fact, `methsim` only stores $Pr(Z_{i + 1} = 1 | Z_{i} = 0)$ and $Pr(Z_{i + 1} = 1 | Z_{i} = 1)$ since Pr(Z_{i + 1} = 0 | Z_{i} = 0) = 1 - Pr(Z_{i + 1} = 1 | Z_{i} = 0)$ and $Pr(Z_{i + 1} = 0 | Z_{i} = 1) = 1 - Pr(Z_{i + 1} = 1 | Z_{i} = 1)$.
+Once $P_{i, i + 1}$ is computed, the desired transition probability is obtained by dividing the appropriate element of $P_{i, i + 1}$ by the appropriate marginal probability. To continue our example, suppose $Z_{i} = 0$, then the probability that $Z_{i + 1}$ is also zero is given by $Pr(Z_{i + 1} = 0 | Z_{i} = 0) = \frac{Pr(Z_{i = 0}, Z_{i + 1} = 0)}{Pr(Z_{i} = 0)} = \frac{0.155}{0.3} = 0.517$ (to three decimal places). In fact, `methsim` only stores $Pr(Z_{i + 1} = 1 | Z_{i} = 0)$ and $Pr(Z_{i + 1} = 1 | Z_{i} = 1)$ since Pr(Z_{i + 1} = 0 | Z_{i} = 0) = 1 - Pr(Z_{i + 1} = 1 | Z_{i} = 0)$ and $Pr(Z_{i + 1} = 0 | Z_{i} = 1) = 1 - Pr(Z_{i + 1} = 1 | Z_{i} = 1)$.
 
-To simulate values of $\mathbf{B}$ and $\mathbf{\psi}$, `methsim` uses the empirical distributions of their estimators, $\mathbf{\beta}$ and $\mathbf{\widehat{\psi}}$, in the input methylome. More specifically, $\mathbf{B}$ is based on $\beta_{i | r_{i}}$ and $\mathbf{\psi}$ is based on $\widehat{\psi_{IPD(i, i+1) | r_{i}}}$, the empirical distributions of $\beta_{i}$ and $\psi_{IPD(i, i + 1)}$ conditional on the region type of the $i^{th}$ locus, $r_{i}$, and the intra-pair distance of the the $i^{th}$ and $(i + 1)^{th}$ locus, $IPD(i, i+1)$, respectively. These empirical distributions are shown for the \emph{ADS} sample in Figures \ref{fig:ADS_beta_by_pm_boxplots} and __FIGURE__.
+The above-described model implicitly assumes that all $n_{h}$ haplotypes have the same marginal probabilities and co-methylation structure. We may extend this model to define $\mathbf{Z}$ as a _mixture_ of a small number of first-order Markov chains defined as in the above. Such a mixture model may be appropriate when simulating a sample that is a combination of cell types.
+
+To simulate values of $\mathbf{B}$ and $\mathbf{\psi}$, `methsim` uses the empirical distributions of their estimates, $\mathbf{\beta}$ and $\mathbf{\widehat{\psi}}$, in the input methylome. More specifically, $\mathbf{B}$ is based on $\beta_{i | r_{i}}$ (the empirical distribution of $\beta_{i}$ conditional on the region type of the $i^{th}$ locus, $r_{i}$) and $\mathbf{\psi}$ is based on $\widehat{\psi_{MH}}$. We have already seen many examples of the distribution of $\widehat{\psi_{MH}}$ in Chapter \ref{chap:co-methylation}. The empirical distributions $\beta_{i | r_{i}}$ for the _ADS_ sample are shown in Figure \ref{fig:ADS_beta_by_pm_boxplots}.
 
 \begin{figure}[!htb]
 \centering
@@ -309,27 +270,33 @@ To simulate values of $\mathbf{B}$ and $\mathbf{\psi}$, `methsim` uses the empir
 \label{fig:ADS_beta_by_pm_boxplots}
 \end{figure}
 
-__TODO: Figure of ADS within-fragment co-methylation__
+There are many ways to simulate values of $\mathbf{B}$ and $\mathbf{\theta} = \mathbf{log{\psi}}$ based on these empirical distributions. I have so far only had time to explore a few simple methods and this remains ongoing work. We will discuss the results from these five models (m1, m2, m3, m4, m5):
 
-These same distributions for all the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ samples are shown in __FIGURES__.
+\begin{description}
+  \item[m1] All loci in each region have the same $B$, which is sampled from $\beta_{i | r_{i}}$. $\theta$ sampled from $Gaussian(\mu_{IPD}, \sigma_{IPD}^{2})$, where $\mu_{IPD}$ and $\sigma_{IPD}$ are plug-in estimates computed from the distribution of chromosome-level $\widehat{\theta_{MH}}$ (autosomes only).
+  \item[m2] All loci in each region have the same \textbf{average} $B$, which is sampled from $\beta_{i | r_{i}}$; this is then perturbed by a $Gaussian(0, \sigma_{B}^2)$ random variable. This is similar to what is done by `WGBSsuite`. Here we use $\sigma_{B}^{2} = B \times (1 - B)$. The resulting $\mathbf{B}$ is truncated so that all values lie between 0.01 and 0.99 (necessary to avoid issues in the iterative proportional fitting algorithm at the boundaries). $\theta$ simulated as in m1.
+  %\item[m3] $\mathbf{B}$ simulated as in m2 but with the perturbations in each region simulated from a first-order autoregressive process with coefficient equal to 0.5. $\theta$ simulated as in m1.
+  %\item[m4] As for m3 but where the sample is a 50:50 mixture, i.e., two independent simulations of $\mathbf{B}$ and $\mathbf{\theta}$ that are sampled from with equal probability.
+  %\item[m5] As for m3 but with $\mathbf{theta} = 0$ to simulate independence of methylation states within fragments.
+\end{description}
 
-There are several ways to simulate values of $\mathbf{B}$ and $\mathbf{\psi}$ based on these empirical distributions. The simplest is to sample each $B_{i}$ and $\psi_{i}$ directly from these empirical distributions. Alternatively, we could take a more model-based approach. For example, we could specify a  parametric model of the $B_{i}$ where all $i$ in a region have the same mean and variance (the mean and variance being based on the empirical distribution of $\beta$-values) or where the $B_{i}$ in each region come from an autoregressive process.
+The simulation of $\mathbf{\theta} = \mathbf{log{\psi}}$ requires further explanation. The empirical distributions of $\mathbf{\widehat{\theta}}$ will only include values for small $IPD$s since these are estimated from individual sequencing reads (see Chapter \ref{chap:co-methylation} for details). When simulating a methylome, we will encounter 2-tuples with much larger $IPD$s and the question is how to deal with these?
 
-The simulation of $\mathbf{\psi}$ requires further explanation. The empirical distributions of $\mathbf{\widehat{\psi}}$ will only include values for small $IPD$s since these are estimated from individual sequencing reads (see Chapter \ref{chap:co-methylation} for details). When simulating a methylome, we will encounter 2-tuples with much larger $IPD$s and the question is how to deal with these? Again, there are several options. We might assume a parametric form for the distribution of $\mathbf{\psi}$ as a function of $IPD$, such as a exponential decay towards $\psi = 1$ (corresponding to independence).
+Again, there are several options. For example, we might assume a parametric form for the distribution of $\mathbf{\psi}$ as a function of $IPD$, such as a exponential decay towards $\theta = 0$ (corresponding to independence). Given the quality and read-lengths of the _ADS_ data, I have elected to use the empirical $\widehat{\theta_{MH}}$ for pairs with $IPD \leq 180$ and set $\mu_{IPD} = 0$ for those with $IPD > 180$[^sigma]. While obviously a gross simplification, the vast majority of $NIL = 0$ CpG pairs have an $IPD \leq 180$ and so will be unaffected by this 'independence' assumption.
 
-I explore different methods for simulating $\mathbf{B}$ and $\mathbf{\psi}$ in Section \ref{sec:results}.
+[^sigma]: $\sigma_{IPD}$ is given by the median absolute deviation of $\sigma_{IPD}$ for $IPD \leq 180$.
 
-The above-described model implicitly assumes that all $n_{h}$ haplotypes have the same marginal probabilities and co-methylation structure. We may extend this model to define $\mathbf{Z}$ as a _mixture_ of a small number of first-order Markov chains defined as in the above. Such a mixture model may be appropriate when simulating a sample that is a combination of cell types.
+There is an increase in complexity for models m1 through to m4, while m5 is there as a sanity check that the within-fragment co-methylation model is working as intended. The limitations of these models may already be clear, but we will discuss these further in Section \ref{sec:methsim_results}.
 
 \subsection{Simulating reads}
 
 Once we have our 'true' methylome, we want to simulate an assay of this sample. In theory this could be any type of methylation assay, but here we focus on simulating whole-genome bisulfite-sequencing data.
 
-`methsim` uses a simple Poisson-based method for simulating bisulfite-sequencing. The user specifies the desired read length, the average sequencing coverage[^read_length], the error rate ($\epsilon$, which includes both sequencing error and bisulfite-conversion error), and provides the simulated 'true' methylome.
-
-The number of reads required is computed by $n_{reads} = \frac{\text{average sequencing coverage}}{\text{read length}} \times \text{size of genome}$. The number of reads per chromosome is assigned proportional to the chromosome length. Then, the start of each read is sampled uniformly across the chromosome respective chromosome. We only retain those reads that overlap a methylation locus.
+`methsim` uses a simple Poisson-based method for simulating bisulfite-sequencing. The user specifies the desired read length, the average sequencing coverage[^read_length], the error rate ($\epsilon$, which includes both sequencing error and bisulfite-conversion error), and provides the simulated 'true' methylome. We will use $200$ bp, single-end reads with an average coverage of $30 \times$ in what follows.
 
 [^read_length]: Currently only single-end data are supported. This isn't a big issue. Most paired-end bisulfite-sequencing datasets have overlapping mates, and so paired-end data can be approximated by simply doubling the read length. Also, all reads must currently have the same length, i.e., no simulation of read trimming. I don't consider this feature a priority, but it could easily be implemented by generating read lengths from a given probability distribution.
+
+The number of reads required is computed by $n_{reads} = \frac{\text{average sequencing coverage}}{\text{read length}} \times \text{size of genome}$. The number of reads per chromosome is assigned proportional to the chromosome length. Then, the start of each read is sampled uniformly across the chromosome respective chromosome. We only retain those reads that overlap a methylation locus.
 
 Suppose we have a simulated read, $z$, that overlaps the 3-tuple $(i, i + 1, i + 2)$. The methylation state along the read is simulated as follows:
 
@@ -343,7 +310,7 @@ Suppose we have a simulated read, $z$, that overlaps the 3-tuple $(i, i + 1, i +
 
 The result of this process is a `SimulatedBS` object storing the ID of each read that overlaps a methylation locus, along with the corresponding genomic co-ordinates and the methylation states.
 
-\subsection{Construct the output}
+\subsection{Constructing the output}
 
 The `SimulatedWGBS` object contains all the data from the simulation. However, it is not always the most convenient or efficient format with which to work. For example, many downstream analyses only make use of $\beta$-values, so we might want to summarise our simulated data this way. `methsim` provides the `asMethPat()` function to convert the `SimulatedWGBS` object to a `MethylationTuples::MethPat` object containing methylation patterns at m-tuples of a given size[^simplify]; all the functionality of the `MethylationTuples` package is then available to the user, such as computing $\beta$-values with the `methLevel()` method.
 
@@ -353,16 +320,11 @@ The `SimulatedWGBS` object contains all the data from the simulation. However, i
 
 The above describes how to simulate a single whole-genome bisulfite-sequencing sample. If we wanted to simulate six independent samples then we could simply run this procedure six times, with a different `MethylomeParam` object for each realisation. However, we will generally be interested in simulating experiments where there is some relationship between the samples. For example, suppose we want to simulate a two-group experiment with three samples per group. Furthermore, suppose we want to include differentially methylated regions between the two groups. How do we simulate such an experiment?
 
-To simulate these type of experiments, we need to be able to control the variation between the `SimulatedWGBS` objects. In this example, we probably want the three samples in each group to be more similar to each other than to the three samples in the other group. Essentially, we need to be able to control the within-group and between-group variation.
+To simulate these type of experiments, we need to be able to control the variation between the resulting `SimulatedWGBS` objects. In this example, we probably want the three samples in each group to be more similar to each other than to the three samples in the other group. Essentially, we need to be able to control the within-group and between-group variation.
 
 Biological variation is controlled through the `MethylomeParam` object and the method with which we simulate $\mathbf{B}$ and $\mathbf{\psi}$ through the `simulate()` method. Technical variation is controlled the `WGBSParam` object. If we want two samples to be very different from one another, then we would use two different `MethylomeParam` objects at the beginning of the process. However, if we want to simulate two technical replicates, then we would use the same `WGBSParam` objects; the two samples have identical 'true' methylomes and they only diverge at the 'sequencing' step of the simulation.
 
-We might also consider more subtle ways of introducing variation. For example, we might use the same `MethylomeParam` object but vary how we simulate $\mathbf{B}$ and $\mathbf{\psi}$ between calls to `simulate()`.
-
-
-and the same average methylation level for each region but vary the strength of co-methylation. This could be achieved by altering the $LOR_{(i, i+1) | r_{i}, IPD(i, i+1)}$ distributions between two `SimulateMethylomeParam` objects while holding the rest constant. Or we might vary the weights, $W$, to simulate more or less heterogeneous samples.
-
-In Section ref{sec:results} I explore how much variation is created using these different techniques.
+We might also consider more subtle ways of introducing variation. For example, we might use the same `MethylomeParam` object but vary how we simulate $\mathbf{B}$ and $\mathbf{\psi}$ between calls to `simulate()`. This avenue remains to be explored.
 
 \subsubsection{Simulating differential methylation}\label{sec:sim_diff_meth}
 
@@ -370,141 +332,30 @@ An obvious application of `methsim` is to simulate data to be used in a study co
 
 One way of doing this would be to take a `SimulatedMethylome` object and create a modified copy where $\mathbf{B}$ has been perturbed by specified amounts at a set of specified loci. We could then simulate bisulfite-sequencing data from each `SimulatedMethylome` and study which analysis methods can identify these simulated DMCs and DMRs.
 
-__UP TO HERE: See what below can be salvaged__
-
 \subsubsection{Performance}
-
-- [x] DONE
 
 Much of `methsim` is written in C++, using the wonderful Rcpp package \citep{Eddelbuettel:2011to, Eddelbuettel:2013if}, which greatly speeds up the running time of key procedures. Furthermore, several steps of the simulation can be run in parallel for each chromosome. Parallelism is implemented via the `BiocParallel` Bioconductor package \citep{BiocParallel}.
 
 The `SimulatedMethylome` and `SimulatedBS` objects are large in memory. This is to some extent unavoidable; we are simulating whole-genome bisulfite-sequencing sequencing experiments that produce an enormous amount of data.
 
-Shown below are the running times and memory usage involved in simulating a $30\times$ whole-genome bisulfite-sequencing sample using the _ADS_ `MethylomeParam` object included in `methsim`. Using up to 8 CPU cores in parallel, it takes less than 5 minutes to simulate the underlying 'true' methylome and a further __HOW LONG__ to simulate a single $30 \times$ sequencing coverage whole-genome bisulfite-sequencing assay of this methylome[^parallel].
-
-[^parallel]: NB the creation of the `SimulatedMethylome` via `simulate(ADS, BPPARAM)` currently only uses a single CPU.
-
-__UP TO HERE: simulate-WGBSParam-method seems to be causing a memory leek and resulting crash. Running valgrind in reduced problem to investigate.__
-
-```{r, echo = TRUE, eval = FALSE}
-# Load necessary packages
-suppressPackageStartupMessages(library(methsim))
-suppressPackageStartupMessages(library(BiocParallel))
-suppressPackageStartupMessages(library(pryr))
-
-# Use up to 8 cores in parallel computations.
-BPPARAM <- MulticoreParam(workers = 8L)
-
-# Set seed for reproducibility.
-set.seed(666)
-
-# ADS: the MethylomeParam object.
-pryr::object_size(ADS)
-#> 16.5 MB
-
-# sm: the SimulatedMethylome object
-system.time(l_sm <- simulate(ADS, BPPARAM = BPPARAM))
-#> Currently only simulates CpG methylation.
-#> Currently only simulates unstranded methylomes.
-#> Simulating 1 methylome..
-#>    user  system elapsed
-#> 186.680   9.676 270.780
-sm <- l_sm[[1]]
-pryr::object_size(sm)
-#> 676 MB
-
-# wgbsp: the WGBSParam object.
-# NOTE: Basically all the memory used by the WGBSParam object is the
-# SimulatedMethylome object.
-wgbsp <- WGBSParam(SimulatedMethylome = sm,
-                   AveCov = 30,
-                   ErrorRate = 0.01,
-                   SequencingType = 'SE',
-                   ReadLength = 100)
-pryr::object_size(wgbsp)
-#> 676 MB
-
-# sbs: the SimulatedBS object.
-system.time(sbs <- simulate(wgbsp, BPPARAM = BPPARAM))
-#> Simulating 1 bisulfite-sequencing sample...
-
-
-
-
-
-#>     user   system  elapsed
-#> 2716.503  174.591  548.122
-pryr::object_size(sbs)
-#> 10.1 GB
-
-# methpat: the MethylationTuples::MethPat object of one-tuples.
-# NOTE: information is lost when a SimulatedBS object is coerced to a MethPat
-# object.
-system.time(methpat <- asMethPat(sbs,
-                                 sampleName = "sim_ADS",
-                                 size = 1L,
-                                 BPPARAM = BPPARAM))
-#>    user  system elapsed
-#> 557.900  34.779  48.944
-pryr::object_size(methpat)
-#> 451 MB
-```
-
-These results are indicative of simulating high-coverage whole-genome bisulfite-sequencing for human-sized genomes. Simulations using a smaller genome or lower sequencing coverage will have faster running times and lower memory usage.
-
+Using up to 8 CPU cores in parallel, it takes less than 9 minutes to simulate a single $30 \times$ sequencing coverage whole-genome bisulfite-sequencing assay from a 'true' methylome. These results are indicative of simulating high-coverage whole-genome bisulfite-sequencing for human-sized genomes. Simulations using a smaller genome or lower sequencing coverage will have faster running times and lower memory usage.
 
 \section{Results}
 
-- [ ] DONE
+A central feature of `methsim` is that the simulation parameters are sampled from an input sample. At a bare minimum, the first test of `methsim` is that simulated data are similar to the real data on which they are based. To assess this, we compare several summary measures between the simulated data and the real data.
 
-A central pillar of `methsim` is that many of the simulation parameters are sampled from real data. At a bare minimum, the first test of `methsim` is that simulated data are similar to the real data on which they are based. To assess this, I compare several summary measures between the simulated data and the real data. The simplest of these are summaries are the distributions of $\beta$-values and within-fragment co-methylation, which are explicitly sampled in `methsim`. In contrast, the spatial correlation of $\beta$-values is not explicitly modelled in `methsim`; rather, we hope that `methsim` recapitulates this phenomenon by appropriate modelling of within-fragment co-methylation and choice of weights, $\mathbf{W}$.
+__TODO: Add in the _ADS_ data to the simulated data__
 
-Once it is established that `methsim` passes this minimal test, I use `methsim` to explore models of within-fragment co-methylation, the choice of the weights, $\mathbf{W}$, and their respective effects on the summary measures in order to identify areas of improvement in `methsim`. Finally, I demonstrate how `methsim` might be used to simulate data for use in a study comparing methods for identifying differential methylation.
+The simplest of these are summaries of the distributions of $\beta$-values and within-fragment co-methylation, which are explicitly sampled in `methsim`. We see that all of m1, m2, m3, m4 and m5 sufficiently capture the bimodality of $\beta$-values (__FIGUREs__) and their relationship to CpG islands (__FIGUREs__).
 
-\subsection{Summary measures of simulated data}
+__FIGURE__ plots the estimates of within-fragment co-methylation. Those models that include within-fragment co-methylation (m1, m2, m3 and m4) bear close resemblance to the real _ADS_ data, although are perhaps to homogeneous across chromosomes. Reassuringly, we see no evidence of within-fragment co-methylation in model 5, which simulates independence of within-fragment methylation states.
 
-- [ ] DONE
+In contrast, the spatial correlation of $\beta$-values is not explicitly modelled in any of models m1 to m5. While m3, m4 and m5 do include some spatial dependence of the $\mathbf{B}$, these are independent of $IPD$ and are intended mostly to analyse the effect of the independence condition in m2. __TODO: Describe these crap results.__
 
-\subsection{Models of within-fragment co-methylation}
+\section{Summary}
 
-- [ ] DONE
+Simulating DNA methylation data is complicated by its heterogeneity. This heterogeneity exists is in multiple 'directions': along the genome, between cells in a sample, and between subjects. As more data become available, we can get a better handle on the causes of the variation but, for now, it remains challenging.
 
-- Apparent co-methylation arises because of dependence of $B_{i}$, even when $Z_{i}$ are independent! E.g., set within-fragment co-methylation to zero but have $B_{i}$ fixed for a region results in independent $Z_{i}$ but dependent $B_{i}$.
-  - What to make of this?
-  - What if we sample $B_{i}$ from $\beta_{i | r_{i}}$ instead of using a fixed value for all loci in a region?
+`methsim` provides a framework that I have used to experiment with models for simulating DNA methylation data. The models I have currently explored capture some key aspects of the data including, for the first time, within-fragment co-methylation. Unfortunately, while these results are promising on some fronts, there is clearly much work to be done on others.
 
-\subsection{The choice of $\mathbf{W}$}
-
-\subsection{Simulating differential methylation}
-
-- [ ] DONE
-
-\section{Conclusions}
-
-- [ ] DONE
-
-\subsubsection{Comparison to other methods}
-
-__TODO: Work the comparison to other methods into my conclusions__
-
-\citet{Lacey:2013iy} supply R scripts to implement their simulation method ([http://rrbs-sim.r-forge.r-project.org/](http://rrbs-sim.r-forge.r-project.org/)). __TODO: Try these scripts, see how long they take__. The running times reported in the original publication are shown in __TABLE__ for a single simulation. __TODO: To simulate a single RRBS dataset would take HOW LONG__. The simulation scripts could be made more user-friendly by creating an R package, rather than supplying the software as a collection of scripts, and would benefit from some documentation.
-
-\begin{table}[h]
-\centering
-\begin{tabular}{@{}lll@{}}
-\toprule
-Number of samples & Number of sites & Running time (seconds) \\ \midrule
-8                 & 1000            & \textless 1            \\
-8                 & 5000            & 13                     \\
-8                 & 10000           &                        \\ \bottomrule
-\end{tabular}
-\caption{Reported running times for simulation methodology of \citet{Lacey:2013iy}. Simulations were run on "on a desktop with a 3.4 GHz processor and 10 GB RAM running 64-bit Windows 7".}
-\label{tab:Lacey_runtime}
-\end{table}
-
-__TODO: Compare `methsim` to `WGBSSuite`.
-
-
-# TODO:
-
-- [ ] Decide on a variable for sequencing depth; $m_{i, j} + u_{i, j}$ is kinda confusing. Perhaps $d_{i, j} / D_{i, j}$?
+Most notably, and frustratingly, I do not yet have an adequate model for the correlations of the true methylation levels, $\mathbf{B}$. The model of \citet{Lacey:2013iy} is promising, although may be computationally infeasible for whole-genome data given the timings reported in the original publication. The model used by `WGBSsuite` \citet{Rackham:2015bv} is similar to m2, so I suspect it will produce similar results, but this requires further investigation. I continue to explore how alternative models of $\mathbf{B}$ might be integrated into `methsim` to improve this aspect of the simulation.
