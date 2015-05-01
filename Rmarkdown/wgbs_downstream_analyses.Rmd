@@ -54,6 +54,8 @@ Regardless of the statistical test used, all attempts to identify DMCs from whol
 
 \begin{table}[h]
 \centering
+\caption[Proposed multiple hypothesis testing procedures]{Methods proposed for adjusting for the multiple hypothesis testing performed in an analysis of DMCs. Several papers use describe their analysing as performing a ``false discovery rate adjustment'' or ``false discovery rate correction'' without explicitly stating what they are doing or citing a reference. One paper uses an ultra-conservative Bonferonni correction.}
+\label{tab:multiple_testing}
 \begin{tabulary}{\textwidth}{LL}
 \toprule
 Method                                       & Used by                                                                            \\ \midrule
@@ -64,8 +66,6 @@ Method                                       & Used by                          
 \citet{Benjamini:2001ho}                      & \citet{Sofer:2013bk, Hebestreit:2013ko}                                             \\
 ``Bonferonni adjustment''                      & \citet{Feng:2014iq}                                                                 \\ \bottomrule
 \end{tabulary}
-\caption{Methods proposed for adjusting for the multiple hypothesis testing performed in an analysis of DMCs. Several papers use describe their analysing as performing a ``false discovery rate adjustment'' or ``false discovery rate correction'' without explicitly stating what they are doing or citing a reference. One paper uses an ultra-conservative Bonferonni correction.}
-\label{tab:multiple_testing}
 \end{table}
 
 One thing to note, however, is that the _effective_ number of tests is fewer than the actual number of tests. This is because the methylation levels at neighbouring loci are correlated (see Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}), which means that tests of differential methylation are generally positively correlated, thus reducing the effective number of independent tests. The classical Benjamini-Hochberg procedure also controls the false discovery rate under certain forms of positive dependence \citep{Benjamini:2001ho}.
@@ -187,14 +187,14 @@ The obvious method to detect allele-specific methylation from bisulfite-sequenci
 
 \begin{table}[h]
 \centering
+\caption[Allele-specific methylation]{$2 \times 2$ table used to test for allele-specific methylation. $m^{1}$ is the number of reads with the first allele and that are also methylated at the methylation locus, $u^{1}$ is the number of reads with the first allele and that are also unmethylated at the methylation locus, etc.}
+\label{tab:asm}
 \begin{tabular}{@{}lll@{}}
 \toprule
 & Allele 1 & Allele 2 \\ \midrule
 $m$ &  $m^{1}$        &  $m^{2}$       \\
 $u$ &  $u^{1}$        &  $u^{2}$       \\ \bottomrule
 \end{tabular}
-\caption{$2 \times 2$ table used to test for allele-specific methylation. $m^{1}$ is the number of reads with the first allele and that are also methylated at the methylation locus, $u^{1}$ is the number of reads with the first allele and that are also unmethylated at the methylation locus, etc.}
-\label{tab:asm}
 \end{table}
 
 While straightforward, this approach is also obviously limited to a subset of the methylation loci in the genome. \citet{Fang:2012ci} and \citet{Peng:2012dh} published methods to detect allele-specfic methylation that do not require heterozygous genetic variants nearby to the methylation locus of interest. These methods rely on the probabilistic assignment of reads to alleles, which are treated as missing data. Unfortunately, there is no publicly available software implementing the method proposed by \citet{Peng:2012dh} and so I do not discuss it further.
@@ -274,7 +274,7 @@ Figure \ref{fig:MethPat} is a schematic of a `MethPat` object storing methylatio
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/MethPat.pdf}
-\caption{Schematic of the \texttt{MethPat} class, shown here for 3-tuples. Each row represents a 3-tuple to which the genomic co-ordinates of the tuples (green box) and the counts of the methylation patterns (grey box) are aligned. The counts of each methylation pattern ($MMM, MMU, \ldots, UUU$) are stored as separate matrices where the columns represent samples ($S_{1}, \ldots, S_{n}$). Some samples may not have any sequencing coverage for a particular m-tuple, in which case the corresponding frequencies are recorded as \texttt{NA}.}
+\caption[Schematic of \texttt{MethPat} class]{Schematic of the \texttt{MethPat} class, shown here for 3-tuples. Each row represents a 3-tuple to which the genomic co-ordinates of the tuples (green box) and the counts of the methylation patterns (grey box) are aligned. The counts of each methylation pattern ($MMM, MMU, \ldots, UUU$) are stored as separate matrices where the columns represent samples ($S_{1}, \ldots, S_{n}$). Some samples may not have any sequencing coverage for a particular m-tuple, in which case the corresponding frequencies are recorded as \texttt{NA}.}
 \label{fig:MethPat}
 \end{figure}
 
@@ -315,6 +315,8 @@ Shown in Table \ref{tab:methpat_sparsity} is the size of the `MethPat` objects i
 
 \begin{table}[h]
 \centering
+\caption[Size of \texttt{MethPat} objects for the \emph{EPISCOPE} data]{Size of \texttt{MethPat} objects for the \emph{EPISCOPE} data. All m-tuples are stranded. The `size' of the \texttt{MethPat} object, reported in gigabytes (GB), is computed using the \texttt{pryr::object\_size()} function (\url{http://cran.r-project.org/web/packages/pryr/index.html}). The `number of rows' corresponds to the number of m-tuples in the object. The `number of assays' is $2^{\text{m}}$, where m is the size of the m-tuples. The final column is a measure of how sparse the data are --- a $0$ values means that particular methylation pattern was not observed in that particular sample and an \texttt{NA} value means that that m-tuple was not observed in that particular sample.}
+\label{tab:methpat_sparsity}
 \begin{tabulary}{\textwidth}{LLLLL}
 \toprule
 & Size (GB) & Number of rows & Number of assays & Percentage of $0$ and \texttt{NA} values \\ \midrule
@@ -324,8 +326,6 @@ Shown in Table \ref{tab:methpat_sparsity} is the size of the `MethPat` objects i
 3-tuples                                 & $43.3$                       & $109,376,348$   & $8$              & $93\%$                                     \\
 4-tuples                                 & $80.5$                       & $102,625,758$   & $16$             & $97\%$                                       \\ \bottomrule
 \end{tabulary}
-\caption{Size of \texttt{MethPat} objects for the \emph{EPISCOPE} data. All m-tuples are stranded. The `size' of the \texttt{MethPat} object, reported in gigabytes (GB), is computed using the \texttt{pryr::object\_size()} function (\url{http://cran.r-project.org/web/packages/pryr/index.html}). The `number of rows' corresponds to the number of m-tuples in the object. The `number of assays' is $2^{\text{m}}$, where m is the size of the m-tuples. The final column is a measure of how sparse the data are --- a $0$ values means that particular methylation pattern was not observed in that particular sample and an \texttt{NA} value means that that m-tuple was not observed in that particular sample.}
-\label{tab:methpat_sparsity}
 \end{table}
 
 It will be possible to improve the storage efficiency by using a different approach to the internal storage of the data. For example, it may be possible to use sparse matrices to store the counts or to create an index so that counts can be re-ordered and stored as run-length encodings, a very space-efficient storage scheme.
