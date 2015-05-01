@@ -34,7 +34,7 @@
             pdfauthor={Your Name},
             pdftitle={Thesis},
             pdfsubject={Dissertation},
-            pdfkeywords={microarray gene expression statistical models regression},
+            pdfkeywords={DNA methylation bioinformatics applied statistics epigenetics epigenomics},
             pdfproducer={Latex with hyperref, or other system},
             pdfcreator={pdflatex, or other tool}]{hyperref}
 
@@ -159,9 +159,9 @@ The University of Melbourne\\\\}
 
 \date{The Walter and Eliza Hall Institute of Medical Research}
 
-\maketitle
-
 \frontmatter
+
+\maketitle
 
 \chapter{Abstract}
 
@@ -201,14 +201,7 @@ exclusive of tables, maps, bibliographies and appendices.
 
 \chapter{Preface}
 
-\textbf{TODO}
-
-\begin{itemize}
-  \item Some data in my thesis are mapped to hg18 and some to hg19.
-  \item Include summary of notation?
-\end{itemize}
-
-The data sets used in this thesis were provided by the investigators listed below.\\\\
+The data sets used in this thesis were provided by the investigators listed in Chapter \ref{chap:datasets}.\\\\
 
 \chapter{Acknowledgments}
 
@@ -218,54 +211,19 @@ Thank you to the Walter and Eliza Hall Institute for being such a great place to
 
 My PhD would not be possible without the people who provided me with data to analyse. I am grateful to Sue Clark, Aaron Statham, Emma Whitelaw and Harry Oey for the opportunity to collaborate with and learn from you. Thanks also to Ryan Lister, Kasper Hansen and Felix Krueger for making their data publicly available and answering all my nitpicky questions. Open science is the best science.
 
-Equally, my PhD would not be possible without the countless people who contribute to the software I use in my daily research. A special thanks to those who helped me as I learnt to write software of my own: Felix Krueger, Toby Sargeant, Martin Morgan, Hervé Pagès, Hadley Wickham and Dirk Eddelbuettel. Open software is the best software.
+Equally, my PhD would not be possible without the countless people who contribute to the software I use in my daily research. A special thanks to those who helped me as I learnt to write software of my own: Felix Krueger, Toby Sargeant, Martin Morgan and Hervé Pagès. Open software is the best software.
 
 I am grateful to the Australian tax payer for supporting me financially during my studies with an Australian Postgraduate Award. I also thank the Victoria Life Sciences Computing Initiative for additional funding and Melanie Bahlo for allowing me a very flexible work arrangement as a research assistant and her encouragement to pursue a PhD.
 
-I owe an enourmous debt of gratitude to my thesis writing buddies, Hannah Vanyai and Darcy Moore, who kept me going during tough times and to my thesis proof readers, Belinda Phipson, Saskia Freytag and Goknur Giner, who have greatly improved this thesis.
+I owe an enormous debt of gratitude to my thesis writing buddies, Hannah Vanyai and Darcy Moore, who kept me going during tough times and to my thesis proof readers, Belinda Phipson, Saskia Freytag and Goknur Giner, who have greatly improved this thesis.
 
-\textbf{TODO: final thanks}
-
-Finally, and most of all, thank you to my parents, Gay and John, to my brothers, Jack, Luke and Daniel, and to my friends. Words cannot express
-
+Finally, and most of all, thank you to my parents, Gay and John, to my brothers, Jack, Luke and Daniel, and to my friends. Your support, love and encouragement kept me going.
 
 \tableofcontents
 
 \listoffigures
 
 \listoftables
-
-
-% TODO: Check list of abbreviations
-\chapter{List of Abbreviations}
-
-\begin{tabular}{ll}
-
-bp & base pair \\
-kb & kilobase = $1000$ bp \\
-Mb & megabase = $1,000,000$ bp \\
-Gb & gigabase = $1,000,000,000$ bp \\
-WGBS & whole genome bisulfite sequencing \\
-RRBS & reduced representation bisulfite sequencing \\
-FDR & false discovery rate \\
-DMC & differentially methylated cytosine \\
-DMR & differentially methylated region \\
-HMM & hidden Markov model \\
-SE & single-end sequencing \\
-PE & paired-end sequencing \\
-indel & insertion or deletion \\
-CGI & CpG island \\
-
-\end{tabular}
-
-% TODO: Check list of symbols
-\chapter{List of Symbols}
-
-\begin{tabular}{ll}
-
-i.e. & that is\\
-
-\end{tabular}
 
 \mainmatter
 
