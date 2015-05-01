@@ -75,7 +75,7 @@ bwa-meth  & \citet{Pedersen:2014wt}                             & bwa-mem       
 BSMAP     & \citet{Xi:2009bd}                                   & SOAP                        \\
 Novoalign & \url{http://www.novocraft.com/products/novoalign/} & Novoalign                   \\ \bottomrule
 \end{tabulary}
-\caption{Four popular bisulfite-sequencing read mappers, selected to highlight the variety of underlying mapping software used by these tools.}
+\caption[Popular bisulfite-sequencing read mappers and their underlying mapping software]{Four popular bisulfite-sequencing read mappers, selected to highlight the variety of underlying mapping software used by these tools.}
 \label{tab:bs-seq_mappers}
 \end{table}
 
@@ -125,7 +125,7 @@ M-bias can be identified by plotting the read-position methylation level ($rpml$
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/ADS_M-bias.pdf}
-\caption{M-bias plot for the \emph{ADS} sample from the \emph{Lister} dataset. Each of \emph{read-1} (R1) and \emph{read-2} (R2) are plotted separately.}
+\caption[\emph{ADS} M-bias]{M-bias plot for the \emph{ADS} sample from the \emph{Lister} dataset. Each of \emph{read-1} (R1) and \emph{read-2} (R2) are plotted separately.}
 \label{fig:ADS_M-bias}
 \end{figure}
 
@@ -162,7 +162,7 @@ For example, suppose we performed $100$ bp single-end sequencing and pre-trimmed
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/E18VA_M-bias.pdf}
-\caption{M-bias plot for the E18VA sample from the EPISCOPE dataset. Each of \emph{read-1} (R1) and \emph{read-2} (R2) are plotted separately. For CpGs in \emph{read-1}, we see noise at the start of the read, followed by a downward slope in the M-bias, which ends with a spike. For CpGs in \emph{read-2}, we see a downward spike at the start of the read following by a gradual increase in the M-bias curve, with a spike at read-position 101 and a spike at the last read-positions for all methylation types. The spike at read-position 101 is also evidence, albeit to a lesser extent, in \emph{read-1}. This position should be ignored in downstream analyses but we do not necessarily also want to ignore read-positions $102-150$ since this would remove one-third of the data.}
+\caption[\emph{E18VA} M-bias]{M-bias plot for the E18VA sample from the EPISCOPE dataset. Each of \emph{read-1} (R1) and \emph{read-2} (R2) are plotted separately. For CpGs in \emph{read-1}, we see noise at the start of the read, followed by a downward slope in the M-bias, which ends with a spike. For CpGs in \emph{read-2}, we see a downward spike at the start of the read following by a gradual increase in the M-bias curve, with a spike at read-position 101 and a spike at the last read-positions for all methylation types. The spike at read-position 101 is also evidence, albeit to a lesser extent, in \emph{read-1}. This position should be ignored in downstream analyses but we do not necessarily also want to ignore read-positions $102-150$ since this would remove one-third of the data.}
 \label{fig:E18VA_M-bias}
 \end{figure}
 
@@ -257,7 +257,7 @@ Certain genetic variants, in particular heterozygous $C$>$T$ SNPs, are more diff
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/Bis-SNP.pdf}
-\caption{\texttt{Bis-SNP} is able to distinguish unmethylated cytosines (site 1), from cytosine to thymine genetic variants (site 2) and thymine to (unmethylated) cytosine genetic variants (site 3) by examining the reads mapped to the reverse strand. For all three loci, the reads mapped to the forward strand contain a thymine. However, it is the base on the reverse strand that reveals the true genotype. When combined with the reference genome it can be inferred whether the sample's genome, which isn't directly observed, has a genetic variant at that location. This is only possible with bisulfite-data generated using the directional protocol. This figure is adapted from \citet{Liu:2012ge}.}
+\caption[\texttt{Bis-SNP} method schematic]{\texttt{Bis-SNP} is able to distinguish unmethylated cytosines (site 1), from cytosine to thymine genetic variants (site 2) and thymine to (unmethylated) cytosine genetic variants (site 3) by examining the reads mapped to the reverse strand. For all three loci, the reads mapped to the forward strand contain a thymine. However, it is the base on the reverse strand that reveals the true genotype. When combined with the reference genome it can be inferred whether the sample's genome, which isn't directly observed, has a genetic variant at that location. This is only possible with bisulfite-data generated using the directional protocol. This figure is adapted from \citet{Liu:2012ge}.}
 \label{fig:Bis-SNP}
 \end{figure}
 
@@ -303,7 +303,7 @@ chr1       & $-$      & 101      & 5 & 2 \\
 chr2       & $+$      & 400      & 0 & 3 \\
 chr2       & $+$      & 450      & 1 & 2  \\ \bottomrule
 \end{tabular}
-\caption{Example of output for methylation calling at 1-tuples. Each row records the the number of methylated ($M$) and unmethylated ($U$) reads at a 1-tuple. Loci may be stratified by strand, as is done here, in which case most CpGs will have measurements for both the positive and negative strands.}
+\caption[Methylation patterns at 1-tuples]{Example of output for methylation calling at 1-tuples. Each row records the the number of methylated ($M$) and unmethylated ($U$) reads at a 1-tuple. Loci may be stratified by strand, as is done here, in which case most CpGs will have measurements for both the positive and negative strands.}
 \label{tab:1-tuples}
 \end{table}
 
@@ -315,7 +315,7 @@ While 1-tuples are the basis of most analyses of bisulfite-sequencing data, they
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/incomplete_picture_1-tuples.pdf}
-\caption{Two regions, each with four methylation loci, that have identical $\beta$-values ($\beta = \frac{M}{M + U}$) at 1-tuples yet have very different overall methylation patterns.}
+\caption[Different methylation patterns can lead to identical $\beta$-values]{Two regions, each with four methylation loci, that have identical $\beta$-values ($\beta = \frac{M}{M + U}$) at 1-tuples yet have very different overall methylation patterns.}
 \label{fig:incomplete_picture_1-tuples}
 \end{figure}
 
@@ -331,7 +331,7 @@ methpat  & \url{https://github.com/bjpop/methpat} & Output of \texttt{bme} & Des
 DMEAS    & \citet{He:2013cj}                       & Output of \texttt{bme} & Windows operating system only. Perl code only available as PDF file.             \\
 \bottomrule
 \end{tabulary}
-\caption{Other software for methylation calling at m-tuples and their limitations. Abbreviations: \texttt{bme} =  \texttt{bismark\_methylation\_extractor}.}
+\caption[Software for calling methylation patterns at m-tuples]{Other software for methylation calling at m-tuples and their limitations. Abbreviations: \texttt{bme} =  \texttt{bismark\_methylation\_extractor}.}
 \label{tab:other_m-tuple_methylation_callers}
 \end{table}
 
@@ -359,7 +359,7 @@ To illustrate several of the above-mentioned concepts, suppose we sequence a reg
 \centering
 \centering
 \includegraphics[width=0.6\textwidth]{../figures/methtuple_example1.pdf}
-\caption{Diagram of three-paired end reads (\texttt{A}, \texttt{B} and \texttt{C}) mapping to a region containing five methylation loci (\texttt{1} $--$ \texttt{5}). The suffix \texttt{\_1} or \texttt{\_2} indicates whether it is \emph{read-1} or \emph{read-2}, respectively.}
+\caption[\texttt{methtuple} example region]{Diagram of three-paired end reads (\texttt{A}, \texttt{B} and \texttt{C}) mapping to a region containing five methylation loci (\texttt{1} $--$ \texttt{5}). The suffix \texttt{\_1} or \texttt{\_2} indicates whether it is \emph{read-1} or \emph{read-2}, respectively.}
 \label{fig:methtuple_example1}
 \end{figure}
 
@@ -368,7 +368,7 @@ If we are interested in 1-tuples, Figure \ref{fig:methtuple_example2} shows what
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_example2.pdf}
-\caption{1-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2}.}
+\caption[\texttt{methtuple} 1-tuples]{1-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2}.}
 \label{fig:methtuple_example2}
 \end{figure}
 
@@ -381,7 +381,7 @@ If we are interested in 3-tuples, Figure \ref{fig:methtuple_example3} shows what
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_example3.pdf}
-\caption{3-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2}.}
+\caption[\texttt{methtuple} 3-tuples]{3-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2}.}
 \label{fig:methtuple_example3}
 \end{figure}
 
@@ -390,7 +390,7 @@ Finally, Figure \ref{fig:methtuple_example4} shows the output if we were to anal
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_example4.pdf}
-\caption{3-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2} when the \texttt{--all-combinations} flag is set.}
+\caption[\texttt{methtuple} 3-tuples with \texttt{--all-combinations}]{3-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2} when the \texttt{--all-combinations} flag is set.}
 \label{fig:methtuple_example4}
 \end{figure}
 
@@ -399,7 +399,7 @@ With current sequencing technology we are limited to extracting m-tuples that sp
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_CpGs_per_read.pdf}
-\caption{Number of CpGs per read for the Lister dataset.}
+\caption[Number of CpGs per read in \emph{Lister} dataset]{Number of CpGs per read for the Lister dataset.}
 \label{fig:Lister_CpGs_per_read}
 \end{figure}
 
@@ -416,7 +416,7 @@ The output format of `methtuple` is tab-delimited plain text, optionally compres
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/3-tuples.pdf}
-\caption{Example output of \texttt{methtuple} for 3-tuples.}
+\caption[\texttt{methtuple} 3-tuples example output]{Example output of \texttt{methtuple} for 3-tuples.}
 \label{fig:3-tuples}
 \end{figure}
 
@@ -431,14 +431,14 @@ The maximum memory usage is not strictly proportional to chromosome length. It i
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_runtime.pdf}
-\caption{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{--all-combinations} was set. Note that the reported $49$ samples separately counts each of the Ziller sequencing runs (see Chapter \ref{chap:datasets} for details).}
+\caption[\texttt{methtuple} running time]{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{--all-combinations} was set. Note that the reported $49$ samples separately counts each of the Ziller sequencing runs (see Chapter \ref{chap:datasets} for details).}
 \label{fig:methtuple_runtime}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_memory.pdf}
-\caption{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{--all-combinations} was set. Note that the reported $49$ samples separately counts each of the Ziller sequencing runs (see Chapter \ref{chap:datasets} for details).}
+\caption[\texttt{methtuple} memory usage]{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{--all-combinations} was set. Note that the reported $49$ samples separately counts each of the Ziller sequencing runs (see Chapter \ref{chap:datasets} for details).}
 \label{fig:methtuple_memory}
 \end{figure}
 
