@@ -446,12 +446,16 @@ The maximum memory usage is not strictly proportional to chromosome length. It i
 library(xtable)
 x <- read.table("../data/wgbs_bioinformatics_analysis/CpG_density_hg19.txt",
                 header = TRUE, stringsAsFactors = FALSE)
-xt <- xtable(x, caption = "Percentage of dinucleotides that are CpGs for each chromosome in the human reference genome (hg19).", label = "tab:cpg_density_hg19")
+xt <- xtable(x, caption = c("Percentage of dinucleotides that are CpGs for each chromosome in the human reference genome (hg19).", "CpG percentage per chromosome in hg19"), label = "tab:cpg_density_hg19")
 align(xt) <- rep("c", ncol(x) + 1)
 digits(xt) <- 2
-print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, include.rownames = FALSE)
+print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, include.rownames = FALSE, caption.placement = "top")
 ```
 
 \subsection{Availability}
 
 `methtuple` is open-source software released under the MIT licence and available from [https://github.com/PeteHaitch/methtuple](https://github.com/PeteHaitch/methtuple).
+
+\section{Summary}
+
+__TODO: necessary?__
