@@ -13,7 +13,14 @@
   - __DONE__
 - [x] Address Goknur's comments
   - __DONE__
-- [ ] Address Terry's comments
+- [x] Address Terry's comments
+  - __DONE__
+- [ ] Plots of beta-correlations separated by strand in a clearer way.
+  - Use loess to summarise trend
+  - In general, plots of beta-correlations are noisy. Just show trend?
+- [ ] "The conditional estimator, works better than the unconditional estimator when the sample size, n, is small [Agresti 2007]." re conditional odds ratio estimators
+  - What does "better" mean.
+- [ ] Add a representative plot of the within-fragment data for a single sample
 - [ ] Fix formatting of $2 \times 2$ contingency tables to be consistent.
 - [ ] Write abstract
 - [ ] Complete `methsim` chapter.

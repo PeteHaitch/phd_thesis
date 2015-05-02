@@ -1,25 +1,29 @@
 # Discussing co-methylation chapter
 
-- 2-tuples vs. pairs. Use pairs instead of 2-tuples (e.g. p153)
-- Spatial correlation is not like traditional autocorrelation.
-- Plots of beta-correlations separated by strand in a clearer way.
+- [x] 2-tuples vs. pairs. Use pairs instead of 2-tuples (e.g. p153)
+- [x] Spatial correlation is not like traditional autocorrelation.
+- [ ] Plots of beta-correlations separated by strand in a clearer way.
   - Use loess to summarise trend
-- "Figures 7.11, 7.12, 7.13 and 7.14 are plots of Spearman correlations of β-values for pairs of CpGs stratified by whether the pair is inside or outside of a CpG island" (p163) __Figure references are wrong; increment by four__
-- In general, plots of beta-correlations are noisy. Just show trend?
-- p175 "The odds ratio is not perfece, however. For one, the possible values of ψ are highly". The odds ratio is indepndent of the margins (Terry's favourite point about the odds ratio; emphasise).
-- top of p176: latex error
-- "The conditional estimator, works better than the unconditional estimator when the sample size, n, is small [Agresti 2007]."
+  - In general, plots of beta-correlations are noisy. Just show trend?
+  - __TODO__
+- [x] "Figures 7.11, 7.12, 7.13 and 7.14 are plots of Spearman correlations of β-values for pairs of CpGs stratified by whether the pair is inside or outside of a CpG island" (p163) __Figure references are wrong; increment by four__
+- [x] p175 "The odds ratio is not perfece, however. For one, the possible values of ψ are highly". The odds ratio is indepndent of the margins (Terry's favourite point about the odds ratio; emphasise).
+- [ ] top of p176: latex error
+  - Page number will have changed.
+- [ ] "The conditional estimator, works better than the unconditional estimator when the sample size, n, is small [Agresti 2007]."
   - What does "better" mean.
-- p177: s/convert/converge/
-- p178: "we analysed a sim. study" -> "we carried out a simulation study"
-- When $K$ is known, use the actual value. Improve legends.
+- [x] p177: s/convert/converge/
+- [x] p178: "we analysed a sim. study" -> "we carried out a simulation study"
+- [x] When $K$ is known, use the actual value. Improve legends.
 - Increase axis labels in simulation figures
-- Include figure number when talking about Simulation 3 or 4, etc.
-- chrM results are worth commenting on
-- chrX with NIL \geq 0 look similar to CGI in that they increase separation.
-- Add SE and PE information to plots of within-fragment co-methylation
-- Add a representative plot of the within-fragment data for a single sample
-- Could remove spearman vs. pearson figures by showing proper "versus" plot and then skipping ahead.
+- [x] Include figure number when talking about Simulation 3 or 4, etc.
+- [x] chrM results are worth commenting on
+- [x] chrX with NIL \geq 0 look similar to CGI in that they increase separation.
+- [x] Add SE and PE information to plots of within-fragment co-methylation
+- [ ] Add a representative plot of the within-fragment data for a single sample
+  - __TODO__
+- [x] Could remove spearman vs. pearson figures by showing proper "versus" plot and then skipping ahead.
+  - Just leave it.
 - p197 Something weird has happened.
 - Comment on other genomic features that might be interesting to stratify by.
 - Comment on how you might reduce heterogeneity by subsampling.

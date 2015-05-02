@@ -45,7 +45,7 @@ The first strategy creates all pairs of adjacent CpGs on the same chromosome and
 
 [^nil0]: Recall that this is with respect to the reference genome and not the sample genome.
 
-The second strategy uses all pairs of CpGs on the same chromosome and strand, which are then stratified by $IPD$ and any secondary variables, such as genomic context. In practice, the second strategy only uses pairs from a set of $IPD$s, e.g., $IPD = 2 - 2000$, otherwise the number of pairs becomes unwieldy. This is more like a traditional autocorrelation analysis of $\bm{\beta} = (\beta_{1}, \ldots, \beta_{N_{loci}})$, albeit of a vector of unequally spaced observations and with care taken to only use pairs on the same chromosome and strand. I refer to this as the $NIL \geq 0$ strategy. Using the $NIL \geq 0$ strategy, two pairs of CpGs with an identical $IPD$ may have a very different number of intervening CpGs.
+The second strategy uses all pairs of CpGs on the same chromosome and strand, which are then stratified by $IPD$ and any secondary variables, such as genomic context. In practice, the second strategy only uses pairs from a set of $IPD$s, e.g., $IPD = 2 - 2000$, otherwise the number of pairs becomes unwieldy. This is what is called an 'autocorrelation' analysis of $\bm{\beta} = (\beta_{1}, \ldots, \beta_{N_{loci}})$ by \citet{Cokus:2008fc}, although it is somewhat different to the traditional notion of an autocorrelation analysis. I refer to this as the $NIL \geq 0$ strategy. Using the $NIL \geq 0$ strategy, two pairs of CpGs with an identical $IPD$ may have a very different number of intervening CpGs.
 
 The interpretation of correlations computed using the $NIL \geq 0$ is complicated because the set of pairs are more heterogeneous than those under the $NIL = 0$ strategy. For this reason I prefer the $NIL = 0$ strategy, however, it is useful to consider and contrast the two strategies, which is what I have done in what follows.
 
@@ -166,7 +166,7 @@ Most samples have a correlation close to $1$ for neighbouring CpGs ($IPD = 2$). 
 
 The trend of the correlations for all these samples plateaus out close to zero, slightly higher for those samples with significant intermediate methylation. However, it should not be concluded from this that the methylation of CpGs separated by more than a few hundred base pairs are uncorrelated. Recall that these results are only for $NIL = 0$ pairs of CpGs, which are increasingly rare for larger $IPD$s. These results tell us about the 'first-order' correlations of $\beta$-values, which decay very quickly but whose importance also decreases quite quickly owing to the vast majority of CpGs being within $100$ bp of another CpG (e.g., Figure \ref{fig:IPD_ECDF_hg19} for humans).
 
-One final aspect of these genome-wide plots bears mentioning. There are hints of an approximately $150$ to $200$ bp periodicity in these plots. This is a similar scale to the previously reported periodicities in correlations of $\beta$-values (see Chapter \ref{chap:co-methylation_review}). While this periodicity can readily be detected by eye, it is somewhat more difficult to verify using traditional methods based on Fourier analysis of the signal. The chief reason is that the data are very noisy beyond the second or third putative cycle due to the limited data at these larger $IPD$s.
+One final aspect of these genome-wide plots bears mentioning. There are hints of an approximately $150$ to $200$ bp periodicity in these plots. This is a similar scale to the previously reported periodicities in correlations of $\beta$-values (see Chapter \ref{chap:co-methylation_review}). While this periodicity can readily be detected by eye, it is somewhat more difficult to verify using classical methods from spectral analysis. The chief reason is that the data are very noisy beyond the second or third putative cycle due to the limited data at these larger $IPD$s.
 
 To address this problem, we might try smoothing the raw correlations, for example, by using LOESS \citep{Cleveland:1979fu}, and then looking for periodicities in the smoothed values. However, this is only helpful when the data are corrupted by a small amount of noise, certainly not the extreme noise we see for $IPD > 1000$ in most samples. Furthermore, smoothing introduces problems of its own, such as choosing the smoothing bandwidth in such a way as to not introduce or destroy real periodicities. Even if we can automatically choose these smoothing parameters in an unbiased manner, we are still stuck with only observing a handful of periods of this size from $NIL = 0$ pairs. So while these periodicities are 'obvious' in the plots, they are rather more difficult to detect without visualising the raw data.
 
@@ -200,7 +200,7 @@ To address this problem, we might try smoothing the raw correlations, for exampl
 
 The above are genome-wide plots, all pairs of CpGs with a given $IPD$ are treated identically. However, there are good reasons to expect that the correlations of $\beta$-values, like the $\beta$-values themselves, might be influenced by their genomic context. To investigate this, we can stratify pairs of CpGs pairs by a genomic feature and repeat the analysis. The obvious feature to stratify on is CpG islands.
 
-Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI} and \ref{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed_CI} are plots of Spearman correlations of $\beta$-values for pairs of CpGs stratified by whether the pair is inside or outside of a CpG island[^spanning]. Again, the substantial noise in these plots is due to a lack of $NIL = 0$ pairs with large $IPD$s, particularly inside CpG islands.
+Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}, \ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CGI} and \ref{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed_CGI} are plots of Spearman correlations of $\beta$-values for pairs of CpGs stratified by whether the pair is inside or outside of a CpG island[^spanning]. Again, the substantial noise in these plots is due to a lack of $NIL = 0$ pairs with large $IPD$s, particularly inside CpG islands.
 
 The message from these plots is clear, $\beta$-values of $NIL = 0$ pairs within CpG islands are much more correlated than those pairs outside of islands. Stratifying by CpG island status also reveals that the correlation of the methylation levels of CpGs inside islands is less influenced by $IPD$. In fact, for some samples it appears that the most correlated $NIL = 0$ pairs inside islands are not those with the minimum $IPD = 2$, but those with a slightly larger $IPD$. From these plots we can now see that the apparent sharp decline in correlations over the first $50$ bp from the genome-wide data is really driven by a shift from pairs that are frequently inside CpG islands to pairs that are mostly outside of islands.
 
@@ -323,7 +323,7 @@ Consider two binary random variables, $X$ and $Y$. Let $\pi_{ij}$ denote the pro
 - $\psi > 1$: Subjects are more likely to have the same level for both $X$ and $Y$, e.g., subjects with $(X, Y) = (1, 1)$ or $(X, Y) = (2, 2)$ are more likely than subjects with $(X, Y) = (1, 2)$ or $(X, Y) = (2, 1)$.
 - $\psi < 1$: Subjects are more likely to have the the opposite level for $X$ than they do for $Y$, e.g., subjects with $(X, Y) = (1, 2)$ or $(X, Y) = (2, 1)$ are more likely than subjects with $(X, Y) = (1, 1)$ or $(X, Y) = (2, 2)$.
 
-The odds ratio is not perfece, however. For one, the possible values of $\psi$ are highly skewed, with $0 < \psi < 1$ and $1 < \psi < \infty$ corresponding to the two distinct dependence scenarios. Rather than estimating $\psi$ directly, we will instead focus our attention on the _log odds ratio_, $\theta = \log{\psi}$. The log odds ratio is symmetric about 0, which makes statistical inference somewhat simpler. I will routinely switch between discussing the estimation of $\psi$ and $\theta$, noting that we can always convert one to the other by appropriate exponentiation or taking of logarithms.
+The odds ratio is a simple summary of the dependence in a $2 \times 2$ table. An attractive feature is that it is independent of the marginal probabilities (__TODO: cite__). The odds ratio is not perfect, however. For one, the possible values of $\psi$ are highly skewed, with $0 < \psi < 1$ and $1 < \psi < \infty$ corresponding to the two distinct dependence scenarios. Rather than estimating $\psi$ directly, we will instead focus our attention on the _log odds ratio_, $\theta = \log{\psi}$. The log odds ratio is symmetric about 0, which makes statistical inference somewhat simpler. I will routinely switch between discussing the estimation of $\psi$ and $\theta$, noting here that we can always convert one to the other by appropriate exponentiation or taking of logarithms.
 
 Suppose we observe $(X, Y)$ for $n$ samples. Denote by $n_{ij} the number of subjects with response $i$ for variable $X$ and response $j$ for variable $Y$. We use the 'plus' notation to denote the sum over the index it replaces, e.g., $n_{1 +} = n_{11} + n_{12}$. The general form of this $2 \times 2$ contingency table is shown in Table \ref{tab:2x2}.
 
@@ -345,7 +345,7 @@ The simplest estimator of $\theta$ is the unconditional maximum likelihood estim
 
 A problem with the estimator $\widehat{\theta_{U}}$ is that it is $0$ or $\infty$ if any $n_{ij} = 0$ and undefined if either the row or column sums are zero, events that have positive probabilities. We can avoid such problems by adding $\frac{1}{2}$ to each of the $n_{ij}$ and defining a modified estimator $\widehat{\theta_{0.5}} = \log{\frac{(n_{11} + 0.5) (n_{22} + 0.5)}{(n_{12} + 0.5) (n_{21} + 0.5)}}$ with corresponding asymptotic standard error $hat{\sigma}(\widehat{\theta_{0.5}}) = \sqrt{\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{22}}}$. \citet{Haldane:1956wq} and \citet{Anscombe:1956te} showed that $\widehat{\theta_{U}}$ and $\widehat{\theta_{0.5}}$ have the same asymptotic distribution around $\theta$ as $n \to \infty$ but that $\widehat{\theta_{0.5}}$ has reduced first-order bias. The modified estimator, $\widehat{\theta_{0.5}}$, is therefore generally recommended.
 
-Another alternative to $\widehat{\theta_{U}}$ is the _conditional_ maximum likelihood estimator, $\widehat{\theta_{C}}$. This is computed by first conditioning on ${n_{1 +}, n_{+ 1}}$. Some algebra then leads to the conditional distribution of $n_{11}$, $f(n_{11}; n_{1 +}, n_{+, 1, \psi})$, which is a hypergeometric distribution \citep{Fisher:1935ug}. The maximum likelihood estimator of $\psi$, $\widehat{\psi_{C}}$ is solved using iterative methods. The conditional estimator, $\widehat{\theta_{C}} = \log{\widehat{\psi_{C}}}$, works better than the unconditional estimator, $\widehat{\theta_{U}}$, when the sample size, $n$, is small \citep{Agresti:2007tf}.
+Another alternative to $\widehat{\theta_{U}}$ is the _conditional_ maximum likelihood estimator, $\widehat{\theta_{C}}$. This is computed by first conditioning on ${n_{1 +}, n_{+ 1}}$. Some algebra then leads to the conditional distribution of $n_{11}$, $f(n_{11}; n_{1 +}, n_{+, 1, \psi})$, which is a hypergeometric distribution \citep{Fisher:1935ug}. The maximum likelihood estimator of $\psi$, $\widehat{\psi}_{C}$ is solved using iterative methods. The conditional estimator, $\widehat{\theta_{C}} = \log{\widehat{\psi}_{C}}$, works better than the unconditional estimator, $\widehat{\theta_{U}}$, when the sample size, $n$, is small \citep{Agresti:2007tf}.
 
 Estimation of the odds ratio is made more difficult when the contingency table is _sparse_. We say that a contingency table is sparse when some of the $n_{ij}$ are small. Sparsity can occur even when the sample size, $n$, is large. Sparsity becomes more of a problem as we move from a single $2 \times 2$ table to $K$ $2 \times 2$ tables or, equivalently, a $2 \times 2 \times K$ table.
 
@@ -353,15 +353,15 @@ Estimation of the odds ratio is made more difficult when the contingency table i
 
 Suppose we now measure the same two binary variables $X$ and $Y$ in $K$ different strata. We summarise these data in a $2 \times 2 \times K$ contingency table, $\{n_{ijk} \}$, where the $k^{th}$ 'slice' of the table corresponds to the $2 \times 2$ table for the $k^{th}$ stratum. For now, we assume that the odds ratio, $\psi = \frac{\pi_{11k} \pi_{22k}}{\pi_{12k} \pi_{21k}}$, remains constant across the $K$ tables but we allow the marginal probabilities, $\pi_{+ 1k} = 1 - \pi_{+ 2k}, \pi_{1 + k} = 1 - \pi_{2 + k}$ to vary.
 
-We can again compute an unconditional maximum likelihood estimator, $\widehat{\psi_{U}}$, a '0.5-adjusted' unconditional maximum likelihood estimator, $\widehat{\psi_{0.5}}$, and a conditional maximum likelihood estimator, $\widehat{\psi_{C}}$, of the log odds ratio $\theta = \log{\psi}$ \citep[see][]{Breslow:1981ta}.
+We can again compute an unconditional maximum likelihood estimator, $\widehat{\psi}_{U}$, a '0.5-adjusted' unconditional maximum likelihood estimator, $\widehat{\psi}_{0.5}$, and a conditional maximum likelihood estimator, $\widehat{\psi}_{C}$, of the log odds ratio $\theta = \log{\psi}$ \citep[see][]{Breslow:1981ta}.
 
-Another estimator of the common odds ratio, $\psi$, is the Mantel-Haenszel estimator \citep{MANTEL:1959uf}, $\widehat{\psi_{MH}} = \frac{\sum_{k} (n_{11k} n_{22k} / n_{+ + k})}{n_{12k} n_{21k} / n_{+ + k}}$. \citet{Robins:1986vh} derived a simple robust estimator of the variance for $\widehat{\theta}_{MH} = \log{\widehat{\psi_{MH}}}$, $\hat{\sigma}^{2}(\widehat{\theta}_{MH})$. This variance estimator did not appear until some 25 years after the initial publication of the Mantel-Haenszel estimator[^mh_variance]. This delay was in part due to the two asymptotic forms of $2 \times 2 \times K$ contingency tables.
+Another estimator of the common odds ratio, $\psi$, is the Mantel-Haenszel estimator \citep{MANTEL:1959uf}, $\widehat{\psi}_{MH} = \frac{\sum_{k} (n_{11k} n_{22k} / n_{+ + k})}{n_{12k} n_{21k} / n_{+ + k}}$. \citet{Robins:1986vh} derived a simple robust estimator of the variance for $\widehat{\theta}_{MH} = \log{\widehat{\psi}_{MH}}$, $\hat{\sigma}^{2}(\widehat{\theta}_{MH})$. This variance estimator did not appear until some 25 years after the initial publication of the Mantel-Haenszel estimator[^mh_variance]. This delay was in part due to the two asymptotic forms of $2 \times 2 \times K$ contingency tables.
 
 [^mh_variance]: Other estimators had been proposed but were supplanted by the work of \citet{Robins:1986vh}.
 
 The first asymptotic environment, $A1$, assumes that the number of $2 \times 2$ tables, $K$, remains small while the the sample sizes in each strata, $n_{+ + k}$, grows large. The second asymptotic environment, $A2$, assumes that $K$ grows while $n_{+ + k}$ remains small. The variance estimator proposed by \citet{Robins:1986vh} is consistent under both $A1$ and $A2$. For our study of within-fragment co-methylation, $A2$ is the more relevant asymptotic environment.
 
-\citet{Breslow:1981ta} showed that under $A2$ neither the unconditional maximum likelihood estimator, $\widehat{\psi_{U}}$, nor the '0.5-adjusted' unconditional maximum likelihood estimator, $\widehat{\psi_{0.5}}$, converge to the true odds ratio. In contrast, both the Mantel-Haenszel estimator, $\widehat{\psi_{MH}}$, and the conditional maximum likelihood estimator, $\widehat{\psi_{C}}$, do convert to $\psi$, with $\widehat{\psi_{MH}}$ having the advantage of a simple closer form expression \citep{Breslow:1996uc}.
+\citet{Breslow:1981ta} showed that under $A2$ neither the unconditional maximum likelihood estimator, $\widehat{\psi}_{U}$, nor the '0.5-adjusted' unconditional maximum likelihood estimator, $\widehat{\psi}_{0.5}$, converge to the true odds ratio. In contrast, both the Mantel-Haenszel estimator, $\widehat{\psi}_{MH}$, and the conditional maximum likelihood estimator, $\widehat{\psi}_{C}$, do converge to $\psi$, with $\widehat{\psi}_{MH}$ having the advantage of a simple closer form expression \citep{Breslow:1996uc}.
 
 \subsection{Homogeneity of odds ratios assumption}
 
@@ -373,62 +373,62 @@ Under asymptotic environment $A2$, where the $2 \times 2$ tables are sparse, \ci
 
 \subsection{Simulation study}\label{subsec:simulation_study}
 
-We analyse the results of a simulation study to explore the effects of sparsity and heterogeneity of odds ratios on estimates of odds ratios in $2 \times 2 \times K$ contingency tables. The simulation requires that we specify several parameters. In order to relate these back to DNA methylation, I describe each parameter using the statistical framework proposed in Chapter \ref{chap:wgbs_statistical_framework}:
+We carry out a simulation study to explore the effects of sparsity and heterogeneity of odds ratios on estimates of odds ratios in $2 \times 2 \times K$ contingency tables. The simulation requires that we specify several parameters. In order to relate these back to DNA methylation, I describe each parameter using the statistical framework proposed in Chapter \ref{chap:wgbs_statistical_framework}:
 
-- the number of tables, $K$. The number of 2-tuples.
+- the number of tables, $K$. The number of CpG pairs (2-tuples).
 - the marginal probabilities, $\pi_{2 +} = Pr(Z_{i})$ and $\pi_{+ 2} = Pr(Z_{i'})$. Some simulations use a common set of marginal probabilities across all tables but others simulate the marginal probabilities from a specified distribution.
 - the odds ratio of each table, $\psi_{k}$. Most simulations use a common odds ratio across the $K$ tables, $\psi_{k} = \psi$.
-- the sample size of each table, $n_{+ + k} = d_{(i, i')}$. The number of reads containing both the $i^{th}$ and ${i'}^{th}$ methylation locus (sequencing depth). Most simulations use a truncated negative binomial distribution to model the sequencing depth. The truncated negative binomial distribution is parameterised by the mean ($\mu$), the dispersion parameter (size) and the truncation level (trunc). Unless otherwise noted, simulations use $\mu = 30$, $\text{size} = 10$ and $\text{trunc} = 9$, corresponding to an average sequencing depth of $30 \times$ but where only 2-tuples with at least $10 \times$ sequencing depth are used in downstream analyses[^nb_sim].
+- the sample size of each table, $n_{+ + k} = d_{(i, i')}$. The number of reads containing both the $i^{th}$ and ${i'}^{th}$ methylation locus (sequencing depth). Most simulations use a truncated negative binomial distribution to model the sequencing depth. The truncated negative binomial distribution is parameterised by the mean ($\mu$), the dispersion parameter (size) and the truncation level (trunc). Unless otherwise noted, simulations use $\mu = 30$, $\text{size} = 10$ and $\text{trunc} = 9$, corresponding to an average sequencing depth of $30 \times$ but where only pairs with at least $10 \times$ sequencing depth are used in downstream analyses[^nb_sim].
 
 [^nb_sim]: In the simulation study, a larger value of 'trunc' results in higher quality data since we can simply keep simulating until we have $K$ tables with sufficient sequencing depth. In analysing real data, increasing this cutoff may be detrimental since we end up with fewer tables to analyse.
 
 For each set of parameters, we generate $K$ $2 \times 2$ contingency tables having the desired marginal probabilities and odds ratio. We then compute the following statistics:
 
-1. The $K$ 0.5-adjusted unconditional odds ratio estimates, $\widehat{\psi_{0.5}}$, from each $2 \times 2$ table.
-2. The unconditional odds ratio estimate from the $2 \times 2$ table formed by collapsing over $k$, $\widehat{\psi_{U}}$.
-3. The Mantel-Haenszel odds ratio estimate from the $2 \times 2 \times K$ table, $\widehat{\psi_{MH}}$.
+1. The $K$ 0.5-adjusted unconditional odds ratio estimates, $\widehat{\psi}_{0.5}$, from each $2 \times 2$ table.
+2. The unconditional odds ratio estimate from the $2 \times 2$ table formed by collapsing over $k$, $\widehat{\psi}_{U}$.
+3. The Mantel-Haenszel odds ratio estimate from the $2 \times 2 \times K$ table, $\widehat{\psi}_{MH}$.
 
-The results of each simulation are summarised by a plot of $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line[^density].
+The results of each simulation are summarised by a plot of $\widehat{\theta}_{0.5} = \log(\widehat{\psi}_{0.5})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U} = \log(\widehat{\psi}_{U})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH} = \log(\widehat{\psi}_{MH})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line[^density].
 
-[^density]: In many simulations $\psi$ is constant across the $K$ tables and therefore the density is degenerate.
+[^density]: In many simulations $\theta$ is constant across the $K$ tables and therefore the density is degenerate.
 
 \subsubsection{Results}
 
-To begin, we explore the effect of the marginal probabilities, $\pi_{2 +}, \pi_{+ 2}$, when $\theta = 0$ ($\psi = 1$) identically across the $K$ tables (corresponding to independence of $X$ and $Y$) for $K = 100$ (Simulation 1, Figure \ref{fig:Simulation_1}), and $K = 1000$ (Simulation 2a, Figure \ref{fig:Simulation_2}). Under this simulation, we expect both $\widehat{\theta_{U}}$ and $\widehat{\theta}_{MH}$ to converge to the true value, $\theta = 0$, as $K \to \infty$. This is indeed what we observe, except when the marginal probabilities are uniformly near the boundaries ($\pi_{2 +} = \pi_{+ 2} = 0.01$ and $\pi_{2 +} = \pi_{+ 2} = 0.99$) and $K$ is smaller.
-
-By contrast, $\widehat{\theta_{0.5}}$ are highly biased estimates of $\theta$, even when $K = 1000$. The histograms of $\widehat{\theta_{0.5}}$ are not centred around the true value, $\theta = 0$, unless the marginal probabilities are well away from the boundaries ($0.25 < \pi_{2 +} = \pi_{+ 2} < 0.75$). The bias can be eliminated only by having ultra-deep sequencing coverage ($mean(d) = 10000 \times$), although the variation of $\widehat{\theta_{0.5}}$ across the $K = 1000$ tables remains non-negligible (Simulation 2b Figure \ref{fig:Simulation_2d}).
+To begin, we explore the effect of the marginal probabilities, $\pi_{2 +}, \pi_{+ 2}$, when $\theta = 0$ ($\psi = 1$) identically across the $K$ tables (corresponding to independence of $X$ and $Y$) for $K = 100$ (Simulation 1a, Figure \ref{fig:Simulation_1a}), and $K = 1000$ (Simulation 1b, Figure \ref{fig:Simulation_1b}). Under this simulation, we expect both $\widehat{\theta_{U}}$ and $\widehat{\theta}_{MH}$ to converge to the true value, $\theta = 0$, as $K \to \infty$. This is indeed what we observe, except when the marginal probabilities are uniformly near the boundaries ($\pi_{2 +} = \pi_{+ 2} = 0.01$ and $\pi_{2 +} = \pi_{+ 2} = 0.99$) and $K$ is smaller. By contrast, the estimates of $\theta$ from the individual $2 \times 2$ tables, $\widehat{\theta_{0.5}}$, are highly biased, even when $K = 1000$ in Simulate 1b (Figure \ref{fig:Simulation_1b}). In both Simulation 1a and 1b (Figures \ref{fig:Simulation_1a} and \ref{fig:Simulation_1b}) the histograms of $\widehat{\theta}_{0.5}$ are not centred around the true value, $\theta = 0$, unless the marginal probabilities are well away from the boundaries ($0.25 < \pi_{2 +} = \pi_{+ 2} < 0.75$).
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_1.pdf}
-\caption[Simulation 1]{Simulation 1. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
-\label{fig:Simulation_1}
+\caption[Simulation 1a]{Results of simulation 1a ($K = 100$). Estimating the log odds ratio, $\theta = 0$ (shown by the dashed line), from a $2 \times 2 \times 100$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\label{fig:Simulation_1a}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_2.pdf}
-\caption[Simulation 2a]{Simulation 2a. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
-\label{fig:Simulation_2}
+\caption[Simulation 1b]{Results of simulation 1b ($K = 1000$). Estimating the log odds ratio, $\theta = 0$ (shown by the dashed line), from a $2 \times 2 \times 1000$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\label{fig:Simulation_1b}
 \end{figure}
+
+The bias can be eliminated only by having ultra-deep sequencing coverage, such as in Simulation 1c where $mean(d) = 10000 \times$ (Figure \ref{fig:Simulation_1c}). Even then, however, the variation of $\widehat{\theta}_{0.5}$ across the $K = 1000$ tables remains non-negligible when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$ are near the boundaries.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_2d.pdf}
-\caption[Simulation 2b]{Simulation 2b. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
-\label{fig:Simulation_2d}
+\caption[Simulation 1c]{Results of simulation 1c ($K = 1000$). Estimating the log odds ratio, $\theta = 0$ (shown by the dashed line), from a $2 \times 2 \times 1000$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $10,000$.}
+\label{fig:Simulation_1c}
 \end{figure}
 
-Next we explore what happens when we allow the marginal probabilities, $\pi_{2 +}, \pi_{+ 2}$, to vary across the $K$ tables when $\theta$ is a fixed value identically across the $K$ tables for $K = 100$ ($\theta$ not necessarily zero). To do so, we simulate $\pi_{2 +}, \pi_{+ 2} \eqd Uniform(0, 1)$ for each $2 \times 2$ table. As is expected from the theory, Figure \ref{fig:Simulation_3} shows that the Mantel-Haenszel estimator does an excellent job of estimating the true value of $\theta$. By contrast, $\widehat{\theta_{U}}$, is well away from the true value and the distribution of $\widehat{\theta_{0.5}}$ is skewed and widely dispersed.
+Next, we explore what happens when we allow the marginal probabilities, $\pi_{2 +}$ and $\pi_{+ 2}$, to vary across the $K = 100$ tables for a fixed (possibly non-zero) value of $\theta$. To do so, we simulate $\pi_{2 +}, \pi_{+ 2} \eqd Uniform(0, 1)$ for each $2 \times 2$ table. As is expected from the theory, the results of Simulation 2 show that the Mantel-Haenszel estimator does an excellent job of estimating the true value of $\theta$ (Figure \ref{fig:Simulation_3}). By contrast, the estimate formed by collapsing over the $K$ tables, $\widehat{\theta}_{U}$, is well away from the true value and the distribution of $\widehat{\theta}_{0.5}$ is skewed and widely dispersed.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_3.pdf}
-\caption[Simulation 3]{Simulation 3. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
-\label{fig:Simulation_3}
+\caption[Simulation 2]{Results of simulation 2 ($K = 100$). Estimating the log odds ratio, $\theta$ (shown by the dashed line), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Uniform(0, 1)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\label{fig:Simulation_2}
 \end{figure}
 
-In a sense, the $\pi_{2 +}, \pi_{+ 2} \eqd Uniform(0, 1)$ assumption is too easy. As we have seen in Chapter \ref{chap:wgbs_statistical_framework}, the marginal probabilities of DNA methylation are mostly near the boundaries, not uniformly distributed on the unit interval. Furthermore, each methylation locus in a 2-tuple will likely have a similar marginal probability of methylation. To simulate this more realistic scenario, we simulate $\pi_{2 +} = \pi_{+ 2} \eqd Beta(0.3, 0.2)$, which has a similar shape to the genome-wide distribution of $\beta$-values observed in most mammalian genomes (Figure \ref{fig:beta_marginals}). The results of this simulation (Simulation 4, Figure \ref{fig:Simulation_4}) are basically an exaggerated version of Simulation 3. The Mantel-Haenszel estimator, $\widehat{\theta}_{MH}$, remains an excellent estimator; the unconditional log odds ratio estimator of the collapsed table does an awful job, regularly returning $\widehat{\theta_{U}} > 0$ when in fact $\theta < 0$; and the distribution of $\widehat{\theta_{0.5}}$ is even more widely dispersed and typically not centred around $\theta$.
+In a sense, the $\pi_{2 +}, \pi_{+ 2} \eqd Uniform(0, 1)$ assumption in Simulation 2 is too easy. As we have seen in Chapter \ref{chap:wgbs_statistical_framework}, the marginal probabilities of DNA methylation are not uniformly distributed but, rather, are bimodal and mostly near the boundaries. Furthermore, each methylation locus in a pair will likely have a similar marginal probability of methylation. To simulate this more relevant scenario, we simulate $\pi_{2 +} = \pi_{+ 2} \eqd Beta(0.3, 0.2)$, which has a similar shape to the genome-wide distribution of $\beta$-values observed in most mammalian genomes (Figure \ref{fig:beta_marginals}).
 
 \begin{figure}[!htb]
 \centering
@@ -437,62 +437,66 @@ In a sense, the $\pi_{2 +}, \pi_{+ 2} \eqd Uniform(0, 1)$ assumption is too easy
 \label{fig:beta_marginals}
 \end{figure}
 
+The results of this simulation (Simulation 3, Figure \ref{fig:Simulation_3}) are basically an exaggerated version of Simulation 2. The Mantel-Haenszel estimator, $\widehat{\theta}_{MH}$, remains an excellent estimator; the unconditional log odds ratio estimator of the collapsed table does an awful job, regularly returning $\widehat{\theta}_{U} > 0$ when in fact $\theta < 0$; and the distribution of $\widehat{\theta}_{0.5}$ is even more widely dispersed and typically not centred around $\theta$.
+
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Simulation_4.pdf}
-\caption[Simulation 4]{Simulation 4. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
-\label{fig:Simulation_4}
+\includegraphics[width=\textwidth]{../figures/Simulation_3.pdf}
+\caption[Simulation 3]{Results of simulation 3 ($K = 100$). Estimating the log odds ratio, $\theta$ (shown by the dashed line), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\label{fig:Simulation_3}
 \end{figure}
 
-We now explore what happens when the odds ratio is heterogeneous across the $K$ tables. Although results are shown for $\widehat{\theta_{0.5}}$ and $\widehat{\theta_{U}}$, we do not discuss these estimators further since we have seen that these perform poorly in even the simplest simulation scenarios.
+We now turn our attention to what happens when the odds ratio is heterogeneous across the $K$ tables. Although results are shown for $\widehat{\theta}_{0.5}$ and $\widehat{\theta}_{U}$, we do not discuss these estimators further since we have seen that these perform poorly in even the simplest simulation scenarios.
 
-In these remaining simulations, all parameters are as for Simulation 4 except that the true log odds ratio of each table, $\theta_{k}$, comes from the following distributions:
+In these remaining simulations, all parameters are as for Simulation 3 except that the true log odds ratio of each table, $\theta_{k}$, comes from the following distributions:
 
-- Simulation 5 and Simulation 6: $\theta_{k} \eqd Gaussian(\phi_{0}, 1)$, where $\theta_{0} = -4, \ldots, 4$ is identical across the $K$ tables.
-- Simulation 7:$\theta_{k} \eqd Skewed\text{-}Gaussian(\theta_{0}, 1, -10)$, where $\theta_{0} = -4, \ldots, 4$ is identical across the $K$ tables.
-- Simulation 8: $\theta_{k} \eqd 0.5 \times Gaussian(- \theta_{0}, 1) + 0.5 \times Gaussian(\theta_{0}, 1)$.
+- Simulation 4a and Simulation 4b: $\theta_{k} \eqd Gaussian(\phi_{0}, 1)$, where $\theta_{0} = -4, \ldots, 4$ is identical across the $K$ tables.
+- Simulation 5:$\theta_{k} \eqd Skewed\text{-}Gaussian(\theta_{0}, 1, -10)$, where $\theta_{0} = -4, \ldots, 4$ is identical across the $K$ tables.
+- Simulation 6: $\theta_{k} \eqd 0.5 \times Gaussian(- \theta_{0}, 1) + 0.5 \times Gaussian(\theta_{0}, 1)$.
 
-Simulations 5, 6 and 7 (Figures \ref{fig:Simulation_5}, \ref{fig:Simulation_6} and \ref{fig:Simulation_7}) demonstrate that the Mantel-Haenszel estimator, $\widehat{\theta}_{MH}$, is a reasonable estimator of the centre of the distribution of log odds ratios. It performs better in Simulation 5 and 6, where the distribution of $\theta$ is symmetric, as opposed to Simulation 7, where the distribution of $\theta$ is skewed. Unsurprisingly, $\widehat{\theta}_{MH}$ does a better job as $K \to \infty$. It should be emphasised, however, that the asymptotic variance of the estimator, $\hat{\sigma}(\widehat{\theta}_{MH})^{2}$ is not an estimate of the variance of the true odds ratios, $var(\theta)$. We can see that the asymptotic $95 \%$ confidence interval of $\widehat{\theta}_{MH}$ only covers a small amount of the variation in the $\theta$.
+Simulations 4a, 4b and 5 (Figures \ref{fig:Simulation_4a}, \ref{fig:Simulation_4b} and \ref{fig:Simulation_5}) demonstrate that the Mantel-Haenszel estimator, $\widehat{\theta}_{MH}$, is a reasonable estimator of the centre of the distribution of the true log odds ratios, $\theta_{k}$. It performs better in Simulation 4a and 4b, where the distribution of the $\theta_{k}$ is symmetric, as opposed to Simulation 5, where the distribution of the $\theta_{k}$ is skewed. Unsurprisingly, $\widehat{\theta}_{MH}$ does a better job when $K = 1000$ (Simulation 4b, Figure \ref{fig:Simulation_4b}) than when $K = 100$ (Simulation 4a, Figure \ref{fig:Simulation_4a}).
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_5.pdf}
-\caption[Simulation 5]{Simulation 5. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
-\label{fig:Simulation_5}
+\caption[Simulation 4a]{Results of simulation 4a ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Gaussian(\theta_{0}, 1)$ (density shown by the dashed line), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\label{fig:Simulation_4a}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_6.pdf}
-\caption[Simulation 6]{Simulation 6. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
-\label{fig:Simulation_6}
+\caption[Simulation 4b]{Results of simulation 4b ($K = 1000$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Gaussian(\theta_{0}, 1)$ (density shown by the dashed line), from a $2 \times 2 \times 1000$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\label{fig:Simulation_4b}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_7.pdf}
-\caption[Simulation 7]{Simulation 7. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
-\label{fig:Simulation_7}
+\caption[Simulation 5]{Results of simulation 5 ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Skewed\text{-}Gaussian(\theta_{0}, 1, -10)$ (density shown by the dashed line), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\label{fig:Simulation_5}
 \end{figure}
 
-Finally, Simulation 8 (Figure \ref{fig:Simulation_8}) shows that if the distribution of $\theta$ is multimodel that $\widehat{\theta}_{MH}$ will estimate the 'average' effect. Of course, the utility of any point estimate is severely reduced when the true effect is multimodal.
+To take this heterogeneity even further, Simulation 6 (Figure \ref{fig:Simulation_6}) shows that if the distribution of $\theta$ is multimodel, then $\widehat{\theta}_{MH}$ will estimate the 'average' effect. Of course, the utility of any point estimate is severely reduced when the true effect is multimodal.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_8.pdf}
-\caption[Simulation 8]{Simulation 8. $\widehat{\theta_{0.5}} = \log(\widehat{\psi_{0.5}})$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta_{U}} = \log(\widehat{\psi_{U}})$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH} = \log(\widehat{\psi_{MH}})$ (coloured blue). The density of the true value of the log odds ratio across the $2 \times 2 \times K$ table $\theta$, is shown by a dashed black line. See main text for description of other parameters.}
-\label{fig:Simulation_8}
+\caption[Simulation 6]{Results of simulation 5 ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = 0.5 \times Gaussian(- \theta_{0}, 1) + 0.5 \times Gaussian(\theta_{0}, 1)$ (density shown by the dashed line), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\label{fig:Simulation_6}
 \end{figure}
+
+One final note. When the true log odds ratios, $\theta_{k}$, is heterogeneous, then the asymptotic variance of the estimator Mantel-Haenszel estiamtor, $\hat{\sigma}(\widehat{\theta}_{MH})^{2}$, is __not__ an estimate of the variance of the true odds ratios, $var(\theta_{k})$. We can see in Simulations 4a, 4b, 5 and 6 (Figures \ref{fig:Simulation_4a}, \ref{fig:Simulation_4b}, \ref{fig:Simulation_5} and \ref{fig:Simulation_6}) that the asymptotic $95 \%$ confidence interval of $\widehat{\theta}_{MH}$ only covers a small amount of the variation in the $\theta_{k}$.
 
 \subsection{Summary}
 
 We summarise the results of the simulation study with respect to our aim of estimating within-fragment co-methylation from whole-genome bisulfite-sequencing data.
 
-This simulation study demonstrates that we cannot estimate within-fragment co-methylation at individual 2-tuples using the simple estimator odds ratio estimator, $\theta_{0.5}$, unless ultra-deep[^ultra-high_depth] sequencing is used ($d > 10000 \times$). The distributions of $\widehat{\theta_{0.5}}$ at typical sequencing depths ($d \approx 30$) are highly biased and dispersed, even under very simple simulation scenarios. Therefore, some degree of aggregation is required in order to study within-fragment co-methylation.
+This simulation study demonstrates that we cannot estimate within-fragment co-methylation at individual pairs of methylation loci using the simple estimator odds ratio estimator, $\theta_{0.5}$, unless ultra-deep[^ultra-high_depth] sequencing is used ($d > 10000 \times$). The distributions of $\widehat{\theta_{0.5}}$ at typical sequencing depths ($d \approx 30$) are highly biased and dispersed, even under very simple simulation scenarios. Therefore, some degree of aggregation is required in order to study within-fragment co-methylation.
 
 [^ultra-high_depth]: Ultra-deep sequencing has its own problems, such as an increased effect of PCR-bias.
 
-Suppose that we aggregate $K$ 2-tuples to form a $2 \times 2 \times K$ contingency table. When little can be assumed about this $2 \times 2 \times K$ contingency table, the Mantel-Haenszel estimator is the most appropriate of those considered. Firstly, it is highly robust to different marginal probabilities across the $K$ tables. Secondly, when the odds ratios are heterogeneous across the $K$ tables, the Mantel-Haenszel estimator will estimate the 'average' effect.
+Suppose that we aggregate $K$ CpG pairs to form a $2 \times 2 \times K$ contingency table. When little can be assumed about this $2 \times 2 \times K$ contingency table, the Mantel-Haenszel estimator is the most appropriate of those considered. Firstly, it is highly robust to different marginal probabilities across the $K$ tables. Secondly, when the odds ratios are heterogeneous across the $K$ tables, the Mantel-Haenszel estimator will estimate the 'average' effect.
 
 Of course, the utility of this 'average' will depend on the distribution of $\theta$, which is unknown in practice. However, we might explore its variability by computing the Mantel-Haenszel estimate under a range of aggregation strategies (i.e. across different $k$).
 
@@ -500,7 +504,7 @@ Of course, the utility of this 'average' will depend on the distribution of $\th
 
 \section{Within-fragment co-methylation}\label{sec:wf_cometh}
 
-Here I describe a simple method to study within-fragment co-methylation by analysing methylation patterns at 2-tuples. For simplicity, I will use CpG 2-tuples, but the method is applicable to any methylation type. This method is to be implemented in the `cometh()` function that is part of the `MethylationTuples` software[^cometh].
+Here I describe a simple method to study within-fragment co-methylation by analysing methylation patterns at pairs of methylation loci (2-tuples). For simplicity, I will use pairs of CpGs, but the method is applicable to any methylation type. This method is to be implemented in the `cometh()` function that is part of the `MethylationTuples` software[^cometh].
 
 [^cometh]: At the time of writing, this is available as a stand along `mantelhaen()` function, but it will soon be one of several strategies of estimating within-fragment co-methylation using the `cometh()` function.
 
@@ -513,37 +517,37 @@ The aim of this analysis is to address the questions:
 
 There are three important decisions to make in our analysis:
 
-1. How to define the 2-tuples?
-2. How to aggregate the 2-tuples?
+1. How to define the CpG pairs?
+2. How to aggregate the CpG pairs?
 3. Which estimator to use?
 
 Answers to the latter two are informed by Section \ref{sec:sparse_2x2xK_tables}.
 
-\subsubsection{How to define the 2-tuples}
+\subsubsection{How to define the CpG pairs}
 
-The construction of 2-tuples is very similar to constructing the pairs of methylation levels, described in Section \ref{sec:beta_pair_construction}. However, we are now limited to analysing co-methylation of loci that can be captured within a single read. With current technology this means we are limited to studying within-fragment co-methylation for 2-tuples with $IPD$ less than approximately $250$. As in Section \ref{subsec:beta_cor}, we will consider 2-tuples with $NIL = 0$ and $NIL \geq 0$.
+The construction of CpG pairs is very similar to constructing the pairs of methylation levels, described in Section \ref{sec:beta_pair_construction}. However, we are now limited to analysing co-methylation of loci that can be captured within a single read. With current technology this means we are limited to studying within-fragment co-methylation for pairs with $IPD$ less than approximately $250$. As in Section \ref{subsec:beta_cor}, we will consider pairs with $NIL = 0$ and $NIL \geq 0$.
 
-\subsubsection{How to aggregate the 2-tuples?}
+\subsubsection{How to aggregate the CpG pairs?}
 
-The counts of methylation patterns at each 2-tuple can be summarised by a $2 \times 2$ contingency table. The sequencing depth of each 2-tuple is typically low. Furthermore, for each locus in the 2-tuple, the marginal probability that it is methylated is very often close to zero or one. Therefore, in light of the results in Section \ref{subsec:simulation_study}, we must aggregate these $2 \times 2$ tables in order to perform any useful inference.
+The counts of methylation patterns at each CpG pair can be summarised by a $2 \times 2$ contingency table. The sequencing depth of each pair is typically low. Furthermore, for each locus in the pair, the marginal probability that it is methylated is very often close to zero or one. Therefore, in light of the results in Section \ref{subsec:simulation_study}, we must aggregate these $2 \times 2$ tables in order to perform any useful inference.
 
-The ideal level of aggregation combines those 2-tuples with homogeneous odds ratios. Of course, this information is unknown to us. Instead, we will aggregate by chromosome to explore the variation of co-methylation across chromosomes and compare these to genome-level estimates. The resulting estimates must be interpreted as the 'average' degree of within-fragment co-methylation across the aggregation levels.
+The ideal level of aggregation combines those pairs with homogeneous odds ratios. Of course, this information is unknown to us. Instead, we will aggregate by chromosome to explore the variation of co-methylation across chromosomes and compare these to genome-level estimates. The resulting estimates must be interpreted as the 'average' degree of within-fragment co-methylation across the aggregation levels.
 
 \subsubsection{Which estimator to use?}
 
-We will use the Mantel-Haenszel odds ratio estimator since it is robust to variable marginal probabilities. This allows us to combine data for 2-tuples from different regions of the genome, e.g., regions that are hypomethylated, partially methylated and hypermethylated.
+We will use the Mantel-Haenszel odds ratio estimator since it is robust to variable marginal probabilities. This allows us to combine data for pairs from different regions of the genome, e.g., regions that are hypomethylated, partially methylated and hypermethylated.
 
 \subsection{Results}
 
 I have analysed all 40 samples in the EPISCOPE, Lister, Seisenberger and Ziller datasets. For each sample, I compute $\widehat{\theta}_{MH}$ using different levels of aggregation (listed here in decreasing order):
 
 1. $IPD$-only: A $2 \times 2 \times K$ table for each $IPD$.
-2. $IPD$-CGI: A $2 \times 2 \times K$ table for each $IPD$ and 'CpG island status' (CGI-status) combination. The CGI-status of each 2-tuple is whether it is _inside_ a CpG island or _outside_ a CpG island[^spanning].
+2. $IPD$-CGI: A $2 \times 2 \times K$ table for each $IPD$ and 'CpG island status' (CGI-status) combination. The CGI-status of each pair is whether it is _inside_ a CpG island or _outside_ a CpG island[^spanning].
 3. $IPD$-chromosome: A $2 \times 2 \times K$ table for each $IPD$ and chromosome combination.
 
-[^spanning]: 2-tuples spanning the boundary of a CpG island are ignored. There are few such 2-tuples when $NIL = 0$. While there are considerably more such 2-tuples when $NIL \geq 0$, I have ignored these in favour of simplicity.
+[^spanning]: Pairs spanning the boundary of a CpG island are ignored. There are few such pairs when $NIL = 0$. While there are considerably more such pairs when $NIL \geq 0$, I have ignored these in favour of simplicity.
 
-No minimum sequencing coverage cutoff is required since the Mantel-Haenszel estimator appropriately downsweights 2-tuples with low sequencing coverage.
+No minimum sequencing coverage cutoff is required since the Mantel-Haenszel estimator appropriately downweights pairs with low sequencing coverage.
 
 We will first compare the results of chromosome-level estimates to genome-level estimates[^chrY].
 
@@ -551,149 +555,149 @@ We will first compare the results of chromosome-level estimates to genome-level 
 
 \subsubsection{Chromosome-level $NIL = 0$ analyses}
 
-Figure \ref{fig:EPISCOPE_MH_by_seqnames}, \ref{fig:Lister_MH_by_seqnames}, \ref{fig:Seisenberger_MH_by_seqnames} and \ref{fig:Ziller_merged_MH_by_seqnames} show the results using $NIL = 0$ CpG 2-tuples for the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, respectively.
-
-Unsurprisingly, there is variation in the chromosome-level estimates for a given $IPD$. Overall, however, we see that the genome-level and chromosome-level estimates follow a similar trend for all samples[^mitochondria]: co-methylation is strongest for smaller $IPD$s, decaying fairly rapidly before levelling out by $IPD = 20$ to $50$. As the $IPD$ increases, we see more variation in the chromosome-level and genome-level estimates, but this is due to the smaller sample sizes we have for 2-tuples with $NIL = 0$ at larger $IPD$s.
-
-[^mitochondria]: The obvious outlier on each of these plots is the mitochondrial DNA. The mitochondria are typically almost completely unmethylated, i.e. the marginal probability of methylation at a CpG on the mitochondria is very close to zero, and so the concept of co-methylation is not particularly meaningful here.
-
-Notably, although the genome-level estimates decay as a function of $IPD$, $\widehat{\theta}_{MH}$ is almost entirely positive over the observable range of $IPD$s, suggesting that within-fragment co-methylation extends for at least a few hundred bp. Furthermore, in samples with sufficiently long paired-end reads, there is a hint of an upturn in the genome-wide $\widehat{\theta}_{MH}$ at approximately $IPD = 180$. This is approximately the distance between two CpGs on adjacent nucleosomes (see Section \ref{sec:nucleosome_and_chromatin}), and may be evidence of the three-dimensional structure of the genome affecting co-methylation.
+Figure \ref{fig:EPISCOPE_MH_by_seqnames}, \ref{fig:Lister_MH_by_seqnames}, \ref{fig:Seisenberger_MH_by_seqnames} and \ref{fig:Ziller_merged_MH_by_seqnames} show the results using $NIL = 0$ CpG pairs for the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, respectively.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_MH_by_seqnames.pdf}
-\caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL = 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL = 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads.}
 \label{fig:EPISCOPE_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_MH_by_seqnames.pdf}
-\caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL = 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL = 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. Only the \emph{ADS}, \emph{ADS-adipose}, \emph{ADS-iPSC} and \emph{H9\_Laurent} samples were sequenced with paired-end reads.}
 \label{fig:Lister_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_MH_by_seqnames.pdf}
-\caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL = 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL = 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads.}
 \label{fig:Seisenberger_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_MH_by_seqnames.pdf}
-\caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL = 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL = 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads.}
 \label{fig:Ziller_merged_MH_by_seqnames}
 \end{figure}
 
+Unsurprisingly, there is variation in the chromosome-level estimates for a given $IPD$. Overall, however, we see that the genome-level and chromosome-level estimates follow a similar trend for all samples[^mitochondria]: co-methylation is strongest for smaller $IPD$s, decaying fairly rapidly before levelling out by $IPD = 20$ to $50$. As the $IPD$ increases, we see more variation in the chromosome-level and genome-level estimates, but this is due to the smaller sample sizes we have for pairs with $NIL = 0$ at larger $IPD$s.
+
+[^mitochondria]: The obvious outlier on each of these plots is the mitochondrial DNA. The mitochondria are typically almost completely unmethylated, i.e. the marginal probability of methylation at a CpG on the mitochondria is very close to zero, and so the concept of co-methylation is not particularly meaningful here.
+
+Notably, although the genome-level estimates decay as a function of $IPD$, $\widehat{\theta}_{MH}$ is almost entirely positive over the observable range of $IPD$s, suggesting that within-fragment co-methylation extends for at least a few hundred bp. Furthermore, in samples with sufficiently long paired-end reads, there is a hint of an upturn in the genome-wide $\widehat{\theta}_{MH}$ at approximately $IPD = 180$. This is approximately the distance between two CpGs on adjacent nucleosomes (see Section \ref{sec:nucleosome_and_chromatin}), and may be evidence of the three-dimensional structure of the genome affecting co-methylation.
+
 \FloatBarrier
-\subsubsection{Chromosome-level $NIL = 0$ analyses}
+\subsubsection{Chromosome-level $NIL \geq 0$ analyses}
 
-The equivalent plots for the $NIL \geq 0$ 2-tuples paint a similar picture, as shown in Figures \ref{fig:EPISCOPE_ac_MH_by_seqnames}, \ref{fig:Lister_ac_MH_by_seqnames}, \ref{fig:Seisenberger_ac_MH_by_seqnames} and \ref{fig:Ziller_merged_ac_MH_by_seqnames}. In addition to the mitochondria, the estimates for X chromosome are frequently distinguishable from the rest of the chromosome-level estimates; e.g., the _ADS_-based samples (_ADS_, _ADS-adipose_ and _ADS-iPSC_), the _H9_-based samples (_H9_ and _H9\_Laurent_), the _IMR90_-based samples (_IMR90\_r1_, _IMR90\_r2_, _IMR90_cell_line_, _IMR90-iPSC_)
-
-- __TODO: Figure out what's going on with some of the EPISCOPE and Ziller samples that have a high autosome (chr21, I think)__
-
-In analysing $NIL \geq 0$ 2-tuples we are increasing the heterogeneity of the $K$ $2 \times 2$ tables, which makes more difficult the interpretation of these results. However, it does give the advantage of allowing the analysis of 2-tuples with larger $IPD$s. The short DNA fragments and read lengths of our data make it difficult to perform reliable chromosome-level inference in even the best samples for $IPD$s greater than 250$ to $300$. Retreating to a genome-level analysis suggests that within-fragment co-methylation is
+The equivalent plots for the $NIL \geq 0$ pairs paint a similar picture, as shown in Figures \ref{fig:EPISCOPE_ac_MH_by_seqnames}, \ref{fig:Lister_ac_MH_by_seqnames}, \ref{fig:Seisenberger_ac_MH_by_seqnames} and \ref{fig:Ziller_merged_ac_MH_by_seqnames}. In addition to the mitochondria, the estimates for X chromosome are frequently distinguishable from the rest of the chromosome-level estimates; e.g., the _ADS_-based samples (_ADS_, _ADS-adipose_ and _ADS-iPSC_), the _H9_-based samples (_H9_ and _H9\_Laurent_), the _IMR90_-based samples (_IMR90\_r1_, _IMR90\_r2_, _IMR90_cell_line_, _IMR90-iPSC_)
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_ac_MH_by_seqnames.pdf}
-\caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. \textbf{TODO: Figure out why E18BUF is missing chrM data}}
+\caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads.}
 \label{fig:EPISCOPE_ac_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_ac_MH_by_seqnames.pdf}
-\caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL \geq 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL \geq 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. Only the \emph{ADS}, \emph{ADS-adipose}, \emph{ADS-iPSC} and \emph{H9\_Laurent} samples were sequenced with paired-end reads.}
 \label{fig:Lister_ac_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_ac_MH_by_seqnames.pdf}
-\caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL \geq 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL \geq 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads.}
 \label{fig:Seisenberger_ac_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_ac_MH_by_seqnames.pdf}
-\caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ 2-tuples. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA.}
+\caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads.}
 \label{fig:Ziller_merged_ac_MH_by_seqnames}
 \end{figure}
+
+By analysing $NIL \geq 0$ pairs we are increasing the heterogeneity of the $K$ $2 \times 2$ tables, which makes more difficult the interpretation of these results. However, it does give the advantage of allowing the analysis of pairs with larger $IPD$s. Nonetheless, the short DNA fragments and read lengths of our data make it difficult to perform reliable chromosome-level inference in even the highest-quality samples for $IPD$s greater than $250$ to $300$. Retreating to a genome-level analysis suggests that within-fragment co-methylation is active over at least a few hundred basepairs in distance.
+
+__TODO: Figure out what's going on with some of the EPISCOPE and Ziller samples that have a high autosome (chr21, I think); figure out why E18BUF is missing chrM in $NIL \geq 0$ plots.__
 
 \FloatBarrier
 \subsubsection{The effect of CpG islands}
 
-Since we must aggregate 2-tuples in order to perform any meaningful analysis of within-fragment co-methylation, there will obviously be unaccounted-for heterogeneity in our estimates. In general, it will be difficult to identify sources of this heterogeneity. One obvious candidate, however, are CpG islands and so we compare estimates of within-fragment co-methylation inside CpG islands and outside of CpG islands. In order to simplify the figures for these analyses, the chromosome-level estimates are not shown. We have seen that the genome-wide estimates capture the trend of the chromosome-level estimates, at least for the autosomes, and so these are sufficient for our purpose.
+Since we must aggregate pairs in order to perform any meaningful analysis of within-fragment co-methylation, there will obviously be unaccounted-for heterogeneity in our estimates. In general, it will be difficult to identify sources of this heterogeneity. One obvious candidate, however, are CpG islands and so we compare estimates of within-fragment co-methylation inside CpG islands and outside of CpG islands. In order to simplify the figures for these analyses, the chromosome-level estimates are not shown. We have seen that the genome-wide estimates capture the trend of the chromosome-level estimates, at least for the autosomes, and so these are sufficient for our purpose.
 
-We observe that there is very little difference between genome-wide estimates of  $\theta$ inside and outside of CpG islands for 2-tuples with $NIL = 0$ (Figures \ref{fig:EPISCOPE_MH_by_CGI}, \ref{fig:Lister_MH_by_CGI}, \ref{fig:Seisenberger_MH_by_CGI}). This is perhaps a little surprising; CpG islands are typically more homogeneous in their average methylation levels and so we would reasonably expect their within-fragment methylation states are more dependent than elsewhere in the genome. However, the $NIL = 0$ results do not tell the full story.
+We observe that there is very little difference between genome-wide estimates of  $\theta$ inside and outside of CpG islands for pairs with $NIL = 0$ (Figures \ref{fig:EPISCOPE_MH_by_CGI}, \ref{fig:Lister_MH_by_CGI}, \ref{fig:Seisenberger_MH_by_CGI}). This is perhaps a little surprising; CpG islands are typically more homogeneous in their average methylation levels and so we would reasonably expect their within-fragment methylation states are more dependent than elsewhere in the genome. However, the $NIL = 0$ results do not tell the full story.
 
-When we analyse 2-tuples with $NIL = 0$, we are only estimating the 'first-order' within-fragment co-methylation. But suppose that the methylation state of the current locus ($Z_{h, i}$) depends not only on the state at the previous locus ($Z_{h, i - 1}$) but also on the states at the two previous states ($Z_{h, i - 2}$ and $Z_{h, i - 3}$). Or it might depend on the states at both upstream and downstream loci (i.e. $Z_{h, i + i'}$ and $Z_{i - i''}$, $i', i'' > 0$). To summarise, the $NIL = 0$ analyses reduce heterogeneity by focusing on adjacent loci but cannot (by themselves) tell us whether within-fragment co-methylation is truly 'first-order'.
+When we analyse pairs with $NIL = 0$, we are only estimating the 'first-order' within-fragment co-methylation. But suppose that the methylation state of the current locus ($Z_{h, i}$) depends not only on the state at the previous locus ($Z_{h, i - 1}$) but also on the states at the two previous states ($Z_{h, i - 2}$ and $Z_{h, i - 3}$). Or it might depend on the states at both upstream and downstream loci (i.e. $Z_{h, i + i'}$ and $Z_{i - i''}$, $i', i'' > 0$). To summarise, the $NIL = 0$ analyses reduce heterogeneity by focusing on adjacent loci but cannot (by themselves) tell us whether within-fragment co-methylation is truly 'first-order'.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_MH_by_CGI.pdf}
-\caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL = 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL = 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:EPISCOPE_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_MH_by_CGI.pdf}
-\caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL = 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL = 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). Only the \emph{ADS}, \emph{ADS-adipose}, \emph{ADS-iPSC} and \emph{H9\_Laurent} samples were sequenced with paired-end reads.}
 \label{fig:Lister_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_MH_by_CGI.pdf}
-\caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL = 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL = 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:Seisenberger_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_MH_by_CGI.pdf}
-\caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL = 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL = 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:Ziller_merged_MH_by_CGI}
 \end{figure}
 
-To look for evidence of higher-order within-fragment co-methylation we turn to the analysis of 2-tuples with $NIL \geq 0$ (Figures \ref{fig:EPISCOPE_ac_MH_by_CGI}, \ref{fig:Lister_ac_MH_by_CGI}, \ref{fig:Seisenberger_ac_MH_by_CGI} and \ref{fig:Ziller_merged_ac_MH_by_CGI}). We now see a fairly clear separation of the genome-wide estimates of $\theta$, with CpG islands being more co-methylated than the rest of the genome. Moreover, the estimates of $\theta$ within CpG islands are approximately constant with respect to $IPD$. Also notable is that the 2-tuples outside of CpG islands have fairly similar estimates of $\theta$ in both the $NIL = 0$ and $NIL \geq 0$ analyses.
+To look for evidence of higher-order within-fragment co-methylation we turn to the analysis of pairs with $NIL \geq 0$ (Figures \ref{fig:EPISCOPE_ac_MH_by_CGI}, \ref{fig:Lister_ac_MH_by_CGI}, \ref{fig:Seisenberger_ac_MH_by_CGI} and \ref{fig:Ziller_merged_ac_MH_by_CGI}). We now see a fairly clear separation of the genome-wide estimates of $\theta$, with CpG islands being more co-methylated than the rest of the genome. Moreover, the estimates of $\theta$ within CpG islands are approximately constant with respect to $IPD$. Also notable is that the pairs of CpGs outside of CpG islands have fairly similar estimates of $\theta$ in both the $NIL = 0$ and $NIL \geq 0$ analyses.
 
 Taken together, these results suggests that within-fragment co-methylation in CpG islands depends on multiple loci and that the genomic distance between these loci is of little direct importance[^cpg_density1]. In contrast, within-fragment co-methylation outside of CpG islands depends mostly on the adjacent locus and the distance to that locus ($IPD$)[^cpg_density2]. We might try to estimate the order of within-fragment co-methylation in CpG islands by analysing m-tuples with $\text{m} > 2$. This quickly becomes complicated, however, since there are $2^{\text{m} - 1}$ odds ratios to estimate for m-tuples. We have therefore not yet pursued this refinement.
 
 [^cpg_density1]: The overall density of methylation loci is likely important, which of related to $IPD$s.
 
-[^cpg_density2]: The ratio $\frac{NIL > 0 \text{2-tuples}}{NIL \geq 0 \text{2-tuples}}$ is lower outside of CpG islands than inside CpG islands owing to the decreased density of CpGs outside of CpG islands. We therefore can't rule out that the similarity of $NIL = 0$ and $NIL \geq 0$ estimates outside of CpG islands is simply due to a lack of data.
+[^cpg_density2]: The ratio $\frac{NIL > 0 \text{pairs}}{NIL \geq 0 \text{pairs}}$ is lower outside of CpG islands than inside CpG islands owing to the decreased density of CpGs outside of CpG islands. We therefore can't rule out that the similarity of $NIL = 0$ and $NIL \geq 0$ estimates outside of CpG islands is simply due to a lack of data.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_ac_MH_by_CGI.pdf}
-\caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:EPISCOPE_ac_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_ac_MH_by_CGI.pdf}
-\caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL \geq 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). Only the \emph{ADS}, \emph{ADS-adipose}, \emph{ADS-iPSC} and \emph{H9\_Laurent} samples were sequenced with paired-end reads.}
 \label{fig:Lister_ac_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_ac_MH_by_CGI.pdf}
-\caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL \geq 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:Seisenberger_ac_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_ac_MH_by_CGI.pdf}
-\caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ 2-tuples. Only the genome-level estimates are shown, stratified by whether the 2-tuple is inside a CpG island (CGI).}
+\caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:Ziller_merged_ac_MH_by_CGI}
 \end{figure}
 
@@ -701,7 +705,7 @@ Taken together, these results suggests that within-fragment co-methylation in Cp
 
 The analyses so far have highlighted the broad similarities of within-fragment co-methylation between a diverse set of samples. Reasuringly, samples done in technical duplicate (_IMR90\_r1_ and _IMR90\_r2_; _H1\_r1_ and _H1\_r2_) have very similar genome-level estimates of $\theta$. Furthermore, biological samples assayed by different laboratores (_H9_ and _H9\_Laurent_; _IMR90\_r1, _IMR90\_r2_ and _IMR90\_cell\_line_) also have fairly similar genome-level estimates of $\theta$[^imr90_ac].
 
-[^imr90_ac]: Differences in the $NIL \geq 0$ results between the _IMR90\_r1, _IMR90\_r2_ and _IMR90\_cell\_line_ samples are due to the _IMR90\_cell\_line_ being sequenced with paired-end reads and therefore having many more $NIL > 0$ 2-tuples to analyse.
+[^imr90_ac]: Differences in the $NIL \geq 0$ results between the _IMR90\_r1, _IMR90\_r2_ and _IMR90\_cell\_line_ samples are due to the _IMR90\_cell\_line_ being sequenced with paired-end reads and therefore having many more $NIL > 0$ pairs to analyse.
 
 There are of course differences, and we now turn our attention to these. The results of this section should be interpreted with some caution: few samples have replicates and so we will have little evidence to conclude what is driving any observed variation nor do we have sufficient power to definitively rule out large differences in co-methylation. Nonetheless, I will offer some hypotheses and support for these as appropriate.
 
@@ -719,11 +723,13 @@ One explanation of this result, at least for the iPSCs, is that it is due to 're
 
 A second observation on the results for the _Lister_ dataset is that genome-level estimates of $\theta$ decay particularly rapidly in the somatic cell lines (_ADS_, _ADS-adipose_, _FF_, _IMR90\_r1_ and _IMR90\_r2_). This is recapituled in the _IMR90\_cell\_line_ sample from the _Ziller_ dataset.
 
-The reduced within-fragment co-methylation in the somatic cell lines may be due to culturing of the cells. As a population of cells develops from a single cell, there are errors in copying the DNA methylation patterns from mother to daughter cell. These errors disrupt the co-methylation of 2-tuples. If the iPSC and iPSC-derived cell lines have had less (developmental) time between the laying down of the original DNA methylation pattern and the point at which they were sequenced, then there is a lower probability that the co-methylation has been disrupted by replication errors. There are also reports that DNA methylation profiles differ widely between cell lines and their precursor primary tissues \cite{Nestor:2015db}, which very likely also effect co-methylation.
+The reduced within-fragment co-methylation in the somatic cell lines may be due to culturing of the cells. As a population of cells develops from a single cell, there are errors in copying the DNA methylation patterns from mother to daughter cell. These errors disrupt the co-methylation of pairs. If the iPSC and iPSC-derived cell lines have had less (developmental) time between the laying down of the original DNA methylation pattern and the point at which they were sequenced, then there is a lower probability that the co-methylation has been disrupted by replication errors. There are also reports that DNA methylation profiles differ widely between cell lines and their precursor primary tissues \cite{Nestor:2015db}, which very likely also effect co-methylation.
 
 \subsection{Limitations}
 
-A major challenge in analysing within-fragment co-methylation is the susceptibility of estimates of $\theta$ to M-bias, particularly when the $IPD$ is large and measurements are taken towards the ends of reads. As noted in Section \ref{sec:m-bias}, it is difficult to properly account for M-bias in pre-trimmed data such as the _Lister_ dataset. Since we can do little about data that has already been pre-trimmed, we are forced to be cautious in our interpretation of within-fragment co-methylation for 2-tuples with larger $IPD$s from these datasets. This is particularly relevant to the apparent increase in within-fragment co-methylation for $NIL \geq 0$ CpG 2-tuples with $IPD \approx 180$. This result is tantalisingly similar to the periodicity we see in the correlations of $\beta$-values and the approximate spacing of nucleosomes in human DNA (see Section \ref{sec:nucleosome_and_chromatin}). However, it is not as apparent in other paired-end samples, and this is only likely to be resolved with longer reads that can span multiple nucleosomes.
+A major challenge in analysing within-fragment co-methylation is the susceptibility of estimates of $\theta$ to M-bias, particularly when the $IPD$ is large and measurements are taken towards the ends of reads. As noted in Section \ref{sec:m-bias}, it is difficult to properly account for M-bias in pre-trimmed data such as the _Lister_ dataset. Since we can do little about data that has already been pre-trimmed, we are forced to be cautious in our interpretation of within-fragment co-methylation for pairs with larger $IPD$s from these datasets. This is particularly relevant to the apparent increase in within-fragment co-methylation for $NIL \geq 0$ CpG pairs with $IPD \approx 180$. This result is tantalisingly similar to the periodicity we see in the correlations of $\beta$-values and the approximate spacing of nucleosomes in human DNA (see Section \ref{sec:nucleosome_and_chromatin}). However, it is not as apparent in other paired-end samples, and this is only likely to be resolved with longer reads that can span multiple nucleosomes.
+
+In analysing these data at the genome-level, and even the chromosome-level, we are aggregating measurements from heterogeneous regions of the genome. Our simulation results of Section \ref{subsec:simulation_study} tell us that the Mantel-Haenszel estimator estimates the 'average' effect across these potentially heterogeneous regions. We might reduce this heterogeneity by aggregating over smaller regions, although choosing the resolution is non-trivial, and so we content ourselves with studying an estimate of the average effect.
 
 \section{Summary}
 
@@ -737,4 +743,8 @@ In theory, we could explore these higher-order dependencies of within-fragment c
 
 Another complexity that these analyses have brushed over is the fact that the genome is not a one-dimensional line but is rather a complex three-dimensional structure whose shape also varies in time. Therefore, the relevant distance between two loci is not necessarily the number of bp between them but may instead be the Euclidean distance in three-dimensional space. Such complexities cannot be resolved with bisulfite-sequencing data alone but will require measures of the three-dimensional structure of the genome, such as those provided by chromatin conformation capture technologies \citep[e.g.,][]{Dekker:2013hi}.
 
-In summary, the results of this chapter demonstrate that DNA methylation has a  complex dependence structure and identify several drivers of these complexity. Co-methylation exists along individual DNA fragments and also manifests as correlations of aggregate measures of methylation. While it is the highest resolution assay for studying DNA methylation, bisulfite-sequencing can still only give a rather limited picture of co-methylation, particularly of within-fragment co-methylation. Data from longer reads will be immensely useful in to advancing our understanding of DNA methylation dynamics. In particular, reads that can span multiple nucleosomes will allow for co-methylation to be better tied in with, and expand upon, existing results on the relationship between nucleosomes and DNA methylation. Until such data are available, we can try to learn more about plausible models of DNA co-methylation through computational methods such as the simulation method described in the next chapter.
+In summary, the results of this chapter demonstrate that DNA methylation has a  complex dependence structure. Co-methylation exists along individual DNA fragments and also manifests as correlations of aggregate measures of methylation. We have estimated the effect of this co-methylation using two complementary approaches: correlations of $\beta$-values and within-fragment co-methylation. Consistent with previous work, our analysis identifies the inter-pair distance between CpGs and the genomic context of these CpGs, in particular, CpG islands, as being important drivers of co-methylation.
+
+Unique to our results are genome-level and chromosome-level estimates of within-fragment co-methylation that reveal a possible role for nucleosome positioning in determining co-methylation. Future work integrating these results with data from assays of nucleosome occupancy may clarify the nature of this relationship. Furthermore, stratifying these analyses by other genomic features, such as genic versus intergenic regions, way help elucidate what other factors are at play.
+
+While it is the highest resolution assay for studying DNA methylation, bisulfite-sequencing can still only give a rather limited picture of co-methylation, particularly of within-fragment co-methylation. Data from assays with longer reads will be immensely useful in to advancing our understanding of DNA methylation dynamics. In particular, reads that can span multiple nucleosomes will allow for co-methylation to be better tied in with, and expand upon, existing results on the relationship between nucleosomes and DNA methylation. Until such data are available, we can try to learn more about plausible models of DNA co-methylation through computational methods such as the simulation method described in the next chapter.
