@@ -433,7 +433,7 @@ In a sense, the $\pi_{2 +}, \pi_{+ 2} \eqd Uniform(0, 1)$ assumption in Simulati
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/beta_marginals.pdf}
-\caption[$Beta(0.3, 0.2)$ histogram]{Histogram of 1000 points simulated from a $Beta(0.3, 0.2)$ distribution.}
+\caption[Histogram of $Beta(0.3, 0.2)$ random variables]{Histogram of 1000 points simulated from a $Beta(0.3, 0.2)$ distribution.}
 \label{fig:beta_marginals}
 \end{figure}
 

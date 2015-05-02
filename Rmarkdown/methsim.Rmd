@@ -92,7 +92,7 @@ Almost all downstream analyses are _reference-based_ (see Section \ref{sec:methy
 
 Recall that $B_{i, j}$ is the underlying _true_ methylation level at locus $i$ in sample $j$. In the context of simulating data for comparing differential methylation calling methods, we want these to be group-specific. That is, we want to specify $B_{i, j^{k}}$, where $j^{k}$ indicates that sample $j$ comes from group $k$. For non-differentially methylated loci all $k$ groups have identical $B_{i, j^{k}} = B_{i, j^{0}}$; differentially methylated loci are simulated by setting $B_{i, j^{k}} \neq B_{i, j^{k'}}$ for some $k \neq k'$.
 
-Under the beta-binomial model, the true methylation level, $B^{i, j}$, is assumed to follow a $Beta(\mu_{i, j^{k}}, \phi_{i, j^{k}})$ distribution, where $\mu_{i, j^{k}}$ is the mean and $\phi_{i, j^{k}}$ is the dispersion of the beta distribution[^beta_parameterisation]. Both the means, $\mu_{i, j^{k}}$, and the dispersions, $\phi_{i, j^{k}}$, are group-specific and are allowed to vary across methylation loci ($i$). The dispersion parameter models the within-group variability of the $B_{i, j}$, i.e., the within-group _biological variability_ of DNA methylation.
+Under the beta-binomial model, the true methylation level, $B^{i, j}$, is assumed to follow a $Beta(\mu_{i, j^{k}}, \phi_{i, j^{k}})$ distribution, where $\mu_{i, j^{k}}$ is the mean and $\phi_{i, j^{k}}$ is the dispersion of the beta distribution[^beta_parameterisation]. Both the means, $\mu_{i, j^{k}}$, and the dispersions, $\phi_{i, j^{k}}$, are group-specific and are allowed to vary across methylation loci ($i$). The dispersion parameter models the within-group variability of the $B_{i, j}$, i.e. the within-group _biological variability_ of DNA methylation.
 
 [^beta_parameterisation]: Note that this is different to the standard parameterisation of the Beta distribution, which is described by two shape parameters, $\alpha$ and $\beta$. The relationship between the two parameterisations is $\mu = \frac{\alpha}{\alpha + \beta}$ and $\phi = \frac{1}{\alpha + \beta + 1}$ \citep{Feng:2014iq}.
 
@@ -100,7 +100,7 @@ As noted by \citet{Feng:2014iq}, the beta distribution is a very flexible distri
 
 Other distributions may be used instead of the beta distribution for modelling $B_{i, j}$. For example, \citet{Xie:2014ez} consider both a single Gaussian distribution and a mixture of Gaussian distributions, while \citet{Xu:2013eg} consider both a truncated Gaussian and a mixture of truncated Gaussian distributions.
 
-An alternative to specifying a parametric distribution for the $B_{i, j}$ is to sample these from real data, e.g., by sampling some observed $\beta_{i, j}$ for a particular dataset and treating them as if they were observations on $B_{i, j}$. `WGBSSuite`\citep{Rackham:2015bv} uses a modified form of this approach. In `WGBSSuite`, a hidden Markov model is used to classify every CpG as having an underlying state ("de-methylated", "1st transition", "2nd transition" or "methylated"). Each of these four states has a region-specific average methylation level that is based on the distribution of $\beta$-values for a chosen dataset. For example, the average methylation level for all "de-methylated" regions is defined as $B_{'de-methylated'} = median(\{ \beta_{i, j}: \beta_{i, j} \in [0, 0.5) \}])$. Then, each $B_{i, j}$ is a perturbed version of this region-level average methylation, $B_{region-type}$, obtained by adding on a zero-mean Gaussian random variable, i.e., $B_{i, j} = B_{region-type} + \epsilon_{i, j}$, where $\epsilon_{i, j} \eqd Normal(0, s^{2})$. Care needs to be taken that $0 \leq B_{i, j} \leq 1$.
+An alternative to specifying a parametric distribution for the $B_{i, j}$ is to sample these from real data, e.g., by sampling some observed $\beta_{i, j}$ for a particular dataset and treating them as if they were observations on $B_{i, j}$. `WGBSSuite`\citep{Rackham:2015bv} uses a modified form of this approach. In `WGBSSuite`, a hidden Markov model is used to classify every CpG as having an underlying state ("de-methylated", "1st transition", "2nd transition" or "methylated"). Each of these four states has a region-specific average methylation level that is based on the distribution of $\beta$-values for a chosen dataset. For example, the average methylation level for all "de-methylated" regions is defined as $B_{'de-methylated'} = median(\{ \beta_{i, j}: \beta_{i, j} \in [0, 0.5) \}])$. Then, each $B_{i, j}$ is a perturbed version of this region-level average methylation, $B_{region-type}$, obtained by adding on a zero-mean Gaussian random variable, i.e. $B_{i, j} = B_{region-type} + \epsilon_{i, j}$, where $\epsilon_{i, j} \eqd Normal(0, s^{2})$. Care needs to be taken that $0 \leq B_{i, j} \leq 1$.
 
 \subsubsection{Simulating sequence depth}
 
@@ -121,7 +121,7 @@ In principal we can simulate a differentially methylated region by simply simula
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/dmr_break.pdf}
-\caption{A hypothetical region in a study of differential methylation in a two-group experiment. Plotted is the difference in $\beta$-value between the two groups ($\delta \beta$) with associated standard error against the position along the genome (\emph{Position (bp)}). The first three methylation loci are DMLs, as are the last five methylation loci. However, the fourth locus is not a DML. Should this region be considered as two distinct DMRs or as a single DMR?}
+\caption[A hypothetical differentially methylated region]{A hypothetical region in a study of differential methylation in a two-group experiment. Plotted is the difference in $\beta$-value between the two groups ($\delta \beta$) with associated standard error against the position along the genome (\emph{Position (bp)}). The first three methylation loci are DMLs, as are the last five methylation loci. However, the fourth locus is not a DML. Should this region be considered as two distinct DMRs or as a single DMR?}
 \label{fig:dmr_break}
 \end{figure}
 
@@ -142,7 +142,7 @@ The second step uses a method published by \citet{Zaykin:2002ko}. The transforme
 
 \subsubsection{Other model-based simulations}
 
-A separate class of model-based simulation methods are those that simulate the $\beta$-values directly, i.e., without simulating sequencing depth \citet[e.g.,][]{Jaffe:2012gx, Chen:2013eh, Chen:2014jb, }. These models are designed for simulating microarray data and not sequencing data, since they do not include the variability due to variation in sequencing depth. Of these methods, only \citet{Jaffe:2012gx} simulate correlation amongst the $B_{i, j_{k}}$.
+A separate class of model-based simulation methods are those that simulate the $\beta$-values directly, i.e. without simulating sequencing depth \citet[e.g.,][]{Jaffe:2012gx, Chen:2013eh, Chen:2014jb, }. These models are designed for simulating microarray data and not sequencing data, since they do not include the variability due to variation in sequencing depth. Of these methods, only \citet{Jaffe:2012gx} simulate correlation amongst the $B_{i, j_{k}}$.
 
 \subsection{Methods based on re-sampling real data}
 
@@ -266,7 +266,7 @@ To simulate values of $\mathbf{B}$ and $\mathbf{\psi}$, `methsim` uses the empir
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/ADS_beta_by_pm_boxplots.pdf}
-\caption{$\beta_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{ADS} sample. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
+\caption[Distribution of $\beta$-values stratified by region type]{$\beta_{i | r_{i}}$, the distribution of $\beta$-values for CpGs in each region type, for the \emph{ADS} sample. Only CpGs with at least $10\times$ sequencing coverage are used. UMR = unmethylated region; LMR = lowly methylated region; PMR = partially methylated region; other = any other region.}
 \label{fig:ADS_beta_by_pm_boxplots}
 \end{figure}
 
@@ -294,7 +294,7 @@ Once we have our 'true' methylome, we want to simulate an assay of this sample. 
 
 `methsim` uses a simple Poisson-based method for simulating bisulfite-sequencing. The user specifies the desired read length, the average sequencing coverage[^read_length], the error rate ($\epsilon$, which includes both sequencing error and bisulfite-conversion error), and provides the simulated 'true' methylome. We will use $200$ bp, single-end reads with an average coverage of $30 \times$ in what follows.
 
-[^read_length]: Currently only single-end data are supported. This isn't a big issue. Most paired-end bisulfite-sequencing datasets have overlapping mates, and so paired-end data can be approximated by simply doubling the read length. Also, all reads must currently have the same length, i.e., no simulation of read trimming. I don't consider this feature a priority, but it could easily be implemented by generating read lengths from a given probability distribution.
+[^read_length]: Currently only single-end data are supported. This isn't a big issue. Most paired-end bisulfite-sequencing datasets have overlapping mates, and so paired-end data can be approximated by simply doubling the read length. Also, all reads must currently have the same length, i.e. no simulation of read trimming. I don't consider this feature a priority, but it could easily be implemented by generating read lengths from a given probability distribution.
 
 The number of reads required is computed by $n_{reads} = \frac{\text{average sequencing coverage}}{\text{read length}} \times \text{size of genome}$. The number of reads per chromosome is assigned proportional to the chromosome length. Then, the start of each read is sampled uniformly across the chromosome respective chromosome. We only retain those reads that overlap a methylation locus.
 

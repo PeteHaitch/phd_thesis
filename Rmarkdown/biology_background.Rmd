@@ -26,7 +26,7 @@ The genome is the genetic material of an organism. In most organisms, the genome
 
 \subsection{DNA}\label{sec:DNA}
 
-The double helix is the most common, and most famous, structure of DNA. In the double helix, the two strands of DNA run in opposite directions to each other and are therefore _anti-parallel_. One strand is called the 5' strand (pronounced "5 prime strand" and also known as the sense strand, Crick strand or top strand) and the other strand called the 3' strand (pronounced "3 prime strand" and also known as the antisense strand, Watson strand or bottom strand). Along each strand of the double helix are the four DNA nucleobases (_bases_): adenine (_A_), cytosine (_C_), guanine (_G_) and thymine (_T_). These bases form _complementary_ base pairings, _A_ with _T_ and _C_ with _G_, along the DNA double helix. This is illustrated in Figure \ref{fig:dna_simple2}.
+The double helix is the most common, and most famous, structure of DNA. In the double helix, the two strands of DNA run in opposite directions to each other and are therefore _anti-parallel_. One strand is called the 5' strand (pronounced "5 prime strand" and also known as the sense strand, Crick strand or top strand) and the other strand called the 3' strand (pronounced "3 prime strand" and also known as the antisense strand, Watson strand or bottom strand). Along each strand of the double helix are the four DNA nucleobases (_bases_): adenine (_A_), cytosine (_C_), guanine (_G_) and thymine (_T_). These bases form _complementary_ base pairings, _A_ with _T_ and _C_ with _G_, along the DNA double helix. This is illustrated in Figure \ref{fig:double_helix}.
 
 \begin{figure}[!htb]
 \centering
@@ -45,7 +45,7 @@ DNA is able to self-replicate. This means that eukaryotic cells created during _
 
 The core of a nucleosome consists of four pairs of histones, H2A, H2B, H3 and H4, which are consequently known as the _core histones_. A fifth histone, H1/H5, is known as the _linker histone_. Each of these histones has a 'tail' consisting of a string of amino acids. These tails can undergo _post-translational modifications_, such as methylation, acetylation and phosphorylation, which can alter their interactions with DNA and nuclear proteins \citep{Alberts:2007vj}. Histone modifications are discussed in Section \ref{sec:epigenetics}.
 
-The nucleosomes are interconnected by _linker DNA_ to form the macromolecule called chromatin. The linker sequences are between $20$ to $60$ basepairs of DNA (bp) in length, while approximately $147$ bp are wrapped around each nucleosome and a further $20$ bp wrapped around each additional H1/H5 histone \citep{Annunziato:2008ue}.
+The nucleosomes are interconnected by _linker DNA_ to form the macromolecule called chromatin. The linker sequences are between $20$ to $60$ base pairs (bp) of DNA in length, while approximately $147$ bp are wrapped around each nucleosome and a further $20$ bp wrapped around each additional H1/H5 histone \citep{Annunziato:2008ue}.
 
 Chromatin is frequently described as either 'closed' or 'open'. Closed chromatin, _heterochromatin_, is more tightly packed than the open _euchromatin_. Heterochromatin is associated with transcriptionally repressed regions of the genome because the machinery required to translate DNA to RNA is unable to physically access the DNA. In contrast, euchromatin is associated with transcriptionally active regions of the genome since its more open nature allows easier access for the translational machinery.
 
@@ -67,7 +67,7 @@ Humans are _diploid_ organisms, meaning that we have two copies of each chromoso
 
 [^mtDNA]: The mitochondrial DNA is maternally inherited.
 
-The length of a chromosome is typically reported as the number of DNA base pairs (bp) in a single copy of that chromosome and the _haploid_ length of a genome is the sum of these chromosome lengths. The haploid human genome is approximately 3 billion base pairs long (Golden Path Length [http://asia.ensembl.org/Homo_sapiens/Location/Genome?r=1](http://asia.ensembl.org/Homo_sapiens/Location/Genome?r=1)).
+The length of a chromosome is typically reported as the number of DNA base pairs in a single copy of that chromosome and the _haploid_ length of a genome is the sum of these chromosome lengths. The haploid human genome is approximately 3 billion base pairs long (Golden Path Length [http://asia.ensembl.org/Homo_sapiens/Location/Genome?r=1](http://asia.ensembl.org/Homo_sapiens/Location/Genome?r=1)).
 
 A human _reference genome_ was jointly completed by the International Human Genome Consortium and Celera Genomics in 2003 \citep{Venter:2001fq,Lander:2001hk}. This reference genome does not represent the genome of any one human since it uses DNA donated by several different people \citep{Venter:2001fq,Lander:2001hk}. Rather, a reference genome is a kind of map or scaffold that can be used to identify similarities and differences between individual genomes.
 
@@ -113,7 +113,7 @@ Sir Adrian Bird, an esteemed British geneticist, attempts to unite these definit
 
 Regardless of which definition you subscribe to, an _epigenetic mark_ is the modification that causes this 'epigenetic change'. In fact, 'causes' may be too strong a claim, as much of current epigenetics research is in identifying associations rather than causations, and the question of whether the epigenetic mark is a cause or consequence of the ascribed function is oft-debated.
 
-The _epigenome_ of a cell is the set of epigenetic marks present on the cell's genome. In contrast to the genome, which is identical between cells within an individual, the epigenome is highly variable between cells within an individual. Indeed, we can identify variation for a single epigenetic mark within cells of the same cell type from the same individual (see Chapter \ref{chap:co-methylation}). _Epigenomics_ is the study of the epigenome, analogous to genomics being the study of the genome. However, one can rarely study the epigenome in isolation from the underlying genetic sequence, as there is evidence that the epigenetic variation is associated with genetic variation \citep{Zhang:2010bg, Bell:2011fm, vanEijk:2012hc, McVicker:2013ih}
+The _epigenome_ of a cell is the set of epigenetic marks present on the cell's genome. In contrast to the genome, which is identical between cells within an individual, the epigenome is highly variable between cells within an individual. Indeed, we can identify variation for a single epigenetic mark within cells of the same cell type from the same individual. _Epigenomics_ is the study of the epigenome, analogous to genomics being the study of the genome. However, one can rarely study the epigenome in isolation from the underlying genetic sequence, as there is evidence that the epigenetic variation is associated with genetic variation \citep{Zhang:2010bg, Bell:2011fm, vanEijk:2012hc, McVicker:2013ih}
 
 One mark that most authors agree is an epigenetic mark is DNA methylation, which I describe in the next section and the study of which is the focus of my thesis.
 
@@ -142,11 +142,11 @@ The typical site of DNA methylation is at the C5 carbon position of a cytosine b
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.3\textwidth]{../figures/5-Methylcytosine.pdf}
-\caption[Chemical structure of 5-methylcytosine]{Chemical structure of 5-methylcytosine. "5-methylcytosine". By Yikrazuul (Own work) [Public domain], via Wikimedia Commons \url{http://commons.wikimedia.org/wiki/File:5-Methylcytosine.svg}}
+\caption[Chemical structure of 5-methylcytosine]{Chemical structure of 5-methylcytosine. ``5-methylcytosine''. By Yikrazuul (Own work) [Public domain], via Wikimedia Commons \url{http://commons.wikimedia.org/wiki/File:5-Methylcytosine.svg}}
 \label{fig:5mC}
 \end{figure}
 
-It is common to describe a cytosine as being 'methylated' or 'unmethylated', however, care must be taken when using these terms. At the lowest level, the level of single-stranded DNA, methylation is a binary event: a cytosine is either methylated or unmethylated. Double-stranded DNA, at least at _palindromic_ methylation loci[^palindromic_sequence], is generally symmetrically methylated, i.e., the loci on each strand are both methylated or both unmethylated. However, _hemimethylation_, where the methylation loci on one strand is methylated and its partner on the opposite strand is unmethylated, can and does occur.
+It is common to describe a cytosine as being 'methylated' or 'unmethylated', however, care must be taken when using these terms. At the lowest level, the level of single-stranded DNA, methylation is a binary event: a cytosine is either methylated or unmethylated. Double-stranded DNA, at least at _palindromic_ methylation loci[^palindromic_sequence], is generally symmetrically methylated, i.e. the loci on each strand are both methylated or both unmethylated. However, _hemimethylation_, where the methylation loci on one strand is methylated and its partner on the opposite strand is unmethylated, can and does occur.
 
 [^palindromic_sequence]: A palindromic DNA sequence is one that is identical when read in the 5' to 3' direction on both the original strand and the complementary strand of the double helix. For example, _CG_ is a palindromic sequence.
 
@@ -165,7 +165,7 @@ One reason for the relative scarcity of CpGs is that methylated cytosines can sp
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/dinucleotide_frequency_hg19.pdf}
-\caption[Dinucleotide frequencies in the human genome]{Observed:expected ratio of dinucleotides in the human reference genome (hg19). The expected frequency is computed under an 'independence' model, based on the observed frequencies of each base.}
+\caption[Dinucleotide frequencies in the human genome]{Observed to expected ratio of dinucleotides in the human reference genome (hg19). The expected frequency is computed under an 'independence' model, based on the observed frequencies of each base.}
 \label{fig:dinucleotide_frequency_hg19}
 \end{figure}
 
@@ -175,7 +175,7 @@ One way to explore the distribution of CpGs in the human genome is to look at th
 
 \begin{figure}[htbp]
 \includegraphics[width=\textwidth]{../figures/IPD_ECDF_hg19.pdf}
-\caption[ECDF of distances between CpGs in hg19]{Plot of the empirical cumulative distribution function of distance between adjacent CpGs in the human reference genome (hg19). The observed distances are contrasted with those under the 'expected' model whereby CpGs are distributed uniformly at random with probability equal to the observed frequency of Cpgs on each chromosome.}
+\caption[ECDF of distances between CpGs in hg19]{Plot of the empirical cumulative distribution function of distance between adjacent CpGs in the human reference genome (hg19). The observed distances are contrasted with those under the `expected' model whereby CpGs are distributed uniformly at random with probability equal to the observed frequency of Cpgs on each chromosome.}
 \label{fig:IPD_ECDF_hg19}
 \end{figure}
 
@@ -197,11 +197,11 @@ This definition was refined by \citet{Takai:2002jb} to exclude _Alu_-repetitive 
 
 An alternative definition, and one that pre-dates the definition of \citet{GardinerGarden:1987we}, is based on the identification of unmethylated regions of the genome, which are typically CpG-dense. Such regions were previously called HpaII tiny fragment islands, or _HTF islands_, and named after the restriction enzyme used to identify them \citep{Cooper:1983ev, Bird:1985gj}.
 
-These 'sandy/beachy' metaphors have been continued (i.e., stretched to breaking point) with various authors defining CpG island shores, CpG island shelves, CpGs in the "open sea", CpG deserts and CpG canyons. CpG island shores, shelves and the open sea are all defined with respect to CpG islands:
+These 'sandy/beachy' metaphors have been continued (i.e. stretched to breaking point) with various authors defining CpG island shores, CpG island shelves, CpGs in the open sea, CpG deserts and CpG canyons. CpG island shores, shelves and the open sea are all defined with respect to CpG islands:
 
 - CpG island shores are regions within 2 kb of CpG islands. These have been demonstrated to have an increased variability of CpG methylation \citep{Irizarry:2009ky}.
 - CpG island shelves are defined as regions within 2 kb of a CpG island shore \citep{Bibikova:2011fw}.
-- The "open sea" contains those CpGs not classed as being in a CpG island, CpG island shore or CpG island shelf \citep{Sandoval:2011dj}.
+- The open sea contains those CpGs not classed as being in a CpG island, CpG island shore or CpG island shelf \citep{Sandoval:2011dj}.
 
 Other metaphors, these based on methylation levels rather than CpG density, include methylation deserts \citep{Li:2012gg} and CpG canyons \citep{Jeong:2014bla}. Because these regions are defined with respect to methylation levels rather than DNA sequence, these are generally identified in a tissue-specific manner.
 
@@ -211,9 +211,9 @@ In humans, cytosine methylation in most cell types is found almost exclusively a
 
 To give a few examples, \citet{Lister:2009hy} found that in a _fibroblast_ cell line that $99.98\%$ of cytosines that displayed statistically significant evidence of methylation occured at CpGs. In contrast, in an embryonic stem cell line, they found that $24.5\%$ of cytosines that displayed statistically significant evidence of methylation occured in a non-CpG context. However, it should also be noted that these non-CpG loci that were methylated had on average a much lower level of methylation than their CpG counterparts.
 
-A subsequent paper from the same group extended this result. \citet{Lister:2011kg} reported that, more generally, non-CpG cytosines account for $20-30\%$ of cytosines with statistically significant evidence of methylation in _pluripotent_ cell lines . Pluripotent cells includes embryonic stem (_ES_) cells and induced pluripotent stem (_iPS_) cell lines.
+A subsequent paper from the same group extended this result. \citet{Lister:2011kg} reported that, more generally, non-CpG cytosines account for $20 \%$ to $30 \%$ of cytosines with statistically significant evidence of methylation in _pluripotent_ cell lines. Pluripotent cells includes embryonic stem (_ES_) cells and induced pluripotent stem (_iPS_) cell lines.
 
-An exception to the rule that non-CpG methylation is largely restricted to pluripotent cells is provided by \citet{Lister:2013et}, who found that neurons also have non-CpG methylation, albeit at a lower level ($1.3-1.5\%$ of all non-CpG cytosines were methylated).
+An exception to the rule that non-CpG methylation is largely restricted to pluripotent cells is provided by \citet{Lister:2013et}, who found that neurons also have non-CpG methylation, albeit at a lower level ($1.3 \%$ to $1.5 \%$ of all non-CpG cytosines were methylated).
 
 Overall, non-CpG methylation in humans is less well studied and less well understood than CpG methylation. This is partly due to sampling bias since commonly used assays for studying DNA methylation, such as the Illumina 27k and 450k microarrays, measure almost exclusively CpG methylation. However, recent technological advances mean that cytosine methylation can be routinely assayed regardless of the sequence context (see Section \ref{sec:dna_methylation_assays}).
 
@@ -235,11 +235,11 @@ In mammalian cells, the writers are the DNA _methyltransferase_ (DNMT) enzymes. 
 
 DNA methylation is not preserved by the DNA replication machinery and so it is the role of the maintainence methyltransferases to restore the methylation pattern on the daughter strand of DNA following DNA replication. In mammals, _DNMT1_ is known as the maintenance DNA methyltransferase.
 
-_DNMT3a_ and _DNMT3b_ are known as the _de novo_ methyltransferases, although these are also required for the maintenance of DNA methylation \citep{Jones:2009ji}. Both _DNMT1_ and _DNMT3b_ appear to be essential for mammalian development since mouse knockouts[^KO] for either gene are embryonically lethal \citep{Li:1992bp}. In contrast, mouse knockouts for _DNMT3a_ are runted but survive for ~4 weeks after birth \citep{Li:1992bp}.
+_DNMT3a_ and _DNMT3b_ are known as the _de novo_ methyltransferases, although these are also required for the maintenance of DNA methylation \citep{Jones:2009ji}. Both _DNMT1_ and _DNMT3b_ appear to be essential for mammalian development since mouse knockouts[^KO] for either gene are embryonically lethal \citep{Li:1992bp}. In contrast, mouse knockouts for _DNMT3a_ are runted but survive for approximately 4 weeks after birth \citep{Li:1992bp}.
 
 [^KO]: A knockout mouse for gene $X$ is a mouse that has been genetically engineered to remove or otherwise inactivate gene $X$. Mouse knockouts can be either heterozygous knockouts (one copy still of the gene is still present/active) or homozygous knockouts (both copies of gene absent/inactive).
 
-_DNMT2_, now known as _TRDMT1_, was once thought to be a DNA methyltransferase but was shown to in fact methylate a small RNA and not DNA \citep{Goll:2006kb}. Another protein, DNMT3L, is homologous to DNMT3a and DNMT3b but does contain catalytic domain that is necessary for methyltransferase activity. Instead, DNMT3L is thought to stimulate the activity of DNMT3a and DNMT3b \citep{Jurkowska:2011dt}.
+_DNMT2_, now known as _TRDMT1_, was once thought to be a DNA methyltransferase but was shown to in fact methylate a small RNA and not DNA \citep{Goll:2006kb}. Another protein, _DNMT3L_, is homologous to _DNMT3a_ and _DNMT3b_ but does contain catalytic domain that is necessary for methyltransferase activity. Instead, DNMT3L is thought to stimulate the activity of _DNMT3a_ and _DNMT3b_ \citep{Jurkowska:2011dt}.
 
 The readers of DNA methylation recognise methylated DNA. These readers can recruit additional proteins to the site of the methylated cytosine to perform a variety of functions related to gene expression. For example, the methyl-CpG-binding domain (_MBD_) group of proteins bind to DNA containing a methylated CpG, which can then suppress gene expression by preventing transcription factor binding at that site \citep{Nan:1993gma}. Another group, the ubiquitin-like, containing PHD and RING finger domain (_UHRF_) proteins, help _DNMT1_ methylate hemimethylated DNA, such as the daughter strand created during DNA replication \citep{Sharif:2007ft, Bostick:2007jh}.
 
@@ -261,7 +261,7 @@ A challenge to measuring DNA methylation is that it is erased by standard molecu
 2. Affinity enrichment
 3. Sodium bisulfite conversion
 
-Following treatment, DNA methylation can be assayed using standard techniques such as:
+Following a pre-treatment, DNA methylation can be assayed using standard techniques such as:
 
 1. Gel-based analysis
 2. Sanger sequencing
@@ -276,7 +276,7 @@ The _resolution_ and _throughput_ of an assay are two key variables when choosin
 
 [^resolution]: Depending on the experiment and its aims, the resolution of an assay might instead be defined as the scale on which DNA methylation can be quantified or the scale at which allows inference to address a specific hypothesis.
 
-The throughput of an assay can be quantified in two ways. The first is per-sample throughput, which is how many measurements of DNA methylation are made per-sample[^throughput1]. This is typically what people mean when they describe an assay as being 'high-throughput' or 'low-throughput' and is the definition I use in the title of my thesis. Depending on your definition of 'high', a high-througput assay will produce on the order of tens of thousands to billions of measurements per sample. The second definition of throughput is  related to cost, be it money or time, i.e., 'how many samples can I afford to analyse?'.
+The throughput of an assay can be quantified in two ways. The first is per-sample throughput, which is how many measurements of DNA methylation are made per-sample[^throughput1]. This is typically what people mean when they describe an assay as being 'high-throughput' or 'low-throughput' and is the definition I use in the title of my thesis. Depending on your definition of 'high', a high-througput assay will produce on the order of tens of thousands to billions of measurements per sample. The second definition of throughput is  related to cost, be it money or time, i.e. `how many samples can I afford to analyse?'.
 
 [^throughput1]: This might reasonably be argued as being a definition of resolution.
 
@@ -290,7 +290,7 @@ _Restriction endonucleases_ are an important technique in molecular biology. The
 
 For example, the recognition site of the restriction enzyme _HpaII_ is `CCGC`. However, _HpaII_ will only digest DNA when the second cytosine in the motif is unmethylated. The _HELP_ (_HpaII_ tiny fragment enrichment by ligation-mediated PCR) assay compares DNA digested by _HpaII_ to one digested with another restriction enzyme that has the same recognition motif but is methylation-insensitive (_MspI_) to identify _hypomethylated_ regions of a genome \citep{Khulan:2006gx}.
 
-Assays based on restriction enzyme were some of the first developed for studying DNA methylation. These were initially developed for studying a small number of loci although they have been extended to genome-scale analysis approaches \citep{Laird:2010iv}. One such genome-wide assays is _CHARM_, 'comprehensive high-throughput arrays for relative methylation' \citep{Irizarry:2008hg}). CHARM combines a methylation fractionation step --- be it _MeDIP_, _HpaII_, or as in the original publication, _McrBC_ --- with a tiling array and analysis techniques that leverage regional DNA methylation levels.
+Assays based on restriction enzyme were some of the first developed for studying DNA methylation. These were initially developed for studying a small number of loci although they have been extended to genome-scale analysis approaches \citep{Laird:2010iv}. One such genome-wide assays is _CHARM_, 'comprehensive high-throughput arrays for relative methylation' \citep{Irizarry:2008hg}). CHARM combines a methylation fractionation step (be it _MeDIP_, _HpaII_, or, as in the original publication, _McrBC_) with a tiling array and analysis techniques that leverage regional DNA methylation levels.
 
 While restriction enzyme assays do not typically provide single-base resolution data, the `methylCRF` software \citep{Stevens:2013hv} is able to infer single CpG methylation levels by combining data from a restriction enzyme based assay (MRE-seq) with one based on affinity enrichment (MeDIP-seq) in a sophisticated statistical analysis.
 
@@ -326,7 +326,7 @@ Genomics research was revolutionised by the development of cheap high-throughput
 
 \citet{Cokus:2008fc} termed their approach _BS-seq_ while \citet{Lister:2008bh} called their method _methylC-seq_. From a bioinformatics perspective, the main difference is that the _BS-seq_ protocol produces sequencing reads from four bisulfite-converted DNA strands --- the original top strand (_OT_), the complementary strand to the original top strand (_CTOT_), the original bottom strand (_OB_) and the complementary strand to the original bottom strand (_CTOB_) --- which require mapping to four different _in silico_ converted reference genomes, followed by a merge of the alignment results. In contrast, the _methylC-seq_ protocol only produces sequencing reads from two bisulfite-converted strands --- _OT_ and _OB_ --- and so only requires mapping to two different _in silico_ converted reference genomes, followed by a merge. The methylC-seq protocol is now the standard whole-genome bisulfite-sequencing protocol, due in part to the simpler bioinformatics analysis.
 
-Whole-genome bisulfite-sequencing remains an expensive assay, which limits its use in studies involving large numbers of samples. Furthermore, depending on the choice of several sequencing parameters, approximately $35$ to $72\%$ of reads will not contain any CpGs (Table \ref{tab:reads_without_cpgs}), which might be considered a gross waste of resources for some experiments.
+Whole-genome bisulfite-sequencing remains an expensive assay, which limits its use in studies involving large numbers of samples. Furthermore, depending on the choice of several sequencing parameters, approximately $35 \%$ to $72\%$ of reads will not contain any CpGs (Table \ref{tab:reads_without_cpgs}), which might be considered a gross waste of resources for some experiments.
 
 \begin{table}[h]
 \centering

@@ -172,7 +172,7 @@ The loss of the one-to-one relationship between sequencing cycle and read-positi
 
 \subsubsection{Identifying M-bias}\label{sec:identifying_m-bias}
 
-In practice, the M-bias curves for each sample are visually inspected to look for evidence of M-bias, i.e., read-positions whose methylation levels are 'too far away' from the vast majority of read-positions. It is rather a subjective decision to make. Two problems that I found when making these decisions were:
+In practice, the M-bias curves for each sample are visually inspected to look for evidence of M-bias, i.e. read-positions whose methylation levels are 'too far away' from the vast majority of read-positions. It is rather a subjective decision to make. Two problems that I found when making these decisions were:
 
 1. Maintaining consistency across samples.
 2. Determining where to draw the line when there is no dramatic 'spike' in the M-bias.
@@ -181,7 +181,7 @@ For example, in Figure \ref{fig:E18VA_M-bias} it is clear that there are problem
 
 For each sample, M-bias is computed separately for each methylation type because the level of methylation varies widely between CG and non-CG methylation types. For paired-end sequencing experiments, it is also done separately for each of _read-1_ and _read-2_ because M-bias is very different for these two mates and also because _read-2_ often has a slightly lower average level of methylation than does _read-1_ (e.g., see Figure \ref{fig:ADS_M-bias}).
 
-In `MethylationTuples`, I use a simple normalisation of the read-position methylation levels ($rpml$). Specifically, the median level of methylation across all read-positions is subtracted from the read-position methylation level to create normalised read-position methylation levels, i.e., $nrpml_{CpG}^{read_1} = rpml_{CpG}^{read_1} - median(rpml_{CpG}^{read_1})$, for CpG methylation in _read-1_.
+In `MethylationTuples`, I use a simple normalisation of the read-position methylation levels ($rpml$). Specifically, the median level of methylation across all read-positions is subtracted from the read-position methylation level to create normalised read-position methylation levels, i.e. $nrpml_{CpG}^{read_1} = rpml_{CpG}^{read_1} - median(rpml_{CpG}^{read_1})$, for CpG methylation in _read-1_.
 
 The `filter()` method identifies read-positions where the $rpml$ differs by more than a given value (`threshold`) from $nrpml$. While it computes these statistics separately for each methylation type and read type, a common `threshold` is used for all methylation types and read types. I tend to use a value of `threshold = 3`, meaning that if the $median(rpml_{CpG}) = 75$, then any read-position with $rpml_{CpG} < 72$ or $rpml_{CpG} > 78$ is flagged as showing evidence of M-bias[^mbias_percentage]. It is currently left to the user to decide whether a read-position should be excluded if it displays evidence of M-bias in a single methylation type or only if it displays evidence across all methylation types. I tend to exclude read-positions that display evidence of M-bias in the methylation type I am working with, which is typically CpG methylation.
 
@@ -207,7 +207,7 @@ Methods to estimate the cellular heterogeneity bias and adjust for it are availa
 
 \section{Methylation calling}\label{sec:methylation_calling}
 
-Methylation calling is the process of calling each sequenced methylation locus as being either methylated or unmethylated[^no_call], as well as determining the _context_ or _type_ of each methylation event (i.e., CpG, CHG or CHH) based on the sequencing data and a reference DNA sequence. In principle, this is a simple process, however, this belies some complications, which I discuss in this section.
+Methylation calling is the process of calling each sequenced methylation locus as being either methylated or unmethylated[^no_call], as well as determining the _context_ or _type_ of each methylation event (i.e. CpG, CHG or CHH) based on the sequencing data and a reference DNA sequence. In principle, this is a simple process, however, this belies some complications, which I discuss in this section.
 
 [^no_call]: A third possibility is making the call that the 'methylation locus' is not in fact a methylation locus. For example, if the sequenced base at a cytosine in the reference sequence is an adenine or a guanine then this may be evidence that the position is not in fact a methylation locus.
 
@@ -263,8 +263,8 @@ Certain genetic variants, in particular heterozygous $C$>$T$ SNPs, are more diff
 
 To emphasise, `Bis-SNP` provides three important pieces of information that make it almost as good as having whole genome DNA sequencing data on the same sample:
 
-1. Reference-specific methylation loci, i.e., cytosines in the reference genome that are mutated to non-cytosine bases in the sample's genome.
-2. Sample-specific methylation loci, i.e., cytosines in the sample's genome that are non-cytosine bases in the reference genome.
+1. Reference-specific methylation loci, i.e. cytosines in the reference genome that are mutated to non-cytosine bases in the sample's genome.
+2. Sample-specific methylation loci, i.e. cytosines in the sample's genome that are non-cytosine bases in the reference genome.
 3. Other genetic variants that may be used in additional analyses, such as in identifying allele-specific methylation, or to refine the methylation _type_ or _context_ (see below).
 
 Genotype calls made using `Bis-SNP` are less accurate than those from whole-genome DNA sequencing because of the reduced complexity of bisulfite-converted DNA. However, we essentially get to measure DNA variation 'for free' by using `Bis-SNP`, which makes it my preferred approach for incoporating genetic variation into methylation calling. The genetic variant calls made by `Bis-SNP` can also be used to _post-hoc_ filter methylation calls made by other software. I use this approach to filter methylation calls made with `methtuple`.

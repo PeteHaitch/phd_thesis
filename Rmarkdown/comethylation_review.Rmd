@@ -18,7 +18,7 @@ Co-methylation is the dependence structure of DNA methylation data. This chapter
 
 \section{What is co-methylation and why study it?}\label{subsec:co-methylation_definition}
 
-I define co-methylation as the dependence structure of DNA methylation data. This broad definition encompasses several similar concepts previously described in the literature. These include: "the presence of methylation over a stretch of neighbouring CpG positions" \citep{Schatz:2004cha}; "the relationship between the degree of methylation over distance" \citep{Eckhardt:2006gh}; the "correlation of two [loci] across many samples" \citep{Akulenko:2013fl}; and the "_vertical_ (i.e., progenitor to descendant) correlation between the same CpG site in neighbouring cell types" \citep{Capra:2014uh}.
+I define co-methylation as the dependence structure of DNA methylation data. This broad definition encompasses several similar concepts previously described in the literature. These include: "the presence of methylation over a stretch of neighbouring CpG positions" \citep{Schatz:2004cha}; "the relationship between the degree of methylation over distance" \citep{Eckhardt:2006gh}; the "correlation of two [loci] across many samples" \citep{Akulenko:2013fl}; and the "_vertical_ (i.e. progenitor to descendant) correlation between the same CpG site in neighbouring cell types" \citep{Capra:2014uh}.
 
 It is important to understand that there exists both within-sample and between-sample co-methylation.
 
@@ -28,7 +28,7 @@ The fundamental level of within-sample co-methylation is the dependence structur
 
 Between-sample co-methylation is the relationship between methylation levels at a pair of loci across a set of samples[^concordance]. For example, \citet{Akulenko:2013fl} reported 187 pairs of genes whose methylation level was highly correlated (Pearson $|r| \geq 0.75$) across more than 300 breast cancer samples. It is worth noting that measures of within-sample co-methylation can themselves be compared between samples.
 
-[^concordance]: One measure of between-sample correlation of aggregate methylation levels that does not fall under my definition of co-methylation is the following: Consider a pair of samples, $j$ and $j'$, and compute the correlation between the set of $\beta$-values for sample $j$ against sample $j'$, i.e., $cor(\{\beta_{i, j}\}_{i = 1}^{i = N_{loci}}, \{\beta_{i, j'}\}_{i = 1}^{i = N_{loci}})$. This measure is often reported as evidence for the "concordance" of methylation levels between replicates, but is not what I consider a form of co-methylation.
+[^concordance]: One measure of between-sample correlation of aggregate methylation levels that does not fall under my definition of co-methylation is the following: Consider a pair of samples, $j$ and $j'$, and compute the correlation between the set of $\beta$-values for sample $j$ against sample $j'$, i.e. $cor(\{\beta_{i, j}\}_{i = 1}^{i = N_{loci}}, \{\beta_{i, j'}\}_{i = 1}^{i = N_{loci}})$. This measure is often reported as evidence for the "concordance" of methylation levels between replicates, but is not what I consider a form of co-methylation.
 
 There have been several attempts to analyse co-methylation, most with the aim of better understanding the biological processes that lay down and regulate DNA methylation. An increased understanding of co-methylation could also lead to cheaper and more efficient assays of DNA methylation. For example, we might identify methylation loci whose methylation status is highly predictive of the methylation level of a surrounding region and design an assay to interrogate those highly predictive loci. This idea is analogous to the use of tag-SNPs on genotyping microarrays.
 
@@ -78,9 +78,9 @@ The proof of this result is given in Appendix \ref{app:bernoulli_equal}.
 
 In general, $PIM^{\ast} \in {[0, 1]}$ since it is a probability, which is already unlike a correlation coefficient that takes values in ${[{-1}, 1]}$. There are a few important special cases that are worth discussing:
 
-1. $PIM^{\ast}_{inid} = (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'}$: Independent and non-identically distributed (_inid_), i.e., $Z_{h, i} \eqd Bernoulli(p_{h})$ and $Z_{h', i'} \eqd Bernoulli(p_{h'})$ and with $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.
-2. $PIM^{\ast}_{did} = (1 - p)^{2} + p^{2} + 2 c p ( 1 - p)$: Dependent and identically distributed (_did_), i.e., $Z_{h, i}, Z_{h', i'} \eqd Bernoulli(p)$ and $cor(Z_{h, i}, Z_{h', i'}) = c \neq 0$.
-3. $PIM^{\ast}_{iid} = (1 - p)^{2} + p^{2}$: Independent and identically distributed (_iid_), i.e., $Z_{h, i}, \allowbreak Z_{h', i'} \eqd Bernoulli(p)$ and $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.
+1. $PIM^{\ast}_{inid} = (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'}$: Independent and non-identically distributed (_inid_), i.e. $Z_{h, i} \eqd Bernoulli(p_{h})$ and $Z_{h', i'} \eqd Bernoulli(p_{h'})$ and with $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.
+2. $PIM^{\ast}_{did} = (1 - p)^{2} + p^{2} + 2 c p ( 1 - p)$: Dependent and identically distributed (_did_), i.e. $Z_{h, i}, Z_{h', i'} \eqd Bernoulli(p)$ and $cor(Z_{h, i}, Z_{h', i'}) = c \neq 0$.
+3. $PIM^{\ast}_{iid} = (1 - p)^{2} + p^{2}$: Independent and identically distributed (_iid_), i.e. $Z_{h, i}, \allowbreak Z_{h', i'} \eqd Bernoulli(p)$ and $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.
 
 As for $PIM^{\ast}$, $PIM^{\ast}_{inid} \in [0, 1]$. In contrast, it is easy to show by differentiation that $PIM^{\ast}_{iid} \geq 0.5$ and that $PIM^{\ast}_{did} \geq 0.5 (c + 1)$, which is $> 0.5$ (resp. $< 0.5$) for $c > 0$ (resp. $c < 0$).
 

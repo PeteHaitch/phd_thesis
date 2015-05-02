@@ -122,7 +122,7 @@ We can ignore reads that do not contain any methylation loci as these are not re
 2. Read mapping is perfect.
 3. We perform single-end sequencing.
 
-The effect of the first two assumptions are discussed in Section \ref{sec:mapping_and_post-processing}. The effect of the third assumption is minor. When using single-end sequencing, the methylation loci from a single read will always form a positively ordered sequence without gaps, i.e., $(i, i + 1, i + 2)$ and not $(i, i - 1, i - 2)$ nor $(i, i + 1, i + 3)$. However, when using paired-end sequencing, the methylation loci from a paired-end read will still be an ordered sequence but one of the following may occur:
+The effect of the first two assumptions are discussed in Section \ref{sec:mapping_and_post-processing}. The effect of the third assumption is minor. When using single-end sequencing, the methylation loci from a single read will always form a positively ordered sequence without gaps, i.e. $(i, i + 1, i + 2)$ and not $(i, i - 1, i - 2)$ nor $(i, i + 1, i + 3)$. However, when using paired-end sequencing, the methylation loci from a paired-end read will still be an ordered sequence but one of the following may occur:
 
 1. There may be gaps due to the insert size being longer than the sum of the read lengths, e.g., $(i, i + 1, i + 3, i + 4))$. In effect, we have missing data for any intervening methylation loci, the $(i + 2)^{th}$ loci in this example.
 2. Loci may be measured twice if the insert size is less than the sum of the read lengths, e.g. _read-1_ gives us $(i, i + 1)$ and _read-2_ gives us $(i + 1, i + 2, i + 3)$. In this example we must use only one of _read-1_ or _read-2_ as the measurement of the $(i + 1)^{th}$ locus because otherwise we are 'double-counting'.
@@ -236,7 +236,7 @@ In addition to the complications of the Section \ref{sec:one_sample_complication
 
 \subsubsection{What is $\mathcal{I}$?}
 
-Each sample has its own set of methylation loci, that is, $\mathcal{I}_{j}$ differs across $j$. Furthermore, sequencing coverage varies from sample-to-sample. This means that even if the samples have exactly the same $\mathcal{I}_{j}$, i.e., the samples are genetically identical, each sample will have a different set of loci with 'sufficient' sequencing coverage. Loci without sufficient sequencing coverage are effectively missing data.
+Each sample has its own set of methylation loci, that is, $\mathcal{I}_{j}$ differs across $j$. Furthermore, sequencing coverage varies from sample-to-sample. This means that even if the samples have exactly the same $\mathcal{I}_{j}$, i.e. the samples are genetically identical, each sample will have a different set of loci with 'sufficient' sequencing coverage. Loci without sufficient sequencing coverage are effectively missing data.
 
 In practice, we might choose to study $\mathcal{I}^{common} = \bigcap_{j} \mathcal{I}_{j}$ or some other suitably defined intersection of the $\mathcal{I}_{j}$, such as all methylation loci present in at least some fraction of the $N_{samples}$ samples.
 
@@ -501,7 +501,7 @@ Lab-based solutions to overcome these biases exist for targeted bisulfite-sequen
 
 $\beta$-values are the _de facto_ standard unit for reporting methylation levels due to their natural interpretation as an estimate of the average level of methylation at the locus. However, they are not necessarily the best unit for statistical inference. This is because a $\beta$-value is an estimate of a proportion and there are a well-known statistical challenges when working with proportion data, including:
 
-1. The estimate of the standard error depends on the estimate of the mean (i.e., $\beta$), through $se(\beta) = \sqrt{\frac{\beta (1 - \beta)}{d}}$. Taking the derivative of this with respect to $\beta$, we see that the maximum standard error, $\sqrt{\frac{0.25}{d}}$, occurs at $\beta = 0.5$ and the minimum standard error, $0$, occurs at $\beta = 0, 1$.
+1. The estimate of the standard error depends on the estimate of the mean (i.e. $\beta$), through $se(\beta) = \sqrt{\frac{\beta (1 - \beta)}{d}}$. Taking the derivative of this with respect to $\beta$, we see that the maximum standard error, $\sqrt{\frac{0.25}{d}}$, occurs at $\beta = 0.5$ and the minimum standard error, $0$, occurs at $\beta = 0, 1$.
 2. We need to know more than just the $\beta$-value to have a sense of how precise an estimate it is. Essentially, we need to also know the sequencing coverage of the methylation loci. Consider two CpGs, one with $m = 1, u = 3$ and the other with $m = 100, u = 300$. Both CpGs have $\beta = 1/4$ but the second CpG is measured with much greater precision. Assuming the binomial model, the first CpG has $se(\beta) = \sqrt{\frac{1/4 \times 3/4}{4}} = 0.22$ whereas the second CpG has $se(\beta) = \sqrt{\frac{1/4 \times 3/4}{400}} = 0.02$.
 3. Proportions are bound between 0 and 1, inclusive.
 
@@ -514,7 +514,7 @@ However, the use of variance stabilising transformations for proportion data has
 
 One transformation that remains popular, at least in the analysis of DNA methylation microarray data, is the logit-transformation, also known as $\mathcal{M}$-values. An $\mathcal{M}$-value is defined as $logit_{2}(\beta) = \log_{2} \Big ( \frac{\beta}{1 - \beta} \Big ) = \log_{2}\Big ( \frac{m + \alpha}{u + \alpha} \Big )$, where here $m$ and $u$ are the intensities from the methylated and unmethylated probes, respectively, and $\alpha$ is an offset to avoid a numerator or denominator that is zero. $\mathcal{M}$-values are also known as log-ratios and are widely used in the analysis of RNA expression two-colour microarrays \citep[e.g.,][]{Smyth:2005ta}.
 
-\citet{Du:2010dc} advocate for the use of $\mathcal{M}$-values for conducting differential methylation analysis from microarray data[^interpretation]. The main reason they advocate for the use of $\mathcal{M}$-values is that they are approximately _homoscedastic_, i.e., their variances are approximately constant across the full range of $\mathcal{M}$-values. As already noted, the logit-transformation is not the only possible variance-stabilising transformation, but the familiarity of log-ratios to bioinformaticians and genomics researchers makes it a favourable choice.
+\citet{Du:2010dc} advocate for the use of $\mathcal{M}$-values for conducting differential methylation analysis from microarray data[^interpretation]. The main reason they advocate for the use of $\mathcal{M}$-values is that they are approximately _homoscedastic_, i.e. their variances are approximately constant across the full range of $\mathcal{M}$-values. As already noted, the logit-transformation is not the only possible variance-stabilising transformation, but the familiarity of log-ratios to bioinformaticians and genomics researchers makes it a favourable choice.
 
 [^interpretation]: \citet{Du:2010dc} also recommend that the results of analyses are reported as $\beta$-values owing to their "more intuitive biological interpretation".
 
