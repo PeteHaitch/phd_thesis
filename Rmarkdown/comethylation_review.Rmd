@@ -52,7 +52,7 @@ As part of their analysis, the authors explore co-methylation, which they define
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/ng1909-F3a.jpg}
-\caption{Correlation of DNA methylation with spatial distance. (a) Correlation between comethylation and spatial distance. Orange dots represent CpG methylation values aggregated and averaged over $25,000$ individual measurements. Gray dots represent CpG methylation values based on resampling of random CpG positions. Blue dots indicate CpG methylation values based on resampling of amplicon positions. At distances $>1,000$ bp, we did not detect any correlation between CpG methylation and spatial distance. Adapted by permission from from Macmillan Publishers Ltd: [Nature Genetics] (\citet{Eckhardt:2006gh}), copyright (2006)}
+\caption[Co-methylation figure from \citet{Eckhardt:2006gh}]{Correlation of DNA methylation with spatial distance. (a) Correlation between comethylation and spatial distance. Orange dots represent CpG methylation values aggregated and averaged over $25,000$ individual measurements. Gray dots represent CpG methylation values based on resampling of random CpG positions. Blue dots indicate CpG methylation values based on resampling of amplicon positions. At distances $>1,000$ bp, we did not detect any correlation between CpG methylation and spatial distance. Adapted by permission from from Macmillan Publishers Ltd: [Nature Genetics] (\citet{Eckhardt:2006gh}), copyright (2006)}
 \label{fig:Eckhardt}
 \end{figure}
 
@@ -117,7 +117,7 @@ The $10$ bp period is equal to the length of one helical DNA turn. From this res
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/Lister_2009_Sup_Fig_9.pdf}
-\caption{Spacing of Adjacent Methylcytosines in Different Contexts. Prevalence of mCHG/mCHH sites (y-axis) as a function of the number of bases between adjacent mCHG/mCHH sites (x-axis) based on all non redundant pair-wise distances up to $50$ nt in exons, introns and random sequences. The blue line represents smoothing by cubic splines. Adapted by permission from from Macmillan Publishers Ltd: [Nature Genetics] (\citet{Lister:2009hy}), copyright (2009)}
+\caption[Co-methylation figure from \citet{Lister:2009hy}]{Spacing of Adjacent Methylcytosines in Different Contexts. Prevalence of mCHG/mCHH sites (y-axis) as a function of the number of bases between adjacent mCHG/mCHH sites (x-axis) based on all non redundant pair-wise distances up to $50$ nt in exons, introns and random sequences. The blue line represents smoothing by cubic splines. Adapted by permission from from Macmillan Publishers Ltd: [Nature Genetics] (\citet{Lister:2009hy}), copyright (2009)}
 \label{fig:Lister_2009_Sup_Fig_9}
 \end{figure}
 
@@ -148,7 +148,7 @@ Figure \ref{fig:Li6} plots the "correlation" against "distance of CpG" ($0 - 100
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/{journal.pbio.1000533.s006}.pdf}
-\caption{Co-methylation patterns for different genomic features. A reproduction of Supplementary Figure 6 from \citet{Li:2010fb} under the Creative Common Attribution (CCBY) licence.}
+\caption[Co-methylation by genomic feature from \citet{Li:2010fb}]{Co-methylation patterns for different genomic features. A reproduction of Supplementary Figure 6 from \citet{Li:2010fb} under the Creative Common Attribution (CCBY) licence.}
 \label{fig:Li6}
 \end{figure}
 
@@ -157,7 +157,7 @@ The plot of genome-wide correlations (panel (a) in Figure \ref{fig:Li6}) contain
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/Figure_S7.pdf}
-\caption{Transformation of methylation correlation at nearby CpG cytosines. A reproduction of Supplementary Figure 7 from \citet{Li:2010fb} under the Creative Common Attribution (CCBY) licence.}
+\caption[Co-methylation figure from \citet{Li:2010fb}]{Transformation of methylation correlation at nearby CpG cytosines. A reproduction of Supplementary Figure 7 from \citet{Li:2010fb} under the Creative Common Attribution (CCBY) licence.}
 \label{fig:Li7}
 \end{figure}
 
@@ -170,7 +170,7 @@ Figure \ref{fig:Lyko} reproduces the results for the co-methylation analysis. No
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/Lyko_Figure_S7.pdf}
-\caption{Periodicity of methylation patterns. (A) Autocorrelation of CpG methylation status over 1 kb. (B) Autocorrelation over 100 bp. Figures A and B show that the correlation of methylation status of neighboring CpGs increases sharply between 1 bp and 20 bp, then drops rapidly between 40 bp and 100 bp, and then slowly fades away. CpGs within a neighborhood of 2 bp to 100 bp are thus more likely to share the same methylation status than more distant CpGs. (C) Fourrier transform of autocorrelation showing a clear periodicity peak at 33 cycles per 100 bp (every 3 bp). (D) Distribution of codon position of mCs, and distribution of methylation level depending on the position. These two panels indicate that the distance between methylated CpGs is often a multiple of three and that the methylated cytosine corresponds most frequently to the first nucleotide of an arginine codon. A reproduction of Supplementary Figure 7 from \citet{Lyko:2010dr} under the Creative Common Attribution (CCBY) licence.}
+\caption[Co-methylation figure from \citet{Lyko:2010dr}]{Periodicity of methylation patterns. (A) Autocorrelation of CpG methylation status over 1 kb. (B) Autocorrelation over 100 bp. Figures A and B show that the correlation of methylation status of neighboring CpGs increases sharply between 1 bp and 20 bp, then drops rapidly between 40 bp and 100 bp, and then slowly fades away. CpGs within a neighborhood of 2 bp to 100 bp are thus more likely to share the same methylation status than more distant CpGs. (C) Fourrier transform of autocorrelation showing a clear periodicity peak at 33 cycles per 100 bp (every 3 bp). (D) Distribution of codon position of mCs, and distribution of methylation level depending on the position. These two panels indicate that the distance between methylated CpGs is often a multiple of three and that the methylated cytosine corresponds most frequently to the first nucleotide of an arginine codon. A reproduction of Supplementary Figure 7 from \citet{Lyko:2010dr} under the Creative Common Attribution (CCBY) licence.}
 \label{fig:Lyko}
 \end{figure}
 
@@ -190,7 +190,7 @@ Figure \ref{fig:FF_chr21_acf_beta_star} is a plot of the autocorrelation of the 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/FF_chr21_acf_beta_star.pdf}
-\caption{Autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \emph{FF} sample.}
+\caption[Autocorrelation of incorrectly defined $\beta$-values]{Autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \emph{FF} sample.}
 \label{fig:FF_chr21_acf_beta_star}
 \end{figure}
 
@@ -199,7 +199,7 @@ Furthermore, if we compute the Fourier transform of this autocorrelation we find
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/FF_chr21_acf_beta_star_fourier.pdf}
-\caption{Fourier transformation of the autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \textit{FF} sample. Fourier transformation computed and plotted using the \texttt{spectrum} function in R. The period is defined as 1 / frequency. The maximum frequency is approximately $0.33$, which corresponds to a period of approximately $3$ bp.}
+\caption[Fourier transformation of incorrectly defined $\beta$-values]{Fourier transformation of the autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \textit{FF} sample. Fourier transformation computed and plotted using the \texttt{spectrum} function in R. The period is defined as 1 / frequency. The maximum frequency is approximately $0.33$, which corresponds to a period of approximately $3$ bp.}
 \label{fig:FF_chr21_acf_beta_star_fourier}
 \end{figure}
 
@@ -241,7 +241,7 @@ The sequencing technology at the time of this publication produced very short re
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/Cokus_2008_Sup_Fig_14.pdf}
-\caption{Within-read probability of additional methylation of CHH sites within a given distance from a methylated CHH site. Data were derived from individual BS-Seq reads. The x-axis indicates the distance between the two cytosines. The y-axis indicates the probability of methylation of CHH sites within the given distance from another methylated CHH site. Each point is the mean value from averaging the probability from each of the five Arabidopsis chromosomes, and the blue line is a running average of these mean values. Error bars represent $95\%$ confidence intervals via critical values of Student $t$ distributions. Adapted by permission from from Macmillan Publishers Ltd: [Nature Genetics] (\citet{Cokus:2008fc}), copyright (2008)}
+\caption[Co-methylation figure from \citet{Cokus:2008fc}]{Within-read probability of additional methylation of CHH sites within a given distance from a methylated CHH site. Data were derived from individual BS-Seq reads. The x-axis indicates the distance between the two cytosines. The y-axis indicates the probability of methylation of CHH sites within the given distance from another methylated CHH site. Each point is the mean value from averaging the probability from each of the five Arabidopsis chromosomes, and the blue line is a running average of these mean values. Error bars represent $95\%$ confidence intervals via critical values of Student $t$ distributions. Adapted by permission from from Macmillan Publishers Ltd: [Nature Genetics] (\citet{Cokus:2008fc}), copyright (2008)}
 \label{fig:Cokus_2008_Sup_Fig_14}
 \end{figure}
 
@@ -283,6 +283,8 @@ As part of their analysis, citeauthor{Landan:2012kp} construct "methylation link
 
 \begin{table}[h]
 \centering
+\caption[Counts of reads at a CpG 2-tuple]{Summary of read counts at a CpG 2-tuple, $(i, i'), i \neq i'$. A dot ($\cdot$) indicates that this index is summed over, e.g., $u\cdot_{i, i + 1} = uu_{i, i + 1} + um_{i, i + 1}$.}
+\label{tab:landan}
 \begin{tabular}{@{}cccc@{}}
 \cmidrule(l){2-4}
  & \multicolumn{3}{c}{Second CpG} \\
@@ -292,22 +294,20 @@ As part of their analysis, citeauthor{Landan:2012kp} construct "methylation link
  & $mu_{i, i'}$       & $mm_{i, i'}$       & $m\cdot_{i, i'}$ \\
  & $\cdot u_{i, i'}$  & $\cdot m_{i, i'}$  & $d_{i, i'}$      \\ \cmidrule(l){2-4}
 \end{tabular}
-\caption{Summary of read counts at a CpG 2-tuple, $(i, i'), i \neq i'$. A dot ($\cdot$) indicates that this index is summed over, e.g., $u\cdot_{i, i + 1} = uu_{i, i + 1} + um_{i, i + 1}$.}
-\label{tab:landan}
 \end{table}
 
-So-called "methylation linkage diagrams" are created by plotting the Pearson correlation of each 2-tuple, $r_{(i, i')}$ as a heatmap (_à la_ heatmaps of linkage disequilibrium) to identify blocks of CpGs with significant co-methylation. It should be noted that the concepts of 'individual' and 'population' are rather different for "methylation linkage" than they are for genetic linkage (see Table \ref{tab:linkage}).
+So-called "methylation linkage diagrams" are created by plotting the Pearson correlation of each 2-tuple, $r_{(i, i')}$ as a heatmap (_à la_ heatmaps of linkage disequilibrium) to identify blocks of CpGs with significant co-methylation. It should be noted that the concepts of 'subject' and 'population' are rather different for "methylation linkage" than they are for genetic linkage (see Table \ref{tab:linkage}).
 
 \begin{table}[h]
 \centering
+\caption[Notions of 'subject' and 'population' in methylation linkage]{Notions of 'subject' and 'population' in traditional genetic linkage and the "methylation linkage" of \citet{Landan:2012kp}. NB 'person' could be any organism, e.g, 'mouse', 'dog', etc.}
+\label{tab:linkage}
 \begin{tabular}{@{}lll@{}}
 \toprule
-                    & Individual               & Population \\ \midrule
+                    & Subject               & Population \\ \midrule
 Genetic linkage     & Person                   & Population \\
 Methylation linkage & (Haploid) genome of cell & Person     \\ \bottomrule
 \end{tabular}
-\caption{Notions of 'individual' and 'population' in traditional genetic linkage and the "methylation linkage" of \citet{Landan:2012kp}. NB 'person' could be any organism, e.g, 'mouse', 'dog', etc.}
-\label{tab:linkage}
 \end{table}
 
 From the methylation linkage analysis of these 45 regions, \citeauthor{Landan:2012kp} conclude that:
