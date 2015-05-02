@@ -13,7 +13,7 @@ bibliography: ../latex/phd_thesis.bib
 \chapter{A statistical framework for whole-genome bisulfite-sequencing data}\label{chap:wgbs_statistical_framework}
 
 \begin{chapabstract}
-I set out a statistical framework for analysing bisulfite-sequencing data. The ideas here are simple, however, they have not yet been put into a unified mathematical framework. My intention in doing so is to clarify several subtleties that, in my experience, are potential sources of confusion.
+This chapter sets out a statistical framework for analysing bisulfite-sequencing data. The ideas here are simple, however, they have not yet been put into a unified mathematical framework. My intention in doing so is to clarify several subtleties that, in my experience, are potential sources of confusion.
 
 Beginning with a single sample, I explain the various sources of variation in this statistical model and introduce the mathematical notation that I use throughout my thesis. I then extend this framework to multiple samples.
 
