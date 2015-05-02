@@ -13,7 +13,7 @@ bibliography: ../latex/phd_thesis.bib
 \chapter{Introduction to genomics and DNA methylation}\label{chap:biology_background}
 
 \begin{chapabstract}
-I summarise the basic biology necessary for understanding my thesis. I introduce DNA methylation, describe some of its biological roles, and introduce assays for studying DNA methylation, with a particular focus on bisulfite-sequencing.
+This chapter summarises the basic biology necessary for understanding my thesis. I introduce DNA methylation, describe some of its biological roles, and introduce assays for studying DNA methylation, with a particular focus on bisulfite-sequencing.
 \end{chapabstract}
 
 \section{From DNA to genomes}\label{ref:from_dna_to_genomes}
