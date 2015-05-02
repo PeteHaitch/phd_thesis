@@ -13,7 +13,7 @@ bibliography: ../latex/phd_thesis.bib
 \chapter{A critical review of co-methylation}\label{chap:co-methylation_review}
 
 \begin{chapabstract}
-Co-methylation is the dependence structure of DNA methylation data. This dependence structure can be viewed from different perspectives and on different scales, which has led to several disparate definitions of co-methylation. In this chapter I critically review these definitions and put them in the statistical framework of Chapter \ref{chap:wgbs_statistical_framework}. I highlight various shortcomings of proposed methods, which led me to develop the methods and software described in  Chapter \ref{chap:co-methylation}. I also review how methods to detect differential methylation have sought to account for and exploit co-methylation.
+Co-methylation is the dependence structure of DNA methylation data. This chapter critically reviews different definitions of co-methylation and puts them in the statistical framework of Chapter \ref{chap:wgbs_statistical_framework}. I highlight various shortcomings of existing methods for quantifying co-methylation, which led me to develop the methods and software described in  Chapter \ref{chap:co-methylation}. I also review how methods to detect differential methylation have sought to account for, and exploit, co-methylation.
 \end{chapabstract}
 
 \section{What is co-methylation and why study it?}\label{subsec:co-methylation_definition}
@@ -62,15 +62,15 @@ The average amplicon length is reported as $411$ bp with a standard deviation of
 
 My best guess as to the definition of "percentage identical methylation" is that it is the proportion of pairs of identical methylation calls at different CpGs from (generally) different amplicons, that is, $Pr(Z_{h, i} = Z_{h', i'})$. I will refer to my best guess of "percentage identical methylation" as $PIM^{\ast}$, and now turn to some of its properties.
 
-Let $0 \leq p_{h} \leq 1$ be the genome-wide average CpG methylation level for the sample from which $Z_{i, h}$ is sampled, that is, $Pr(Z_{h, i} = 1) = p_{h}$. For two distinct CpGs sequenced on two (potentially) distinct amplicons, $Z_{h, i}$ and  $Z_{h', i'}$, we want to compute the probability that the methylation states are identical, that is, $Pr(Z_{h, i} = Z_{h', i'})$. Not only may the two CpGs be from distinct amplicons, but in the original analysis the amplicons themselves may be from distinct samples with different genome-wide average methylation levels. This most general setting is described by $Z_{h, i} \eqd \text{Bernoulli}(p_{h})$ and $Z_{h', i'} \eqd \text{Bernoulli}(p_{h'})$, with $cor(Z_{h, i}, Z_{h', i'}) = c$. In this setting we can compute the theoretical $PIM^{\ast}$ as follows:
+Let $0 \leq p_{h} \leq 1$ be the genome-wide average CpG methylation level for the sample from which $Z_{h, i}$ is sampled, that is, $Pr(Z_{h, i} = 1) = p_{h}$. For two distinct CpGs sequenced on two (potentially) distinct amplicons, $Z_{h, i}$ and  $Z_{h', i'}$, we want to compute the probability that the methylation states are identical, that is, $Pr(Z_{h, i} = Z_{h', i'})$. Not only may the two CpGs be from distinct amplicons, but in the original analysis the amplicons themselves may be from distinct samples with different genome-wide average methylation levels. This most general setting is described by $Z_{h, i} \eqd \text{Bernoulli}(p_{h})$ and $Z_{h', i'} \eqd \text{Bernoulli}(p_{h'})$, with $cor(Z_{h, i}, Z_{h', i'}) = c$. In this setting we can compute the theoretical $PIM^{\ast}$ as follows:
 
 \begin{align*}
 PIM^{\ast} &= Pr(Z_{h, i} = Z_{h', i'}) \\
         &= Pr(Z_{h, i} = 0, Z_{h', i'} = 0) + Pr(Z_{h, i} = 1, Z_{h', i'} = 1) \\
         &= Pr(Z_{h', i'} = 0 | Z_{h, i} = 0) Pr(Z_{h, i} = 0) +
            Pr(Z_{h', i'} = 1 | Z_{h, i} = 1) Pr(Z_{h, i} = 1) \\
-        &= \big [ (1 - p_{h'}) + c (1 - p_{h}) \big ] (1 - p_{h}) +
-           \big [ (p_{h'} + c (1 - p_{h})) \big ] p_{h} \\
+        &= \big [ (1 - p_{h'}) + c p_{h} \big ] (1 - p_{h}) +
+           \big [ p_{h'} + c (1 - p_{h}) \big ] p_{h} \\
         &= (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'} + 2 c p_{h} (1 - p_{h})
 \end{align*}
 
@@ -78,7 +78,7 @@ The proof of this result is given in Appendix \ref{app:bernoulli_equal}.
 
 In general, $PIM^{\ast} \in {[0, 1]}$ since it is a probability, which is already unlike a correlation coefficient that takes values in ${[{-1}, 1]}$. There are a few important special cases that are worth discussing:
 
-1. $PIM^{\ast}_{inid} = (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'}$: Independent and non-identically distributed (_inid_), i.e., $Z_{h, i} \eqd Bernoulli(p_{h})$ and $Z_{h, i'} \eqd Bernoulli(p_{h'})$ and with $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.
+1. $PIM^{\ast}_{inid} = (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'}$: Independent and non-identically distributed (_inid_), i.e., $Z_{h, i} \eqd Bernoulli(p_{h})$ and $Z_{h', i'} \eqd Bernoulli(p_{h'})$ and with $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.
 2. $PIM^{\ast}_{did} = (1 - p)^{2} + p^{2} + 2 c p ( 1 - p)$: Dependent and identically distributed (_did_), i.e., $Z_{h, i}, Z_{h', i'} \eqd Bernoulli(p)$ and $cor(Z_{h, i}, Z_{h', i'}) = c \neq 0$.
 3. $PIM^{\ast}_{iid} = (1 - p)^{2} + p^{2}$: Independent and identically distributed (_iid_), i.e., $Z_{h, i}, \allowbreak Z_{h', i'} \eqd Bernoulli(p)$ and $cor(Z_{h, i}, Z_{h', i'}) = c = 0$.
 
@@ -102,7 +102,7 @@ The autocorrelation plots showed two periodicities, one of $\approx 167$ bp and 
 
 [^CHH_only]: The $10$ bp period was later observed for CG and CHG methylation as well, at least for nucleosome bound DNA \citep{Chodavarapu:2010iqa}
 
-The $167$ bp period is "is similar to, but slightly shorter than, estimates of the average spacing of nucleosomes in plant chromatin" and Cokus et al. hypothesise that this periodicity is due to histones dictating access to DNA by the DNA methyltransferases.
+The $167$ bp period "is similar to, but slightly shorter than, estimates of the average spacing of nucleosomes in plant chromatin" and Cokus et al. hypothesise that this periodicity is due to histones dictating access to DNA by the DNA methyltransferases.
 
 The $10$ bp period is equal to the length of one helical DNA turn. From this result Cokus et al. hypothesise that the DOMAINS REARRANGED METHYLASE 2 (_DRM2_), "the main enzyme controlling asymmetric methylation in _Arabidopsis_", contains two active sites that methylate sites $8$ to $10$ bp apart[^comethylation_def2], like its mammalian homologue, DNA methyltransferase 3 (_DNMT3_). The $10$ bp CHH-only period in the autocorrelation analysis of the $\beta$-values is also observed in a _within-fragment analysis_ (discussed in \ref{sec:previous_within-fragment_analyses})
 
@@ -253,7 +253,7 @@ Furthermore, by aggregating all pairs of CHH loci separated by a common distance
 
 \subsection{\citet{Ball:2009kh}}
 
-\citet{Ball:2009kh} use bisulfite padlock probes with $36$ bp single-end reads to profile CpG methylation at approximately $7,000$ CpGs in an Epstein-Barr virus transformed B-lymphocyte cell line. As part of their study, \citeauthor{Ball:2009kh} sought to investigate whether the co-methylation reported by \citet{Eckhardt:2006gh} (Section \label{sec:eckhardt}) occurs at the single-molecule level.
+\citet{Ball:2009kh} use bisulfite padlock probes with $36$ bp single-end reads to profile CpG methylation at approximately $7,000$ CpGs in an Epstein-Barr virus transformed B-lymphocyte cell line. As part of their study, \citeauthor{Ball:2009kh} sought to investigate whether the co-methylation reported by \citet{Eckhardt:2006gh} occurs at the single-molecule level.
 
 To do so, \citeauthor{Ball:2009kh} took all reads containing multiple CpGs and mapping to positions with intermediate $\beta$-values ($0.2 < \beta < 0.8$) with at least $100\times$ sequencing coverage. From these reads they computed the correlation of within-read methylation states. \citeauthor{Ball:2009kh} found that the distribution of these correlations is centred around $0.5$ with very few values below zero, evidence that methylation levels at CpGs on the same DNA fragment "are generally positively correlated".
 
@@ -275,24 +275,24 @@ In summary, this analysis uses high resolution measurements from a moderate numb
 
 \subsection{\citet{Landan:2012kp}}\label{sec:landan}
 
-\citet{Landan:2012kp} is notable for its use of the within-read information available from bisulfite-sequencing data. The authors explore the within-sample heterogeneity of methylation patterns at 4-tuples and 6-tuples of CpGs from ultra-deep bisulfite-sequencing (median coverage of each CpG in the target $> 10,000 \times$) of 45 cancer-related CpG islands and study how methylation dynamics at this regions evolves over time. \citeauthor{Landan:2012kp} also use these data to estimate co-methylation.
+\citet{Landan:2012kp} is notable for its use of the within-read information available from bisulfite-sequencing data. The authors explore the within-sample heterogeneity of methylation patterns at 4-tuples and 6-tuples of CpGs from ultra-deep bisulfite-sequencing ($> 10,000 \times$ median sequencing coverage of each CpG in the target) of 45 cancer-related CpG islands and study how methylation dynamics at this regions evolves over time. \citeauthor{Landan:2012kp} also use these data to estimate co-methylation.
 
-As part of their analysis, citeauthor{Landan:2012kp} construct "methylation linkage diagrams" based on a Pearson correlation estimate of within-fragment co-methylation. For each CpG 2-tuple in their targeted regions, they create a $2 \times 2$ contingency table. The general form of the table is shown below in Table \ref{tab:landan}. They then compute the Pearson correlation of each table[^cor_equivalence], $r = \frac{mm_{i, i'} \times uu_{i, i'} - mu_{i, i'} \times um_{i, i'}}{sqrt{u\cdot_{i, i'} \times m\cdot_{i, i'} \times \cdot u_{i, i'} \times m_{i, i'}}}$. Importantly, $r$ is based on within-read measurements from a single sample and so these $r$ are estimates of within-read, within-sample co-methylation.
+As part of their analysis, \citeauthor{Landan:2012kp} construct "methylation linkage diagrams" based on a Pearson correlation estimate of within-fragment co-methylation. For each CpG 2-tuple in their targeted regions, they create a $2 \times 2$ contingency table. The general form of the table is shown below in Table \ref{tab:landan}. They then compute the Pearson correlation of each table[^cor_equivalence], $r = \frac{n_{mm} \times n_{uu} - n_{mu} \times n_{um}}{\sqrt{n_{u+} \times n_{m+} \times n_{+u} \times n_{+m}}}$. Importantly, $r$ is based on within-read measurements from a single sample and so these $r$ are estimates of within-read, within-sample co-methylation.
 
 [^cor_equivalence]: The formula I give for $r$ is also known as the $\phi$ coefficient of a $2 \times 2$ table. The $\phi$ coefficient of a $2 \times 2$ table of binary variables, such as Table \ref{tab:landan}, is mathematically equivalent to the Pearson correlation coefficient of the same data.
 
 \begin{table}[h]
 \centering
-\caption[Counts of reads at a CpG 2-tuple]{Summary of read counts at a CpG 2-tuple, $(i, i'), i \neq i'$. A dot ($\cdot$) indicates that this index is summed over, e.g., $u\cdot_{i, i + 1} = uu_{i, i + 1} + um_{i, i + 1}$.}
+\caption[Counts of reads at a CpG 2-tuple]{Summary of read counts at a CpG 2-tuple. For example, $n_{um}$ is the number of reads methylated at the first CpG and unmethylated at the second CpG. We use the 'plus' notation to denote the sum over the index it replaces, e.g., $n_{u+} = n_{uu} + n_{um}$.}
 \label{tab:landan}
 \begin{tabular}{@{}cccc@{}}
 \cmidrule(l){2-4}
  & \multicolumn{3}{c}{Second CpG} \\
  \cmidrule(l){2-4}
 \multirow{3}{*}{First CpG} & & & \\
- & $uu_{i, i'}$       & $um_{i,i'}$       & $u\cdot_{i, i'}$ \\
- & $mu_{i, i'}$       & $mm_{i, i'}$       & $m\cdot_{i, i'}$ \\
- & $\cdot u_{i, i'}$  & $\cdot m_{i, i'}$  & $d_{i, i'}$      \\ \cmidrule(l){2-4}
+ & $n_{uu}$       & $n_{um}$       & $n_{u+}$ \\
+ & $n_{mu}$       & $n_{mm}$       & $n_{m+}$ \\ \cmidrule(l){2-4}
+ & $n_{+u}$  & $\cdot n_{+m}$  & $n_{++} = n$      \\
 \end{tabular}
 \end{table}
 
@@ -300,7 +300,7 @@ So-called "methylation linkage diagrams" are created by plotting the Pearson cor
 
 \begin{table}[h]
 \centering
-\caption[Notions of 'subject' and 'population' in methylation linkage]{Notions of 'subject' and 'population' in traditional genetic linkage and the "methylation linkage" of \citet{Landan:2012kp}. NB 'person' could be any organism, e.g, 'mouse', 'dog', etc.}
+\caption[Notions of `subject' and `population' in methylation linkage]{Notions of `subject' and `population' in traditional genetic linkage and the "methylation linkage" of \citet{Landan:2012kp}. NB `person' could be any organism, e.g, `mouse', `dog', etc.}
 \label{tab:linkage}
 \begin{tabular}{@{}lll@{}}
 \toprule
@@ -314,7 +314,7 @@ From the methylation linkage analysis of these 45 regions, \citeauthor{Landan:20
 
 > "[the] correlation between the methylation states of pairs of CpGs was generally very low. This lack of correlation suggests that methylation dynamics are typically independent for different CpGs, making the methylation state of one CpG (whether high or low) uninformative on the methylation state of nearby CpGs."
 
-As we will see in Chapter \ref{chap:co-methylation}, this result is contradicted by my analyses of within-fragment co-methylation (__TODO__: Update once Chapter \ref{chap-comethylation} is updated.)
+As we will see in Chapter \ref{chap:co-methylation}, this result is contradicted by my analyses of within-fragment co-methylation using whole-genome data.
 
 \section{Between-sample co-methylation}
 \label{sec:between_sample_cometh}
@@ -342,7 +342,7 @@ The variety of definitions, rigour, and reproducibility of the published analyse
 
 For example, the R/Bioconductor packages `bsseq` \citep{Hansen:2011gu, Hansen:2012gr} and `BiSeq` \citep{Hebestreit:2013ko} both cite \citet{Eckhardt:2006gh} as providing evidence of co-methylation, which can be exploited by spatial smoothing of the $\beta$-values prior to testing for differential methylation. Specifically, by assuming that CpGs close to one another have similar methylation levels, the smoothed $\beta$-values are, on average, more accurate than the raw $\beta$-values. Both `bsseq` and `BiSeq` smooth $\beta$-values on a per-sample basis.
 
-Smoothing is particularly powerful for experiments with low sequencing coverage since the error in estimating the raw $\beta$-values is inversely proportional to the sequencing coverage and smoothing reduces this error. An important parameter when smoothing is the choice of window size over which to smooth, also known as the _bandwidth_ of the smoother. The default window size in `bsseq` is defined as one that contains at least 70 CpGs and is at least 2000 bp wide. `BiSeq` uses a much smaller default window size of 80 bp, a decision that is  driven by its focus on RRBS data which has a higher CpG density than whole-genome bisulfite-sequencing data. Ideally, a data-driven bandwidth would be used, one driven by the strength of co-methylation in the region, but this is difficult to implement in practice. A simpler but potentially useful hybrid would be to define different window sizes for genomic features with generally different co-methylation structures, e.g., CpG islands vs. the rest of the genome (see Chapter \ref{chap:co-methylation}) (__TODO: Revisit in light of updated results in Co-methylation chapter__).
+Smoothing is particularly powerful for experiments with low sequencing coverage since the error in estimating the raw $\beta$-values is inversely proportional to the sequencing coverage and smoothing reduces this error. An important parameter when smoothing is the choice of window size over which to smooth, also known as the _bandwidth_ of the smoother. The default window size in `bsseq` is defined as one that contains at least 70 CpGs and is at least 2000 bp wide. `BiSeq` uses a much smaller default window size of 80 bp, a decision that is  driven by its focus on RRBS data which has a higher CpG density than whole-genome bisulfite-sequencing data. Ideally, a data-driven bandwidth would be used, one driven by the strength of co-methylation in the region, but this is difficult to implement in practice. A simpler but potentially useful hybrid would be to define different window sizes for genomic features with generally different co-methylation structures, e.g., CpG islands vs. the rest of the genome (see Chapter \ref{chap:co-methylation}).
 
 In addition to smoothing the $\beta$-values, `BiSeq` also estimates and tries to account for the spatial correlation of test statistics when testing for differential methylation at neighbouring loci. This is not the same as looking for correlations between the $\beta$-values, but is rather based on looking for correlations amongst the _differences_ in $\beta$-values, since these differences are what the test statistics of differential methylation are based upon. Specifically, `BiSeq` fits a semivariogram to the test statistics of differentially methylated CpGs. The correlations estimated using the semivariogram are in turn used in estimates of the standard deviations when identifying differentially methylated regions.
 

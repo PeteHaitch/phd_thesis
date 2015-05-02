@@ -9,9 +9,12 @@
   - Check in proofreading
 - [x] Add genome-wide line to legend of MH plots
   - __DONE__
-- [ ] Address Saskia's comments
-- [ ] Address Goknur's comments
+- [x] Address Saskia's comments
+  - __DONE__
+- [x] Address Goknur's comments
+  - __DONE__
 - [ ] Address Terry's comments
+- [ ] Fix formatting of $2 \times 2$ contingency tables to be consistent.
 - [ ] Write abstract
 - [ ] Complete `methsim` chapter.
 - [ ] Write concluding remarks

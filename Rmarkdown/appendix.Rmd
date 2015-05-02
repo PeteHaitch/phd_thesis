@@ -43,7 +43,7 @@ Pr(X_{1} = x_{1}, \ldots, X_{n} = x_{n}) = Pr(X_{1} = x_{1}) Pr(X_{2} = x_{2} | 
 \end{equation*}
 
 In particular, in the case $n = 2$ we can compute the probability that two
-dependent but identically distributed Bernoulli random variables are equal.
+dependent and identically distributed Bernoulli random variables are equal.
 
 To extend the above result to the probability that two dependent and
 __non-identically__ distributed Bernoulli random variables are equal, simply
