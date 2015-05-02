@@ -16,6 +16,7 @@
 - [x] Address Terry's comments
   - __DONE__
 - [ ] Rename `methsim` plots without the `_1` and `_2` suffixes
+- [ ] Could simulate $B$ from Beta distribution rather than Normal, i.e., a beta-binomial model!
 - [ ] Plots of beta-correlations separated by strand in a clearer way.
   - Use loess to summarise trend
   - In general, plots of beta-correlations are noisy. Just show trend?
