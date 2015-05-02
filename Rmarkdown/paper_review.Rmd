@@ -156,7 +156,7 @@ pos_{i'} = \left\{
 \end{equation*}
 Note that the end of the window may not be a CpG if $w_{i} = 2000$ but will be if $w_{i} > 2000$.
 
-The raw $\beta$-values are weighted according to the binomial likelihood and a tricube kernel. The binomial likelihood weights points inversely to their standard error, $se(\beta_{i, j})$, and the tricube kernal gives greater weight to those $\beta_{i, j}$ near the centre of the window.
+The raw $\beta$-values are weighted according to the binomial likelihood and a tricube kernel. The binomial likelihood weights points inversely to their standard error, $se(\beta_{i, j})$, and the tricube kernel gives greater weight to those $\beta_{i, j}$ near the centre of the window.
 
 ### Step 2 {-}
 
