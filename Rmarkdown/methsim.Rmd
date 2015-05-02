@@ -227,7 +227,7 @@ I now describe each step in greater detail.
 
 While a tailored algorithm may improve this segmentation process, the result produced by `MethylSeekR` is a reasonable approximation to segmenting the methylome into the required 'regions of similarity'.
 
-\subsubsection{Parameterising the model}
+\subsubsection{Parameterising the model}\label{subsec:parameterising_the_model}
 
 `methsim` uses a two-state ($1 =$ methylated or $0 =$ unmethylated), one-step Markov chain to model $\mathbf{Z} = \{ \mathbf{Z_{h}} \}_{h = 1}^{h = n_{h}}$. This allows the incorporation of within-fragment co-methylation into the simulation. The choice of a one-step process is one of computational simplicity and is a reasonable approximation for most of the genom given the available data (see Chapter \ref{chap:co-methylation}).
 
@@ -270,15 +270,17 @@ To simulate values of $\mathbf{B}$ and $\mathbf{\psi}$, `methsim` uses the empir
 \label{fig:ADS_beta_by_pm_boxplots}
 \end{figure}
 
-There are many ways to simulate values of $\mathbf{B}$ and $\mathbf{\theta} = \mathbf{log{\psi}}$ based on these empirical distributions. I have so far only had time to explore a few simple methods and this remains ongoing work. We will discuss the results from these five models (m1, m2, m3, m4, m5):
+There are many ways to simulate values of $\mathbf{B}$ and $\mathbf{\theta} = \mathbf{log{\psi}}$ based on these empirical distributions. I have so far only had time to explore a few simple methods and this remains ongoing work. We will discuss the results from three methods for simulating $\mathbf{B}$ (_m1_, _m2_, and _m3_) and two ways for simulating $\mathbf{\theta}$ (_A_ and _B_):
 
 \begin{description}
-  \item[m1] All loci in each region have the same $B$, which is sampled from $\beta_{i | r_{i}}$. $\theta$ sampled from $Gaussian(\mu_{IPD}, \sigma_{IPD}^{2})$, where $\mu_{IPD}$ and $\sigma_{IPD}$ are plug-in estimates computed from the distribution of chromosome-level $\widehat{\theta_{MH}}$ (autosomes only).
-  \item[m2] All loci in each region have the same \textbf{average} $B$, which is sampled from $\beta_{i | r_{i}}$; this is then perturbed by a $Gaussian(0, \sigma_{B}^2)$ random variable. This is similar to what is done by `WGBSsuite`. Here we use $\sigma_{B}^{2} = B \times (1 - B)$. The resulting $\mathbf{B}$ is truncated so that all values lie between 0.01 and 0.99 (necessary to avoid issues in the iterative proportional fitting algorithm at the boundaries). $\theta$ simulated as in m1.
-  %\item[m3] $\mathbf{B}$ simulated as in m2 but with the perturbations in each region simulated from a first-order autoregressive process with coefficient equal to 0.5. $\theta$ simulated as in m1.
-  %\item[m4] As for m3 but where the sample is a 50:50 mixture, i.e., two independent simulations of $\mathbf{B}$ and $\mathbf{\theta}$ that are sampled from with equal probability.
-  %\item[m5] As for m3 but with $\mathbf{theta} = 0$ to simulate independence of methylation states within fragments.
+  \item[\emph{m1}] All loci in each region have the same $B$, which is sampled from $\beta_{i | r_{i}}$.
+  \item[\emph{m2}] All loci in each region have the same \textbf{average} $B$, which is sampled from $\beta_{i | r_{i}}$; this is then perturbed by a $Gaussian(0, \sigma_{B}^2)$ random variable. This is similar to what is done by `WGBSsuite`. Here we use $\sigma_{B}^{2} = B \times (1 - B)$. The resulting $\mathbf{B}$ is truncated so that all values lie between 0.01 and 0.99 (necessary to avoid issues in the iterative proportional fitting algorithm at the boundaries).
+  %\item[\emph{m3}] $\mathbf{B}$ simulated as in \emph{m2} but with the perturbations in each region simulated from a first-order autoregressive process with coefficient equal to 0.5.
+  %\item[\emph{A}] $\theta$ identically zero. This is to simulate independence of within-fragment methylation states and as a control to check that `methsim` is working as intended for simulating within-fragment co-methylation.
+  %\item[\emph{B}] $\theta$ sampled from $Gaussian(\mu_{IPD}, \sigma_{IPD}^{2})$, where $\mu_{IPD}$ and $\sigma_{IPD}$ are plug-in estimates computed from the distribution of chromosome-level $\widehat{\theta_{MH}}$ (autosomes only).
 \end{description}
+
+Furthermore, we will consider simulations where the sample is 'pure' (\emph{I}) and where the sample is a mixture of sub-populations with relative frequencies __TODO: Check frequencies__ (\emph{II}). We do not explore all combinations of these factors but look at five informative combinations: _m1AI_, _m1BI, _m2BI_, _m3BI_ and _m3BII_. We compare these five models to the real _ADS_ data.
 
 The simulation of $\mathbf{\theta} = \mathbf{log{\psi}}$ requires further explanation. The empirical distributions of $\mathbf{\widehat{\theta}}$ will only include values for small $IPD$s since these are estimated from individual sequencing reads (see Chapter \ref{chap:co-methylation} for details). When simulating a methylome, we will encounter 2-tuples with much larger $IPD$s and the question is how to deal with these?
 
@@ -342,15 +344,33 @@ Using up to 8 CPU cores in parallel, it takes less than 9 minutes to simulate a 
 
 \section{Results}
 
-A central feature of `methsim` is that the simulation parameters are sampled from an input sample. At a bare minimum, the first test of `methsim` is that simulated data are similar to the real data on which they are based. To assess this, we compare several summary measures between the simulated data and the real data.
+A central feature of `methsim` is that the simulation parameters are sampled from an input sample. At a bare minimum, the first test of `methsim` is that simulated data are similar to the real data on which they are based. To assess this, we compare several summary measures between the simulated data and the real data. The simplest of these are summaries of the distributions of $\beta$-values and within-fragment co-methylation, which are explicitly sampled in `methsim`.
 
-__TODO: Add in the _ADS_ data to the simulated data__
+First looking at the distribution of $\beta$-values, we see that all of _m1AI_, _m1BI_, _m2BI_, _m3BI_ and _m3BII_ do a reasonable job of capturing the bimodality of $\beta$-values (Figure \ref{fig:methsim_plotBetaFreqPoly}) and their relationship to CpG islands (Figure \ref{fig:methsim_plotBetaFreqPoly_CGI}). The effect of both the independent perturbations (_m2_) and the correlated perturbations (_m3_) appear to be dominated by variation due to variation in sequencing coverage. The lack of within-fragment co-methylation in _m1AI_ does not affect the genome-wide distribution of methylation levels. The mixture model, _m3BII_, has noticeably more intermediate $\beta$-values owing to the increased heterogeneity at each CpG across the sub-populations.
 
-The simplest of these are summaries of the distributions of $\beta$-values and within-fragment co-methylation, which are explicitly sampled in `methsim`. We see that all of m1, m2, m3, m4 and m5 sufficiently capture the bimodality of $\beta$-values (__FIGUREs__) and their relationship to CpG islands (__FIGUREs__).
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/methsim_plotBetaFreqPoly.pdf}
+\caption[\texttt{methsim} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for \texttt{methsim} simulated data and the \emph{ADS} input sample. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
+\label{fig:methsim_plotBetaFreqPoly}
+\end{figure}
 
-__FIGURE__ plots the estimates of within-fragment co-methylation. Those models that include within-fragment co-methylation (m1, m2, m3 and m4) bear close resemblance to the real _ADS_ data, although are perhaps to homogeneous across chromosomes. Reassuringly, we see no evidence of within-fragment co-methylation in model 5, which simulates independence of within-fragment methylation states.
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/methsim_plotBetaFreqPoly_CGI.pdf}
+\caption[\texttt{methsim} $\beta$-value kernel density stratified by CpG islands]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \texttt{methsim} simulated data and the \emph{ADS} input sample, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.
+\label{fig:methsim_plotBetaFreqPoly_CGI}
+\end{figure}
 
-In contrast, the spatial correlation of $\beta$-values is not explicitly modelled in any of models m1 to m5. While m3, m4 and m5 do include some spatial dependence of the $\mathbf{B}$, these are independent of $IPD$ and are intended mostly to analyse the effect of the independence condition in m2. __TODO: Describe these crap results.__
+Turning our attention to within-fragment co-methylation, Figure \ref{fig:methsim_methsim_MH_by_seqnames} shows the genome-level and chromosome-level Mantel-Haenszel estimates of within-fragment co-methylation. Figure \ref{fig:methsim_MH_by_CGI} shows the genome-level estimates of within-fragment co-methylation stratified by CpG islands. Reassuringly, we see no evidence of within-fragment co-methylation in _m1AI_, which simulates independence of within-fragment methylation states. The trend of the genome-level estimates, by design, very closely matches that of the _ADS_ input sample. We see, however, that the chromosome-level estimates of _m1BI_, _m2BI_, _m3BI_ and _m3BII_ are perhaps a little too homogeneous when compared to the _ADS_ input sample. We also see in the results for _m1BI_, _m2BI_, _m3BI_ and _m3BII_ the effect of simulating from a $Gaussian(0, \sigma)$ for $IPD > 180$, as outlined in Section \ref{subsec:parameterising_the_model}. The _m3BII_ model again stands out, this time with a noticeably higher level of within-fragment co-methylation. Each sub-population has its own $\mathbf{\theta}$ and, although these are sampled from the same parametric model, this suggests that such heterogeneity in the sample will artificially inflate estimates of within-fragment co-methylation, even those made at the genome-level. While this requires further investigation, it raises the possibilit that increased genome-level estimates of within-fragment co-methylation may in fact be measuring increased heterogeneity of the sample.
+
+These caveats aside, all five models do quite a good job of capturing the average level of CpG methylation and the strength of within-fragment co-methylation. Unfortunately, the results are not so promising for the correlations of $\beta$-values.
+
+In contrast to the other two summaries, the intention with `methsim` was to not explicitly model the spatial correlation of $\beta$-values. Rather, the idea was to see how the marginal level of methylation and the within-fragment co-methylation affected these correlations[^ar]. However, this overlooks that we are already imposing some structure, and therefore correlations, on the $\textbf{B}$  by specifying them in a region-specific manner.
+
+[^ar]: While _m3BI_ and _m3BII_ do include some spatial dependence of the $\mathbf{B}$ via the autoregressive perturbation, these perturbations are independent of $IPD$ and are really intended to analyse the effect of the independence condition in _m2BI_.
+
+Figures \ref{methsim_spearman_beta_cors_min_cov_10_strand_collapsed_CI.pdf} shows the overwhelming nature of this modelling decision. When compared to the correlations of $\beta$-values from the _ADS_ input sample, we see that in all five models the correlations of $\beta$-values are far too strong. Stratifying these correlations by CpG islands, we see that the source of this problem is in regions outside of CpG islands (Figure \ref{methsim_spearman_beta_cors_min_cov_10_strand_collapsed_CGI.pdf}). This gives some hope that this deficiency may fixed by a more careful modelling of $\beta$-values outside CpG islands, and remains a source of ongoing work.
 
 \section{Summary}
 
