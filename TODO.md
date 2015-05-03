@@ -60,6 +60,7 @@
 - [ ] Update title of methtuple memory usage plot to refer to 40 samples rather than 49.
 - [ ] Tables in datasets chapter run outside margins and are generally a bit of a mess.
 - [ ] Check that all Ziller plots are titled "Ziller" and not "Ziller merged"
+- [ ] Check typesetting of C++
 
 # Long term
 
