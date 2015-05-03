@@ -1,6 +1,14 @@
 \documentclass[11pt,a4paper,oneside]{book}	%fleqn,
 \usepackage{etex}
 
+% To insert blank (unnumbered) page after title page http://tex.stackexchange.com/a/36881
+\usepackage{afterpage}
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
+
 % Chapter abstracts (http://tex.stackexchange.com/a/59138)
 \usepackage{changepage}% http://ctan.org/pkg/changepage
 \usepackage{lipsum}% http://ctan.org/pkg/lipsum
@@ -163,6 +171,8 @@ The University of Melbourne\\\\}
 
 \maketitle
 
+\blankpage
+
 \chapter{Abstract}
 
 DNA methylation is an epigenetic modification that plays an important role in X-chromosome inactivation, genomic imprinting and the repression of repetitive elements in the genome. It must be tightly regulated for normal mammalian development and aberrant DNA methylation is strongly associated with many forms of cancer.
@@ -171,7 +181,7 @@ This thesis examines the statistical and computational challenges raised by high
 
 The first half of the thesis outlines the biological questions of interest in studying DNA methylation, the bioinformatics analysis of these data, and the statistical questions we seek to address. In discussing these bioinformatics challenges, we develop software to facilitate novel analyses of these data. We pay particular attention to analyses of methylation patterns along individual DNA fragments, a novel feature of sequencing-based assays.
 
-The second half of the thesis focuses on \emph{co-methylation}, the spatial dependence of DNA methylation. We demonstrate that previous analyses of co-methylation have been limited by inadequate data and analysis methods. This motivates a study of co-methylation from 40 whole-genome bisulfite-sequencing samples. These 40 samples represent a diverse range of tissues, from embryonic and induced pluripotent stem cells, through to somatic cells and tumours. Making use of software developed in the first half of the thesis, we explore different measures of co-methylation and relate these to one another. We identify genomic features that influence co-methylation and how it varies between different tissues.
+The second half of the thesis focuses on \emph{co-methylation}, the spatial dependence of DNA methylation. We demonstrate that previous analyses of co-methylation have been limited by inadequate data and deficiencies in the statistical methods applied. This motivates a study of co-methylation from 40 whole-genome bisulfite-sequencing samples. These 40 samples represent a diverse range of tissues, from embryonic and induced pluripotent stem cells, through to somatic cells and tumours. Making use of software developed in the first half of the thesis, we explore different measures of co-methylation and relate these to one another. We identify genomic features that influence co-methylation and how it varies between different tissues.
 
 In the final chapter, we develop a framework for simulating whole-genome bisulfite-sequencing data. Simulation software is valuable when developing new analysis methods since it can generate data on which to assess the performance of the method and benchmark it against competing methods. Our simulation model is informed by our analyses of the 40 whole-genome bisulfite-sequencing samples and our study of co-methylation.
 
@@ -207,11 +217,11 @@ exclusive of tables, maps, bibliographies and appendices.
 
 \chapter{Preface}
 
-The data sets used in this thesis were provided by the investigators
+The datasets used in this thesis were provided by the investigators listed below.
 
-\textbf{TODO}: List investigators.
+Aaron Statham and Sue Clark, Garvan Institute of Medical Research. The \emph{EPISCOPE} dataset.
 
-For full details, please see Chapter \ref{chap:datasets}.\\\\
+Several publicly available datasets were also used and are described in Chapter \ref{chap:datasets}.\\\\
 
 \chapter{Acknowledgments}
 
@@ -227,7 +237,7 @@ I am grateful to the Australian tax payer for supporting me financially during m
 
 I owe an enormous debt of gratitude to my thesis writing buddies, Hannah Vanyai and Darcy Moore, who kept me going during tough times and to my thesis proof readers, Belinda Phipson, Saskia Freytag and Goknur Giner, who have greatly improved this thesis.
 
-Finally, and most of all, thank you to my parents, Gay and John, to my brothers, Jack, Luke and Daniel, and to my friends. Your support, love and encouragement kept me going.
+Finally, and most of all, thank you to my parents, Gay and John, to my brothers, Jack, Luke and Daniel, and to my friends. Your support, love, and encouragement kept me going.
 
 \tableofcontents
 
@@ -258,9 +268,6 @@ Finally, and most of all, thank you to my parents, Gay and John, to my brothers,
 \include{concluding_remarks} % concluding_remarks.tex
 
 \backmatter
-
-% 2 - 4 pages
-\textbf{TODO}
 
 \include{appendix} % appendix.tex
 
