@@ -31,8 +31,9 @@
   - __DONE__
 - [x] Give every figure and table a brief caption.
   - __DONE__
+- [x] No full stop in title
+  __DONE__
 
-- [ ] No full stop in title
 - [ ] Re-visit summary of WGBS statistical framework chapter
   - This chapter highlights that there are many levels of variation and common summaries of the data aggregate over these.
 - [ ] Does the WGBS bioinformatics analysis chapter need a summary?
@@ -54,7 +55,10 @@
 - [ ] Fix MethylationTuples::mantelhaen(). Works if copy-pasted into session but not as part of MethylationTuples package.
 - [ ] Look at some scatterplots of beta-value pairs from simulated data
 - "dataset" vs. "data set". Include in `methsim` chapter if revealing.
-- [ ] \texttt{--all-combinations} prints as '-all-combinations'
+- [ ] \texttt{--all-combinations} prints as '-all-combinations' and other examples
+  - Works when typed in markdown as `--all-combinations`, but this isn't always possible.
+- [ ] Update title of methtuple memory usage plot to refer to 40 samples rather than 49.
+- [ ] Tables in datasets chapter run outside margins and are generally a bit of a mess.
 
 # Long term
 

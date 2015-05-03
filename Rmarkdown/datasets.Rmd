@@ -19,25 +19,25 @@ bibliography: ../latex/phd_thesis.bib
 This chapter briefly documents the 40 whole-genome bisulfite-sequencing samples that I use in my thesis. The `BAM` files for each sample underwent the same basic processing:
 
 1. Genetic variants were called using the `bissnp_easy_usage.pl` script included with `Bis-SNP (v0.82.2)`.
-2. M-bias was estimated using `bismark_methylation_extractor` with the `--mbias_only` flag set. These output files were then analysed using the  `MethylationTuples` R package (see section \ref{sec:MethylationTuples}) and all read-positions with an CpG normalised read-position methylation level ($nrpml$) more than $0.03$ from the median, i.e. $|nrpml_{CpG} - median(nrpml_{CpG})| > 0.03$, were excluded from methylation calling (read 1 and read 2 analysed separately where applicable).
+2. M-bias was estimated using `bismark_methylation_extractor` with the `--mbias_only` flag set. These output files were then analysed using the  `MethylationTuples` R package (see section \ref{sec:MethylationTuples}) and all read-positions with an CpG normalised read-position methylation level ($nrpml$) more than $0.03$ from the median, i.e. $|nrpml_{CpG} - median(nrpml_{CpG})| > 0.03$, were excluded from methylation calling (_read-1_ and _read-2_ analysed separately where applicable).
 3. CpG methylation calling was performed using `methtuple (v1.4.0)` for m-tuples $\text{m} = 1, \ldots, 8$. CpG 2-tuples were called both with and without the `--all-combinations` flag; all other tuple sizes were called without the `--all-combinations` flag.
-4. Sample-level m-tuples were combined at the dataset-level using the `MethylationTuples` R package (see \ref{sec:MethylationTuples}). Specifically, a `MethPat` object was created for each of the EPISCOPE, Lister, Seisenberger and Ziller datasets for 1-tuples, 2-tuples and 2ac-tuples (2-tuples with the  `--all-combinations` flag in `methtuple` set), 3-tuples and 4-tuples. I did not create `MethPat` objects for m-tuples with $\text{m} > 4$ because the data are too sparse at this larger sizes to be generally useful.
+4. Sample-level m-tuples were combined at the dataset-level using the `MethylationTuples` R package (see Section \ref{sec:MethylationTuples}). Specifically, a `MethPat` object was created for each of the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets for 1-tuples, 2-tuples and 2ac-tuples (2-tuples with the  `--all-combinations` flag in `methtuple` set), 3-tuples and 4-tuples. I did not create `MethPat` objects for m-tuples with $\text{m} > 4$ because the data are too sparse at this larger sizes to be generally useful.
 
-The raw data for the _Lister_, _Seisenberger and _EPISCOPE_ datasets are all publicly available. The _EPISCOPE_ data are not yet published and I do not have permission to make these publicly available. The scripts used to prepare the results for each chapter are available from \url{https://github.com/PeteHaitch/phd_thesis_analyses}. Further details of software used are available in Appendix \ref{app:software_details}.
+The raw data for the _Lister_, _Seisenberger_ and _EPISCOPE_ datasets are all publicly available. The _EPISCOPE_ data are not yet published and I do not have permission to make these publicly available. The scripts used to prepare the results for each chapter are available from \url{https://github.com/PeteHaitch/phd_thesis_analyses}. Further details of software used are available in Appendix \ref{app:software_details}.
 
 \section{\emph{Lister} dataset}\label{sec:Lister_dataset}
 
-The _Lister dataset_ refers to whole-genome bisulfite-sequencing libraries used in \cite{Lister:2009hy} and \cite{Lister:2011kg}. The Lister data were the largest publicly available human whole-genome bisulfite-sequencing datasets until quite recently. All samples are of human DNA.
+The _Lister_ dataset refers to whole-genome bisulfite-sequencing libraries used in \cite{Lister:2009hy} and \cite{Lister:2011kg}. The _Lister_ data were the largest publicly available human whole-genome bisulfite-sequencing datasets until quite recently.
 
 \subsection{Sample descriptions}
 
-The methylC-seq libraries from the \cite{Lister:2009hy} paper were the first published whole-genome bisulfite-sequencing libraries of mammalian DNA. A focus of this paper was comparing DNA methylation levels in a somatic tissue, fetal lung fibroblasts (_IMR90_), with those from a pluripotent tissue, embryonic stem cells (_H1_). Each tissue was run in duplicate. While \cite{Lister:2009hy} refer to these "biological" replicates I believe that these are better described technical replicates since each replicate is from the same cell line; what distinguishes the replicates are the number of cell passages and the subsequent library preparations and sequencing. In any case, the published analyses pool these duplicates, which ignores all between-replicate variability.
+The methylC-seq libraries from the \cite{Lister:2009hy} paper were the first published whole-genome bisulfite-sequencing libraries of mammalian DNA. A focus of this paper was comparing DNA methylation levels in a somatic tissue, fetal lung fibroblasts (_IMR90_), with those from a pluripotent tissue, embryonic stem cells (_H1_). Each tissue was run in duplicate. While \cite{Lister:2009hy} refer to these "biological" replicates I believe that these are better described as technical replicates since each replicate is from the same cell line; what distinguishes the replicates are the number of cell passages and the subsequent library preparations and sequencing. In any case, the published analyses pool these duplicates, which ignores all between-replicate variability.
 
-The methylC-seq libraries from the \cite{Lister:2011kg} include some created by the authors and some published by other groups (see Table \ref{tab:Lister_dataset}). These samples include cell lines from differentiated cell lines, embryonic stem cell lines, pluripotent stem cell lines and _in vitro_ differentiated from pluripotent stem cells. There are no replicates for any of the _Lister 2011_ samples.
+The methylC-seq libraries from the \cite{Lister:2011kg} include some created by the authors and some published by other groups (see Table \ref{tab:Lister_dataset}). These samples include cell lines from differentiated cell lines, embryonic stem cell lines, pluripotent stem cell lines and _in vitro_ differentiated from pluripotent stem cells. There are no replicates for any of the \cite{Lister:2011kg} samples.
 
 \begin{table}[!htb]
 \centering
-\caption[Description of \emph{Lister} dataset]{Samples in \emph{Lister} dataset. The reported read lengths are prior to any trimming of the reads. Abbreviations: \emph{iPSC} = induced pluripotent stem cell; \emph{ESC} = embryonic stem cell; \emph{IVD} = \emph{in vitro} differentiated from pluripotent cell line \emph{PE} = single-end sequencing; \emph{PE} = paired-end sequencing.}
+\caption[Description of \emph{Lister} dataset]{Samples in \emph{Lister} dataset. The reported read lengths are prior to any trimming of the reads. Abbreviations: \emph{iPSC} = induced pluripotent stem cell; \emph{ESC} = embryonic stem cell; \emph{IVD} = \emph{in vitro} differentiated from pluripotent cell line; \emph{PE} = single-end sequencing; \emph{PE} = paired-end sequencing.}
 \label{tab:Lister_dataset}
 \begin{tabulary}{\textwidth}{LLLLLL}
 \toprule
@@ -78,7 +78,7 @@ As the aligned reads were in a custom file format, I wrote Python scripts to con
 
 \section{\emph{EPISCOPE} dataset}\label{sec:EPISCOPE_dataset}
 
-The EPISCOPE data were kindly provided to me by Professor Susan Clark (Garvan Institute of Medical Research, Sydney) and Dr Peter Molloy (CSIRO Animal, Food and Health Sciences). This dataset is not yet published.
+The _EPISCOPE_ data were kindly provided to me by Professor Susan Clark (Garvan Institute of Medical Research, Sydney) and Dr Peter Molloy (CSIRO Animal, Food and Health Sciences). This dataset is not yet published.
 
 \subsection{Sample descriptions}
 
@@ -119,7 +119,7 @@ The sequencing data for these 12 samples were processed and aligned by Aaron Sta
 
 \section{\emph{Seisenberger} dataset}\label{sec:Seisenberger_dataset}
 
-The Seisenberger data are from a study of the dynamics of DNA methylation reprogramming in mouse primordial germ cells \citep{Seisenberger:2012ko}. These were a convenience sample provided to me by a colleague, Felix Krueger (Babraham Institute). I thank Felix who sent me the `BAM` files containing processed and aligned reads.
+The _Seisenberger_ data are from a study of the dynamics of DNA methylation reprogramming in mouse primordial germ cells \citep{Seisenberger:2012ko}. These were a convenience sample provided to me by a colleague, Felix Krueger (Babraham Institute). I thank Felix who sent me the `BAM` files containing processed and aligned reads.
 
 \subsection{Sample descriptions}
 
@@ -146,7 +146,7 @@ The sequencing data for these 3 samples were processed and aligned by Felix Krue
 
 \section{\emph{Ziller} dataset}\label{sec:Ziller_dataset}
 
-The Ziller are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 8 whole-genome bisulfite-sequencing libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research, Sydney). I thank Felix who sent me the `BAM` files containing processed and aligned reads.
+The _Ziller_ are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 8 whole-genome bisulfite-sequencing libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research, Sydney). I thank Aaron who sent me the `BAM` files containing processed and aligned reads.
 
 \subsection{Sample descriptions}
 
