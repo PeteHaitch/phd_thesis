@@ -64,6 +64,11 @@
 - [ ] Check typesetting of C++
 - [ ] Include `coMET` paper in Chapter 6.
 - [ ] Clarify the definition of $\psi_{U}$ for $2 \times 2 \times K$; is it the same as the "collapsed" estimator?
+- [ ] Check Sherman `-CG` and `-CH` parameters (e.g., `--CG` or `-CG`)
+- [ ] Check the size of the simulated data as a `MethPat` object.
+- [ ] Add $\beta$ to the y-axis of the $\beta$-by-PM boxplots.
+- [ ] Fix `BiocParallel` citation.
+- [ ] Include timings from Lacey et al. in `methsim` chapter.
 
 # Long term
 
