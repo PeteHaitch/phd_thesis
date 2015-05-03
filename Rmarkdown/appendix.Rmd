@@ -118,7 +118,7 @@ All computational work was performed on one of the Bioinformatics Division's HP 
 \centering
 \begin{tabular}{@{}lllll@{}}
 \toprule
-Machine name & Processors                           & Cores per processor & Total number of cores & RAM    \\ \midrule
+Machine name & Processors & Cores per processor & Total number of cores & RAM    \\ \midrule
 unix88       & $4\times$ Intel Xeon X7350 @ 2.93GHz & 4                   & 16                    & 128 GB \\
 unix301      & $4\times$ AMD Opteron 8435 @ 2.6GHz  & 6                   & 24                    & 256 GB \\
 unix302      & $4\times$ AMD Opteron 6174 @ 2.2GHz  & 12                  & 48                    & 512 GB \\
@@ -129,14 +129,30 @@ unix305      & $4\times$ AMD Opteron 6276 @ 2.3GHz  & 16                  & 64  
 \label{tab:unices}
 \end{table}
 
-## Software details
+\section{Software details}\label{app:software_details}
 
-__TODO__
+The analyses described in my thesis made extensive use of R (`R Under development (unstable) (2014-10-29 r66891)` and `R version 3.2.0 (2015-04-16)`) and Python (`v2.6.6`). All analyses were run on one of the servers described above. The scripts used to prepare the results for each chapter are available from \url{https://github.com/PeteHaitch/phd_thesis_analyses}. Further details of software used are available in Appendix \ref{app:software_details}.
 
-- R version
-- `MethylationTuples`
-- `methsim`
-- `methtuples`
-- others
+I developed several pieces of software during my PhD. These are listed in below, along with the version used in for analyses in my thesis:
 
-__TODO: Add citations of all packages used in thesis__
+- `methtuple` (`v1.4.0`)
+- `GenomicTuples` (`v1.2.1`)
+- `MethylationTuples` (`v0.3.0.9007`)
+- `methsim` (`v0.5.0.9013`)
+
+In addition, I made use of the R packages listed in Table \ref{tab:R_packages} and gratefully acknowledge the developers. 
+
+```{r R_packages, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
+library(xtable)
+x <- read.table("../data/r_packages.txt",  header = TRUE,
+                stringsAsFactors = FALSE, sep = "\t")
+# Drop packages with "*" column set, which indicates the package is a
+# "dependency of a dependency".
+x <- x[x[, 2] != "*", ]
+x <- x[, -2]
+xt <- xtable(x, caption = c("R packages used in thesis as reported by \texttt{devtools::session\\_info()}", "R packages used in thesis"),
+             label = "tab:R_packages")
+align(xt) <- rep("c", ncol(x) + 1)
+print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable",
+      floating = FALSE, include.rownames = FALSE, caption.placement = "top")
+```
