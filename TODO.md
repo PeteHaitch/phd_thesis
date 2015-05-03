@@ -29,8 +29,10 @@
   - __DONE__
 - [x] Add blank page between title and abstract
   - __DONE__
+- [x] Give every figure and table a brief caption.
+  - __DONE__
 
-- [ ] Could simulate $B$ from Beta distribution rather than Normal, i.e., a beta-binomial model!
+- [ ] No full stop in title
 - [ ] Re-visit summary of WGBS statistical framework chapter
   - This chapter highlights that there are many levels of variation and common summaries of the data aggregate over these.
 - [ ] Does the WGBS bioinformatics analysis chapter need a summary?
@@ -44,42 +46,15 @@
   - What does "better" mean.
 - [ ] Add a representative plot of the within-fragment data for a single sample
 - [ ] Fix formatting of $2 \times 2$ contingency tables to be consistent.
+- [ ] Increase axis labels in simulation study figures
 - [ ] Find submission documents
 - [ ] Add analysis folder to github
   - First upload `.Rmd` analysis scripts.
   - Upload <sample>.CG.<m>.tsv.gz Lister, Seisenberger, Ziller samples (m = 1, 2, 2ac) to figshare. All 1-tuples are under Figshare's 250 MB limit but the same is not true of 2-tuples or 2ac-tuples.
 - [ ] Fix MethylationTuples::mantelhaen(). Works if copy-pasted into session but not as part of MethylationTuples package.
-- [x] Give every figure and table a brief caption.
-  - __DONE__
 - [ ] Look at some scatterplots of beta-value pairs from simulated data
 - "dataset" vs. "data set". Include in `methsim` chapter if revealing.
 - [ ] \texttt{--all-combinations} prints as '-all-combinations'
-
-# Discussing co-methylation chapter
-
-- 2-tuples vs. pairs. Use pairs instead of 2-tuples (e.g. p153)
-- Spatial correlation is not like traditional autocorrelation.
-- Plots of beta-correlations separated by strand in a clearer way.
-  - Use loess to summarise trend
-- "Figures 7.11, 7.12, 7.13 and 7.14 are plots of Spearman correlations of β-values for pairs of CpGs stratified by whether the pair is inside or outside of a CpG island" (p163) __Figure references are wrong; increment by four__
-- In general, plots of beta-correlations are noisy. Just show trend?
-- p175 "The odds ratio is not perfece, however. For one, the possible values of ψ are highly". The odds ratio is indepndent of the margins (Terry's favourite point about the odds ratio; emphasise).
-- top of p176: latex error
-- "The conditional estimator, works better than the unconditional estimator when the sample size, n, is small [Agresti 2007]."
-  - What does "better" mean.
-- p177: s/convert/converge/
-- p178: "we analysed a sim. study" -> "we carried out a simulation study"
-- When $K$ is known, use the actual value. Improve legends.
-- Increase axis labels in simulation figures
-- Include figure number when talking about Simulation 3 or 4, etc.
-- chrM results are worth commenting on
-- chrX with NIL \geq 0 look similar to CGI in that they increase separation.
-- Add SE and PE information to plots of within-fragment co-methylation
-- Add a representative plot of the within-fragment data for a single sample
-- Could remove spearman vs. pearson figures by showing proper "versus" plot and then skipping ahead.
-- p197 Something weird has happened.
-- Comment on other genomic features that might be interesting to stratify by.
-- Comment on how you might reduce heterogeneity by subsampling.
 
 # Long term
 
@@ -87,6 +62,7 @@
   - Slots will be something like MethLevelDT, ComethDT (using Mantel-Haenszel estimates), MethLevelCorDT and all will have to be with respect to the levels of the PartitionedMethylome.
 - Once switch from "2" to "1" classes/methods made in methsim, fix other TODOs
 - Suggest BPPARAM argument for bsapply(). Suggest bpreplicate() added to BiocParallel.
+- Could simulate $B$ from Beta distribution rather than Normal, i.e. beta-binomial model! This is what Lacey et al. or `WGBSsuite` do.
 - Figure out why an assay in a SummarizedExperiment can be a DataFrame but cannot be inserted using `assay<-`.
 - Read Hadley's recommendations on capitalising parameter descriptions and implement them for all packages.
 - Finish ASD2 report.
