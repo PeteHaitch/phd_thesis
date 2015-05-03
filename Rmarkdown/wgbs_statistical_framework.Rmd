@@ -203,7 +203,7 @@ The definitions for $\text{m} > 2$ follow in the obvious manner.
 
 One final definition is the average methylation level of each read, which is used by \citet{Landan:2012kp}. For each read, $z \in \mathcal{R}_{(i, i + 1, \ldots, i + \text{m} - 1)}$, the average methylation of the read, $\zeta_{z}$, is defined as the proportion of methylation loci in the read that are methylated. Thus, $\zeta_{z} = 0, \frac{1}{m}, \frac{2}{m}, \ldots, 1$.
 
-\subsection{Some complications for a single sample}\label{sec:one_sample_complications}
+\subsection{Some complications}\label{sec:one_sample_complications}
 
 I now discuss some complications and how this framework might accommodate these issues in practice.
 
@@ -230,7 +230,7 @@ A fourth level is how the sample's relate to one another, such as the treatment 
 
 We can define this fourth level using a design matrix $X = [X_{j}]$. For example, in a two-group experiment $X_{j} = 1$ if the sample is from group $1$ and $X_{j} = 0$ if the sample is from group $2$. We may also include covariates in the standard way by allowing $X_{j}$ to be a row vector, $X_{j} = (x_{1, j}, \ldots, x_{P, j})$, where $x_{p, j}$ encodes the information on the $p^{th}$ covariate for the $j^{th}$ sample.
 
-\subsection{Some complications with multiple samples}\label{sec{multi_sample_complications}}
+\subsection{Some complications}\label{sec{multi_sample_complications}}
 
 In addition to the complications of the Section \ref{sec:one_sample_complications}, we now have sample-to-sample variation that must be addressed within this framework.
 

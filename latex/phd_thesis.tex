@@ -156,7 +156,7 @@
 %% Starting
 
 \title{\huge \bf The statistical analysis of high-throughput assays
-for studying DNA methylation.\\}
+for studying DNA methylation\\}
 
 \author{{\bf \Large Peter Francis Hickey}\\\\
 Submitted in total fulfilment of the requirements\\
@@ -165,7 +165,8 @@ May 2015\\\\
 Department of Mathematics and Statistics\\
 The University of Melbourne\\\\}
 
-\date{The Walter and Eliza Hall Institute of Medical Research}
+\date{Bioinformatics Division\\
+The Walter and Eliza Hall Institute of Medical Research}
 
 \frontmatter
 
@@ -177,11 +178,11 @@ The University of Melbourne\\\\}
 
 DNA methylation is an epigenetic modification that plays an important role in X-chromosome inactivation, genomic imprinting and the repression of repetitive elements in the genome. It must be tightly regulated for normal mammalian development and aberrant DNA methylation is strongly associated with many forms of cancer.
 
-This thesis examines the statistical and computational challenges raised by high-throughput assays of DNA methylation, particularly the current gold standard assay of whole-genome bisulfite-sequencing. Using whole-genome bisulfite-sequencing, we can now measure DNA methylation at individual nucleotides across entire genomes. These experiments produce vast amounts of data that require new methods and tools to analyse.
+This thesis examines the statistical and computational challenges raised by high-throughput assays of DNA methylation, particularly the current gold standard assay of whole-genome bisulfite-sequencing. Using whole-genome bisulfite-sequencing, we can now measure DNA methylation at individual nucleotides across entire genomes. These experiments produce vast amounts of data that require new methods and software to analyse.
 
 The first half of the thesis outlines the biological questions of interest in studying DNA methylation, the bioinformatics analysis of these data, and the statistical questions we seek to address. In discussing these bioinformatics challenges, we develop software to facilitate novel analyses of these data. We pay particular attention to analyses of methylation patterns along individual DNA fragments, a novel feature of sequencing-based assays.
 
-The second half of the thesis focuses on \emph{co-methylation}, the spatial dependence of DNA methylation. We demonstrate that previous analyses of co-methylation have been limited by inadequate data and deficiencies in the statistical methods applied. This motivates a study of co-methylation from 40 whole-genome bisulfite-sequencing samples. These 40 samples represent a diverse range of tissues, from embryonic and induced pluripotent stem cells, through to somatic cells and tumours. Making use of software developed in the first half of the thesis, we explore different measures of co-methylation and relate these to one another. We identify genomic features that influence co-methylation and how it varies between different tissues.
+The second half of the thesis focuses on \emph{co-methylation}, the spatial dependence of DNA methylation along the genome. We demonstrate that previous analyses of co-methylation have been limited by inadequate data and deficiencies in the applied statistical methods. This motivates a study of co-methylation from 40 whole-genome bisulfite-sequencing samples. These 40 samples represent a diverse range of tissues, from embryonic and induced pluripotent stem cells, through to somatic cells and tumours. Making use of software developed in the first half of the thesis, we explore different measures of co-methylation and relate these to one another. We identify genomic features that influence co-methylation and how it varies between different tissues.
 
 In the final chapter, we develop a framework for simulating whole-genome bisulfite-sequencing data. Simulation software is valuable when developing new analysis methods since it can generate data on which to assess the performance of the method and benchmark it against competing methods. Our simulation model is informed by our analyses of the 40 whole-genome bisulfite-sequencing samples and our study of co-methylation.
 
@@ -225,7 +226,7 @@ Several publicly available datasets were also used and are described in Chapter 
 
 \chapter{Acknowledgments}
 
-I would like to thank my PhD supervisors, Terry Speed and  Peter Hall. Peter, thank you for supporting my decision to radically change tack very early on in my PhD from a topic in theoretical statistics to a heavily computational and interdisciplinary problem. And Terry, thank you for agreeing to take me on as a student after this change of heart. I have learnt much from working with you and greatly appreciate your generosity and guidance over the course of my PhD. Thanks also to Gordon Smyth, the chair of my PhD committee, for always taking the time to help me.
+I would like to thank my PhD supervisors, Terry Speed and  Peter Hall. Peter, thank you for supporting my decision to radically change tack very early on in my PhD from a topic in theoretical statistics to a heavily computational and interdisciplinary problem. Terry, thank you for agreeing to take me on as a student after this change of heart. I have learnt much from working with you and greatly appreciate your generosity and guidance over the course of my PhD. Thanks also to Gordon Smyth, the chair of my PhD committee, for always taking the time to help me.
 
 Thank you to the Walter and Eliza Hall Institute for being such a great place to do research. In particular, thank you to my wonderful friends and colleagues in the Bioinformatics Division for your support and advice. A special thanks to Keith Satterley and the ITS department who both tolerated and helped fix my computational blunders.
 

@@ -156,7 +156,7 @@ I have elected to use Spearman's correlation coefficient in what follows because
 \end{figure}
 
 \FloatBarrier
-\subsection{$NIL = 0$ CpG pairs}
+\subsection{CpG pairs with $NIL = 0$}
 
 Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI} and \ref{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed_CI} show the Spearman correlations of strand-collapsed $\beta$-values for $NIL = 0$ pairs of CpGs. Two things immediately stand out. Firstly, for all samples the trend is that the strength of the correlation decays as a function of $IPD$; pairs of CpGs separated larger distances are on average less correlated than pairs of CpGs separated by shorter distances. Secondly, the estimated correlations violently jump around for larger $IPD$s. The latter is simply due to the aforementioned lack of $NIL = 0$ pairs at larger $IPD$s with which to estimate these correlations. Therefore, it is the trend, rather than the individual values, that should be analysed in these plots.
 
@@ -235,7 +235,7 @@ The message from these plots is clear, $\beta$-values of $NIL = 0$ pairs within 
 \end{figure}
 
 \FloatBarrier
-\subsection{$NIL \geq 0$ CpG pairs}\label{sec:nil_geq_0_beta_cors}
+\subsection{CpG pairs with $NIL \geq 0$}\label{sec:nil_geq_0_beta_cors}
 
 Figures \ref{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}, \ref{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}, \ref{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI} and \ref{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI} are the plots of CpG $\beta$-value correlations against $IPD$ for $NIL \geq 0$ pairs. In contrast to the $NIL = 0$ results, the correlations here are relatively stable, at least for $IPD = 2, \ldots, 2000$[^ipd_choice]. This is because there are many more $NIL \geq 0$ pairs than there are $NIL = 0$ pairs.
 

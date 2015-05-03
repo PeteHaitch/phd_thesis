@@ -231,7 +231,7 @@ I now describe each step in greater detail.
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_beta_by_pm_boxplots.pdf}
-\caption[\emph{EPISCOPE}: $\beta$-values my region-type]{Boxplots of CpG $\beta$-values in each region-type following segmentation by \texttt{MethylSeekR} for the \emph{EPISCOPE} dataset.}
+\caption[\emph{EPISCOPE}: $\beta$-values by region-type]{Boxplots of CpG $\beta$-values in each region-type following segmentation by \texttt{MethylSeekR} for the \emph{EPISCOPE} dataset.}
 \label{fig:EPISCOPE_beta_by_pm_boxplots}
 \end{figure}
 
@@ -239,7 +239,7 @@ I now describe each step in greater detail.
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_beta_by_pm_boxplots.pdf}
-\caption[\emph{Lister}: $\beta$-values my region-type]{Boxplots of CpG $\beta$-values in each region-type following segmentation by \texttt{MethylSeekR} for the \emph{Lister} dataset.}
+\caption[\emph{Lister}: $\beta$-values by region-type]{Boxplots of CpG $\beta$-values in each region-type following segmentation by \texttt{MethylSeekR} for the \emph{Lister} dataset.}
 \label{fig:Lister_beta_by_pm_boxplots}
 \end{figure}
 
@@ -247,7 +247,7 @@ I now describe each step in greater detail.
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_beta_by_pm_boxplots.pdf}
-\caption[\emph{Seisenberger}: $\beta$-values my region-type]{Boxplots of CpG $\beta$-values in each region-type following segmentation by \texttt{MethylSeekR} for the \emph{Seisenberger} dataset.}
+\caption[\emph{Seisenberger}: $\beta$-values by region-type]{Boxplots of CpG $\beta$-values in each region-type following segmentation by \texttt{MethylSeekR} for the \emph{Seisenberger} dataset.}
 \label{fig:Seisenberger_beta_by_pm_boxplots}
 \end{figure}
 
@@ -255,7 +255,7 @@ I now describe each step in greater detail.
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_beta_by_pm_boxplots.pdf}
-\caption[\emph{Ziller}: $\beta$-values my region-type]{Boxplots of CpG $\beta$-values in each region-type following segmentation by \texttt{MethylSeekR} for the \emph{Ziller} dataset.}
+\caption[\emph{Ziller}: $\beta$-values by region-type]{Boxplots of CpG $\beta$-values in each region-type following segmentation by \texttt{MethylSeekR} for the \emph{Ziller} dataset.}
 \label{fig:Ziller_beta_by_pm_boxplots}
 \end{figure}
 
@@ -391,14 +391,14 @@ Firstly, looking at the distribution of $\beta$-values, we see that all of _m1AI
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methsim_plotBetaFreqPoly.pdf}
-\caption[\texttt{methsim} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for \texttt{methsim} simulated data and the \emph{ADS} input sample. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
+\caption[\texttt{methsim}: $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for \texttt{methsim} simulated data and the \emph{ADS} input sample. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
 \label{fig:methsim_plotBetaFreqPoly}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methsim_plotBetaFreqPoly_CGI.pdf}
-\caption[\texttt{methsim} $\beta$-value kernel density stratified by CpG islands]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \texttt{methsim} simulated data and the \emph{ADS} input sample, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
+\caption[\texttt{methsim}: $\beta$-value kernel density stratified by CpG islands]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \texttt{methsim} simulated data and the \emph{ADS} input sample, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:methsim_plotBetaFreqPoly_CGI}
 \end{figure}
 

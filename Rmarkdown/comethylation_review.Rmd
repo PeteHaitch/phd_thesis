@@ -199,7 +199,7 @@ Furthermore, if we compute the Fourier transform of this autocorrelation we find
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.8\textwidth]{../figures/FF_chr21_acf_beta_star_fourier.pdf}
-\caption[Fourier transformation of incorrectly defined $\beta$-values]{Fourier transformation of the autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \textit{FF} sample. Fourier transformation computed and plotted using the \texttt{spectrum} function in R. The period is defined as 1 / frequency. The maximum frequency is approximately $0.33$, which corresponds to a period of approximately $3$ bp.}
+\caption[Fourier analysis of incorrectly defined $\beta$-values]{Fourier transformation of the autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \textit{FF} sample. Fourier transformation computed and plotted using the \texttt{spectrum} function in R. The period is defined as 1 / frequency. The maximum frequency is approximately $0.33$, which corresponds to a period of approximately $3$ bp.}
 \label{fig:FF_chr21_acf_beta_star_fourier}
 \end{figure}
 
@@ -300,7 +300,7 @@ So-called "methylation linkage diagrams" are created by plotting the Pearson cor
 
 \begin{table}[h]
 \centering
-\caption[Notions of `subject' and `population' in methylation linkage]{Notions of `subject' and `population' in traditional genetic linkage and the "methylation linkage" of \citet{Landan:2012kp}. NB `person' could be any organism, e.g, `mouse', `dog', etc.}
+\caption[Notions of `subject' and `population' in methylation linkage analyses]{Notions of `subject' and `population' in traditional genetic linkage and the "methylation linkage" of \citet{Landan:2012kp}. NB `person' could be any organism, e.g, `mouse', `dog', etc.}
 \label{tab:linkage}
 \begin{tabular}{@{}lll@{}}
 \toprule

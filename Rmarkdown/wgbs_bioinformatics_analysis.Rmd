@@ -257,7 +257,7 @@ Certain genetic variants, in particular heterozygous $C$>$T$ SNPs, are more diff
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/Bis-SNP.pdf}
-\caption[\texttt{Bis-SNP} method schematic]{\texttt{Bis-SNP} is able to distinguish unmethylated cytosines (site 1), from cytosine to thymine genetic variants (site 2) and thymine to (unmethylated) cytosine genetic variants (site 3) by examining the reads mapped to the reverse strand. For all three loci, the reads mapped to the forward strand contain a thymine. However, it is the base on the reverse strand that reveals the true genotype. When combined with the reference genome it can be inferred whether the sample's genome, which isn't directly observed, has a genetic variant at that location. This is only possible with bisulfite-data generated using the directional protocol. This figure is adapted from \citet{Liu:2012ge}.}
+\caption[Schematic of \texttt{Bis-SNP} method]{\texttt{Bis-SNP} is able to distinguish unmethylated cytosines (site 1), from cytosine to thymine genetic variants (site 2) and thymine to (unmethylated) cytosine genetic variants (site 3) by examining the reads mapped to the reverse strand. For all three loci, the reads mapped to the forward strand contain a thymine. However, it is the base on the reverse strand that reveals the true genotype. When combined with the reference genome it can be inferred whether the sample's genome, which isn't directly observed, has a genetic variant at that location. This is only possible with bisulfite-data generated using the directional protocol. This figure is adapted from \citet{Liu:2012ge}.}
 \label{fig:Bis-SNP}
 \end{figure}
 
