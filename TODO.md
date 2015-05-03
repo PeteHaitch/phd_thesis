@@ -61,6 +61,7 @@
 - [ ] Tables in datasets chapter run outside margins and are generally a bit of a mess.
 - [ ] Check that all Ziller plots are titled "Ziller" and not "Ziller merged"
 - [ ] Check typesetting of C++
+- [ ] Include `coMET` paper in Chapter 6.
 
 # Long term
 
