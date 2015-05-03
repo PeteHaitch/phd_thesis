@@ -43,6 +43,7 @@
 - [ ] Plots of beta-correlations separated by strand in a clearer way.
   - Use loess to summarise trend
   - In general, plots of beta-correlations are noisy. Just show trend?
+  - Plot the difference of correlations between strands?
 - [ ] "The conditional estimator, works better than the unconditional estimator when the sample size, n, is small [Agresti 2007]." re conditional odds ratio estimators
   - What does "better" mean.
 - [ ] Add a representative plot of the within-fragment data for a single sample
@@ -62,6 +63,7 @@
 - [ ] Check that all Ziller plots are titled "Ziller" and not "Ziller merged"
 - [ ] Check typesetting of C++
 - [ ] Include `coMET` paper in Chapter 6.
+- [ ] Clarify the definition of $\psi_{U}$ for $2 \times 2 \times K$; is it the same as the "collapsed" estimator?
 
 # Long term
 
