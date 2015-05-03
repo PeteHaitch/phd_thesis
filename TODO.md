@@ -19,8 +19,23 @@
   - __FIXED__ Use $\bm{\psi}$
 - [x] Rename `methsim` plots without the `_1` and `_2` suffixes
   - __DONE__
+- [x] Write abstract
+  - __DONE__
+- [x] Complete `methsim` chapter.
+  - __DONE__
+- [x] Write concluding remarks
+  - __DONE__
+- [x] Email communications about printing
+  - __DONE__
+- [x] Add blank page between title and abstract
+  - __DONE__
+
 - [ ] Could simulate $B$ from Beta distribution rather than Normal, i.e., a beta-binomial model!
-- [ ] TODO: Figure out what's going on with some of the EPISCOPE and Ziller samples that have a high autosome (chr21, I think); figure out why E18BUF is missing chrM in $NIL \geq 0$ plots.
+- [ ] Re-visit summary of WGBS statistical framework chapter
+  - This chapter highlights that there are many levels of variation and common summaries of the data aggregate over these.
+- [ ] Does the WGBS bioinformatics analysis chapter need a summary?
+- [ ] What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?
+- [ ] Figure out what's going on with some of the EPISCOPE and Ziller samples that have a high autosome (chr21, I think); figure out why E18BUF is missing chrM in $NIL \geq 0$ plots.
 - [ ] Should gene names and cytosine modifications be _italicised_.
 - [ ] Plots of beta-correlations separated by strand in a clearer way.
   - Use loess to summarise trend
@@ -29,15 +44,7 @@
   - What does "better" mean.
 - [ ] Add a representative plot of the within-fragment data for a single sample
 - [ ] Fix formatting of $2 \times 2$ contingency tables to be consistent.
-- [x] Write abstract
-  - __DONE__
-- [x] Complete `methsim` chapter.
-  - __DONE__
-- [ ] Write concluding remarks
-- [ ] Email communications about printing
 - [ ] Find submission documents
-- [ ] Add blank page between title and abstract
-  - Dineika's solution gives the first blank page a number, which isn't what Belinda's thesis looks like.
 - [ ] Add analysis folder to github
   - First upload `.Rmd` analysis scripts.
   - Upload <sample>.CG.<m>.tsv.gz Lister, Seisenberger, Ziller samples (m = 1, 2, 2ac) to figshare. All 1-tuples are under Figshare's 250 MB limit but the same is not true of 2-tuples or 2ac-tuples.
