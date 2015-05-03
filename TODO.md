@@ -33,10 +33,11 @@
   - __DONE__
 - [x] No full stop in title
   __DONE__
+- [x] Does the WGBS bioinformatics analysis chapter need a summary?
+  - __DONE: added__
 
 - [ ] Re-visit summary of WGBS statistical framework chapter
   - This chapter highlights that there are many levels of variation and common summaries of the data aggregate over these.
-- [ ] Does the WGBS bioinformatics analysis chapter need a summary?
 - [ ] What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?
 - [ ] Figure out what's going on with some of the EPISCOPE and Ziller samples that have a high autosome (chr21, I think); figure out why E18BUF is missing chrM in $NIL \geq 0$ plots.
 - [ ] Should gene names and cytosine modifications be _italicised_.
@@ -48,7 +49,7 @@
   - What does "better" mean.
 - [ ] Add a representative plot of the within-fragment data for a single sample
 - [ ] Fix formatting of $2 \times 2$ contingency tables to be consistent.
-- [ ] Increase axis labels in simulation study figures
+- [ ] Increase axis labels in simulation study figures?
 - [ ] Find submission documents
 - [ ] Add analysis folder to github
   - First upload `.Rmd` analysis scripts.
@@ -69,6 +70,10 @@
 - [ ] Add $\beta$ to the y-axis of the $\beta$-by-PM boxplots.
 - [ ] Fix `BiocParallel` citation.
 - [ ] Include timings from Lacey et al. in `methsim` chapter.
+- [ ] Be more specific with what was discovered in the analyses of co-methylation.
+- [ ] Move estimation of RRBS CpGs from the appendix to online.
+- [ ] Add `makeCGI` to list of software.
+- [ ] Multiple $\LaTeX$ typesetting bugs.
 
 # Long term
 

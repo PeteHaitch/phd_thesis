@@ -77,7 +77,7 @@ Pr(Z_{h, i} = Z_{h', i'}) &= Pr(Z_{h, i} = 0, Z_{h', i'} = 0) + Pr(Z_{h, i} = 1,
                   &= (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'} + 2 c p_{h} (1 - p_{h})
 \end{align*}
 
-\subsection{Estimate of number of CpGs used by \citet{Lacey:2013iy}}\label{app:lacey}
+\subsection{Estimating the number of CpGs used by \citet{Lacey:2013iy}}\label{app:lacey}
 
 I want to estimate the number of CpGs used by \citet{Lacey:2013iy} to estimate the correlation of methylation levels. They used the chromosome 11 data from an RRBS experiment on a normal myotube cell line, _MTCTL2_. Unfortunately, there is no URL provided to these data. \citet{Lacey:2013iy} cite their data as having come from \citet{Tsumagari:2013gn}, which includes a sample "Normal Human Skeletal Muscle Myoblasts", _HSMM_ ([http://genome-mirror.duhs.duke.edu/ENCODE/cellTypes.html](http://genome-mirror.duhs.duke.edu/ENCODE/cellTypes.html), [http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/](http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/)). I believe this to be the same cell line. In any case, for my purposes I simply needed some comparable RRBS data, not necessarily the exact same sample as  _MTCTL2_.
 
