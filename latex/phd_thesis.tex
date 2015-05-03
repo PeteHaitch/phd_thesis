@@ -165,9 +165,15 @@ The University of Melbourne\\\\}
 
 \chapter{Abstract}
 
-% should be between 300 - 500 words
+DNA methylation is an epigenetic modification that plays an important role in X-chromosome inactivation, genomic imprinting and the repression of repetitive elements in the genome. It must be tightly regulated for normal mammalian development and aberrant DNA methylation is strongly associated with many forms of cancer.
 
-\textbf{TODO}
+This thesis examines the statistical and computational challenges raised by high-throughput assays of DNA methylation, particularly the current gold standard assay of whole-genome bisulfite-sequencing. Using whole-genome bisulfite-sequencing, we can now measure DNA methylation at individual nucleotides across entire genomes. These experiments produce vast amounts of data that require new methods and tools to analyse.
+
+The first half of the thesis outlines the biological questions of interest in studying DNA methylation, the bioinformatics analysis of these data, and the statistical questions we seek to address. In discussing these bioinformatics challenges, we develop software to facilitate novel analyses of these data. We pay particular attention to analyses of methylation patterns along individual DNA fragments, a novel feature of sequencing-based assays.
+
+The second half of the thesis focuses on \emph{co-methylation}, the spatial dependence of DNA methylation. We demonstrate that previous analyses of co-methylation have been limited by inadequate data and analysis methods. This motivates a study of co-methylation from 40 whole-genome bisulfite-sequencing samples. These 40 samples represent a diverse range of tissues, from embryonic and induced pluripotent stem cells, through to somatic cells and tumours. Making use of software developed in the first half of the thesis, we explore different measures of co-methylation and relate these to one another. We identify genomic features that influence co-methylation and how it varies between different tissues.
+
+In the final chapter, we develop a framework for simulating whole-genome bisulfite-sequencing data. Simulation software is valuable when developing new analysis methods since it can generate data on which to assess the performance of the method and benchmark it against competing methods. Our simulation model is informed by our analyses of the 40 whole-genome bisulfite-sequencing samples and our study of co-methylation.
 
 
 \chapter{Declaration}
