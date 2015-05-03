@@ -15,8 +15,12 @@
   - __DONE__
 - [x] Address Terry's comments
   - __DONE__
-- [ ] Rename `methsim` plots without the `_1` and `_2` suffixes
+- [x] $\mathbf{\psi}$ doesn't print how I'd hoped.
+  - __FIXED__ Use $\bm{\psi}$
+- [x] Rename `methsim` plots without the `_1` and `_2` suffixes
+  - __DONE__
 - [ ] Could simulate $B$ from Beta distribution rather than Normal, i.e., a beta-binomial model!
+- [ ] TODO: Figure out what's going on with some of the EPISCOPE and Ziller samples that have a high autosome (chr21, I think); figure out why E18BUF is missing chrM in $NIL \geq 0$ plots.
 - [ ] Should gene names and cytosine modifications be _italicised_.
 - [ ] Plots of beta-correlations separated by strand in a clearer way.
   - Use loess to summarise trend
@@ -25,8 +29,10 @@
   - What does "better" mean.
 - [ ] Add a representative plot of the within-fragment data for a single sample
 - [ ] Fix formatting of $2 \times 2$ contingency tables to be consistent.
-- [ ] Write abstract
-- [ ] Complete `methsim` chapter.
+- [x] Write abstract
+  - __DONE__
+- [x] Complete `methsim` chapter.
+  - __DONE__
 - [ ] Write concluding remarks
 - [ ] Email communications about printing
 - [ ] Find submission documents
@@ -39,7 +45,7 @@
 - [x] Give every figure and table a brief caption.
   - __DONE__
 - [ ] Look at some scatterplots of beta-value pairs from simulated data
-- "dataset" vs. "data set"
+- "dataset" vs. "data set". Include in `methsim` chapter if revealing.
 - [ ] \texttt{--all-combinations} prints as '-all-combinations'
 
 # Discussing co-methylation chapter
@@ -67,8 +73,6 @@
 - p197 Something weird has happened.
 - Comment on other genomic features that might be interesting to stratify by.
 - Comment on how you might reduce heterogeneity by subsampling.
-
-
 
 # Long term
 
