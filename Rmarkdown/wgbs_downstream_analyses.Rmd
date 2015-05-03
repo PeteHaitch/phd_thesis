@@ -22,7 +22,7 @@ A barrier to analyses based on m-tuples has been a lack of software. To overcome
 
 The majority of downstream analysis methods use methylation patterns at 1-tuples, i.e. $\mathbf{m} = (m_{1}, \ldots, m_{i}, \ldots, m_{N_{loci}})$ and $\mathbf{u} = (u_{1}, \ldots, u_{i}, \ldots, u_{N_{loci}})$[^not_beta_values]. Methods based on 1-tuples have been developed to address several scientific questions including testing for differential methylation (Section \ref{sec:differential_methylation}), testing for differentially variable methylation (Section \ref{sec:variable_methylation}) and identifying regulatory regions of the genome (Section \ref{sec:epigenome_segmentation}).
 
-[^not_beta_values]: It is insufficient to use $\mathbf{\beta} = \frac{\mathbf{m}}{\mathbf{m} + \mathbf{u}}$ because the conversion to $\beta$-values loses information about the precision with which each methylation locus is measured (the sequencing depth, $\mathbf{d} = \mathbf{m} + \mathbf{u}$).
+[^not_beta_values]: It is insufficient to use $\bm{\beta} = \frac{\mathbf{m}}{\mathbf{m} + \mathbf{u}}$ because the conversion to $\beta$-values loses information about the precision with which each methylation locus is measured (the sequencing depth, $\mathbf{d} = \mathbf{m} + \mathbf{u}$).
 
 \subsection{Differential methylation}\label{sec:differential_methylation}
 
@@ -72,7 +72,7 @@ One thing to note, however, is that the _effective_ number of tests is fewer tha
 
 While there have been reports of DMCs resulting in a phenotypic difference \citep[e.g.,]{Furst:2012gh}, DMCs are mostly tested as a prelude to the identification of differentially methylated regions (DMRs). Moreover, with approximately 25 million CpGs in the human genome, not to mention the many, many more non-CpG cytosines, it is an optimist who aims for the reliable detection of DMCs from whole-genome bisulfite-sequencing experiments. This will remain true while sample sizes can be counted on one or two hands and the average sequencing depth is $10\times$ to $30\times$.
 
-Several software packages are now available for identifying DMCs. Most are limited to analysing two-group experiments. Rather than directly analysing the $\mathbf{m}$ and $\mathbf{u}$, these software generally make additional modelling assumptions, such as the beta-binomial model (Section \ref{sec:beta-binomial_models}), and/or perform some transformation of the data, such as smoothing of $\mathbf{\beta}$ (Section \ref{sec:transformations}).
+Several software packages are now available for identifying DMCs. Most are limited to analysing two-group experiments. Rather than directly analysing the $\mathbf{m}$ and $\mathbf{u}$, these software generally make additional modelling assumptions, such as the beta-binomial model (Section \ref{sec:beta-binomial_models}), and/or perform some transformation of the data, such as smoothing of $\bm{\beta}$ (Section \ref{sec:transformations}).
 
 `DSS` \citep{Feng:2014iq}, `BiSeq` \citep{Hebestreit:2013ko}, `MOABS` \citep{Sun:2014fk} `methylSig` \citep{Park:2014ho} and `RADmeth` \citep{Dolzhenko:2014bo} all use a Beta-Binomial hierarchical model of DNA methylation, although the exact details differ considerably between packages. `DSS` and `MOABS` use empirical Bayes methods to estimate parameters whereas `methylSig`, `BiSeq` and `RADmeth` use maximum likelihood estimation. `BiSeq` and `methlySig` also perform spatial smoothing of the data.
 
@@ -153,11 +153,11 @@ Statistical tests of variances are well known to be more difficult than tests of
 
 Tests of differential variability that are based on the F-test \citep[e.g.,][]{Hansen:2011gu} or Bartlett's test \citep[e.g.,][]{Teschendorff:2012hea} will be susceptible to calling loci with such outliers as being differentially variable. By contrast, `DiffVar` \citep{Phipson:2014ji} uses Levene's test \citep{Olkin:1960uu}, which is robust to outliers, to test for differential variability.
 
-All these methods are based on analysing $\mathbf{m}$ and $\mathbf{u}$ or $\mathbf{\beta}$.
+All these methods are based on analysing $\mathbf{m}$ and $\mathbf{u}$ or $\bm{\beta}$.
 
 \subsection{Epigenome segmentation}\label{sec:epigenome_segmentation}
 
-Methylation data in the form of the vector of $\beta$-values, $\mathbf{\beta}$, may also be used by methods to segment the genome or epigenome into regulatory regions \citep{Stadler:2011kt}. One type of region that has received particular attention are so-called _partially methylated domains_ (PMDs). Partially methylated domains are long stretches of the genome where the average methylation level, $B_{i}$, is away from the extremes of $0$ and $1$, typically in the range $0.2$ to $0.7$.
+Methylation data in the form of the vector of $\beta$-values, $\bm{\beta}$, may also be used by methods to segment the genome or epigenome into regulatory regions \citep{Stadler:2011kt}. One type of region that has received particular attention are so-called _partially methylated domains_ (PMDs). Partially methylated domains are long stretches of the genome where the average methylation level, $B_{i}$, is away from the extremes of $0$ and $1$, typically in the range $0.2$ to $0.7$.
 
 PMDs were first identified in the _IMR90_ methylome by \citet{Lister:2009hy}. Using a simple sliding window algorithm, \citeauthor{Lister:2009hy} found that approximately $40\%$ of every autosome was a PMD and that the average length of these PMDs was a large 153 kb. They also showed that these PMDs were not simply due to a methylated subpopulation and an unmethylated subpopulation of cells in the sample. This did this by showing that individual reads mapped to these PMDs contained both methylated and unmethylated bases.
 
