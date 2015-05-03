@@ -13,7 +13,7 @@ bibliography: ../latex/phd_thesis.bib
 \chapter{Bioinformatics analysis of whole-genome bisulfite-sequencing data}\label{chap:wgbs_bioinformatics_analysis}
 
 \begin{chapabstract}
-I explain the bioinformatics analysis of whole-genome bisulfite-sequencing data, concentrating on the most widely used \emph{methylC-seq} protocol. All data used in my thesis were generated using this protocol.
+I explain the bioinformatics analysis of whole-genome bisulfite-sequencing data, concentrating on the most widely used methylC-seq protocol. All data used in my thesis were generated using this protocol.
 
 There are four fundamental steps in the analysis of bisulfite-sequencing data:
 
@@ -26,7 +26,7 @@ There are four fundamental steps in the analysis of bisulfite-sequencing data:
 
 This chapter focuses on steps 1-3, while Chapter \ref{chap:wgbs_downstream_analyses} addresses the wide variety of analyses available at Step 4. Steps 1 and 2 will be familiar to anyone who has analysed high-throughput sequencing data, but each requires a twist to work with bisulfite-sequencing data. Step 3 is obviously unique to assays of DNA methylation, but there are similarities to variant calling from DNA sequencing.
 
-The chapter concludes by introducing the `methtuple` software, a unique methylation caller for extracting methylation patterns at tuples of methylation loci. \texttt{methtuple} is critical for work in later chapters on co-methylation (Chapter \ref{chap:co-methylation}) but has wider application in facilitating downstream analyses of bisulfite-sequencing data.
+The chapter concludes by introducing the \texttt{methtuple} software, a unique methylation caller for extracting methylation patterns at tuples of methylation loci. \texttt{methtuple} is critical for work in later chapters on co-methylation (Chapter \ref{chap:co-methylation}) but has wider application in facilitating downstream analyses of bisulfite-sequencing data.
 \end{chapabstract}
 
 \section{Data quality control checks}\label{sec:data_qc}
@@ -67,6 +67,8 @@ Table \ref{tab:bs-seq_mappers} list some popular bisulfite-sequencing read mappe
 
 \begin{table}[h]
 \centering
+\caption[Popular bisulfite-sequencing read mappers and their underlying mapping software]{Four popular bisulfite-sequencing read mappers, selected to highlight the variety of underlying mapping software used by these tools.}
+\label{tab:bs-seq_mappers}
 \begin{tabulary}{\textwidth}{LLL}
 \toprule
 Name      & Reference                                            & Underlying mapping software \\ \midrule
@@ -75,8 +77,6 @@ bwa-meth  & \citet{Pedersen:2014wt}                             & bwa-mem       
 BSMAP     & \citet{Xi:2009bd}                                   & SOAP                        \\
 Novoalign & \url{http://www.novocraft.com/products/novoalign/} & Novoalign                   \\ \bottomrule
 \end{tabulary}
-\caption[Popular bisulfite-sequencing read mappers and their underlying mapping software]{Four popular bisulfite-sequencing read mappers, selected to highlight the variety of underlying mapping software used by these tools.}
-\label{tab:bs-seq_mappers}
 \end{table}
 
 Each of these aligners can report the output in the standard Sequence Alignment/Map format, `SAM`, or its binary equivalent, `BAM` \citep{Li:2009ka}. However, there is no agreed upon standard in the `SAM` specification for encoding the data specific to bisulfite-sequencing, which means that each mapper does this in a slightly different way. This complexity makes it difficult for downstream analysis tools to support the output of different mapping software.
@@ -99,19 +99,17 @@ PCR amplification of the input DNA is a common step in creating a library for hi
 
 In bisulfite-sequencing data, PCR duplicates containing a methylation locus can result in a biased estimate of the methylation level at that locus. This is because the sequenced reads do not accurately represent the true methylation levels of the sample.
 
-There is generally no way to tell if a read is truly a PCR duplicated based on the sequencing data alone.
-
-There is generally no way to tell based on sequencing data if a read is truly a PCR duplicate. However, it is relatively easy to identify suspected PCR duplicates (which are almost always inaccurately referred to as 'PCR duplicates'[^pcr_dup]). Software to identify PCR duplicates includes the `MarkDuplicates` function that is a part of the `Picard` software ([http://broadinstitute.github.io/picard/](http://broadinstitute.github.io/picard/)), the `rmdup` function that is a part of the `SAMtools` software \citep{Li:2009ka} and `SAMBLASTER` \citep{Faust:2014hf}. These software all use mapped reads from a `SAM` or `BAM` file as input.
+There is generally no way to tell based on sequencing data if a read is truly a PCR duplicate. However, it is relatively easy to identify suspected PCR duplicates (which are almost always referred to as 'PCR duplicates'[^pcr_dup]). Software to identify PCR duplicates includes the `MarkDuplicates` function that is a part of the `Picard` software ([http://broadinstitute.github.io/picard/](http://broadinstitute.github.io/picard/)), the `rmdup` function that is a part of the `SAMtools` software \citep{Li:2009ka} and `SAMBLASTER` \citep{Faust:2014hf}. These software all use mapped reads from a `SAM` or `BAM` file as input.
 
 [^pcr_dup]: The distinction between suspected PCR duplicates and true PCR duplicates is rarely made, possibly because the phrase is so clunky. Suspected PCR duplicates are almost always referred to as PCR duplicates with the implicit assumption that the reader is aware that these very likely include false positive calls. Consistent with the literature, I will use the term PCR duplicates when I refer to reads identified as PCR duplicates by some software. I will use _true_ PCR duplicates when I need to distinguish the two concepts.
 
-Roughly speaking, these tools will flag reads with identical start and end co-ordinates as being suspected PCR duplicates. This will inevitably lead to some false positives because reads may have identical co-ordinates yet not be PCR duplicates. The false positive rate is a particular problem when a subset of the genome is sequenced at high coverage, such as in RRBS. This can be thought of as an example of the pigeonhole principle, which states that if we have $m$ containers (positions where a read can start) and $n > m$ items (reads), then at least one container must contain more than one item (at least one position must have more than one read starting there).
+Roughly speaking, these tools will flag reads with identical start and end co-ordinates as being suspected PCR duplicates. This will inevitably lead to some false positives because reads may have identical co-ordinates yet not be true PCR duplicates. The false positive rate is a particular problem when a subset of the genome is sequenced at high coverage, such as in RRBS. This can be thought of as an example of the pigeonhole principle, which states that if we have $m$ containers (positions where a read can start) and $n > m$ items (reads), then at least one container must contain more than one item (at least one position must have more than one read starting there).
 
 We could make this mathematically more precise, but it doesn't give us a simple answer to the question, 'should we remove possible PCR duplicates from bisulfite-sequencing data?'. The unsatisfactory answer is, 'it depends'. A rule of thumb is that provided the average or median sequencing coverage of the 'genome' is less than the fragment length[^pcr_fragment_length] then we expect few false positive calls.
 
 [^pcr_fragment_length]: For single-end data, the 'fragment length' in these calculations is the read length.
 
-In practice, this means that for whole-genome sequencing data we can be fairly confident that suspected PCR duplicates are _true_ PCR duplicates. However, for targetted sequencing, such as RRBS or amplicon sequencing, we are much less confident and may remove some of our signal if we remove possible PCR duplicates. Instead, for RRBS we might exclude regions with an "abnormally" high sequencing coverage \citep{Krueger:2012ks}. For amplicon sequencing we often can't afford to exclude possible PCR duplicates if, for example, the aim is to identify rare epialleles by very deep sequencing of a small region.
+In practice, for whole-genome sequencing data we can be fairly confident that suspected PCR duplicates are _true_ PCR duplicates. However, for targetted sequencing, such as RRBS or amplicon sequencing, we are much less confident and may remove some of our signal if we remove possible PCR duplicates. Instead, for RRBS we might exclude regions with an "abnormally" high sequencing coverage \citep{Krueger:2012ks}. For amplicon sequencing we often can't afford to exclude possible PCR duplicates if, for example, the aim is to identify rare epialleles by very deep sequencing of a small region.
 
 \subsection{M-bias}\label{sec:m-bias}
 
@@ -137,10 +135,10 @@ The strongest source of M-bias in Illumina whole-genome bisulfite-sequencing dat
 
 Estimating M-bias and incorporating it into the methylation calling can be done using two different strategies:
 
-1. Compute the M-bias from the aligned reads, then call methylation events. The methylation calling should include filters to remove the detected M-bias (along with any other additional filters). This strategy requires two passes over the `SAM/BAM` file - one to compute the M-bias and one to do the methylation calling. This is the approach used by `bismark_methylation_extractor` \citep{Krueger:2011eb} and `Bis-SNP` \citep{Liu:2012ge}.
+1. Compute the M-bias from the aligned reads, then call methylation events. The methylation calling should include filters to remove the detected M-bias (along with any other additional filters). This strategy requires two passes over the `SAM/BAM` file, one to compute the M-bias and one to do the methylation calling. This is the approach used by `bismark_methylation_extractor` \citep{Krueger:2011eb} and `Bis-SNP` \citep{Liu:2012ge}.
 2. Call methylation events but retain the read-position of each methylation event. Compute the M-bias from this first file and then filter out methylation events that suffer from M-bias. This strategy requires only a single pass over the `SAM/BAM` file but requires additional information to be stored alongside the methylation calls which is then followed by a pass over the file containing the methylation calls. This is the approach taken by `BSmooth` \citep{Hansen:2012gr}.
 
-I find the first strategy conceptually simpler, and easier to program, so use it in my methylation calling software, `methtuple`, described in Section \ref{sec:methtuple}).
+I find the first strategy conceptually simpler, and easier to program, so use it in my methylation calling software, `methtuple` (described in Section \ref{sec:methtuple}).
 
 In theory, the M-bias could be estimated during the alignment step or during another processing step, such as sorting or marking PCR duplicates, to avoid an additional pass over the `SAM/BAM` file.
 
@@ -162,7 +160,7 @@ For example, suppose we performed $100$ bp single-end sequencing and pre-trimmed
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/E18VA_M-bias.pdf}
-\caption[\emph{E18VA} M-bias]{M-bias plot for the E18VA sample from the EPISCOPE dataset. Each of \emph{read-1} (R1) and \emph{read-2} (R2) are plotted separately. For CpGs in \emph{read-1}, we see noise at the start of the read, followed by a downward slope in the M-bias, which ends with a spike. For CpGs in \emph{read-2}, we see a downward spike at the start of the read following by a gradual increase in the M-bias curve, with a spike at read-position 101 and a spike at the last read-positions for all methylation types. The spike at read-position 101 is also evidence, albeit to a lesser extent, in \emph{read-1}. This position should be ignored in downstream analyses but we do not necessarily also want to ignore read-positions $102-150$ since this would remove one-third of the data.}
+\caption[\emph{E18VA} M-bias]{M-bias plot for the E18VA sample from the EPISCOPE dataset. Each of \emph{read-1} (R1) and \emph{read-2} (R2) are plotted separately. For CpGs in \emph{read-1}, we see noise at the start of the read, followed by a downward slope in the M-bias, which ends with a spike. For CpGs in \emph{read-2}, we see a downward spike at the start of the read following by a gradual increase in the M-bias curve, with a spike at read-position 101 and a spike at the last read-positions for all methylation types. The spike at read-position 101 is also evident, albeit to a lesser extent, in \emph{read-1}. This position should be ignored in downstream analyses but we do not necessarily also want to ignore read-positions $102-150$ since this would remove one-third of the data.}
 \label{fig:E18VA_M-bias}
 \end{figure}
 
@@ -172,7 +170,7 @@ The loss of the one-to-one relationship between sequencing cycle and read-positi
 
 \subsubsection{Identifying M-bias}\label{sec:identifying_m-bias}
 
-In practice, the M-bias curves for each sample are visually inspected to look for evidence of M-bias, i.e. read-positions whose methylation levels are 'too far away' from the vast majority of read-positions. It is rather a subjective decision to make. Two problems that I found when making these decisions were:
+In practice, the M-bias curves for each sample are visually inspected to look for evidence of M-bias, i.e. read-positions whose methylation levels are 'too far away' from the majority of read-positions. It is rather a subjective decision to make. Two problems that I found when making these decisions were:
 
 1. Maintaining consistency across samples.
 2. Determining where to draw the line when there is no dramatic 'spike' in the M-bias.
@@ -191,9 +189,9 @@ The `filter()` method identifies read-positions where the $rpml$ differs by more
 
 Now that we've found read-positions with M-bias, what can we do about it? Typically, read-positions showing evidence of M-bias are excluded when calling methylation events. In fact, a slightly cruder procedure is typically used whereby the entire ends of reads are removed. For example, suppose we have $100$ bp reads with M-bias observed at positions $1, 2, 3, 4, 9, 94, 96, 97, 98, 99, 100$, then read-positions $1-9$ and $94-100$ would be ignored when methylation calling.  Both `bismark_methylation_extractor` and `Bis-SNP`, two popular methylation callers, use this method.
 
-This strategy is generally sufficient because M-bias tends to occur as runs of read-positions at the 5' and 3' ends of reads. However, occasionally there are spikes in the M-bias plot, which indicate specific read-positions that we would like to exclude. Figure \ref{fig:E18VA_M-bias} shows an example of such a spike that occurred at read-position 101 in 150 bp reads. Using `bismark_methylation_extractor` we would be forced to either retain this position or to ignore read-positions $101-150$, effectively ignoring one third of the sequencing data, much of it unaffected by M-bias. My `methtuple` software (Section \ref{sec:methtuple}) avoids the unnecessary exclusion of those bases by allowing the user to specify the exact read-positions that she wants to exclude[^methtuple_mbias].
+This strategy is generally sufficient because M-bias tends to occur as runs of read-positions at the 5' and 3' ends of reads. However, occasionally there are spikes in the M-bias plot, which indicate specific read-positions that we would like to exclude. Figure \ref{fig:E18VA_M-bias} shows an example of such a spike that occurred at read-position 101 in 150 bp reads. Using `bismark_methylation_extractor` we would be forced to either retain this position or to ignore read-positions $101-150$, effectively ignoring one third of the sequencing data, much of it unaffected by M-bias. The `methtuple` software avoids the unnecessary exclusion of those bases by allowing the user to specify the exact read-positions that she wants to exclude (discussed in Section \ref{sec:methtuple}).
 
-In the datasets I have analysed I've had to ignore up to 30 read-positions per read due to M-bias. Ideally, we would be able to remove the effects of M-bias by accounting for it in methylation calling rather than by simply excluding those read-positions entirely. One idea is to inversely weight methylation calls by the level of M-bias. A downside to this approach is that this would turn an otherwise binary methylation call into a continuous value between $0$ and $1$, with an attendant loss in interpretability. However, we could still compute the ubiquitous $\beta$-values, traditionally defined as the proportion of reads that are methylated at a locus, and use these in downstream inferences, without much loss in interpretation. The bigger problem with this approach is the increased computational complexity and cost, and this is why I have not further pursued this idea.
+In the datasets I have analysed, I have had to ignore up to 30 read-positions per read due to M-bias. Ideally, we would be able to remove the effects of M-bias by accounting for it in methylation calling rather than by simply excluding those read-positions entirely. One idea is to inversely weight methylation calls by the level of M-bias. A downside to this approach is that this would turn an otherwise binary methylation call into a continuous value between $0$ and $1$, with an attendant loss in interpretability. However, we could still compute the ubiquitous $\beta$-values, traditionally defined as the proportion of reads that are methylated at a locus, and use these in downstream inferences, without much loss in interpretation. The bigger problem with this approach is the increased computational complexity and cost, and this is why I have not further pursued this idea.
 
 \subsection{Other biases}\label{sec:other_biases}
 
@@ -221,7 +219,7 @@ All bisulfite-sequencing assays use _reference-based_ methylation calling. This 
 
 When using reference-based methylation calling, the position of the methylation locus is with respect to the reference genome, since then all samples will use a common set of co-ordinates. Some methylation loci cannot be typed using a reference-based approach. For example, unless the genome of the sample is fully known, methylation loci in insertions cannot be distinguished from genetic variation since there is no reference sequence to compare them against.
 
-Prior to methylation calling, each read should be filtered to remove low-quality reads and low quality bases. When using a set of filters, at each step a read either 'survives', and is subjected to the proceeding filter, or 'dies', and is excluded from methylation calling[^read_filters]. Strictly speaking each sequenced bases is assigned a weight in the filtering process, however, in practice, filters are normally first applied to reads and then to all bases within 'surviving' reads. In my own work analysing whole-genome bisulfite-sequencing data, I routinely use the following filters.
+Prior to methylation calling, each read should be filtered to remove low-quality reads and low quality bases. When using a set of filters, at each step a read either 'survives', and is subjected to the proceeding filter, or 'dies', and is excluded from methylation calling[^read_filters]. Strictly speaking, each sequenced bases is assigned a weight in the filtering process, however, in practice, filters are normally first applied to reads and then to all bases within 'surviving' reads. In my own work analysing whole-genome bisulfite-sequencing data, I routinely use the following filters.
 
 A read survives if:
 
@@ -245,7 +243,7 @@ The reference sequence is typically the reference genome used in the alignment s
 
 \subsubsection{Whole-genome sequencing or genotyping of the sample}\label{sec:wgs_or_genotyping}
 
-The gold-standard is to perform whole-genome DNA sequencing of each sample. This data is then used to form a set of sample-specific methylation loci. However, this approach is also very expensive due to the extra sequencing requirements. A cheaper alternative is to genotype the sample on a genome-wide SNP microarray. This will give very accurate, very cheap genotypes at a large number of loci ($500,000$ to $5,000,000$). However, it obviously cannot identify genetic differences that aren't on the array, such as novel sample-specific genetic variants.
+The gold-standard is to perform whole-genome DNA sequencing of each sample. This data is then used to form a set of sample-specific methylation loci. This approach, however, is also very expensive due to the extra sequencing requirements. A cheaper alternative is to genotype the sample on a genome-wide SNP microarray. This will give very accurate, very cheap genotypes at a large number of loci ($500,000$ to $5,000,000$). However, it obviously cannot identify genetic differences that aren't on the array, such as novel sample-specific genetic variants.
 
 \subsubsection{Calling genetic variations directly from the bisulfite-sequencing data}\label{sec:wgbs_variant_calling}
 
@@ -271,11 +269,13 @@ Genotype calls made using `Bis-SNP` are less accurate than those from whole-geno
 
 \subsubsection{Excluding sites of known genetic variation}\label{sec:known_genetic_variation}
 
-The third approach, and arguably the bare minimum, is to call methylation loci using the reference genome and to _post-hoc_ exclude any loci that overlap sites of known genetic variation in the population. For example, we might exclude all cytosines in the reference genome that are also SNPs in dbSNP \citep{Sherry:2001gh}.
+The third approach, and arguably the bare minimum, is to call methylation events using the reference genome and to _post-hoc_ exclude any loci that overlap sites of known genetic variation in the population. For example, we might exclude all cytosines in the reference genome that are also SNPs in dbSNP \citep{Sherry:2001gh}.
 
 This is a conservative approach, as it will remove loci regardless of whether the sample has a genetic variant at that position or not, but it may be a good enough method in some cases. It also obviously requires a database of known variation for the organism being studied, which is the case for commonly studied organisms such as humans and mice.
 
-This approach can obviously only exclude sites of known variation from consideration, and cannot add sample-specific methylation loci. To remove those reference-specific methylation loci that are __not__ found in databases of known genetic variation, we might identify loci in the sample that display a large number of non-C/T bases (resp. non-G/A bases) at a C (resp. G) on the forward (resp. reverse) strand of the reference genome.
+This approach can obviously only exclude sites of known variation from consideration, and cannot add sample-specific methylation loci. To remove those reference-specific methylation loci that are __not__ found in databases of known genetic variation, we might identify loci in the sample that display a large number of non-C/T bases (resp. non-G/A bases) at a C (resp. G) on the forward (resp. reverse) strand of the reference genome[^ad_hoc_bissnp]
+
+[^ad_hoc_bissnp]: This is like an _ad hoc_ and limited version of `Bis-SNP`.
 
 \subsection{Determining the context or methylation type}\label{sec:methylation_context}
 
@@ -315,7 +315,7 @@ While 1-tuples are the basis of most analyses of bisulfite-sequencing data, they
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/incomplete_picture_1-tuples.pdf}
-\caption[Different methylation patterns can lead to identical $\beta$-values]{Two regions, each with four methylation loci, that have identical $\beta$-values ($\beta = \frac{M}{M + U}$) at 1-tuples yet have very different overall methylation patterns.}
+\caption[Different methylation patterns can lead to identical $\beta$-values]{Two regions, each with four methylation loci that have identical $\beta$-values ($\beta = \frac{M}{M + U}$) at 1-tuples yet have very different overall methylation patterns. Each line is a read, a white circle is an unmethylated CpG and a black circle is a methylated CpG.}
 \label{fig:incomplete_picture_1-tuples}
 \end{figure}
 
@@ -345,7 +345,7 @@ I define an m-tuple to be a tuple of $m = 1, 2, \ldots$ methylation loci. I refe
 
 [^adjacent]: Two methylation loci are adjacent if there is no methylation loci in between the pair. For example, `CGCG` and `CGTTACG` both contain two adjacent CpGs (the intervening `TTA` in the second sequence does not include a CpG). In contrast, the first and last CpG in the sequence `CGTCGTCG` are __not__ adjacent, since the intervening sequencing, `TCGT` include a CpG. Note that in situations where we are only interested in studying CpGs, we define 'methylation loci' to mean 'CpGs'. Therefore the sequence `CGTCTTCG` contains two adjacent methylation loci; while there is a `C` in the intervening sequence, `TCTT`, it is a CHH not a CpG.
 
-Generally, when referring to m-tuples I implicitly mean those with $NIL = 0$; I will explicitly use the notation $NIL \geq 0$ when I wish to make clear that there may be intervening methylation loci in the m-tuple. The default option of `methtuple` is to produce m-tuples with $NIL = 0$ unless the `--all-combinations` flag is set[^nil0].
+When referring to m-tuples I implicitly mean those with $NIL = 0$; I will explicitly use the notation $NIL \geq 0$ when I wish to make clear that there may be intervening methylation loci in the m-tuple. The default option of `methtuple` is to produce m-tuples with $NIL = 0$ unless the `--all-combinations` flag is set[^nil0].
 
 [^nil0]: Actually, while `methtuple` tries to produce m-tuples with $NIL = 0$ it can't guarantee this because it would require looking up the reference genome sequence for each m-tuple (this is avoided for computational simplicity). This is only really an issue with paired-end sequencing, as is made clear in the examples of Figures \ref{fig:methtuple_example1}, \ref{fig:methtuple_example2}, \ref{fig:methtuple_example3} and \ref{fig:methtuple_example4}. Some _post-hoc_ filtering of the m-tuples will generally be required in order to remove those m-tuples with $NIL > 0$.
 
@@ -359,7 +359,7 @@ To illustrate several of the above-mentioned concepts, suppose we sequence a reg
 \centering
 \centering
 \includegraphics[width=0.6\textwidth]{../figures/methtuple_example1.pdf}
-\caption[\texttt{methtuple} example region]{Diagram of three-paired end reads (\texttt{A}, \texttt{B} and \texttt{C}) mapping to a region containing five methylation loci (\texttt{1} $--$ \texttt{5}). The suffix \texttt{\_1} or \texttt{\_2} indicates whether it is \emph{read-1} or \emph{read-2}, respectively.}
+\caption[\texttt{methtuple} example region]{Diagram of three-paired end reads (\texttt{A}, \texttt{B} and \texttt{C}) mapping to a region containing five methylation loci (\texttt{1}, \texttt{2}, \texttt{3}, \texttt{4} and  \texttt{5}). The suffix \texttt{\_1} or \texttt{\_2} indicates whether it is \emph{read-1} or \emph{read-2}, respectively.}
 \label{fig:methtuple_example1}
 \end{figure}
 
@@ -394,7 +394,7 @@ Finally, Figure \ref{fig:methtuple_example4} shows the output if we were to anal
 \label{fig:methtuple_example4}
 \end{figure}
 
-With current sequencing technology we are limited to extracting m-tuples that span no more than $200-250$ bp. This obviously affects the size of m-tuples that we can study. Figure \ref{fig:Lister_CpGs_per_read} shows the number of CpGs per read for the Lister dataset (see Chapter \ref{chap:datasets} for a description of the Lister dataset). Longer reads, and paired-end reads, contain more methylation loci and so are more informative for analyses using m-tuples. This can be seen by comparing, for example, the _ADS_ and _HSF1_ samples. Samples sequenced more deeply will have more reads per m-tuple, although this can't be seen in these plots since they are normalised by sequencing depth.
+With current sequencing technology we are limited to extracting m-tuples that span no more than $200$ to $250$ bp. This obviously affects the size of m-tuples that we can study. Figure \ref{fig:Lister_CpGs_per_read} shows the number of CpGs per read for the Lister dataset (see Chapter \ref{chap:datasets} for a description of the Lister dataset). Longer reads, and paired-end reads, contain more methylation loci and so are more informative for analyses using m-tuples. This can be seen by comparing, for example, the _ADS_ and _HSF1_ samples. Samples sequenced more deeply will have more reads per m-tuple, although this can't be seen in these plots since they are normalised by sequencing depth.
 
 \begin{figure}[!htb]
 \centering
@@ -405,7 +405,7 @@ With current sequencing technology we are limited to extracting m-tuples that sp
 
 \subsection{Implementation}\label{sec:methtuple_methods}
 
-`methtuple` performs methylation calling for a single `BAM` file generated by `Bismark`. The user is required to specify the size of the tuples (`--m`), and the methylation type (`--methylationType`) for each run of the program. There are many useful options to filter reads and read-positions. Apart from the standard quality filters, `methtuple` is careful when processing paired-end reads to only count the base from one of the reads in any overlapping paired-end reads to avoid double-counting these overlapping bases. `methtuple` also allows the user to filter out specific read-positions rather than wholesale filtering of the ends of reads. This is particularly useful for samples where there is a 'spike' in the M-bias plot, such as that shown in Figure \ref{fig:E18VA_M-bias}. Such a 'spike' can be filtered out without also being forced to also filter out additional upstream read-positions that are not affected by M-bias.
+`methtuple` performs methylation calling for a single `BAM` file generated by `Bismark`. The user is required to specify the size of the tuples (`--m`), and the methylation type (`--methylationType`) for each run of the program. There are many useful options to filter reads and read-positions. Apart from the standard quality filters, `methtuple` is careful when processing paired-end reads to only count the base from one of the reads in any overlapping paired-end reads to avoid double-counting these overlapping bases. `methtuple` also allows the user to filter out specific read-positions rather than wholesale filtering of the ends of reads. This is particularly useful for samples where there is a 'spike' in the M-bias plot, such as that shown in Figure \ref{fig:E18VA_M-bias}. Such a spike can be filtered out without also being forced to also filter out additional upstream read-positions that are not affected by M-bias.
 
 `methtuple` is written in Python and uses the `pysam` ([https://github.com/pysam-developers/pysam/](https://github.com/pysam-developers/pysam/)) module to parse the `BAM` file. It is compatible with both Python2 and Python3. To improve performance, I provide a helper script to split the sample by chromosome and process each chromosome in parallel ([https://github.com/PeteHaitch/methtuple/blob/master/helper_scripts/run_methtuple.sh](https://github.com/PeteHaitch/methtuple/blob/master/helper_scripts/run_methtuple.sh)). This helper script makes extensive use of `GNU parallel` \citep{Tange:2011ty}. While Python-level parallel processing is desirable, this `GNU parallel`-based approach was simpler to implement and sufficient for my purposes.
 
@@ -422,23 +422,23 @@ The output format of `methtuple` is tab-delimited plain text, optionally compres
 
 \subsection{Performance}
 
-I have used `methtuple` to perform methylation calling at CpG m-tuples, $m = 1, \ldots, 8$, for over 50 whole-genome bisulfite-sequencing samples. Figure \ref{fig:methtuple_runtime} shows the distribution of running times and Figure \ref{fig:methtuple_memory} the maximum memory usage across all the samples from the EPISCOPE, Lister and Ziller datasets. For each sample, each chromosome was processed using a single core on one of the shared-use servers in the Bioinformatics Division (see Table \ref{tab:unices} in the Appendix for details of these machines).
+I have used `methtuple` to perform methylation calling at CpG m-tuples, $m = 1, \ldots, 8$, for $40$ whole-genome bisulfite-sequencing samples. Figure \ref{fig:methtuple_runtime} shows the distribution of running times and Figure \ref{fig:methtuple_memory} the maximum memory usage across all the samples from the EPISCOPE, Lister and Ziller datasets. For each sample, each chromosome was processed using a single core on one of the shared-use servers in the Bioinformatics Division (see Table \ref{tab:unices} in the Appendix for details of these machines).
 
 The running time of `methtuple` is proportional to the number of reads mapped to the chromosome, which is proportional to the length of the chromosome and its ploidy. The running time is largely independent of the tuple size (`-m`). The variation in running times within a chromosome is due to the number of reads generated per sample and the length of the reads, where the length of a paired-end read is defined as the sum of the mates' lengths. Samples with more reads take longer to process and samples sequenced with longer reads take longer because these contain more m-tuples.
 
-The maximum memory usage is not strictly proportional to chromosome length. It is instead driven by the number and density of CpGs on the chromosome.  For example, chromosome 19, which has the highest CpG density of all the autosomes in the human genome, requires far more memory than chromosome 18, which has less than half the CpG density of chromosome 19 (see Table \ref{tab:cpg_density_hg19}). The relationship between the maximum memory usage and the tuple size (`-m`) is complex; more data have to be retained as `-m` increases, thus increasing the memory usage, but fewer reads contain tuples of that size and so there aren't as many m-tuples or observations on these to count and retain. Therefore, memory usage is relatively constant across values of `-m` for a given chromosome. The obvious exception is for the results labelled `2ac`, which used the `--all-combinations` flag in conjunction with `-m 2`. This means that all 2-tuples with $NIL \geq 0$ were computed and there are many, many more CpG 2-tuples with $NIL \geq 0$ than there are with $NIL = 0$, hence the increase in memory usage.
+The maximum memory usage is not strictly proportional to chromosome length. It is instead driven by the number and density of CpGs on the chromosome.  For example, chromosome 19, which has the highest CpG density of all the autosomes in the human genome, requires far more memory than chromosome 18, which has less than half the CpG density of chromosome 19 (see Table \ref{tab:cpg_density_hg19}). The relationship between the maximum memory usage and the tuple size (`-m`) is complex; more data have to be retained as `-m` increases, thus increasing the memory usage, but fewer reads contain tuples of that size and so there aren't as many m-tuples or observations on these to count and retain. Memory usage is therefore relatively constant across values of `-m` for a given chromosome. The obvious exception is for the results labelled `2ac`, which used the `--all-combinations` flag in conjunction with `-m 2`. This means that all 2-tuples with $NIL \geq 0$ were extracted and there are many, many more CpG 2-tuples with $NIL \geq 0$ than there are with $NIL = 0$, hence the increase in memory usage.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_runtime.pdf}
-\caption[\texttt{methtuple} running time]{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{--all-combinations} was set. Note that the reported $49$ samples separately counts each of the Ziller sequencing runs (see Chapter \ref{chap:datasets} for details).}
+\caption[\texttt{methtuple} running time]{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{--all-combinations} was set.}
 \label{fig:methtuple_runtime}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_memory.pdf}
-\caption[\texttt{methtuple} memory usage]{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{--all-combinations} was set. Note that the reported $49$ samples separately counts each of the Ziller sequencing runs (see Chapter \ref{chap:datasets} for details).}
+\caption[\texttt{methtuple} memory usage]{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{--all-combinations} was set.}
 \label{fig:methtuple_memory}
 \end{figure}
 
@@ -458,4 +458,6 @@ print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", f
 
 \section{Summary}
 
-__TODO: necessary?__
+This chapter has detailed the first steps in a bioinformatics analysis of whole-genome bisulfite-sequencing data. There are many decisions to be made at each step and these will ultimately affect the quality of the data available for downstream analysis.
+
+This chapter also introduced `methtuple`, the first of several pieces of software that were developed as part of my thesis. `methtuple` is software for calling methylation patterns at m-tuples from whole-genome bisulfite-sequencing data. It will be essential for our later analysis of within-fragment co-methylation (Chapter \ref{chap:co-methylation}) and has wider utility in facilitating other downstream analyses based on methylation patterns at m-tuples (Chapter \ref{chap:wgbs_downstream_analyses}).
