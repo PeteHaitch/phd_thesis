@@ -139,9 +139,9 @@ A German chemist, W.G. Ruppel, first identified a methylated nucleic acid in 189
 
 [^tuberculosis]: _Mycobacterium tuberculosis_ was then known as _Tubercle bacillus_.
 
-In 1945, Hotchkiss ultimately proved Johnson and Coghill correct when he isolated _5-methylcytosine_ from nucleic acid prepared from cow thymus \citep{HOTCHKISS:1948va}. Using paper chromatography, Hotchkiss demonstrated that methylated cytosine existed and was distinct from conventional cytosine and uracil.
+In 1945, Hotchkiss ultimately proved Johnson and Coghill correct when he isolated 5-methylcytosine from nucleic acid prepared from cow thymus \citep{HOTCHKISS:1948va}. Using paper chromatography, Hotchkiss demonstrated that methylated cytosine existed and was distinct from conventional cytosine and uracil.
 
-The typical site of DNA methylation is at the C5 carbon position of a cytosine base, hence _5-methylcytosine_. Figure \ref{fig:5mC} shows the structure of 5mC.
+The typical site of DNA methylation is at the C5 carbon position of a cytosine base, hence 5-methylcytosine. Figure \ref{fig:5mC} shows the structure of 5mC.
 
 \begin{figure}[!htb]
 \centering
@@ -243,7 +243,7 @@ _DNMT3a_ and _DNMT3b_ are known as the _de novo_ methyltransferases, although th
 
 [^KO]: A knockout mouse for gene $X$ is a mouse that has been genetically engineered to remove or otherwise inactivate gene $X$. Mouse knockouts can be either heterozygous knockouts (one copy still of the gene is still present/active) or homozygous knockouts (both copies of gene absent/inactive).
 
-_DNMT2_, now known as _TRDMT1_, was once thought to be a DNA methyltransferase but was shown to in fact methylate a small RNA and not DNA \citep{Goll:2006kb}. Another protein, _DNMT3L_, is homologous to _DNMT3a_ and _DNMT3b_ but does contain catalytic domain that is necessary for methyltransferase activity. Instead, DNMT3L is thought to stimulate the activity of _DNMT3a_ and _DNMT3b_ \citep{Jurkowska:2011dt}.
+_DNMT2_, now known as _TRDMT1_, was once thought to be a DNA methyltransferase but was shown to in fact methylate a small RNA and not DNA \citep{Goll:2006kb}. Another protein, _DNMT3L_, is homologous to _DNMT3a_ and _DNMT3b_ but does contain catalytic domain that is necessary for methyltransferase activity. Instead, _DNMT3L_ is thought to stimulate the activity of _DNMT3a_ and _DNMT3b_ \citep{Jurkowska:2011dt}.
 
 The readers of DNA methylation recognise methylated DNA. These readers can recruit additional proteins to the site of the methylated cytosine to perform a variety of functions related to gene expression. For example, the methyl-CpG-binding domain (_MBD_) group of proteins bind to DNA containing a methylated CpG, which can then suppress gene expression by preventing transcription factor binding at that site \citep{Nan:1993gma}. Another group, the ubiquitin-like, containing PHD and RING finger domain (_UHRF_) proteins, help _DNMT1_ methylate hemimethylated DNA, such as the daughter strand created during DNA replication \citep{Sharif:2007ft, Bostick:2007jh}.
 
@@ -251,11 +251,11 @@ The removal or erasure of DNA methylation, called _demethylation_, may be charac
 
 Active demethylation is currently a hot topic in epigenetics research. Multiple mechanisms have been proposed, and it is indeed likely that there are multiple ways to achieve active demethylation. These mechanisms were recently reviewed by \citet{Wu:2014gw}, which I briefly summarise:
 
-1. The direct removal of the methyl group from _5mC_ is considered unlikely due to the strong carbon-carbon bond between the methyl group and the cytosine.
+1. The direct removal of the methyl group from 5mC is considered unlikely due to the strong carbon-carbon bond between the methyl group and the cytosine.
 2. There is evidence that the DNA repair machinery can be co-opted to remove a methylated base or the surrounding region. The excised base or region is then repaired with unmethylated cytosines replacing 5mCs.
-3. 5mC oxidation-dependent active DNA demethylation. This follows from the observation that the TET enzymes can iteratively oxidate a _5mC_ $\to$ _5hmC_ $\to$ _5fC_ $\to$ _5caC_ reaction. The removal of _5hmC_, _5fC_ or _5caC_ is biochemically 'easier' than the removal of _5mC_ and could occur via a more efficient form of replication-dependent demethylation, direct removal of the oxidized methyl group or through the DNA repair machinery.
+3. 5mC oxidation-dependent active DNA demethylation. This follows from the observation that the TET enzymes can iteratively oxidate a 5mC $\to$ 5hmC $\to$ 5fC $\to$ 5caC reaction. The removal of 5hmC, 5fC or 5caC is biochemically 'easier' than the removal of 5mC and could occur via a more efficient form of replication-dependent demethylation, direct removal of the oxidized methyl group or through the DNA repair machinery.
 
-One question raised by the third point is whether _5hmC_, _5fC_ and _5caC_ are simply intermediate products in an active demethylation cycle or if they themselves are bona fide epigenetic marks. This is an active area of research.
+One question raised by the third point is whether 5hmC, 5fC and 5caC are simply intermediate products in an active demethylation cycle or if they themselves are bona fide epigenetic marks. This is an active area of research.
 
 \section{Assays for studying DNA methylation}\label{sec:dna_methylation_assays}
 
