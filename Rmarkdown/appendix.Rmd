@@ -129,7 +129,7 @@ unix305      & $4\times$ AMD Opteron 6276 @ 2.3GHz  & 16                  & 64  
 
 \section{Software details}\label{app:software_details}
 
-The analyses described in my thesis made extensive use of R (`R Under development (unstable) (2014-10-29 r66891)` and `R version 3.2.0 (2015-04-16)`) and Python (`v2.6.6`). All analyses were run on one of the servers described above. The scripts used to prepare the results for each chapter are available from \url{https://github.com/PeteHaitch/phd_thesis_analyses}. Further details of software used are available in Appendix \ref{app:software_details}.
+The analyses described in my thesis made extensive use of R (`R Under development (unstable) (2014-10-29 r66891)` and `R version 3.2.0 (2015-04-16)`) and Python (`v2.7`). All analyses were run on one of the servers described above. The scripts used to prepare the results for each chapter are available from \url{https://github.com/PeteHaitch/phd_thesis_analyses}. Further details of software used are available in Appendix \ref{app:software_details}.
 
 I developed several pieces of software during my PhD. These are listed in below, along with the version used in for analyses in my thesis:
 
