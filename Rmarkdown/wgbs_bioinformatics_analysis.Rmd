@@ -323,6 +323,8 @@ In order to study these phenomena, we firstly need software that can perform met
 
 \begin{table}[h]
 \centering
+\caption[Software for calling methylation patterns at m-tuples]{Other software for methylation calling at m-tuples and their limitations. Abbreviations: \texttt{bme} =  \texttt{bismark\_methylation\_extractor}.}
+\label{tab:other_m-tuple_methylation_callers}
 \begin{tabulary}{\textwidth}{LLLL}
 \toprule
 Software           & Reference                                & Input                                              & Limitations                                                                \\ \midrule
@@ -331,8 +333,6 @@ methpat  & \url{https://github.com/bjpop/methpat} & Output of \texttt{bme} & Des
 DMEAS    & \citet{He:2013cj}                       & Output of \texttt{bme} & Windows operating system only. Perl code only available as PDF file.             \\
 \bottomrule
 \end{tabulary}
-\caption[Software for calling methylation patterns at m-tuples]{Other software for methylation calling at m-tuples and their limitations. Abbreviations: \texttt{bme} =  \texttt{bismark\_methylation\_extractor}.}
-\label{tab:other_m-tuple_methylation_callers}
 \end{table}
 
 \subsection{m-tuples}\label{sec:m-tuples}
@@ -390,7 +390,7 @@ Finally, Figure \ref{fig:methtuple_example4} shows the output if we were to anal
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_example4.pdf}
-\caption[\texttt{methtuple} 3-tuples with \texttt{--all-combinations}]{3-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2} when the \texttt{--all-combinations} flag is set.}
+\caption[\texttt{methtuple} 3-tuples with \texttt{{-}{-}all-combinations}]{3-tuples produced for each read for the toy example in Figure \ref{fig:methtuple_example2} when the \texttt{{-}{-}all-combinations} flag is set.}
 \label{fig:methtuple_example4}
 \end{figure}
 
@@ -431,16 +431,18 @@ The maximum memory usage is not strictly proportional to chromosome length. It i
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_runtime.pdf}
-\caption[\texttt{methtuple} running time]{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{--all-combinations} was set.}
+\caption[\texttt{methtuple} running time]{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{{-}{-}all-combinations} was set.}
 \label{fig:methtuple_runtime}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_memory.pdf}
-\caption[\texttt{methtuple} memory usage]{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{--all-combinations} was set.}
+\caption[\texttt{methtuple} memory usage]{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{{-}{-}all-combinations} was set.}
 \label{fig:methtuple_memory}
 \end{figure}
+
+\FloatBarrier
 
 ```{r autosomal_cpg_density_hg19, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
 library(xtable)
