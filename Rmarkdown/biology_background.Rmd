@@ -150,7 +150,7 @@ The typical site of DNA methylation is at the C5 carbon position of a cytosine b
 \label{fig:5mC}
 \end{figure}
 
-Acytosine may be described being 'methylated' or 'unmethylated', however, care must be taken when using these terms. At the lowest level, the level of single-stranded DNA, methylation is a binary event: a cytosine is either methylated or unmethylated. Double-stranded DNA, at least at _palindromic_ methylation loci[^palindromic_sequence], is generally symmetrically methylated, i.e. the loci on each strand are both methylated or both unmethylated. However, _hemimethylation_, where the methylation loci on one strand is methylated and its partner on the opposite strand is unmethylated, can and does occur.
+A cytosine may be described being 'methylated' or 'unmethylated', however, care must be taken when using these terms. At the lowest level, the level of single-stranded DNA, methylation is a binary event: a cytosine is either methylated or unmethylated. Double-stranded DNA, at least at _palindromic_ methylation loci[^palindromic_sequence], is generally symmetrically methylated, i.e. the loci on each strand are both methylated or both unmethylated. However, _hemimethylation_, where the methylation loci on one strand is methylated and its partner on the opposite strand is unmethylated, can and does occur.
 
 [^palindromic_sequence]: A palindromic DNA sequence is one that is identical when read in the 5' to 3' direction on both the original strand and the complementary strand of the double helix. For example, _CG_ is a palindromic sequence.
 
@@ -294,7 +294,7 @@ _Restriction endonucleases_ are an important technique in molecular biology. The
 
 For example, the recognition site of the restriction enzyme _HpaII_ is `CCGC`. However, _HpaII_ will only digest DNA when the second cytosine in the motif is unmethylated. The _HELP_ (_HpaII_ tiny fragment enrichment by ligation-mediated PCR) assay compares DNA digested by _HpaII_ to one digested with another restriction enzyme that has the same recognition motif but is methylation-insensitive (_MspI_) to identify _hypomethylated_ regions of a genome \citep{Khulan:2006gx}.
 
-Assays based on restriction enzyme were some of the first developed for studying DNA methylation. These were initially developed for studying a small number of loci although they have been extended to genome-scale analysis approaches \citep{Laird:2010iv}. One such genome-wide assays is _CHARM_, 'comprehensive high-throughput arrays for relative methylation' \citep{Irizarry:2008hg}). CHARM combines a methylation fractionation step (be it _MeDIP_, _HpaII_, or, as in the original publication, _McrBC_) with a tiling array and analysis techniques that leverage regional DNA methylation levels.
+Assays based on restriction enzymes were some of the first developed for studying DNA methylation. These were initially developed for studying a small number of loci although they have been extended to genome-scale analysis approaches \citep{Laird:2010iv}. One such genome-wide assays is _CHARM_, 'comprehensive high-throughput arrays for relative methylation' \citep{Irizarry:2008hg}). CHARM combines a methylation fractionation step (be it _MeDIP_, _HpaII_, or, as in the original publication, _McrBC_) with a tiling array and analysis techniques that leverage regional DNA methylation levels.
 
 While restriction enzyme assays do not typically provide single-base resolution data, the `methylCRF` software \citep{Stevens:2013hv} is able to infer single CpG methylation levels by combining data from a restriction enzyme based assay (MRE-seq) with one based on affinity enrichment (MeDIP-seq) in a sophisticated statistical analysis.
 
@@ -398,7 +398,7 @@ The bisulfite-treatment of DNA can introduce biases and other problems. Three ex
 
 \subsection{DNA kinetics assays}\label{sec:dna_kinetics_assays}
 
-Ideally, an assay of DNA methylation could natively 'read' methylated cytosines as a distinct signal from unmethylated cytosines. This idea forms the basis of assays using the kinetics of DNA to infer the presence of DNA methylation and other DNA modifications. While very exciting, these assays do not yet scale to studying genome-wide DNA methylation levels in mammalian-sized genomes.
+Ideally, an assay of DNA methylation could simply 'read' methylated cytosines as a distinct signal from unmethylated cytosines. This idea forms the basis of assays using the kinetics of DNA to infer the presence of DNA methylation and other DNA modifications. While very exciting, these assays do not yet scale to studying genome-wide DNA methylation levels in mammalian-sized genomes.
 
 The only commercially available assay in this class is the Pacific Biosciences SMRT technology \citep{Flusberg:2010hra}. It infers the presence of DNA modifications by comparing the time it takes to 'read' the modified form of a base, such as 5mC, to the time it takes to read its unmodified form.
 
