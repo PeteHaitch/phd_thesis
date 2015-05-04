@@ -412,14 +412,6 @@ Because these densities are normalised, these plots don't show the proportion of
 
 CpG $\beta$-values are often computed by aggregating the $m$ and $u$ counts across the forward and reverse strands. On average, this doubles the sequencing coverage of each CpG but presupposes that the two strands are indeed symmetrically methylated. To investigate the validity of this assumption we can compute the correlation of strand-specific $\beta$-values. Tables \ref{tab:EPISCOPE_strand_correlations}, \ref{tab:Lister_strand_correlations}, \ref{tab:Seisenberger_strand_correlations} and \ref{tab:Ziller_merged_strand_correlations} report the Pearson correlation of these strand-specific $\beta$-values for varying sequencing coverage cutoffs.
 
-There is a considerable amount of noise in the estimates of $\beta$-values when using low sequencing coverage, as can be seen from the smaller strand-correlations at these lower cutoffs. Once we require a minimum sequencing coverage of $5\times$, we see that most samples have a very high correlation of $\beta$-values across strands, $r = 0.8$ to $0.9$, with some notable exceptions.
-
-Some of the embryonic stem cell samples (_H1\_r1_, _H1\_r2_ and _HSF1_ from the _Lister_ dataset) have less correlated strand-specific $\beta$-values, $r = 0.5$ to $0.7$. The other embryonic stem cell samples have higher correlations of $\beta$-values across strands, although the estimates are quite different between the two replicates of the same cell line (_H9_: $r = 0.77$, _H9\_Laurent_: $r = 0.92$). This suggests that caution may be warranted in combining CpG methylation levels across strands for embryonic stem cell samples.
-
-All three _Seisenberger_ samples have noticeably less correlated strand-specific $\beta$-values, including the embryonic stem cell, _J1\_1_. However, since these data are from pooled DNA, the source of this reduced correlation is difficult to pin down.
-
-Overall, with the exception of embryonic stem cells, it seems that most samples have highly correlated strand-specific CpG $\beta$-values, which means that these data can safely be combined across strands. However, it remains a good idea to first check this assumption prior to combining data across strands.
-
 ```{r EPISCOPE_strand_correlations, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
 library(xtable)
 x <- read.table("../data/strand_correlation/EPISCOPE_strand_correlations.txt",
@@ -452,7 +444,7 @@ print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", f
 ```
 
 ```{r Ziller_merged_strand_correlations, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
-x <- read.table("../data/strand_correlation/Ziller_merged_strand_correlations.txt",
+x <- read.table("../data/strand_correlation/Ziller_strand_correlations.txt",
 stringsAsFactors = FALSE)
 colnames(x) <- 1:10
 xt <- xtable(x, caption = c("Correlations of $\\beta$-values across strands for the \\emph{Ziller} dataset. Each row is a sample and each column is a minimum coverage cutoff.", "\\emph{Ziller}: Correlations of $\\beta$-values across strands"), label = "tab:Ziller_merged_strand_correlations")
@@ -460,6 +452,14 @@ align(xt) <- rep("c", ncol(x) + 1)
 digits(xt) <- 2
 print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, caption.placement = 'top')
 ```
+
+There is a considerable amount of noise in the estimates of $\beta$-values when using low sequencing coverage, as can be seen from the smaller strand-correlations at these lower cutoffs. Once we require a minimum sequencing coverage of $5\times$, we see that most samples have a very high correlation of $\beta$-values across strands, $r = 0.8$ to $0.9$, with some notable exceptions.
+
+Some of the embryonic stem cell samples (_H1\_r1_, _H1\_r2_ and _HSF1_ from the _Lister_ dataset) have less correlated strand-specific $\beta$-values, $r = 0.5$ to $0.7$. The other embryonic stem cell samples have higher correlations of $\beta$-values across strands, although the estimates are quite different between the two replicates of the same cell line (_H9_: $r = 0.77$, _H9\_Laurent_: $r = 0.92$). This suggests that caution may be warranted in combining CpG methylation levels across strands for embryonic stem cell samples.
+
+All three _Seisenberger_ samples have noticeably less correlated strand-specific $\beta$-values, including the embryonic stem cell, _J1\_1_. However, since these data are from pooled DNA, the source of this reduced correlation is difficult to pin down.
+
+Overall, with the exception of embryonic stem cells, it seems that most samples have highly correlated strand-specific CpG $\beta$-values, which means that these data can safely be combined across strands. However, it remains a good idea to first check this assumption prior to combining data across strands.
 
 \FloatBarrier
 
