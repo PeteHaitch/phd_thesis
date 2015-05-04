@@ -281,18 +281,17 @@ As part of their analysis, \citeauthor{Landan:2012kp} construct "methylation lin
 
 [^cor_equivalence]: The formula I give for $r$ is also known as the $\phi$ coefficient of a $2 \times 2$ table. The $\phi$ coefficient of a $2 \times 2$ table of binary variables, such as Table \ref{tab:landan}, is mathematically equivalent to the Pearson correlation coefficient of the same data.
 
-\begin{table}[h]
+\begin{table}[!htb]
 \centering
 \caption[Counts of reads at a CpG 2-tuple]{Summary of read counts at a CpG 2-tuple. For example, $n_{um}$ is the number of reads methylated at the first CpG and unmethylated at the second CpG. We use the 'plus' notation to denote the sum over the index it replaces, e.g., $n_{u+} = n_{uu} + n_{um}$.}
 \label{tab:landan}
-\begin{tabular}{@{}cccc@{}}
-\cmidrule(l){2-4}
- & \multicolumn{3}{c}{Second CpG} \\
- \cmidrule(l){2-4}
-\multirow{3}{*}{First CpG} & & & \\
- & $n_{uu}$       & $n_{um}$       & $n_{u+}$ \\
- & $n_{mu}$       & $n_{mm}$       & $n_{m+}$ \\ \cmidrule(l){2-4}
- & $n_{+u}$  & $\cdot n_{+m}$  & $n_{++} = n$      \\
+\begin{tabular}{@{}ccccl@{}}
+\cmidrule(l){2-5}
+                           &              & \multicolumn{2}{c}{Second CpG} &              \\ \cmidrule(lr){3-4}
+                           &              & Unmethylated    & Methylated   & Total        \\ \cmidrule(l){2-5}
+\multirow{2}{*}{First CpG} & Unmethylated & $n_{uu}$        & $n_{um}$     & $n_{u+}$     \\
+                           & Methylated   & $n_{mu}$        & $n_{mm}$   & $n_{m+}$     \\
+                           & Total        & $n_{+u}$        & $n_{+m}$     & $n = n_{++}$ \\ \cmidrule(l){2-5}
 \end{tabular}
 \end{table}
 

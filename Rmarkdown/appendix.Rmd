@@ -114,17 +114,17 @@ All computational work was performed on one of the Bioinformatics Division's HP 
 
 \begin{table}[h]
 \centering
-\begin{tabular}{@{}lllll@{}}
-\toprule
-Machine name & Processors & Cores per processor & Total number of cores & RAM    \\ \midrule
-unix88       & $4\times$ Intel Xeon X7350 @ 2.93GHz & 4                   & 16                    & 128 GB \\
-unix301      & $4\times$ AMD Opteron 8435 @ 2.6GHz  & 6                   & 24                    & 256 GB \\
-unix302      & $4\times$ AMD Opteron 6174 @ 2.2GHz  & 12                  & 48                    & 512 GB \\
-unix303      & $4\times$ AMD Opteron 6176 @ 2.3GHz  & 12                  & 48                    & 512 GB \\
-unix305      & $4\times$ AMD Opteron 6276 @ 2.3GHz  & 16                  & 64                    &        \\ \bottomrule
-\end{tabular}
 \caption{Bioinformatics Division server specifications.}
 \label{tab:unices}
+\begin{tabulary}{\textwidth}{LLLL}
+\toprule
+Machine name & Processors & Number of cores & RAM    \\ \midrule
+unix88       & $4\times$ Intel Xeon X7350 @ 2.93GHz & 16 & 128 GB \\
+unix301      & $4\times$ AMD Opteron 8435 @ 2.6GHz  & 24 & 256 GB \\
+unix302      & $4\times$ AMD Opteron 6174 @ 2.2GHz  & 48 & 512 GB \\
+unix303      & $4\times$ AMD Opteron 6176 @ 2.3GHz  & 48 & 512 GB \\
+unix305      & $4\times$ AMD Opteron 6276 @ 2.3GHz  & 64 & 512 GB \\ \bottomrule
+\end{tabulary}
 \end{table}
 
 \section{Software details}\label{app:software_details}

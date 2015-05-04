@@ -338,13 +338,13 @@ Suppose we observe $(X, Y)$ for $n$ samples. Denote by $n_{ij}$ the number of su
 \centering
 \caption[$2 \times 2$ contingency table notation]{Notation for a $2 \times 2$ contingency table.}
 \label{tab:2x2}
-\begin{tabular}{@{}cccc@{}}
-\cmidrule(l){2-4}
- & \multicolumn{3}{c}{Column} \\
-\multirow{3}{*}{Row} & & & \\
- & $n_{11}$       & $n_{12}$       & $n_{1 +}$ \\
- & $n_{21}$       & $n_{22}$       & $n_{2 +}$ \\
- & $n_{+ 1}$  & $n_{+ 2}$  & $n_{+ +} = n$ \\ \cmidrule(l){2-4}
+\begin{tabular}{@{}ccccl@{}}
+\cmidrule(l){2-5}
+                   &       & \multicolumn{2}{c}{Y} &              \\ \cmidrule(lr){3-4}
+                   &       & 1         & 2         & Total        \\ \cmidrule(l){2-5}
+\multirow{2}{*}{X} & 1     & $n_{11}$  & $n_{12}$  & $n_{1+}$     \\
+                   & 2     & $n_{21}$  & $n_{22}$  & $n_{2+}$     \\
+                   & Total & $n_{+1}$  & $n_{+m}$  & $n = n_{++}$ \\ \cmidrule(l){2-5}
 \end{tabular}
 \end{table}
 

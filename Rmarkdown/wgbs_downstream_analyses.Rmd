@@ -311,7 +311,7 @@ Shown in Table \ref{tab:methpat_sparsity} is the size of the `MethPat` objects i
 
 \begin{table}[h]
 \centering
-\caption[Size of \texttt{MethPat} objects for the \emph{EPISCOPE} data]{Size of \texttt{MethPat} objects for the \emph{EPISCOPE} data. All m-tuples are stranded. The `size' of the \texttt{MethPat} object, reported in gigabytes (GB), is computed using the \texttt{pryr::object\_size()} function (\url{http://cran.r-project.org/web/packages/pryr/index.html}). The `number of rows' corresponds to the number of m-tuples in the object. The `number of assays' is $2^{\text{m}}$, where m is the size of the m-tuples. The final column is a measure of how sparse the data are: a $0$ values means that particular methylation pattern was not observed in that particular sample and an \texttt{NA} value means that that m-tuple was not observed in that particular sample.}
+\caption[Size of \texttt{MethPat} objects for the \emph{EPISCOPE} data]{Size of \texttt{MethPat} objects for the \emph{EPISCOPE} data. All m-tuples are stranded. The `size' of the \texttt{MethPat} object, reported in gigabytes (GB), is computed using the \texttt{pryr::object\_size()} function (\url{http://cran.r-project.org/web/packages/pryr/index.html}). The `number of rows' corresponds to the number of m-tuples in the object. The `number of assays' is $2^{\text{m}}$, where m is the size of the m-tuples. The final column is a measure of how sparse the data are: a $0$ value means that particular methylation pattern was not observed in that particular sample and an \texttt{NA} value means that that m-tuple was not observed in that particular sample.}
 \label{tab:methpat_sparsity}
 \begin{tabulary}{\textwidth}{LLLLL}
 \toprule
