@@ -47,27 +47,31 @@
   - __DONE: Cited page in Agresti's intro to CDA textbook (2007).__
 - [x] Figure out why E18BUF is missing chrM for within-fragment $NIL \geq 0$ plots.
   - __DONE: I've noted the E18BUF omission in the caption. E18BUF has no chrM data in the 2ac-tuples `MethPat` object because methtuple was never run on that sample-chromosome-2ac combination (nor was chrY). This was due to some sort of omission in the `run_methtuple.sh` script__
-- [ ] Figure out what's going on with some of the EPISCOPE and Ziller samples that have a high autosome (chr21, I think).
+- [x] Figure out what's going on with some of the EPISCOPE and Ziller samples that have a high autosome (chr21, I think).
   - __DONE: Yes, it's chr21. But I have no idea what's causing this. Truly weird. I've commented on this in my thesis__.
+- [x] \texttt{--all-combinations} prints as '-all-combinations' and other examples
+  - __DONE: Replaced with \texttt{{-}{-}all-combinations}__
+- [x] Fix formatting of $2 \times 2$ contingency tables to be consistent.
+  - __DONE__
+- [x] Find submission documents
+  - __DONE__
+- [x] Tables in datasets chapter run outside margins and are generally a bit of a mess.
+  - __DONE: Fixed these tables__
+
 
 - [ ] Plots of beta-correlations separated by strand in a clearer way.
   - Use loess to summarise trend
   - In general, plots of beta-correlations are noisy. Just show trend?
   - Plot the difference of correlations between strands?
 - [ ] Add a representative plot of the within-fragment data for a single sample
-- [ ] Fix formatting of $2 \times 2$ contingency tables to be consistent.
 - [ ] Increase axis labels in simulation study figures?
-- [ ] Find submission documents
 - [ ] Add analysis folder to github
   - First upload `.Rmd` analysis scripts.
   - Upload <sample>.CG.<m>.tsv.gz Lister, Seisenberger, Ziller samples (m = 1, 2, 2ac) to figshare. All 1-tuples are under Figshare's 250 MB limit but the same is not true of 2-tuples or 2ac-tuples.
 - [ ] Fix MethylationTuples::mantelhaen(). Works if copy-pasted into session but not as part of MethylationTuples package. Then update Software Details in Appendix.
 - [ ] Look at some scatterplots of beta-value pairs from simulated data
 - "dataset" vs. "data set". Include in `methsim` chapter if revealing.
-- [ ] \texttt{--all-combinations} prints as '-all-combinations' and other examples
-  - Works when typed in markdown as `--all-combinations`, but this isn't always possible.
 - [ ] Update title of methtuple memory usage plot to refer to 40 samples rather than 49.
-- [ ] Tables in datasets chapter run outside margins and are generally a bit of a mess.
 - [ ] Check that all Ziller plots are titled "Ziller" and not "Ziller merged"
 - [ ] Check typesetting of C++
 - [ ] Include `coMET` paper in Chapter 6.
