@@ -417,8 +417,9 @@ library(xtable)
 x <- read.table("../data/strand_correlation/EPISCOPE_strand_correlations.txt",
 stringsAsFactors = FALSE)
 colnames(x) <- 1:10
+x <- x[, 1:5]
 xt <- xtable(x, caption = c("Correlations of $\\beta$-values across strands for the \\emph{EPISCOPE} dataset. Each row is a sample and each column is a minimum coverage cutoff.", "\\emph{EPISCOPE}: Correlations of $\\beta$-values across strands"), label = "tab:EPISCOPE_strand_correlations")
-align(xt) <- rep("c", ncol(x) + 1)
+align(xt) <- c("r", rep("c", ncol(x)))
 digits(xt) <- 2
 print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, caption.placement = "top")
 ```
@@ -427,8 +428,9 @@ print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", f
 x <- read.table("../data/strand_correlation/Lister_strand_correlations.txt",
 stringsAsFactors = FALSE)
 colnames(x) <- 1:10
+x <- x[, 1:5]
 xt <- xtable(x, caption = c("Correlations of $\\beta$-values across strands for the \\emph{Lister} dataset. Each row is a sample and each column is a minimum coverage cutoff.", "\\emph{Lister}: Correlations of $\\beta$-values across strands"), label = "tab:Lister_strand_correlations")
-align(xt) <- rep("c", ncol(x) + 1)
+align(xt) <- c("r", rep("c", ncol(x)))
 digits(xt) <- 2
 print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, caption.placement = 'top')
 ```
@@ -437,18 +439,20 @@ print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", f
 x <- read.table("../data/strand_correlation/Seisenberger_strand_correlations.txt",
 stringsAsFactors = FALSE)
 colnames(x) <- 1:10
+x <- x[, 1:5]
 xt <- xtable(x, caption = c("Correlations of $\\beta$-values across strands for the \\emph{Seisenberger} dataset. Each row is a sample and each column is a minimum coverage cutoff.", "\\emph{Seisenberger}: Correlations of $\\beta$-values across strands"), label = "tab:Seisenberger_strand_correlations")
-align(xt) <- rep("c", ncol(x) + 1)
+align(xt) <- c("r", rep("c", ncol(x)))
 digits(xt) <- 2
 print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, caption.placement = 'top')
 ```
 
 ```{r Ziller_merged_strand_correlations, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
-x <- read.table("../data/strand_correlation/Ziller_strand_correlations.txt",
+x <- read.table("../data/strand_correlation/Ziller_merged_strand_correlations.txt",
 stringsAsFactors = FALSE)
 colnames(x) <- 1:10
+x <- x[, 1:5]
 xt <- xtable(x, caption = c("Correlations of $\\beta$-values across strands for the \\emph{Ziller} dataset. Each row is a sample and each column is a minimum coverage cutoff.", "\\emph{Ziller}: Correlations of $\\beta$-values across strands"), label = "tab:Ziller_merged_strand_correlations")
-align(xt) <- rep("c", ncol(x) + 1)
+align(xt) <- c("r", rep("c", ncol(x)))
 digits(xt) <- 2
 print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, caption.placement = 'top')
 ```

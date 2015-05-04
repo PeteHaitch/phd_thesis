@@ -57,7 +57,16 @@
   - __DONE__
 - [x] Tables in datasets chapter run outside margins and are generally a bit of a mess.
   - __DONE: Fixed these tables__
-
+- [x] Check typesetting of C++
+  - __DONE: Used a macro__
+- [x] Check Sherman `-CG` and `-CH` parameters (e.g., `--CG` or `-CG`)
+  - __DONE__
+- [x] "dataset" vs. "data set".
+  - __DONE: Using dataset__
+- [x] Include timings from Lacey et al. in `methsim` chapter.
+  - __DONE__
+- [x] Check the size of the simulated data as a `MethPat` object.
+  - __DONE: updated__
 
 - [ ] Plots of beta-correlations separated by strand in a clearer way.
   - Use loess to summarise trend
@@ -69,18 +78,13 @@
   - First upload `.Rmd` analysis scripts.
   - Upload <sample>.CG.<m>.tsv.gz Lister, Seisenberger, Ziller samples (m = 1, 2, 2ac) to figshare. All 1-tuples are under Figshare's 250 MB limit but the same is not true of 2-tuples or 2ac-tuples.
 - [ ] Fix MethylationTuples::mantelhaen(). Works if copy-pasted into session but not as part of MethylationTuples package. Then update Software Details in Appendix.
-- [ ] Look at some scatterplots of beta-value pairs from simulated data
-- "dataset" vs. "data set". Include in `methsim` chapter if revealing.
+- [ ] Look at some scatterplots of beta-value pairs from simulated data. Include in `methsim` chapter if revealing.
 - [ ] Update title of methtuple memory usage plot to refer to 40 samples rather than 49.
 - [ ] Check that all Ziller plots are titled "Ziller" and not "Ziller merged"
-- [ ] Check typesetting of C++
 - [ ] Include `coMET` paper in Chapter 6.
 - [ ] Clarify the definition of $\psi_{U}$ for $2 \times 2 \times K$; is it the same as the "collapsed" estimator?
-- [ ] Check Sherman `-CG` and `-CH` parameters (e.g., `--CG` or `-CG`)
-- [ ] Check the size of the simulated data as a `MethPat` object.
 - [ ] Add $\beta$ to the y-axis of the $\beta$-by-PM boxplots.
 - [ ] Fix `BiocParallel` citation.
-- [ ] Include timings from Lacey et al. in `methsim` chapter.
 - [ ] Be more specific with what was discovered in the analyses of co-methylation.
 - [ ] Move estimation of RRBS CpGs from the appendix to online.
 - [ ] Add `makeCGI` to list of software.

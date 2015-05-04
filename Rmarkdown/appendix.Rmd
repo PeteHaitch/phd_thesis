@@ -135,8 +135,8 @@ I developed several pieces of software during my PhD. These are listed in below,
 
 - `methtuple` (`v1.4.0`)
 - `GenomicTuples` (`v1.2.1`)
-- `MethylationTuples` (`v0.3.0.9007`)
-- `methsim` (`v0.5.0.9013`)
+- `MethylationTuples` (`v0.3.0.9007`, commit `4e127d2`)
+- `methsim` (`v0.5.0.9013`, commit `9162c8b`)
 
 In addition, I made use of the R packages listed in Table \ref{tab:R_packages} and gratefully acknowledge the developers.
 
@@ -147,10 +147,12 @@ x <- read.table("../data/r_packages.txt",  header = TRUE,
 # Drop packages with "*" column set, which indicates the package is a
 # "dependency of a dependency".
 x <- x[x[, 2] != "*", ]
-x <- x[, -2]
-xt <- xtable(x, caption = c("R packages used in thesis as reported by \texttt{devtools::session\\_info()}", "R packages used in thesis"),
+x <- x[, -c(2, 4)]
+# Drop MethylationTuples and methsim which are reported elsewhere
+x <- x[!x$package %in% c("methsim", "MethylationTuples", "GenomicTUples"), ]
+xt <- xtable(x, caption = c("R packages used in thesis as reported by \\texttt{devtools::session\\_info()}", "R packages used in thesis"),
              label = "tab:R_packages")
-align(xt) <- rep("c", ncol(x) + 1)
+align(xt) <- rep("l", 4)
 print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable",
       floating = FALSE, include.rownames = FALSE, caption.placement = "top")
 ```

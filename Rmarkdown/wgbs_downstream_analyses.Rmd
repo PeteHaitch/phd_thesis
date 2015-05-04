@@ -237,7 +237,7 @@ Generally speaking, there are fewer software options for analysing methylation p
 
 I have also experienced considerable difficulty in applying some of these methods owing to poor software implementations. To give two examples, `DMEAS` \citep{He:2013cj} is only available as a Windows binary or as a Perl script that itself is only available as a PDF file, and I have been unable to install `methclone` due to compilation errors.
 
-`MethPipe` is perhaps the best documented and potentially extensible software for analysing methylation patterns at m-tuples. `MethPipe` is mostly written in C++ and is designed as a suite of tools for a complete 'pipeline' analysis of bisulfite-sequencing data. As such, it does not feature tools that are particularly amenable to interactive or exploratory analyses. In fact, I am unaware of any software that allows easy exploratory analyses of methylation patterns at m-tuples, which in part motivated the development of `MethylationTuples`.
+`MethPipe` is perhaps the best documented and potentially extensible software for analysing methylation patterns at m-tuples. `MethPipe` is mostly written in \CC and is designed as a suite of tools for a complete 'pipeline' analysis of bisulfite-sequencing data. As such, it does not feature tools that are particularly amenable to interactive or exploratory analyses. In fact, I am unaware of any software that allows easy exploratory analyses of methylation patterns at m-tuples, which in part motivated the development of `MethylationTuples`.
 
 \section{\texttt{MethylationTuples}}\label{sec:MethylationTuples}
 
@@ -250,7 +250,7 @@ I have made significant progress towards the first goal with `methtuple` (see Se
 
 \subsection{Design}
 
-`MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples. It is released under an Artistic-2.0 license, consistent with core Bioconductor packages. I chose to write this software in R because it is a very popular language for data analysis, particularly in bioinformatics, and facilitates both batch and interactive usage. R is also my computational mother tongue and an R package is a convenient unit for sharing reusable code. To improve the performance of key functionality, parts of `MethylationTuples` are written in `C++`, making use of the `Rcpp` package \citep{Eddelbuettel:2011to,Eddelbuettel:2013if}.
+`MethylationTuples` is an R package for managing, analysing and visualising methylation patterns at m-tuples. It is released under an Artistic-2.0 license, consistent with core Bioconductor packages. I chose to write this software in R because it is a very popular language for data analysis, particularly in bioinformatics, and facilitates both batch and interactive usage. R is also my computational mother tongue and an R package is a convenient unit for sharing reusable code. To improve the performance of key functionality, parts of `MethylationTuples` are written in \CC, making use of the `Rcpp` package \citep{Eddelbuettel:2011to,Eddelbuettel:2013if}.
 
 While initially developed to support my research into co-methylation (Chapter \ref{chap:co-methylation}), the data structures developed in `MethylationTuples` are well-suited to any analysis based on methylation patterns of m-tuples such as methylation entropy, allele-specific methylation and the identification of epialleles. Of course, `MethylationTuples` can equally be used to develop methods based on 1-tuples, such as identifying differential methylation, since 1-tuples are just a particular type of m-tuple.
 
