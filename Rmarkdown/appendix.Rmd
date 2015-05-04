@@ -59,8 +59,8 @@ Pr(Z_{h', i'} = z_{h', i'} | Z_{h, i} = z_{h, i})
 \label{eq:transition_matrix_nid}
 \Pi =
  \begin{pmatrix}
-  (1 - p_{h'}) + c p_{h} & p_{h'} - c p_{h} \\
-  \big [ (1 - p_{h'}) + c p_{h} \big ] (1 - p_{h}) & \big [ p_{h'} + c (1 - p_{h}) \big ] p_{h}
+  (1 - p_{h'}) +c p_{h} & p_{h'} -c p_{h} \\
+  (1 - p_{h'}) -c (1 - p_{h}) & p_{h'} + c (1 - p_{h})
  \end{pmatrix}
 \end{equation*}
 

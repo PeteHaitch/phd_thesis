@@ -35,10 +35,11 @@
   __DONE__
 - [x] Does the WGBS bioinformatics analysis chapter need a summary?
   - __DONE: added__
+- [x] Re-visit summary of WGBS statistical framework chapter
+  - __DONE__
 
-- [ ] Re-visit summary of WGBS statistical framework chapter
-  - This chapter highlights that there are many levels of variation and common summaries of the data aggregate over these.
-- [ ] What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?
+- [x] What is the general restriction on $c$ when $p_{h, i} \neq p_{h', i'}$?
+  __DONE: All of $\Pi$ must be $\in [0, 1]$ and alll rows of $\Pi$ must sum to 1.__
 - [ ] Figure out what's going on with some of the EPISCOPE and Ziller samples that have a high autosome (chr21, I think); figure out why E18BUF is missing chrM in $NIL \geq 0$ plots.
 - [ ] Should gene names and cytosine modifications be _italicised_.
 - [ ] Plots of beta-correlations separated by strand in a clearer way.
