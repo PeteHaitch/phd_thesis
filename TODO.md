@@ -81,18 +81,26 @@
   - __DONE: Decided against this; there are enough plots already__
 - [x] Increase axis labels in simulation study figures.
   - __DONE__
+- [ ] Update title of methtuple memory usage plot to refer to 40 samples rather than 49.
+  - __DONE: Don't do this. There were 49 runs, so use that number__
+- [x] Check that all Ziller plots are titled "Ziller" and not "Ziller merged"
+  - __DONE__
+- [ ] Add $\beta$ to the y-axis of the $\beta$-by-PM boxplots.
+  - __DONE__- [ ] Fix MethylationTuples::mantelhaen(). Works if copy-pasted into session but not as part of MethylationTuples package. Then update Software Details in Appendix.
+- [x] Explain why Seisenberger only has 2 partitioned methylomes
+  - __DONE__
+
+## Thursday tasks
 
 - [ ] Send Dineika the front matter.
   - Address Dineika's suggestions
   - Add Dineika to acknowledgements
-- [ ] Fix MethylationTuples::mantelhaen(). Works if copy-pasted into session but not as part of MethylationTuples package. Then update Software Details in Appendix.
-- [ ] Update title of methtuple memory usage plot to refer to 40 samples rather than 49.
-- [ ] Check that all Ziller plots are titled "Ziller" and not "Ziller merged"
+- [ ] Terry's point re convergence argument (p196)
+- [ ] Check fonts on `methtuple` performance plots are legible when printed.
+- [ ] Compress PDF
 - [ ] Clarify the definition of $\psi_{U}$ for $2 \times 2 \times K$; is it the same as the "collapsed" estimator?
-- [ ] Add $\beta$ to the y-axis of the $\beta$-by-PM boxplots.
 - [ ] Be more specific with what was discovered in the analyses of co-methylation?
 - [ ] Add `makeCGI` to list of software.
-- [ ] Compress PDF
 
 ## Friday tasks
 
