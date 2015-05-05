@@ -247,7 +247,7 @@ I now describe each step in greater detail.
 \centering
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_beta_by_pm_boxplots.pdf}
-\caption[\emph{Seisenberger}: $\beta$-values by region-type]{Boxplots of CpG $\beta$-values in each region-type following segmentation by \texttt{MethylSeekR} for the \emph{Seisenberger} dataset.}
+\caption[\emph{Seisenberger}: $\beta$-values by region-type]{Boxplots of CpG $\beta$-values in each region-type following segmentation by \texttt{MethylSeekR} for the \emph{Seisenberger} dataset. \texttt{MethylSeekR} was unable to partition the \emph{E16.5\_male\_1} methylome due to its unusual $\beta$-value distribution, hence no data is shown for this sample.}
 \label{fig:Seisenberger_beta_by_pm_boxplots}
 \end{figure}
 
