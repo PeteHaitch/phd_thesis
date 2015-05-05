@@ -51,7 +51,7 @@ The interpretation of correlations computed using the $NIL \geq 0$ is complicate
 
 \subsubsection{Stratifying by a genomic feature}\label{sec:pair_stratification}
 
-Two pairs of CpGs with an identical $IPD$ may come from two regions, even when using the $NIL = 0$ strategy. These regions mayhave very different methylation dynamics. In other words, the vector of $\beta$-values for a given sample is highly non-stationary; the correlation between two loci depends on more than just the $IPD$. An obvious variable to investigate is how strong an influence the genomic context has on these correlations of $\beta$-values. To do this, we can stratify our analysis by a genomic feature. While this does not eliminate this heterogeneity, it may help identify factors that drive some of the variation.
+Two pairs of CpGs with an identical $IPD$ may come from two regions, even when using the $NIL = 0$ strategy. These regions may have very different methylation dynamics. In other words, the vector of $\beta$-values for a given sample is highly non-stationary; the correlation between two loci depends on more than just the $IPD$. An obvious variable to investigate is how strong an influence the genomic context has on these correlations of $\beta$-values. To do this, we can stratify our analysis by a genomic feature. While this does not eliminate this heterogeneity, it may help identify factors that drive some of the variation.
 
 For any genomic feature, a pair of loci may be inside, outside or spanning the boundary of the feature. Figure \ref{fig:feature_status} illustrates the 'feature status' of some pairs of loci. Note that a pair where each locus is in a distinct feature from the same class is declared to be inside the feature, i.e. elements need not be in the same feature but rather in the same type of feature. The genomic feature should partition the genome so that each locus is either inside or outside of the feature. Since the number of 'spanning pairs' is substantially fewer than those inside or outside of the feature, and the boundaries of the feature are oftentimes fuzzy, I have excluded these 'spanning pairs' in the results shown below.
 
@@ -219,7 +219,7 @@ The message from these plots is clear, $\beta$-values of $NIL = 0$ pairs within 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CGI.pdf}
-\caption[\emph{Lister}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the Lister dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
+\caption[\emph{Lister}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Lister} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 
@@ -320,7 +320,7 @@ A limitation to these analyses is that they are based on correlations of measure
 
 \section{Estimating dependence in sparse $2 \times 2 \times K$ contingency tables}\label{sec:sparse_2x2xK_tables}
 
-We will begin with an overview of the simplest case, estimating dependence in a $2 \times 2$ contingency table (i.e. $K = 1$). We will then progressively introduce the complications of sparsity, $K > 1$, and heterogeneity across the $K$ tables. We conclude with a simulation study highlighting the performance of several different estimators of dependence in sparse $2 \times 2 \times K$ contingency tables and determinine which is most appropriate for a study of within-fragment co-methylation.
+We will begin with an overview of the simplest case, estimating dependence in a $2 \times 2$ contingency table (i.e. $K = 1$). We will then progressively introduce the complications of sparsity, $K > 1$, and heterogeneity across the $K$ tables. We conclude with a simulation study highlighting the performance of several different estimators of dependence in sparse $2 \times 2 \times K$ contingency tables and determine which is most appropriate for a study of within-fragment co-methylation.
 
 \subsection{$2 \times 2$ contingency tables}
 
@@ -755,9 +755,9 @@ The most interesting differences between samples occur in the _Lister_ dataset. 
 
 This suggests that pluripotent cells have stronger within-fragment co-methylation than do somatic or differentiated cells. Consistent with this is that the _H9_, _H9\_Laurent_ and _J1_ samples (embryonic stem cell lines), the _E6.5\_epiblast\_1_ sample (epiblasts derived from day 6.5 embryos) and the _E16.5\_male\_1_ (male progenitor germ cells derived from day 16.5 embryos) all have relatively high genome-wide estimates of $\theta$.
 
-One explanation of this result, at least for the iPSCs, is that it is due to 'reseting' of the methylome during embryonic development induction of pluripotency \citep{Lister:2011kg, Stricker:2013kl}. This explanation does not immediately carry over the the embryonic stem cell lines, although there is extensive reprogramming of DNA methylation during embryogenesis, which may be relevant \citep{Seisenberger:2013jq}.
+One explanation of this result, at least for the iPSCs, is that it is due to 'resetting' of the methylome during embryonic development induction of pluripotency \citep{Lister:2011kg, Stricker:2013kl}. This explanation does not immediately carry over the the embryonic stem cell lines, although there is extensive reprogramming of DNA methylation during embryogenesis, which may be relevant \citep{Seisenberger:2013jq}.
 
-A second observation on the results for the _Lister_ dataset is that genome-level estimates of $\theta$ decay particularly rapidly in the somatic cell lines (_ADS_, _ADS-adipose_, _FF_, _IMR90\_r1_ and _IMR90\_r2_). This is recapituled in the _IMR90\_cell\_line_ sample from the _Ziller_ dataset.
+A second observation on the results for the _Lister_ dataset is that genome-level estimates of $\theta$ decay particularly rapidly in the somatic cell lines (_ADS_, _ADS-adipose_, _FF_, _IMR90\_r1_ and _IMR90\_r2_). This is recapitulated in the _IMR90\_cell\_line_ sample from the _Ziller_ dataset.
 
 The reduced within-fragment co-methylation in the somatic cell lines may be due to culturing of the cells. As a population of cells develops from a single cell, there are errors in copying the DNA methylation patterns from mother to daughter cell. These errors disrupt the co-methylation of pairs. If the iPSC and iPSC-derived cell lines have had less (developmental) time between the laying down of the original DNA methylation pattern and the point at which they were sequenced, then there is a lower probability that the co-methylation has been disrupted by replication errors. There are also reports that DNA methylation profiles differ widely between cell lines and their precursor primary tissues \cite{Nestor:2015db}, which very likely also affect co-methylation.
 
