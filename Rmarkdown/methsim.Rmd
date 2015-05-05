@@ -430,19 +430,19 @@ In contrast to the other two summaries, the intention with `methsim` was to not 
 
 [^ar]: While _m3BI_ and _m3BII_ do include some spatial dependence of the $\mathbf{B}$ via the autoregressive perturbation, these perturbations are independent of $IPD$ and are really intended to analyse the effect of the independence condition in _m2BI_.
 
-Figure \ref{fig:methsim_spearman_beta_cors_min_cov_10_strand_collapsed_CI} shows the dramatic consequences of this modelling decision. When compared to the correlations of $\beta$-values from the _ADS_ input sample, we see that in all five models the correlations of $\beta$-values are far too strong. Stratifying these correlations by CpG islands, we see that the source of this problem is in regions outside of CpG islands (Figure \ref{fig:methsim_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}). This gives some hope that this deficiency may fixed by a more careful modelling of $\beta$-values outside CpG islands, and remains a source of ongoing work.
+Figure \ref{fig:methsim_spearman_beta_cors_min_cov_10_strand_collapsed} shows the dramatic consequences of this modelling decision. When compared to the correlations of $\beta$-values from the _ADS_ input sample, we see that in all five models the correlations of $\beta$-values are far too strong. Stratifying these correlations by CpG islands, we see that the source of this problem is in regions outside of CpG islands (Figure \ref{fig:methsim_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}). This gives some hope that this deficiency may fixed by a more careful modelling of $\beta$-values outside CpG islands, and remains a source of ongoing work.
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/methsim_spearman_beta_cors_min_cov_10_strand_collapsed_CI.pdf}
-\caption[\texttt{methsim}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values]{Spearman correlations of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for \texttt{methsim} simulated data and the \emph{ADS} input sample.}
-\label{fig:methsim_spearman_beta_cors_min_cov_10_strand_collapsed_CI}
+\includegraphics[width=\textwidth]{../figures/methsim_spearman_beta_cors_min_cov_10_strand_collapsed.pdf}
+\caption[\texttt{methsim}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values]{Spearman correlations of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for \texttt{methsim} simulated data and the \emph{ADS} input sample. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
+\label{fig:methsim_spearman_beta_cors_min_cov_10_strand_collapsed}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methsim_spearman_beta_cors_min_cov_10_strand_collapsed_CGI.pdf}
-\caption[\texttt{methsim}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for \texttt{methsim} simulated data and the \emph{ADS} input sample.}
+\caption[\texttt{methsim}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for \texttt{methsim} simulated data and the \emph{ADS} input sample. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:methsim_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 

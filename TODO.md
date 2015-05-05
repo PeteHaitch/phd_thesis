@@ -67,11 +67,9 @@
   - __DONE__
 - [x] Check the size of the simulated data as a `MethPat` object.
   - __DONE: updated__
+- [x] Plots of beta-correlations separated by strand in a clearer way.
+  - __DONE: Added loess fit__
 
-- [ ] Plots of beta-correlations separated by strand in a clearer way.
-  - Use loess to summarise trend
-  - In general, plots of beta-correlations are noisy. Just show trend?
-  - Plot the difference of correlations between strands?
 - [ ] Add a representative plot of the within-fragment data for a single sample
 - [ ] Increase axis labels in simulation study figures?
 - [ ] Add analysis folder to github

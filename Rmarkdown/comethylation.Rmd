@@ -86,7 +86,7 @@ In summary, the correlations of pairs of $\beta$-values should be cautiously int
 \FloatBarrier
 \subsection{Results}
 
-For all 40 samples in the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, I compute the Pearson and Spearman correlations using both the $NIL = 0$ and $NIL \geq 0$ strategies. I compute these genome-wide and after stratifying CpG pairs by whether they are in a CpG island. These analyses are performed separately for each strand and also for strand-collapsed $\beta$-values.
+For all 40 samples in the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, I compute the Pearson and Spearman correlations using both the $NIL = 0$ and $NIL \geq 0$ strategies. I compute these genome-wide and after stratifying CpG pairs by whether they are in a CpG island. These analyses are performed separately for each strand and also for strand-collapsed $\beta$-values. The plots of these analyses show the raw estimates as semi-transparent points and are overlaid with a loess fit to these points.
 
 \subsubsection{Can we collapse by strand?}
 
@@ -95,28 +95,28 @@ Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_5}, \ref{fig:Lister_spearma
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_spearman_beta_cors_min_cov_5.pdf}
-\caption[\emph{EPISCOPE}: Correlations of strand-specific $NIL = 0$ pairs of $\beta$-values]{Correlations of $\beta$-values for strand-specific pairs of CpGs with $NIL = 0$ for samples from the \emph{EPISCOPE} dataset.}
+\caption[\emph{EPISCOPE}: Correlations of strand-specific $NIL = 0$ pairs of $\beta$-values]{Correlations of $\beta$-values for strand-specific pairs of CpGs with $NIL = 0$ for samples from the \emph{EPISCOPE} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:EPISCOPE_spearman_beta_cors_min_cov_5}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_spearman_beta_cors_min_cov_5.pdf}
-\caption[\emph{Lister}: Correlations of strand-specific $NIL = 0$ pairs of $\beta$-values]{Correlations of $\beta$-values for strand-specific pairs of CpGs with $NIL = 0$ for samples from the \emph{Lister} dataset.}
+\caption[\emph{Lister}: Correlations of strand-specific $NIL = 0$ pairs of $\beta$-values]{Correlations of $\beta$-values for strand-specific pairs of CpGs with $NIL = 0$ for samples from the \emph{Lister} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Lister_spearman_beta_cors_min_cov_5}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_spearman_beta_cors_min_cov_5.pdf}
-\caption[\emph{Seisenberger}: Correlations of strand-specific $NIL = 0$ pairs of $\beta$-values]{Correlations of $\beta$-values for strand-specific pairs of CpGs with $NIL = 0$ for samples from the \emph{Seisenberger} dataset.}
+\caption[\emph{Seisenberger}: Correlations of strand-specific $NIL = 0$ pairs of $\beta$-values]{Correlations of $\beta$-values for strand-specific pairs of CpGs with $NIL = 0$ for samples from the \emph{Seisenberger} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Seisenberger_spearman_beta_cors_min_cov_5}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_spearman_beta_cors_min_cov_5.pdf}
-\caption[\emph{Ziller}: Correlations of strand-specific $NIL = 0$ pairs of $\beta$-values]{Correlations of $\beta$-values for strand-specific pairs of CpGs with $NIL = 0$ for samples from the \emph{Ziller} dataset.}
+\caption[\emph{Ziller}: Correlations of strand-specific $NIL = 0$ pairs of $\beta$-values]{Correlations of $\beta$-values for strand-specific pairs of CpGs with $NIL = 0$ for samples from the \emph{Ziller} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Ziller_spearman_beta_cors_min_cov_5}
 \end{figure}
 
@@ -131,35 +131,35 @@ I have elected to use Spearman's correlation coefficient in what follows because
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed.pdf}
-\caption[\emph{EPISCOPE}: Pearson vs. Spearman correlation]{Pearson correlation versus Spearman correlations of $\beta$-values for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{EPISCOPE} dataset.}
+\caption[\emph{EPISCOPE}: Pearson vs. Spearman correlation]{Pearson correlation versus Spearman correlations of $\beta$-values for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{EPISCOPE} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:EPISCOPE_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed.pdf}
-\caption[\emph{Lister}: Pearson vs. Spearman correlation]{Pearson correlation versus Spearman correlations of $\beta$-values for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Lister} dataset.}
+\caption[\emph{Lister}: Pearson vs. Spearman correlation]{Pearson correlation versus Spearman correlations of $\beta$-values for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Lister} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Lister_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed.pdf}
-\caption[\emph{Seisenberger}: Pearson vs. Spearman correlation]{Pearson correlation versus Spearman correlations of $\beta$-values for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Seisenberger} dataset.}
+\caption[\emph{Seisenberger}: Pearson vs. Spearman correlation]{Pearson correlation versus Spearman correlations of $\beta$-values for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Seisenberger} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Seisenberger_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed.pdf}
-\caption[\emph{Ziller}: Pearson vs. Spearman correlation]{Pearson correlation versus Spearman correlations of $\beta$-values for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Ziller} dataset.}
+\caption[\emph{Ziller}: Pearson vs. Spearman correlation]{Pearson correlation versus Spearman correlations of $\beta$-values for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Ziller} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Ziller_pearson_vs_spearman_beta_cors_min_cov_10_strand_collapsed}
 \end{figure}
 
 \FloatBarrier
 \subsection{CpG pairs with $NIL = 0$}
 
-Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI} and \ref{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed_CI} show the Spearman correlations of strand-collapsed $\beta$-values for $NIL = 0$ pairs of CpGs. Two things immediately stand out. Firstly, for all samples the trend is that the strength of the correlation decays as a function of $IPD$; pairs of CpGs separated by larger distances are on average less correlated than pairs of CpGs separated by shorter distances. Secondly, the estimated correlations violently jump around for larger $IPD$s. The latter is simply due to the aforementioned lack of $NIL = 0$ pairs at larger $IPD$s with which to estimate these correlations. Therefore, it is the trend, rather than the individual values, that should be analysed in these plots.
+Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed}, \ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed} and \ref{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed} show the Spearman correlations of strand-collapsed $\beta$-values for $NIL = 0$ pairs of CpGs. Two things immediately stand out. Firstly, for all samples the trend is that the strength of the correlation decays as a function of $IPD$; pairs of CpGs separated by larger distances are on average less correlated than pairs of CpGs separated by shorter distances. Secondly, the estimated correlations violently jump around for larger $IPD$s. The latter is simply due to the aforementioned lack of $NIL = 0$ pairs at larger $IPD$s with which to estimate these correlations. Therefore, it is the trend, rather than the individual values, that should be analysed in these plots.
 
 There are some consistent patterns in comparing these trends across samples. The correlations very quickly drop well below $0.5$, within approximately $50$ bp for all the _EPISCOPE_ and _Seisenberger_ samples and most of the _Lister_ and _Ziller_ samples. Samples that are exceptions to this trend (_ADS_, _ADS-adipose_, _ADS-iPSC_, _FF_, _IMR90\_r1_, _IMR90\_r2_, _IMR90\_cell\_line_ and _HepG2\_cell\_line_) have a slower decay in these correlations and remain more highly correlated over $IPD = 2, \ldots, 1500$. These same samples are also notable because they have significant amounts of intermediate methylation (Section \ref{sec:genome-wide_distribution_of_beta_values}). I believe this is what drives the stronger and more slowly decaying correlations. The scatterplots of $\beta$-values for these samples will have more $\beta$-values in the middle of the scatterplot, and fewer in the corners, hence the stronger correlations.
 
@@ -173,35 +173,35 @@ To address this problem, we might try smoothing the raw correlations, for exampl
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI.pdf}
-\caption[\emph{EPISCOPE}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values]{Spearman correlations of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{EPISCOPE} dataset.}
-\label{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI}
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed.pdf}
+\caption[\emph{EPISCOPE}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values]{Spearman correlations of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{EPISCOPE} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
+\label{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI.pdf}
-\caption[\emph{Lister}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values]{Spearman correlations of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Lister} dataset.}
-\label{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI}
+\includegraphics[width=\textwidth]{../figures/Lister_spearman_beta_cors_min_cov_10_strand_collapsed.pdf}
+\caption[\emph{Lister}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values]{Spearman correlations of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Lister} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
+\label{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI.pdf}
-\caption[\emph{Seisenberger}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values]{Spearman correlations of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Seisenberger} dataset.}
-\label{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI}
+\includegraphics[width=\textwidth]{../figures/Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed.pdf}
+\caption[\emph{Seisenberger}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values]{Spearman correlations of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Seisenberger} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
+\label{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_spearman_beta_cors_min_cov_10_strand_collapsed_CI.pdf}
-\caption[\emph{Ziller}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values]{Spearman correlation of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Ziller} dataset.}
-\label{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed_CI}
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_spearman_beta_cors_min_cov_10_strand_collapsed.pdf}
+\caption[\emph{Ziller}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values]{Spearman correlation of $\beta$-values as a function of $IPD$ for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Ziller} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
+\label{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed}
 \end{figure}
 
 \FloatBarrier
 
-Figures ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CI}, ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CI} and ref{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed_CI} are genome-wide plots; all pairs of CpGs with a given $IPD$ are treated identically. However, there are good reasons to expect that the correlations of $\beta$-values, like the $\beta$-values themselves, might be influenced by their genomic context. To investigate this, we can stratify pairs of CpGs pairs by a genomic feature and repeat the analysis. The obvious feature to stratify on is CpG islands.
+Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed}, \ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed} and \ref{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed} are genome-wide plots; all pairs of CpGs with a given $IPD$ are treated identically. However, there are good reasons to expect that the correlations of $\beta$-values, like the $\beta$-values themselves, might be influenced by their genomic context. To investigate this, we can stratify pairs of CpGs pairs by a genomic feature and repeat the analysis. The obvious feature to stratify on is CpG islands.
 
 Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}, \ref{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CGI} and \ref{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed_CGI} are plots of Spearman correlations of $\beta$-values for pairs of CpGs stratified by whether the pair is inside or outside of a CpG island[^spanning]. Again, the substantial noise in these plots is due to a lack of $NIL = 0$ pairs with large $IPD$s, particularly inside CpG islands.
 
@@ -212,35 +212,35 @@ The message from these plots is clear, $\beta$-values of $NIL = 0$ pairs within 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CGI.pdf}
-\caption[\emph{EPISCOPE}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{EPISCOPE} dataset.}
+\caption[\emph{EPISCOPE}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{EPISCOPE} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:EPISCOPE_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CGI.pdf}
-\caption[\emph{Lister}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the Lister dataset.}
+\caption[\emph{Lister}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the Lister dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Lister_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CGI.pdf}
-\caption[\emph{Seisenberger}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Seisenberger} dataset.}
+\caption[\emph{Seisenberger}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Seisenberger} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Seisenberger_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_spearman_beta_cors_min_cov_10_strand_collapsed_CGI.pdf}
-\caption[\emph{Ziller}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Ziller} dataset.}
+\caption[\emph{Ziller}: Correlations of $NIL = 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL = 0$ for samples from the \emph{Ziller} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Ziller_spearman_beta_cors_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 
 \FloatBarrier
 \subsection{CpG pairs with $NIL \geq 0$}\label{sec:nil_geq_0_beta_cors}
 
-Figures \ref{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}, \ref{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}, \ref{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI} and \ref{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI} are the plots of CpG $\beta$-value correlations against $IPD$ for $NIL \geq 0$ pairs. In contrast to the $NIL = 0$ results, the correlations here are relatively stable, at least for $IPD = 2, \ldots, 2000$[^ipd_choice]. This is because there are many more $NIL \geq 0$ pairs than there are $NIL = 0$ pairs.
+Figures \ref{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed}, \ref{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed}, \ref{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed} and \ref{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed} are the plots of CpG $\beta$-value correlations against $IPD$ for $NIL \geq 0$ pairs. In contrast to the $NIL = 0$ results, the correlations here are relatively stable, at least for $IPD = 2, \ldots, 2000$[^ipd_choice]. This is because there are many more $NIL \geq 0$ pairs than there are $NIL = 0$ pairs.
 
 [^ipd_choice]: These correlations could be computed for $IPD > 2000$. However, constructing all $NIL \geq 0$ pairs requires much more time and memory than constructing all $NIL = 0$ pairs because there are many more such pairs. For this reason I have focused on $IPD = 2, \ldots, 2000$ for the $NIL \geq 0$ pairs.
 
@@ -248,30 +248,30 @@ When we aggregate over as many factors as we are in these genome-wide $NIL \geq 
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI.pdf}
-\caption[\emph{EPISCOPE}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values]{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{EPISCOPE} dataset.}
-\label{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed.pdf}
+\caption[\emph{EPISCOPE}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values]{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{EPISCOPE} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
+\label{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI.pdf}
-\caption[\emph{Lister}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values]{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Lister} dataset.}
-\label{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}
+\includegraphics[width=\textwidth]{../figures/Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed.pdf}
+\caption[\emph{Lister}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values]{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Lister} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
+\label{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI.pdf}
-\caption[\emph{Seisenberger}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values]{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Seisenberger} dataset.}
-\label{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}
+\includegraphics[width=\textwidth]{../figures/Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed.pdf}
+\caption[\emph{Seisenberger}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values]{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Seisenberger} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
+\label{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI.pdf}
-\caption[\emph{Ziller}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values]{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Ziller} dataset.}
-\label{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed_CI}
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_spearman_beta_cors_all_min_cov_10_strand_collapsed.pdf}
+\caption[\emph{Ziller}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values]{Spearman correlation of $\beta$-values for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Ziller} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
+\label{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed}
 \end{figure}
 
 \FloatBarrier
@@ -283,28 +283,28 @@ Comparing CpG islands to non-islands, we again see that the methylation levels o
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI.pdf}
-\caption[\emph{EPISCOPE}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{EPISCOPE} dataset.}
+\caption[\emph{EPISCOPE}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{EPISCOPE} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:EPISCOPE_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI.pdf}
-\caption[\emph{Lister}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Lister} dataset.}
+\caption[\emph{Lister}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Lister} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Lister_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI.pdf}
-\caption[\emph{Seisenberger}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Seisenberger} dataset.}
+\caption[\emph{Seisenberger}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Seisenberger} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Seisenberger_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI.pdf}
-\caption[\emph{Ziller}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Ziller} dataset.}
+\caption[\emph{Ziller}: Correlations of $NIL \geq 0$ strand-collapsed $\beta$-values stratified by CpG islands]{Spearman correlations of $\beta$-values as a function of $IPD$ stratified by CpG island status for strand-collapsed pairs of CpGs with $NIL \geq 0$ for samples from the \emph{Ziller} dataset. The raw estimates of the correlations are shown as semi-transparent points and are overlaid with a loess fit to these points (\texttt{span} = 0.1).}
 \label{fig:Ziller_spearman_beta_cors_all_min_cov_10_strand_collapsed_CGI}
 \end{figure}
 
