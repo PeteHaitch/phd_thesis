@@ -90,7 +90,7 @@ Almost all downstream analyses are _reference-based_ (see Section \ref{sec:methy
 
 \subsubsection{Simulating $B_{i, j}$}
 
-Recall that $B_{i, j}$ is the underlying _true_ methylation level at locus $i$ in sample $j$. In the context of simulating data for comparing differential methylation calling methods, we want these to be group-specific. That is, we want to specify $B_{i, j_{k}}$, where $j_{k}$ indicates that sample $j$ comes from group $k$. For non-differentially methylated loci all $k$ groups have identical $B_{i, j_{k}} = B_{i, j^{0}}$; differentially methylated loci are simulated by setting $B_{i, j_{k}} \neq B_{i, j^{k'}}$ for some $k \neq k'$.
+Recall that $B_{i, j}$ is the underlying _true_ methylation level at locus $i$ in sample $j$. In the context of simulating data for comparing differential methylation calling methods, we want these to be group-specific. That is, we want to specify $B_{i, j_{k}}$, where $j_{k}$ indicates that sample $j$ comes from group $k$. For non-differentially methylated loci all $k$ groups have identical $B_{i, j_{k}} = B_{i, j_{0}}$; differentially methylated loci are simulated by setting $B_{i, j_{k}} \neq B_{i, j_{k'}}$ for some $k \neq k'$.
 
 Under the beta-binomial model, the true methylation level, $B_{i, j}$, is assumed to follow a $Beta(\mu_{i, j_{k}}, \phi_{i, j_{k}})$ distribution, where $\mu_{i, j_{k}}$ is the mean and $\phi_{i, j_{k}}$ is the dispersion of the beta distribution[^beta_parameterisation]. Both the means, $\mu_{i, j_{k}}$, and the dispersions, $\phi_{i, j_{k}}$, are group-specific and are allowed to vary across methylation loci ($i$). The dispersion parameter models the within-group variability of the $B_{i, j}$, i.e. the within-group _biological variability_ of DNA methylation.
 
