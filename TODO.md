@@ -69,24 +69,33 @@
   - __DONE: updated__
 - [x] Plots of beta-correlations separated by strand in a clearer way.
   - __DONE: Added loess fit__
+- [x] Include `coMET` paper in Chapter 6.
+  - __DONE__
+- [x] Fix `BiocParallel` citation.
+  - __DONE__
+- [x] Look at some scatterplots of beta-value pairs from simulated data. Include in `methsim` chapter if revealing.
+  - __DONE: They are in supplementary code. Nothing revealing enough to justify inclusion in main text; basically, the simulated data lie along the diagonal far more than the real data, hence they have higher correlations.__
+- [x] Move estimation of RRBS CpGs from the appendix to online.
+  - __DONE__
 
+
+- [ ] Send Dineika the front matter.
+  - Add Dineika to acknowledgements
 - [ ] Add a representative plot of the within-fragment data for a single sample
 - [ ] Increase axis labels in simulation study figures?
+- [ ] Fix MethylationTuples::mantelhaen(). Works if copy-pasted into session but not as part of MethylationTuples package. Then update Software Details in Appendix.
+- [ ] Update title of methtuple memory usage plot to refer to 40 samples rather than 49.
+- [ ] Check that all Ziller plots are titled "Ziller" and not "Ziller merged"
+- [ ] Clarify the definition of $\psi_{U}$ for $2 \times 2 \times K$; is it the same as the "collapsed" estimator?
+- [ ] Add $\beta$ to the y-axis of the $\beta$-by-PM boxplots.
+- [ ] Be more specific with what was discovered in the analyses of co-methylation?
+- [ ] Add `makeCGI` to list of software.
+
+## Friday tasks
+
 - [ ] Add analysis folder to github
   - First upload `.Rmd` analysis scripts.
   - Upload <sample>.CG.<m>.tsv.gz Lister, Seisenberger, Ziller samples (m = 1, 2, 2ac) to figshare. All 1-tuples are under Figshare's 250 MB limit but the same is not true of 2-tuples or 2ac-tuples.
-- [ ] Fix MethylationTuples::mantelhaen(). Works if copy-pasted into session but not as part of MethylationTuples package. Then update Software Details in Appendix.
-- [ ] Look at some scatterplots of beta-value pairs from simulated data. Include in `methsim` chapter if revealing.
-- [ ] Update title of methtuple memory usage plot to refer to 40 samples rather than 49.
-- [ ] Check that all Ziller plots are titled "Ziller" and not "Ziller merged"
-- [ ] Include `coMET` paper in Chapter 6.
-- [ ] Clarify the definition of $\psi_{U}$ for $2 \times 2 \times K$; is it the same as the "collapsed" estimator?
-- [ ] Add $\beta$ to the y-axis of the $\beta$-by-PM boxplots.
-- [ ] Fix `BiocParallel` citation.
-- [ ] Be more specific with what was discovered in the analyses of co-methylation.
-- [ ] Move estimation of RRBS CpGs from the appendix to online.
-- [ ] Add `makeCGI` to list of software.
-- [ ] Multiple $\LaTeX$ typesetting bugs.
 
 # Long term
 

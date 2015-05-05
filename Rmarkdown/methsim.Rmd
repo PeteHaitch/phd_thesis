@@ -378,7 +378,7 @@ One way of doing this would be to take a `SimulatedMethylome` object and create 
 
 \subsection{Performance}
 
-While `methsim` is an R package, much of it is written in \CC, using the Rcpp package \citep{Eddelbuettel:2011to, Eddelbuettel:2013if}, which greatly speeds up the running time of key procedures. Furthermore, several steps of the simulation can be run in parallel for each chromosome. Parallelism is implemented via the `BiocParallel` Bioconductor package \citep{BiocParallel}.
+While `methsim` is an R package, much of it is written in \CC, using the Rcpp package \citep{Eddelbuettel:2011to, Eddelbuettel:2013if}, which greatly speeds up the running time of key procedures. Furthermore, several steps of the simulation can be run in parallel for each chromosome. Parallelism is implemented via the `BiocParallel` Bioconductor package (\url{http://bioconductor.org/packages/BiocParallel}).
 
 The `SimulatedMethylome` and `SimulatedBS` objects are large in memory. This is to some extent unavoidable; we are simulating whole-genome bisulfite-sequencing sequencing experiments that produce an enormous amount of data.
 

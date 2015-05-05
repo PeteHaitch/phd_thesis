@@ -15,9 +15,7 @@ bibliography: ../latex/phd_thesis.bib
 
 \chapter{Appendix}\label{chap:appendix}
 
-\section{Chapter \ref{chap:co-methylation_review}}\label{app:co-methylation_review}
-
-\subsection{The probability that two dependent Bernoulli random variables are identical}\label{app:bernoulli_equal}
+\section{The probability that two dependent Bernoulli random variables are identical}\label{app:bernoulli_equal}
 
 \cite{Lindqvist:1978fm} wrote a brief note on Bernoulli trials with dependence.
 Building on earlier work by \cite{Klotz:1973if}, Lindqvist parameterises the
@@ -76,37 +74,6 @@ Pr(Z_{h, i} = Z_{h', i'}) &= Pr(Z_{h, i} = 0, Z_{h', i'} = 0) + Pr(Z_{h, i} = 1,
                      p_{h} p_{h'} + c p_{h} (1 - p_{h}) \\
                   &= (1 - p_{h}) (1 - p_{h'}) + p_{h} p_{h'} + 2 c p_{h} (1 - p_{h})
 \end{align*}
-
-\subsection{Estimating the number of CpGs used by \citet{Lacey:2013iy}}\label{app:lacey}
-
-I want to estimate the number of CpGs used by \citet{Lacey:2013iy} to estimate the correlation of methylation levels. They used the chromosome 11 data from an RRBS experiment on a normal myotube cell line, _MTCTL2_. Unfortunately, there is no URL provided to these data. \citet{Lacey:2013iy} cite their data as having come from \citet{Tsumagari:2013gn}, which includes a sample "Normal Human Skeletal Muscle Myoblasts", _HSMM_ ([http://genome-mirror.duhs.duke.edu/ENCODE/cellTypes.html](http://genome-mirror.duhs.duke.edu/ENCODE/cellTypes.html), [http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/](http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/)). I believe this to be the same cell line. In any case, for my purposes I simply needed some comparable RRBS data, not necessarily the exact same sample as  _MTCTL2_.
-
-There are approximately $60,000$ CpGs on chromosome 11 in these comparable RRBS data. The following R code shows how I computed this using three RRBS replicates of the _HSMM_ sample.
-
-Firstly, I download the data and unzip it:
-```{r, cache = FALSE, message = FALSE}
-library(R.utils)
-library(data.table)
-dl_dir <- "../data/appendix/"
-url <- 'http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/'
-files <- paste0('wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep',
-                1:3, '.bed.gz')
-dests <- paste0(dl_dir, files)
-x <- mapply(function(f, d) {
-  if (!file.exists(gsub(".gz", "", paste0(dl_dir, f)))) {
-    download.file(url = paste0(url, f), d)
-    gunzip(filename = d, overwrite = TRUE)
-    }
-  fread(gsub(pattern = '.gz', replacement = '', x = d), sep = '\t',
-        verbose = FALSE)
-  }, files, dests, SIMPLIFY = FALSE)
-```
-
-Then I count the number of CpGs on chromosome 11 in each replicate:
-```{r}
-y <- rbindlist(x)
-y[V1 == "chr11", .N, by = list(V4)]
-```
 
 \section{Computing details}\label{app:computing_details}
 
