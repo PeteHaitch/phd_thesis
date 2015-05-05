@@ -422,7 +422,7 @@ The output format of `methtuple` is tab-delimited plain text, optionally compres
 
 \subsection{Performance}
 
-I have used `methtuple` to perform methylation calling at CpG m-tuples, $m = 1, \ldots, 8$, for $40$ whole-genome bisulfite-sequencing samples. Figure \ref{fig:methtuple_runtime} shows the distribution of running times and Figure \ref{fig:methtuple_memory} the maximum memory usage across all the samples from the EPISCOPE, Lister and Ziller datasets. For each sample, each chromosome was processed using a single core on one of the shared-use servers in the Bioinformatics Division (see Table \ref{tab:unices} in the Appendix for details of these machines).
+I have used `methtuple` to perform methylation calling at CpG m-tuples, $m = 1, \ldots, 8$, for more than $40$ whole-genome bisulfite-sequencing samples. Figure \ref{fig:methtuple_runtime} shows the distribution of running times and Figure \ref{fig:methtuple_memory} the maximum memory usage across all the samples from the EPISCOPE, Lister and Ziller datasets. For each sample, each chromosome was processed using a single core on one of the shared-use servers in the Bioinformatics Division (see Table \ref{tab:unices} in the Appendix for details of these machines).
 
 The running time of `methtuple` is proportional to the number of reads mapped to the chromosome, which is proportional to the length of the chromosome and its ploidy. The running time is largely independent of the tuple size (`-m`). The variation in running times within a chromosome is due to the number of reads generated per sample and the length of the reads, where the length of a paired-end read is defined as the sum of the mates' lengths. Samples with more reads take longer to process and samples sequenced with longer reads take longer because these contain more m-tuples.
 
@@ -431,14 +431,14 @@ The maximum memory usage is not strictly proportional to chromosome length. It i
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_runtime.pdf}
-\caption[\texttt{methtuple} running time]{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{{-}{-}all-combinations} was set.}
+\caption[\texttt{methtuple} running time]{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{{-}{-}all-combinations} was set. Note that the total number of samples is $49$ because each of the Ziller sequencing runs is separetely counted (see Chapter \ref{chap:datasets} for details).}
 \label{fig:methtuple_runtime}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_memory.pdf}
-\caption[\texttt{methtuple} memory usage]{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{{-}{-}all-combinations} was set.}
+\caption[\texttt{methtuple} memory usage]{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{{-}{-}all-combinations} was set. Note that the total number of samples is $49$ because each of the Ziller sequencing runs is separetely counted (see Chapter \ref{chap:datasets} for details).}
 \label{fig:methtuple_memory}
 \end{figure}
 
