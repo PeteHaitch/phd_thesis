@@ -77,12 +77,14 @@
   - __DONE: They are in supplementary code. Nothing revealing enough to justify inclusion in main text; basically, the simulated data lie along the diagonal far more than the real data, hence they have higher correlations.__
 - [x] Move estimation of RRBS CpGs from the appendix to online.
   - __DONE__
-
+- [ ] Add a representative plot of the within-fragment data for a single sample
+  - __DONE: Decided against this; there are enough plots already__
+- [x] Increase axis labels in simulation study figures.
+  - __DONE__
 
 - [ ] Send Dineika the front matter.
+  - Address Dineika's suggestions
   - Add Dineika to acknowledgements
-- [ ] Add a representative plot of the within-fragment data for a single sample
-- [ ] Increase axis labels in simulation study figures?
 - [ ] Fix MethylationTuples::mantelhaen(). Works if copy-pasted into session but not as part of MethylationTuples package. Then update Software Details in Appendix.
 - [ ] Update title of methtuple memory usage plot to refer to 40 samples rather than 49.
 - [ ] Check that all Ziller plots are titled "Ziller" and not "Ziller merged"
@@ -90,6 +92,7 @@
 - [ ] Add $\beta$ to the y-axis of the $\beta$-by-PM boxplots.
 - [ ] Be more specific with what was discovered in the analyses of co-methylation?
 - [ ] Add `makeCGI` to list of software.
+- [ ] Compress PDF
 
 ## Friday tasks
 

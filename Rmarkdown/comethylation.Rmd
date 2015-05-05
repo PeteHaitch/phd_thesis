@@ -455,6 +455,8 @@ The results of this simulation (Simulation 3, Figure \ref{fig:Simulation_3}) are
 
 We now turn our attention to what happens when the odds ratio is heterogeneous across the $K$ tables. Although results are shown for $\widehat{\theta}_{0.5}$ and $\widehat{\theta}_{U}$, we do not discuss these estimators further since we have seen that these perform poorly in even the simplest simulation scenarios.
 
+\FloatBarrier
+
 In these remaining simulations, all parameters are as for Simulation 3 except that the true log odds ratio of each table, $\theta_{k}$, comes from the following distributions:
 
 - Simulation 4a and Simulation 4b: $\theta_{k} \eqd Gaussian(\theta_{0}, 1)$, where $\theta_{0} = -4, \ldots, 4$ is identical across the $K$ tables.
