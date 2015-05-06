@@ -77,31 +77,32 @@
   - __DONE: They are in supplementary code. Nothing revealing enough to justify inclusion in main text; basically, the simulated data lie along the diagonal far more than the real data, hence they have higher correlations.__
 - [x] Move estimation of RRBS CpGs from the appendix to online.
   - __DONE__
-- [ ] Add a representative plot of the within-fragment data for a single sample
+- [x] Add a representative plot of the within-fragment data for a single sample
   - __DONE: Decided against this; there are enough plots already__
 - [x] Increase axis labels in simulation study figures.
   - __DONE__
-- [ ] Update title of methtuple memory usage plot to refer to 40 samples rather than 49.
+- [x] Update title of methtuple memory usage plot to refer to 40 samples rather than 49.
   - __DONE: Don't do this. There were 49 runs, so use that number__
 - [x] Check that all Ziller plots are titled "Ziller" and not "Ziller merged"
   - __DONE__
-- [ ] Add $\beta$ to the y-axis of the $\beta$-by-PM boxplots.
+- [x] Add $\beta$ to the y-axis of the $\beta$-by-PM boxplots.
   - __DONE__- [ ] Fix MethylationTuples::mantelhaen(). Works if copy-pasted into session but not as part of MethylationTuples package. Then update Software Details in Appendix.
 - [x] Explain why Seisenberger only has 2 partitioned methylomes
   - __DONE__
-- [ ] Address Dineika's suggestions and add Dineika to acknowledgements
+- [x] Address Dineika's suggestions and add Dineika to acknowledgements
   - __DONE__
 - [x] Check fonts on `methtuple` performance plots are legible when printed.
   - __DONE: Made figure larger but didn't alter x-axis labels (can't, not enough space).__
+- [x] Terry's point re convergence argument (p196)
+  - __DONE: Re-worded to make this clearer__
+- [x] Add `makeCGI` to list of software.
+  - __DONE__
 
 
 ## Thursday tasks
 
-- [ ] Terry's point re convergence argument (p196)
-- [ ] Clarify the definition of $\psi_{U}$ for $2 \times 2 \times K$; is it the same as the "collapsed" estimator?
-- [ ] Be more specific with what was discovered in the analyses of co-methylation?
-- [ ] Add `makeCGI` to list of software.
 - [ ] Read unimelb docs on submission
+- [ ] Proof read the bastard
 
 ## Friday tasks
 
