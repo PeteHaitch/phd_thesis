@@ -36,9 +36,10 @@ provided that $max(1 - \frac{1}{p}, 1 - \frac{1}{1 - p}) \leq c \leq 1$.
 
 From this we can compute the joint distribution,
 
-\begin{equation*}
-Pr(X_{1} = x_{1}, \ldots, X_{n} = x_{n}) = Pr(X_{1} = x_{1}) Pr(X_{2} = x_{2} | X_{2} = x_{2}) \cdots Pr(X_{n} = x_{n} | X_{n - 1} = x_{n - 1})
-\end{equation*}
+\begin{align*}
+ &  Pr(X_{1} = x_{1}, \ldots, X_{n} = x_{n}) \\
+=& Pr(X_{1} = x_{1}) Pr(X_{2} = x_{2} | X_{2} = x_{2}) \cdots Pr(X_{n} = x_{n} | X_{n - 1} = x_{n - 1})
+\end{align*}
 
 In particular, in the case $n = 2$ we can compute the probability that two
 dependent and identically distributed Bernoulli random variables are equal.
@@ -66,8 +67,8 @@ We can then compute the desired probability
 
 \begin{align*}
 Pr(Z_{h, i} = Z_{h', i'}) &= Pr(Z_{h, i} = 0, Z_{h', i'} = 0) + Pr(Z_{h, i} = 1, Z_{h', i'} = 1) \\
-                  &= Pr(Z_{h', i'} = 0 | Z_{h, i} = 0) Pr(X_{0} = 0) +
-                     Pr(Z_{h', i'} = 1 | Z_{h, i} = 1) Pr(X_{0} = 1) \\
+                  &= Pr(Z_{h', i'} = 0 | Z_{h, i} = 0) Pr(Z_{h, i} = 0) \\
+                  &+ Pr(Z_{h', i'} = 1 | Z_{h, i} = 1) Pr(Z_{h, i} = 1) \\
                   &= \big [ (1 - p_{h'}) + c p_{h} \big ] (1 - p_{h}) +
                      \big [ p_{h'} + c ( 1 - p_{h}) \big ] p_{h} \\
                   &= (1 - p_{h}) (1 - p_{h'}) + c p_{h} \big [1 - p_{h}] +
@@ -96,9 +97,9 @@ unix305      & $4\times$ AMD Opteron 6276 @ 2.3GHz  & 64 & 512 GB \\ \bottomrule
 
 \section{Software details}\label{app:software_details}
 
-The analyses described in my thesis made extensive use of R (`R Under development (unstable) (2014-10-29 r66891)` and `R version 3.2.0 (2015-04-16)`) and Python (`v2.7`). All analyses were run on one of the servers described above. The scripts used to prepare the results for each chapter are available from \url{https://github.com/PeteHaitch/phd_thesis_analyses}. Further details of software used are available in Appendix \ref{app:software_details}.
+The analyses described in my thesis made extensive use of R (`R Under development (unstable) (2014-10-29 r66891)` and `R version 3.2.0 (2015-04-16)`) and Python (`v2.7`). All analyses were run on one of the servers described above. The scripts used to prepare the results for each chapter are available from \url{https://github.com/PeteHaitch/phd_thesis_analyses}.
 
-I developed several pieces of software during my PhD. These are listed in below, along with the version used in for analyses in my thesis:
+I developed several pieces of software during my PhD. These are listed below, along with the version used in for analyses in my thesis:
 
 - `methtuple` (`v1.4.0`)
 - `GenomicTuples` (`v1.2.1`)

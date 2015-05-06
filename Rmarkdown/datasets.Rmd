@@ -16,7 +16,7 @@ bibliography: ../latex/phd_thesis.bib
 
 \section{Overview of data processing}
 
-This chapter briefly documents the 40 whole-genome bisulfite-sequencing samples that I use in my thesis. The `BAM` files for each sample underwent the same basic processing:
+This chapter briefly documents the 40 whole-genome bisulfite-sequencing samples that I use in my thesis. The `BAM` files containing the aligned reads for each sample underwent the same basic processing:
 
 1. Genetic variants were called using the `bissnp_easy_usage.pl` script included with `Bis-SNP (v0.82.2)`.
 2. M-bias was estimated using `bismark_methylation_extractor` with the `--mbias_only` flag set. These output files were then analysed using the  `MethylationTuples` R package (see section \ref{sec:MethylationTuples}) and all read-positions with an CpG normalised read-position methylation level ($nrpml$) more than $0.03$ from the median, i.e. $|nrpml_{CpG} - median(nrpml_{CpG})| > 0.03$, were excluded from methylation calling (_read-1_ and _read-2_ analysed separately where applicable).
@@ -137,7 +137,7 @@ The _Seisenberger_ data are from a study of the dynamics of DNA methylation repr
 
 \subsection{Sample descriptions}
 
-I have the data for only three samples from the original publication, detailed in Table \ref{tab:Seisenberger_dataset}. The _J1\_1_ sample is from an embryonic stem cell line while both the _E6.5\_epiblast\_1_ and _E16.5\_male\_1_ samples are derived from pools of $10-30$ embryos. Developmentally, the samples are ordered _J1\_1_ (embryonic stem cell), _E6.5\_epiblast\_1_ (embryonic day 6.5 epiblast) and _E16.5\_male\_1_ (embryonic day 16.5 male progenitor germ cells).
+I have the data for only three samples from the original publication, detailed in Table \ref{tab:Seisenberger_dataset}. The _J1\_1_ sample is from an embryonic stem cell line while both the _E6.5\_epiblast\_1_ and _E16.5\_male\_1_ samples are derived from pools of $10$ to $30$ embryos. Developmentally, the samples are ordered _J1\_1_ (embryonic stem cell), _E6.5\_epiblast\_1_ (embryonic day 6.5 epiblast) and _E16.5\_male\_1_ (embryonic day 16.5 male progenitor germ cells).
 
 I believe that the samples I received labelled _J1\_1_ and _E16.5\_male\_1_  in fact correspond to _J1\_2_ and _E16.5\_male\_2_, respectively, i.e. the second  replicate rather than the first. The data I received are all $100$ bp paired-end sequences, which matches replicate 2 rather than replicate 1 for both of these samples \citet[Supplementary Table 1]{Seisenberger:2012ko}.
 
@@ -160,7 +160,7 @@ The sequencing data for these 3 samples were processed and aligned by Felix Krue
 
 \section{\emph{Ziller} dataset}\label{sec:Ziller_dataset}
 
-The _Ziller_ are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 8 whole-genome bisulfite-sequencing libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research, Sydney). I thank Aaron who sent me the `BAM` files containing processed and aligned reads.
+The _Ziller_ data are a subset of the data used in \cite{Ziller:2013fs}. Specifically, I use a convenience sample of 8 whole-genome bisulfite-sequencing libraries. These were made available to me by a collaborator, Aaron Statham (Garvan Institute of Medical Research, Sydney). I thank Aaron who sent me the `BAM` files containing processed and aligned reads.
 
 \subsection{Sample descriptions}
 
@@ -205,4 +205,4 @@ I received 19 `BAM` files from Aaron, which represent 19 sequencing runs of the 
 
 \section{CpG islands}
 
-I have used the CpG island definition from the hidden Markov model proposed by \citet{Wu:2010do} and implemented in the `makeCGI` R package (`v1.2`). The predicted CpG islands for the human reference genome (both hg18 and hg19) were downloaded from [http://rafalab.jhsph.edu/CGI/](http://rafalab.jhsph.edu/CGI/) on 29/10/2014. I used the `makeCGI` R package to create the predicted CpG islands for the mouse reference genome (mm10) since these were not available for download.
+I have used the CpG island definition from the hidden Markov model proposed by \citet{Wu:2010do} and implemented in the `makeCGI` R package (`v1.2`, \url{http://rafalab.jhsph.edu/CGI/}). The predicted CpG islands for the human reference genome (both hg18 and hg19) were downloaded from [http://rafalab.jhsph.edu/CGI/](http://rafalab.jhsph.edu/CGI/) on 29/10/2014. I used the `makeCGI` R package to create the predicted CpG islands for the mouse reference genome (mm10) since these were not available for download.

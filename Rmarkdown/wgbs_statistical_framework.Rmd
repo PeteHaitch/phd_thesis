@@ -15,14 +15,14 @@ bibliography: ../latex/phd_thesis.bib
 \begin{chapabstract}
 This chapter sets out a statistical framework for analysing bisulfite-sequencing data. The ideas here are simple, however, they have not yet been put into a unified mathematical framework. My intention in doing so is to clarify several subtleties that, in my experience, are potential sources of confusion.
 
-Beginning with a single sample, I explain the various sources of variation in this statistical model and introduce the mathematical notation that I use throughout my thesis. I then extend this framework to multiple samples.
+Beginning with a single sample, I explain the various sources of variation in DNA methylation data and introduce the mathematical notation that I use throughout my thesis. I then extend this framework to multiple samples.
 
 Finally, I describe key variables, common estimators of these and their statistical properties by analysing 40 whole-genome bisulfite-sequencing samples.
 \end{chapabstract}
 
 \section{One sample}\label{sec:one_sample}
 
-Even with only a single sample, there are several levels of variation to consider in a bisulfite-sequencing experiment. I find it convenient to separate these into:
+There are several levels of variation to consider in a bisulfite-sequencing experiment, even with only a single sample. I find it convenient to separate these into:
 
 1. Pre-sequencing sources of variation
 2. Sequencing and post-sequencing sources of variation.
@@ -40,13 +40,13 @@ In the following, I describe these sources of variation, which are illustrated i
 
 A methylation locus is a single cytosine, that is, a CpG, CHG or CHH. The set of these loci is labelled $\mathcal{I} = \{pos_{i}: i = 1, \ldots, N_{loci} \}$, where $pos_{i}$ is the genomic co-ordinates of the $i^{th}$ locus, e.g., `chr1:+:666`. It will be convenient to refer to loci by the subscript $i$ rather than by $pos_{i}$, although it is important to remember that the number of base pairs between the $i^{th}$ and $(i + 1)^{th}$ methylation loci varies along the genome. Furthermore, depending on whether the data are stranded, a pair of loci may be on opposite strands. In a small number of instances the $i^{th}$ and $(i + 1)^{th}$ methylation loci are on separate chromosomes, e.g., the last CpG on chromosome 1 and the first CpG on chromosome 2.
 
-The methylation state of a locus can vary within a sample due to cell-to-cell variability of DNA methylation. A sample in a bisulfite-sequencing experiment contains DNA that is extracted from hundreds or thousands of cells and each cell may have a slightly different methylation profile. Furthermore, within a diploid cell there are two copies of each chromosome, and therefore two copies of each methylation locus, and these two copies can have different methylation states. Therefore, it is also necessary to consider not just the genomic co-ordinates of the locus but from which DNA fragment the methylation state originated.
+The methylation state of a locus can vary within a sample due to cell-to-cell heterogeneity of DNA methylation. A sample in a bisulfite-sequencing experiment contains DNA that is extracted from hundreds or thousands of cells and each cell may have a slightly different methylation profile. Furthermore, within a diploid cell there are two copies of each chromosome, and therefore two copies of each methylation locus, and these two copies can have different methylation states. It is also therefore necessary to consider not just the genomic co-ordinates of the locus but from which DNA fragment the methylation state originated.
 
-Suppose that in the pool of DNA fragments for the sample that there are $H_{i}$ fragments containing the $i^{th}$ methylation locus. In general, $H_{i}$ is unknown and will vary from locus to locus within a sample[^H_i]. Note that the value of $H_{i}$ is determined following the library preparation, including PCR amplification of the DNA; therefore, it can give a grossly distorted picture of the true representation of the cells. I denote by $\mathcal{H}_{i}$ the set of all fragments containing the $i^{th}$ locus.
+Suppose that in the pool of DNA fragments for the sample that there are $H_{i}$ fragments containing the $i^{th}$ methylation locus. In general, $H_{i}$ is unknown and will vary from locus to locus within a sample[^H_i]. Note that the value of $H_{i}$ is determined following the library preparation, including PCR amplification of the DNA; therefore, it can give a grossly distorted picture of the true representation of the cells. We denote by $\mathcal{H}_{i}$ the set of all fragments containing the $i^{th}$ locus.
 
 [^H_i]: Knowing $H_{i}$ would require knowing: (1) the number of cells used as input (which might only be known to within an order of magnitude), (2) the ploidy of each cell (generally known) and (3) the number of PCR cycles (generally known). But the real problem is that none of the steps in creating the pool of DNA fragments is perfect. In particular, PCR introduces biases; some molecules are preferentially amplified while others 'drop out'. So even if we knew (1), (2) and (3) we cannot simply multiply these together to compute $H_{i}$, although this might at least give us a rough estimate.
 
-Although we do not know the number of fragments in the pool, we can define (and measure) the methylation state of a locus on a single DNA fragment. I denote by the indicator random variable, $Z_{h, i}$, the methylation state of $i^{th}$ methylation locus on the $h^{th}$ DNA fragment:
+Although we do not know the number of fragments in the pool, we can define (and measure) the methylation state of a locus on a single DNA fragment. We denote by the indicator random variable, $Z_{h, i}$, the methylation state of $i^{th}$ methylation locus on the $h^{th}$ DNA fragment:
 
 \begin{equation*}
 Z_{h, i} = \left\{
@@ -71,22 +71,23 @@ From these we can compute the proportion of fragments that are methylated at the
 
 The above definitions can be extended from individual methylation loci, 1-tuples, to m-tuples. Mathematically, an m-tuple is denoted by a sequence of methylation loci, $(i, i + 1, \ldots, i + m - 1)$.
 
-I denote by the vector of indicator random variables, $Z_{h, (i, i + 1, \ldots, i + \text{m} - 1)}$, the methylation pattern of the m-tuple $(i, i + 1, \ldots, i + m - 1)$ on the $h^{th}$ DNA fragment containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$:
+We denote the methylation pattern on the $h^{th}$ DNA fragment containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$ by the vector of indicator random variables, $Z_{h, (i, i + 1, \ldots, i + \text{m} - 1)}$,:
 
 \begin{equation*}
 Z_{h, (i, i + 1, \ldots, i + \text{m} - 1)} = \left\{
   \begin{array}{l l}
-  (0, 0, \ldots, 0) & \quad \text{if unmethylated at the } \Big (i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 1)^{th} \Big ) \\
-  & \quad \text{ locus on the } h^{th} \text{ fragment}\\
-  (0, 0, \ldots, 1) & \quad \text{if unmethylated at the } \Big (i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 2)^{th} \Big ) \\
-  & \quad \text{ locus and methlyated at the } (i + \text{m} - 1)^{th} \text{ locus on the } h^{th} \text{ fragment} \\
+  (0, 0, \ldots, 0) & \quad \text{if unmethylated at the } \Big (i^{th}, \ldots, (i + \text{m} - 1)^{th} \Big ) \\
+  & \quad \text{locus on the } h^{th} \text{ fragment}\\
+  (0, 0, \ldots, 1) & \quad \text{if unmethylated at the } \Big (i^{th}, \ldots, (i + \text{m} - 2)^{th} \Big ) \\
+  & \quad \text{locus and methylated at the } (i + \text{m} - 1)^{th} \\
+  & \quad \text{locus on the } h^{th} \text{ fragment} \\
   \vdots \\
-  (1, 1, \ldots, 1) & \quad \text{if methylated at the } \Big (i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 1)^{th} \Big ) \\
-  & \quad \text{ locus on the } h^{th} \text{ fragment}
+  (1, 1, \ldots, 1) & \quad \text{if methylated at the } \Big (i^{th}, \ldots, (i + \text{m} - 1)^{th} \Big ) \\
+  & \quad \text{locus on the } h^{th} \text{ fragment}
   \end{array} \right.
   \end{equation*}
 
-$\mathcal{H}_{(i, i + 1, i + m - 1)}$ denotes the set of all fragments containing the m-tuple $(i, i + 1, i + m - 1)$.
+We denote the set of all fragments containing the m-tuple $(i, i + 1, i + m - 1)$ by $\mathcal{H}_{(i, i + 1, i + m - 1)}$.
 
 There are $2^{\text{m}}$ possible methylation patterns at an m-tuple. Rather than describe a methylation pattern by an m-vector of zeros and ones, I also write these using $U$ and $M$; for example, the possible methylation patterns at a 2-tuple are $MM, MU, UM$ and $UU$.
 
@@ -114,20 +115,20 @@ Again, I emphasise that $H_{(i, i + 1, i + \text{m} - 1), j}, Z_{h, (i, i + 1, i
 
 \subsection{Post-sequencing}\label{sec:one_sample_post_sequencing}
 
-A whole-genome bisulfite-sequencing experiment does not sequence every DNA fragment in the pool. Rather, sequencing can be thought of as sampling without replacement from the pool of DNA fragments. We have a large number (~$10^{10}$) of fragments in the pool and each methylation locus is only present on a small number of those fragments. Therefore, we can approximate this sampling by Poisson sampling, where the rate parameter for locus $i$ is proportional to the number of fragments in the pool and inversely proportional to the number of fragmentation containing the $i^{th}$ methylation locus, $H_{i}$.
+A whole-genome bisulfite-sequencing experiment does not sequence every DNA fragment in the pool. Rather, sequencing can be thought of as sampling without replacement from the pool of DNA fragments. We have a large number (~$10^{10}$) of fragments in the pool and each methylation locus is only present on a small number of those fragments. We can therefore approximate this sampling by Poisson sampling, where the rate parameter for locus $i$ is proportional to the number of fragments in the pool and inversely proportional to the number of fragmentation containing the $i^{th}$ methylation locus, $H_{i}$.
 
-We can ignore reads that do not contain any methylation loci as these are not relevant to ths discussion. I make three further simplifying assumptions:
+We can ignore reads that do not contain any methylation loci as these are not relevant to ths discussion. We make three further simplifying assumptions:
 
 1. Sequencing is performed without error.
 2. Read mapping is perfect.
 3. We perform single-end sequencing.
 
-The effect of the first two assumptions are discussed in Section \ref{sec:mapping_and_post-processing}. The effect of the third assumption is minor. When using single-end sequencing, the methylation loci from a single read will always form a positively ordered sequence without gaps, i.e. $(i, i + 1, i + 2)$ and not $(i, i - 1, i - 2)$ nor $(i, i + 1, i + 3)$. However, when using paired-end sequencing, the methylation loci from a paired-end read will still be an ordered sequence but one of the following may occur:
+The effect of the first two assumptions are discussed in Section \ref{sec:mapping_and_post-processing}. The effect of the third assumption is minor. When using single-end sequencing, the methylation loci from a single read will always form a positively ordered sequence without gaps, i.e. $(i, i + 1, i + 2)$ and not, for example, $(i, i - 1, i - 2)$ nor $(i, i + 1, i + 3)$. However, when using paired-end sequencing, the methylation loci from a paired-end read will still be an ordered sequence but one of the following may occur:
 
 1. There may be gaps due to the insert size being longer than the sum of the read lengths, e.g., $(i, i + 1, i + 3, i + 4)$. In effect, we have missing data for any intervening methylation loci, the $(i + 2)^{th}$ loci in this example.
 2. Loci may be measured twice if the insert size is less than the sum of the read lengths, e.g. _read-1_ gives us $(i, i + 1)$ and _read-2_ gives us $(i + 1, i + 2, i + 3)$. In this example we must use only one of _read-1_ or _read-2_ as the measurement of the $(i + 1)^{th}$ locus because otherwise we are 'double-counting'.
 
-Each read measures the methylation state of one or more loci from a single DNA fragment. I denote by $\mathcal{R}_i$ the set of all mapped reads containing the $i^{th}$ locus. The number of reads containing the $i^{th}$ locus is referred to as the sequencing depth at the $i^{th}$ locus, which I denote by $d_{i} = |\mathcal{R}_{i}|$, where $d_{i} \leq H_{i}$ with strict inequality for almost all $i$.
+Each read measures the methylation state of one or more loci from a single DNA fragment. We denote by $\mathcal{R}_i$ the set of all mapped reads containing the $i^{th}$ locus. The number of reads containing the $i^{th}$ locus is referred to as the sequencing depth at the $i^{th}$ locus, which we denote by $d_{i} = |\mathcal{R}_{i}|$, where $d_{i} \leq H_{i}$ with strict inequality for almost all $i$.
 
 A single read containing the $i^{th}$ locus is denoted $z: z \in \mathcal{R}_{i}$ and the observed methylation state is indicated by:
 
@@ -158,7 +159,7 @@ Here we have assumed that $d_{i} = m_{i} + u_{i}$, meaning that reads that do no
 
 [^non-methylation_reads]: Such reads can occur due to sequencing error, mapping error or genetically heterozygous methylation loci.
 
-This is the so-called $\beta$-value, which is commonly interpreted as an estimate of $B_{i}$, the proportion of cells in the sample that are methylated at the $i^{th}$ locus. In Section \ref{sec:estimating_B} I discuss this interpretation and other estimators of the 'methylation level' at a locus.
+This is the so-called $\beta$-value, which is commonly interpreted as an estimate of $B_{i}$, the proportion of cells in the sample that are methylated at the $i^{th}$ locus. In Section \ref{sec:estimating_B} we discuss this interpretation and other estimators of the 'methylation level' at a locus.
 
 These definitions can also be extended from 1-tuples to m-tuples. The set of all reads containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$ is denoted by $\mathcal{R}_{(i, i + 1, \ldots, i + \text{m} - 1)}$ and has sequencing depth $d_{(i, i + 1, \ldots, i + \text{m} - 1)} = |\mathcal{R}_{(i, i + 1, \ldots, i + \text{m} - 1)}|$. A single read containing the m-tuple $(i, i + 1, \ldots, i + \text{m} - 1)$ is denoted by $z: z \in \mathcal{R}_{(i, i + 1, \ldots, i + \text{m} - 1)}$, and the observed methylation state is given by:
 
@@ -167,15 +168,15 @@ z: z \in \mathcal{R}_{(i, i + 1, \ldots, i + \text{m} - 1)} = \left\{
   \begin{array}{l l}
     (0, 0, \ldots, 0) & \quad \text{if unmethylated at the } \\
     & \quad \Big ( i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 1)^{th} \Big) \\
-    & \quad \text{ locus}\\
+    & \quad \text{locus}\\
     (0, 0, \ldots, 1) & \quad \text{if unmethylated at the } \\
     & \quad \Big (i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 2)^{th} \Big) \\
-    & \quad \text{ locus} \\
+    & \quad \text{locus} \\
       & \quad \text{and methlyated at the } (i + \text{m} - 1)^{th} \text{ locus} \\
     \vdots \\
     (1, 1, \ldots, 1) & \quad \text{if methylated at the } \\
     & \quad \Big (i^{th}, (i + 1)^{th}, \ldots, (i + \text{m} - 1)^{th} \Big ) \\
-    & \quad \text{ locus}
+    & \quad \text{locus}
       \end{array} \right.
 \end{equation*}
 
@@ -190,7 +191,7 @@ By summing over the reads containing the m-tuple, $(i, i + 1, \ldots, i + \text{
   uu_{(i, i + 1)} &= |\{z: z \in \mathcal{R}_{(i, i + 1)}, z = (0, 0)\}|
 \end{align*}
 
-As we did for $B$-values, we can extend the $\beta_{i}$ values to m-tuples. Here are the definitions for $\text{m} = 2$:
+As we did for $B$-values, we can extend the $\beta$ values to m-tuples. Here are the definitions for $\text{m} = 2$:
 
 \begin{align*}
   \beta_{(i, i + 1)}^{mm} &= \frac{mm_{(i, i + 1)}}{d_{(i, i + 1)}} \\
@@ -205,7 +206,7 @@ One final definition is the average methylation level of each read, which is use
 
 \subsection{Some complications}\label{sec:one_sample_complications}
 
-I now discuss some complications and how this framework might accommodate these issues in practice.
+We now discuss some complications and how this framework might accommodate these issues in practice.
 
 \subsubsection{What is $\mathcal{I}$?}\label{sec:what_is_I}
 
@@ -226,7 +227,7 @@ The number of these genetically heterozygous methylation loci is often small eno
 
 From a purely notational perspective, the move from a single sample to multiple samples simply requires an additional subscript, $j = 1, \ldots, N_{samples}$, where $N_{samples}$ is the number of samples. This defines the three levels in the hierarchy of a typical experiment: DNA fragments ($h$), methylation loci ($i$) and samples ($j$). For example, $Z_{h, i, j}$ is the methylation state on the $h^{th}$ DNA fragment at the $i^{th}$ methylation locus in the $j^{th}$ sample and $\beta_{i, j}$ is the $\beta$-value for the $i^{th}$ locus in the $j^{th}$ sample.
 
-A fourth level is how the sample's relate to one another, such as the treatment group of each sample. This fourth level might be defined up-front, such as in a designed experiment looking for differences in methylation between tumour and normal tissue. Alternatively, the aim of the experiment might be to _discover_ this grouping, such as in a clustering analysis.
+A fourth level is how the samples relate to one another, such as the treatment group of each sample. This fourth level might be defined up-front, such as in a designed experiment looking for differences in methylation between tumour and normal tissue. Alternatively, the aim of the experiment might be to _discover_ this grouping, such as in a clustering analysis.
 
 We can define this fourth level using a design matrix $X = [X_{j}]$. For example, in a two-group experiment $X_{j} = 1$ if the sample is from group $1$ and $X_{j} = 0$ if the sample is from group $2$. We may also include covariates in the standard way by allowing $X_{j}$ to be a row vector, $X_{j} = (x_{1, j}, \ldots, x_{P, j})$, where $x_{p, j}$ encodes the information on the $p^{th}$ covariate for the $j^{th}$ sample.
 
@@ -240,11 +241,11 @@ Each sample has its own set of methylation loci, that is, $\mathcal{I}_{j}$ diff
 
 In practice, we might choose to study $\mathcal{I}^{common} = \bigcap_{j} \mathcal{I}_{j}$ or some other suitably defined intersection of the $\mathcal{I}_{j}$, such as all methylation loci present in at least some fraction of the $N_{samples}$ samples.
 
-A conservative analysis might only analyse those loci where at least some fraction of the $n$ samples have sufficient sequencing coverage. A less conservative analysis might try to impute the missing values based on methylation levels at neighbouring loci.
+A conservative analysis might only analyse those loci where at least some fraction of the samples have sufficient sequencing coverage. A less conservative analysis might try to impute the missing values based on methylation levels at neighbouring loci.
 
 \section{Parameter estimation}\label{sec:parameter_estimation}
 
-The main parameter of interest for each sample is the vector of methylation levels for each locus, $\bm{B_{j}} = (B_{1,j}, \ldots, B_{N_{loci}, j})$. In this section I review various methods for estimating these key parameters. When necessary, I have 'translated' the original work into my notation to make these methods more readily comparable. I have suppressed $j$ subscript when referring to a single sample.
+In this section we review various methods for estimating these key parameters. The main parameter of interest for each sample is the vector of methylation levels for each locus, $\bm{B_{j}} = (B_{1,j}, \ldots, B_{N_{loci}, j})$. When necessary, I have 'translated' the original work into my notation to make these methods more readily comparable. I have suppressed $j$ subscript when referring to a single sample.
 
 \subsection{Estimating $M$, $U$}\label{sec:estimating_m_and_u}
 
@@ -270,7 +271,7 @@ An attractive feature of the beta-binomial distribution is that it can be motiva
 
 Smoothing is particularly powerful for loci with low sequencing coverage, where the denominator $m_{i, j} + u_{i, j}$ is small and the corresponding standard error of $\beta_{i, j}$ is large. The smoothed $\beta$-values, rather than the raw $\beta$-values, are then generally used in all downstream analyses.
 
-Both `bsseq` and `BiSeq` use a binomial local likelihood smoother. In each case this smoother was chosen because `BSmooth` and `BiSeq` model the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample by $M_{i, j} | d_{i, j} \eqd Binomial(d_{i, j}, B_{i, j})$. The smoothing is 'local' to exploit co-methylation, which is considered a local phenomenon.
+Both `bsseq` and `BiSeq` use a binomial local likelihood smoother. In each case this smoother is chosen because `BSmooth` and `BiSeq` model the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample by $M_{i, j} | d_{i, j} \eqd Binomial(d_{i, j}, B_{i, j})$. The smoothing is 'local' to exploit co-methylation, which is considered a local phenomenon.
 
 In both `bsseq` and `BiSeq` the raw $\beta$-values are weighted according to the binomial likelihood and a kernel function. The binomial likelihood weights $\beta_{i}$ inversely to their standard error, $se(\beta_{i})$, and the kernel gives greater weight to those $\beta_{i}$ near the centre of the window. \citet{Lacey:2013iy} note that loci with very high sequencing coverage will strongly influence the smoother, potentially biasing estimates at neighbouring loci with lower coverage.
 
@@ -286,7 +287,7 @@ Another 'parameter' choice when smoothing is the choice of kernel, although this
 
 \section{Statistical properties of $\beta$-values}\label{sec:beta}
 
-Under the (conditional) binomial model, $M_{i, j} | d_{i, j} \eqd Bin(d_{i, j}, B_{i, j})$, $\beta_{i, j} = \frac{m_{i, j}}{m_{i, j} + u_{i, j}}$ is an unbiased estimator of $B_{i, j}$ with standard error $se(\beta_{i, j}) = \sqrt{\frac{\beta_{i, j}(1 - \beta_{i, j})}{d_{i, j}}}$ \citep{Hansen:2012gr}. The natural interpretation of $\beta_{i, j}$ is then as an estimator of the average level of methylation at the $i^{th}$ locus in the $j^{th}$ sample. In this section I discuss this interpretation and statistical properties of this estimator.
+Under the (conditional) binomial model, $M_{i, j} | d_{i, j} \eqd Binomial(d_{i, j}, B_{i, j})$, $\beta_{i, j} = \frac{m_{i, j}}{d_{i, j}}$ is an unbiased estimator of $B_{i, j}$ with standard error $se(\beta_{i, j}) = \sqrt{\frac{\beta_{i, j}(1 - \beta_{i, j})}{d_{i, j}}}$ \citep{Hansen:2012gr}. The natural interpretation of $\beta_{i, j}$ is then as an estimator of the average level of methylation at the $i^{th}$ locus in the $j^{th}$ sample. In this section I discuss this interpretation and statistical properties of this estimator.
 
 \subsection{Empirical distributions of $\beta$-values}
 
@@ -296,13 +297,13 @@ In a study involving multiple samples, the set of $\beta$-values can be summaris
 
 Restricting our attention to CpGs, Figures \ref{fig:EPISCOPE_plotBetaDensity}, \ref{fig:Lister_plotBetaDensity}, \ref{fig:Seisenberger_plotBetaDensity} and \ref{fig:Ziller_merged_plotBetaDensity} show the kernel density estimates of the genome-wide distributions of $\beta$-values, that is, the column-wise summaries, for each sample of the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, respectively. Figures \ref{fig:EPISCOPE_plotBetaFreqPoly}, \ref{fig:Lister_plotBetaFreqPoly}, \ref{fig:Seisenberger_plotBetaFreqPoly} and \ref{fig:Ziller_plotBetaFreqPoly} show the same data but with the $\beta$-values grouped into $0.01$-width bins and plotted against the percentages of CpGs that fall into each bin.
 
-What is immediately clear is that these distributions are bimodal: most CpGs are highly methylated or lowly methylated. The exception is the _E16.5\_male\_1_ sample from the _Seisenberger_ data which is hypomethylated and with an enormous number of CpGs that have intermediate methylation levels. The _E16.5\_male\_1_ sample is progenitor germ cells from a pool of embryonic day 16.5 male mice. Between days E6.5 and E13.5, the mouse progenitor germ cells undergo global demethylation and it is only from day E16.5 onwards that they begin to be _de novo_ methylated \citep{Seisenberger:2012ko}, hence the wide variation in $\beta$-values.
+What is immediately clear is that these distributions are bimodal: most CpGs are highly methylated or lowly methylated. The exception is the _E16.5\_male\_1_ sample from the _Seisenberger_ data which is hypomethylated and with an enormous number of intermediately methylated CpGs. The _E16.5\_male\_1_ sample is a progenitor germ cells from a pool of embryonic day 16.5 male mice. Between days E6.5 and E13.5, the mouse progenitor germ cells undergo global demethylation and it is only from day E16.5 onwards that they begin to be _de novo_ methylated \citep{Seisenberger:2012ko}, hence the wide variation in $\beta$-values.
 
 Almost all the samples with significant intermediate methylation are either somatic cell lines (_ADS_, _ADS-adipose_, _FF_, _IMR90\_r1_ and _IMR90\_r2_ from the _Lister_ dataset; _IMR90\_cell\_line_ from the _Ziller_ dataset) or cancer cells lines and tissue (_HepG2\_cell\_line_, _Colon\_Tumor\_Primary_ and _Colon\_Primary\_Normal_ from the _Ziller_ dataset). Aside from the aforementioned _E16.5\_male\_1_, the _E6.5\_epiblast\_1_ sample from the _Seisenberger_ dataset also displays greater levels of intermediate methylation. This sample was also created by pooling DNA from multiple mice, which may explain the extra variability in the $\beta$-value distribution.
 
 It has previously been observed that cancer samples have highly variable DNA methylation \citep{Hansen:2011gu}, which, combined with the possibility of multiple sub-clones, explains these intermediate $\beta$-values in the cancer samples.
 
-The explanation for the somatic cell lines is less clear. Notably, all of the 12 EPISCOPE samples, which are somatic tissue samples rather than cell lines, have relatively low levels of intermediate methylation. Likewise, the various frontal cortex samples in the _Ziller_ dataset, which includes both 'normal' and Alzheimer's samples (_Frontal\_cortex\_normal\_1_, _Frontal\_cortex\_normal\_2_, _Frontal\_cortex\_AD\_1_ and _Frontal\_cortex\_AD\_2_), have very low levels of intermediate methylation. This raises the question as to whether the widespread partial methylation observed in the somatic samples from the _Lister_ dataset is in fact a feature of somatic cell lines rather than somatic cells _per se_. Naively, a cell line is a 'pure' cell population, however, the DNA methylation data clearly reveal widespread cellular heterogeneity of DNA methylation.
+The explanation for the somatic cell lines is less clear. Notably, all of the 12 EPISCOPE samples, which are tissue samples rather than cell lines, have relatively low levels of intermediate methylation. Likewise, the various frontal cortex samples in the _Ziller_ dataset, which includes both 'normal' and Alzheimer's samples (_Frontal\_cortex\_normal\_1_, _Frontal\_cortex\_normal\_2_, _Frontal\_cortex\_AD\_1_ and _Frontal\_cortex\_AD\_2_), have very low levels of intermediate methylation. This raises the question as to whether the widespread partial methylation observed in the somatic samples from the _Lister_ dataset is in fact a feature of somatic cell lines rather than somatic cells _per se_. Naively, a cell line is a 'pure' cell population, however, the DNA methylation data clearly reveal widespread cellular heterogeneity of DNA methylation.
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_plotBetaDensity.pdf}
@@ -330,33 +331,35 @@ The explanation for the somatic cell lines is less clear. Notably, all of the 12
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_plotBetaFreqPoly.pdf}
-\caption[\emph{EPISCOPE} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the EPISCOPE data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
+\caption[\emph{EPISCOPE} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{EPISCOPE} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
 \label{fig:EPISCOPE_plotBetaFreqPoly}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Lister_plotBetaFreqPoly.pdf}
-\caption[\emph{Lister} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the Lister data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
+\caption[\emph{Lister} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Lister} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
 \label{fig:Lister_plotBetaFreqPoly}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Seisenberger_plotBetaFreqPoly.pdf}
-\caption[\emph{Seisenberger} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the Seisenberger data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
+\caption[\emph{Seisenberger} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Seisenberger} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
 \label{fig:Seisenberger_plotBetaFreqPoly}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_plotBetaFreqPoly.pdf}
-\caption[\emph{Ziller} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the Ziller data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
+\caption[\emph{Ziller} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Ziller} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
 \label{fig:Ziller_plotBetaFreqPoly}
 \end{figure}
 
-The bimodality of the genome-wide $\beta$-value distributions is driven by the fact that most CpGs in CpG islands are unmethylated whereas those outside of the islands are mostly methylated. Figures \ref{fig:EPISCOPE_plotBetaDensity_CGI}, \ref{fig:Lister_plotBetaDensity_CGI}, \ref{fig:Seisenberger_plotBetaDensity_CGI} and \ref{fig:Ziller_merged_plotBetaDensity_CGI} show the kernel density plots of the $\beta$-value distributions stratified by CpG island status for the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, respectively. These distributions are normalised so that each density has a maximum value of 1.
+\FloatBarrier
+
+The bimodality of the genome-wide $\beta$-value distributions is driven by the fact that most CpGs in CpG islands are unmethylated whereas those outside of the CpG islands are mostly methylated. Figures \ref{fig:EPISCOPE_plotBetaDensity_CGI}, \ref{fig:Lister_plotBetaDensity_CGI}, \ref{fig:Seisenberger_plotBetaDensity_CGI} and \ref{fig:Ziller_merged_plotBetaDensity_CGI} show the kernel density plots of the $\beta$-value distributions stratified by CpG island status for the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, respectively. These distributions are normalised so that each density has a maximum value of 1.
 
 These plots show that CpG islands have a more strictly bimodal distribution than do the non-islands. While the majority of CpGs in CpG islands are unmethylated, there are a subset of methylated CpGs in CpG islands in each sample (except for the _E16.5\_male\_1_ sample). The _H1\_r1_ and _H1\_r2_ samples, replicates of an embryonic stem cell line, stand out for having CpGs in CpG islands being more methylated than unmethylated. These plots also show that most of the intermediate methylation occurs outside of the CpG islands.
 
-Because these densities are normalised, these plots don't show the proportion of CpGs in CpG islands. Therefore, Figures \ref{fig:EPISCOPE_plotBetaFreqPoly_CGI}, \ref{fig:Lister_plotBetaFreqPoly_CGI}, \ref{fig:Seisenberger_plotBetaFreqPoly_CGI} and \ref{fig:Ziller_merged_plotBetaFreqPoly_CGI} show the same data but with $\beta$-values grouped into $0.01$-width bins and plotted against the percentage of total CpGs in each bin. These plots highlight that the majority of unmethylated CpGs occur in CpG islands and that most of the intermediate methylation occurs outside of CpG islands, owing to most CpGs being outside of an island.
+Because these densities are normalised, these plots don't show the proportion of CpGs in CpG islands. Therefore, Figures \ref{fig:EPISCOPE_plotBetaFreqPoly_CGI}, \ref{fig:Lister_plotBetaFreqPoly_CGI}, \ref{fig:Seisenberger_plotBetaFreqPoly_CGI} and \ref{fig:Ziller_merged_plotBetaFreqPoly_CGI} show the same data but with $\beta$-values grouped into $0.01$-width bins and plotted against the percentage of total CpGs in each bin. These plots highlight that the majority of unmethylated CpGs occur in CpG islands and that most of the intermediate methylation occurs outside of CpG islands, owing to most CpGs being outside a CpG island.
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_plotBetaDensity_CGI.pdf}
@@ -493,12 +496,6 @@ Furthermore, referring to CpGs as "methylcytosines" results in a loss of informa
 
 In summary, for bisulfite-sequencing experiments where the DNA for each sample comes from multiple cells I do not think it makes sense, nor is it useful, to refer to individual cytosines, $i$, as being methylated or unmethylated. Instead, it is better to summarise the methylation level at a CpG by a $\beta$-value since this has a natural interpretation as the estimated proportion of haploid genomes in the sample that are methylated at that CpG. Unfortunately, $\beta$-values are not without their own issues, as discussed in Section \ref{sec:beta_biases}.
 
-\subsection{Spatial correlations of $\beta$-values}
-
-Many researchers have observed that DNA methylation is spatially correlated along the genome, \citep[e.g.,][]{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Hansen:2011gu, Hebestreit:2013ko, Wang:2011cw, Pedersen:2012vl, Lacey:2013iy, Sofer:2013bk, Liu:dy, Lyko:2010dr, Landan:2012kp, Lister:2009hy}. I call this spatial correlation of methylation levels _co-methylation_.
-
-I examine in detail the spatial correlations of $\beta$-values in Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}.
-
 \subsection{Sources of bias in $\beta$-values}\label{sec:beta_biases}
 
 The natural interpretation of $\beta_{i}$ is the average level of methylation at the $i^{th}$ locus. However, this will be biased if the probability of sequencing a fragment with a methylated site is different from the probability of sequencing a fragment with an unmethylated site. In fact, it has been shown that methylated DNA is overrepresented in bisulfite-sequencing data due, with the problem exacerbated by higher rounds of PCR amplification and dependent on the bisulfite-conversion protocol \citep{Ji:2014fq}. PCR amplification can result in overreprestation of one of the DNA strands in bisulfite-sequencing data \citep{Warnecke:1997eh}.
@@ -525,6 +522,12 @@ One transformation that remains popular, at least in the analysis of DNA methyla
 \citet{Du:2010dc} advocate for the use of $\mathcal{M}$-values for conducting differential methylation analysis from microarray data[^interpretation]. The main reason they advocate for the use of $\mathcal{M}$-values is that they are approximately _homoscedastic_, i.e. their variances are approximately constant across the full range of $\mathcal{M}$-values. As already noted, the logit-transformation is not the only possible variance-stabilising transformation, but the familiarity of log-ratios to bioinformaticians and genomics researchers makes it a favourable choice. As with $\beta$-values, the $\mathcal{M}$-values derived from bisulfite-sequencing data cannot generally be directly analysed due to the variable sequencing coverage across loci.
 
 [^interpretation]: \citet{Du:2010dc} also recommend that the results of analyses are reported as $\beta$-values owing to their "more intuitive biological interpretation".
+
+\subsection{Spatial correlations of $\beta$-values}
+
+Many researchers have observed that DNA methylation is spatially correlated along the genome, \citep[e.g.,][]{Eckhardt:2006gh, Cokus:2008fc, Li:2010fb, Hansen:2011gu, Hebestreit:2013ko, Wang:2011cw, Pedersen:2012vl, Lacey:2013iy, Sofer:2013bk, Liu:dy, Lyko:2010dr, Landan:2012kp, Lister:2009hy}. I call this spatial correlation of methylation levels _co-methylation_.
+
+I examine in detail the spatial correlations of $\beta$-values in Chapters \ref{chap:co-methylation_review} and \ref{chap:co-methylation}.
 
 \section{Summary}
 
