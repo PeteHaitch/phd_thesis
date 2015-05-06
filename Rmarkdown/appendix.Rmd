@@ -117,7 +117,7 @@ x <- x[x[, 2] != "*", ]
 x <- x[, -c(2, 4)]
 # Drop MethylationTuples and methsim which are reported elsewhere
 x <- x[!x$package %in% c("methsim", "MethylationTuples", "GenomicTUples"), ]
-xt <- xtable(x, caption = c("R packages used in thesis as reported by \\texttt{devtools::session\\_info()}", "R packages used in thesis"),
+xt <- xtable(x, caption = c("R packages used in thesis (as reported by \\texttt{devtools::session\\_info()})", "R packages used in thesis"),
              label = "tab:R_packages")
 align(xt) <- rep("l", 4)
 print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable",

@@ -34,6 +34,7 @@ IRanges		2.2.1	2015-04-22	Bioconductor
 knitr		1.10	2015-04-23	CRAN (R 3.2.0)
 lambda.r	*	1.1.7	2015-03-20	CRAN (R 3.2.0)
 magrittr	*	1.5	2014-11-22	CRAN (R 3.2.0)
+makeCGI		1.2	2015-05-06	local
 MASS	*	7.3-40	2015-03-21	CRAN (R 3.2.0)
 methsim		0.5.0.9013	2015-04-25	Github (PeteHaitch/methsim@9162c8b)
 MethylationTuples		0.3.0.9007	2015-04-24	Github (PeteHaitch/MethylationTuples@4e127d2)
