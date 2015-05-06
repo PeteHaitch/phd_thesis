@@ -89,24 +89,26 @@
   - __DONE__- [ ] Fix MethylationTuples::mantelhaen(). Works if copy-pasted into session but not as part of MethylationTuples package. Then update Software Details in Appendix.
 - [x] Explain why Seisenberger only has 2 partitioned methylomes
   - __DONE__
+- [ ] Address Dineika's suggestions and add Dineika to acknowledgements
+  - __DONE__
+- [x] Check fonts on `methtuple` performance plots are legible when printed.
+  - __DONE: Made figure larger but didn't alter x-axis labels (can't, not enough space).__
+
 
 ## Thursday tasks
 
-- [ ] Send Dineika the front matter.
-  - Address Dineika's suggestions
-  - Add Dineika to acknowledgements
 - [ ] Terry's point re convergence argument (p196)
-- [ ] Check fonts on `methtuple` performance plots are legible when printed.
-- [ ] Compress PDF
 - [ ] Clarify the definition of $\psi_{U}$ for $2 \times 2 \times K$; is it the same as the "collapsed" estimator?
 - [ ] Be more specific with what was discovered in the analyses of co-methylation?
 - [ ] Add `makeCGI` to list of software.
+- [ ] Read unimelb docs on submission
 
 ## Friday tasks
 
 - [ ] Add analysis folder to github
   - First upload `.Rmd` analysis scripts.
   - Upload <sample>.CG.<m>.tsv.gz Lister, Seisenberger, Ziller samples (m = 1, 2, 2ac) to figshare. All 1-tuples are under Figshare's 250 MB limit but the same is not true of 2-tuples or 2ac-tuples.
+- [ ] Compress PDF
 
 # Long term
 
