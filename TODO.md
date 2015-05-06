@@ -99,14 +99,16 @@
   - __DONE__
 - [x] Read unimelb docs on submission
   - __DONE__
+- [x] Check Cokus equations about joint probs
+  - __DONE: Correct in text__
+- [x] Check Breslow:1981ta for definitions of odds ratio estimates in 3-way tables
+  - __DONE__
+- [x] Check latex logs for warnings/errors
+  - __DONE__
+
 
 ## Thursday tasks
 
-- [ ] Check Cokus equations about joint probs
-- [ ] Check Breslow:1981ta for definitions of odds ratio estimates in 3-way tables
-  - "We can again compute an unconditional maximum likelihood estimator, a '0.5-adjusted' unconditional maximum likelihood estimator, and a conditional maximum likelihood estimator of the odds ratio $\psi$ \citep[see][]{Breslow:1981ta}."
-  - \citet{Breslow:1981ta} showed that under $A2$ neither the unconditional maximum likelihood estimator, $\widehat{\psi}_{U}$, nor the '0.5-adjusted' unconditional maximum likelihood estimator, $\widehat{\psi}_{0.5}$, converge to the true odds ratio. In contrast, both the Mantel-Haenszel estimator, $\widehat{\psi}_{MH}$, and the conditional maximum likelihood estimator, $\widehat{\psi}_{C}$, do converge to $\psi$, with $\widehat{\psi}_{MH}$ having the advantage of a simple closer form expression \citep{Breslow:1996uc}. (maybe get rid of notation)
-- [ ] Check latex logs for warnings/errors
 
 ## Friday tasks
 

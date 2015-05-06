@@ -366,7 +366,7 @@ Another estimator of the common odds ratio, $\psi$, is the Mantel-Haenszel estim
 
 The first asymptotic environment, $A1$, assumes that $K$ remains small while the the sample sizes in each strata, $n_{+ + k}$, grows large. The second asymptotic environment, $A2$, assumes that $K$ grows while $n_{+ + k}$ remains small. The variance estimator proposed by \citet{Robins:1986vh} is consistent under both $A1$ and $A2$. For our study of within-fragment co-methylation, $A2$ is the more relevant asymptotic environment.
 
-\citet{Breslow:1981ta} showed that under $A2$ neither the unconditional maximum likelihood estimator, $\widehat{\psi}_{U}$, nor the '0.5-adjusted' unconditional maximum likelihood estimator, $\widehat{\psi}_{0.5}$, converge to the true odds ratio. In contrast, both the Mantel-Haenszel estimator, $\widehat{\psi}_{MH}$, and the conditional maximum likelihood estimator, $\widehat{\psi}_{C}$, do converge to $\psi$, with $\widehat{\psi}_{MH}$ having the advantage of a simple closer form expression \citep{Breslow:1996uc}.
+\citet{Breslow:1981ta} showed that under $A2$ that the unconditional maximum likelihood estimator does not converge to the true odds ratio. In contrast, both the Mantel-Haenszel estimator and the conditional maximum likelihood estimator do converge to the true odds ratio, with the Mantel-Haenszel estimator having the advantage of a simple closed form expression \citep{Breslow:1996uc}.
 
 \subsection{Homogeneity of odds ratios assumption}
 
