@@ -391,7 +391,7 @@ For each set of parameters, we generate $K$ $2 \times 2$ contingency tables havi
 2. The unconditional log odds ratio estimate from the $2 \times 2$ table formed by collapsing over $k$, $\widehat{\theta}_{U}$.
 3. The Mantel-Haenszel log odds ratio estimate from the $2 \times 2 \times K$ table, $\widehat{\theta}_{MH}$.
 
-The results of each simulation are summarised by a plot of $\widehat{\theta}_{0.5}$ (histogram), the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange), and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The density of $\theta_{k}$, the value of the true log odds ratio in the $k^{th}$ slice of the $2 \times 2 \times K$ table, is shown by a dashed black line[^density].
+The results of each simulation are summarised by a plot of $\widehat{\theta}_{0.5}$ (histogram), the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange), and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The density of $\theta_{k}$, the value of the true log odds ratio in the $k^{th}$ slice of the $2 \times 2 \times K$ table, is shown by a black curve[^density].
 
 [^density]: In many simulations $\theta$ is constant across the $K$ tables and therefore the density is degenerate.
 
@@ -402,14 +402,14 @@ To begin, we explore the effect of the marginal probabilities, $\pi_{2 +}$ and $
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_1.pdf}
-\caption[Simulation 1a]{Results of simulation 1a ($K = 100$). Estimating the log odds ratio, $\theta = 0$ (shown by the dashed line), from a $2 \times 2 \times 100$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\caption[Simulation 1a]{Results of simulation 1a ($K = 100$). Estimating the log odds ratio, $\theta = 0$ (shown by the black line), from a $2 \times 2 \times 100$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_1a}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_2.pdf}
-\caption[Simulation 1b]{Results of simulation 1b ($K = 1000$). Estimating the log odds ratio, $\theta = 0$ (shown by the dashed line), from a $2 \times 2 \times 1000$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\caption[Simulation 1b]{Results of simulation 1b ($K = 1000$). Estimating the log odds ratio, $\theta = 0$ (shown by the black line), from a $2 \times 2 \times 1000$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_1b}
 \end{figure}
 
@@ -418,7 +418,7 @@ The bias can be eliminated only by having ultra-deep sequencing coverage, such a
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_2d.pdf}
-\caption[Simulation 1c]{Results of simulation 1c ($K = 1000$). Estimating the log odds ratio, $\theta = 0$ (shown by the dashed line), from a $2 \times 2 \times 1000$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $10,000$.}
+\caption[Simulation 1c]{Results of simulation 1c ($K = 1000$). Estimating the log odds ratio, $\theta = 0$ (shown by the black line), from a $2 \times 2 \times 1000$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $10,000$.}
 \label{fig:Simulation_1c}
 \end{figure}
 
@@ -429,7 +429,7 @@ Next, we explore what happens when we allow the marginal probabilities, $\pi_{2 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_3.pdf}
-\caption[Simulation 2]{Results of simulation 2 ($K = 100$). Estimating the log odds ratio, $\theta$ (shown by the dashed line), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Uniform(0, 1)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\caption[Simulation 2]{Results of simulation 2 ($K = 100$). Estimating the log odds ratio, $\theta$ (shown by the black line, $-4, -3, \ldots, 3, 4$ across the panels), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Uniform(0, 1)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_2}
 \end{figure}
 
@@ -447,7 +447,7 @@ The results of this simulation (Simulation 3, Figure \ref{fig:Simulation_3}) are
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_4.pdf}
-\caption[Simulation 3]{Results of simulation 3 ($K = 100$). Estimating the log odds ratio, $\theta$ (shown by the dashed line), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\caption[Simulation 3]{Results of simulation 3 ($K = 100$). Estimating the log odds ratio, $\theta$ (shown by the black line, $-4, -3, \ldots, 3, 4$ across the panels), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_3}
 \end{figure}
 
@@ -466,21 +466,21 @@ Simulations 4a, 4b and 5 (Figures \ref{fig:Simulation_4a}, \ref{fig:Simulation_4
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_5.pdf}
-\caption[Simulation 4a]{Results of simulation 4a ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Gaussian(\theta_{0}, 1)$ (density shown by the dashed line), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\caption[Simulation 4a]{Results of simulation 4a ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Gaussian(\theta_{0}, 1)$ (density shown by the black curve), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_4a}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_6.pdf}
-\caption[Simulation 4b]{Results of simulation 4b ($K = 1000$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Gaussian(\theta_{0}, 1)$ (density shown by the dashed line), from a $2 \times 2 \times 1000$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\caption[Simulation 4b]{Results of simulation 4b ($K = 1000$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Gaussian(\theta_{0}, 1)$ (density shown by the black curve), from a $2 \times 2 \times 1000$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_4b}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_7.pdf}
-\caption[Simulation 5]{Results of simulation 5 ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Skewed\text{-}Gaussian(\theta_{0}, 1, -10)$ (density shown by the dashed line), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\caption[Simulation 5]{Results of simulation 5 ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Skewed\text{-}Gaussian(\theta_{0}, 1, -10)$ (density shown by the black curve), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_5}
 \end{figure}
 
@@ -489,7 +489,7 @@ To take this heterogeneity even further, Simulation 6 (Figure \ref{fig:Simulatio
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/Simulation_8.pdf}
-\caption[Simulation 6]{Results of simulation 5 ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = 0.5 \times Gaussian(- \theta_{0}, 1) + 0.5 \times Gaussian(\theta_{0}, 1)$ (density shown by the dashed line), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (solid line) and $95 \%$ confidence interval (dashed lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
+\caption[Simulation 6]{Results of simulation 5 ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = 0.5 \times Gaussian(- \theta_{0}, 1) + 0.5 \times Gaussian(\theta_{0}, 1)$ (density shown by the black curve), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_6}
 \end{figure}
 
