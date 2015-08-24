@@ -330,34 +330,13 @@ Genomics research was revolutionised by the development of cheap high-throughput
 
 \citet{Cokus:2008fc} termed their approach _BS-seq_ while \citet{Lister:2008bh} called their method _methylC-seq_. From a bioinformatics perspective, the main difference is that the BS-seq protocol produces sequencing reads from four bisulfite-converted DNA strands --- the original top strand (_OT_), the complementary strand to the original top strand (_CTOT_), the original bottom strand (_OB_) and the complementary strand to the original bottom strand (_CTOB_) --- which require mapping to four different _in silico_ converted reference genomes, followed by a merge of the alignment results. In contrast, the methylC-seq protocol only produces sequencing reads from two bisulfite-converted strands --- _OT_ and _OB_ --- and so only requires mapping to two different _in silico_ converted reference genomes, followed by a merge. The methylC-seq protocol is now the standard whole-genome bisulfite-sequencing protocol, due in part to the simpler bioinformatics analysis.
 
-Whole-genome bisulfite-sequencing remains an expensive assay, which limits its use in studies involving large numbers of samples. Furthermore, depending on the choice of several sequencing parameters, approximately $35 \%$ to $72\%$ of reads will not contain any CpGs (Table \ref{tab:reads_without_cpgs}), which might be considered a gross waste of resources for some experiments.
+Whole-genome bisulfite-sequencing remains an expensive assay, which limits its use in studies involving large numbers of samples. Furthermore, depending on the choice of several sequencing parameters, approximately $35 \%$ to $72\%$ of reads will not contain any CpGs (Figure \ref{fig:reads_without_cpgs}), which might be considered a gross waste of resources for some experiments.
 
-\begin{table}[h]
-\centering
-\caption[Percentage of reads without CpGs]{The percentage of reads that do not contain any CpGs for each sample in the \emph{Lister} dataset. Paired-end reads are counted as a single read and as such have a lower percentage of reads without CpGs. See Chapter \ref{chap:datasets} for a description of the \emph{Lister} dataset.}
-\label{tab:reads_without_cpgs}
-\begin{tabular}{@{}rc@{}}
-\toprule
-Sample              & Reads with no CpG \\ \midrule
-ADS-iPSC            & $35 \%$                \\
-ADS-adipose         & $37 \%$                \\
-ADS                 & $39 \%$                \\
-H9\_Laurent         & $39 \%$                \\
-FF-iPSC\_19.11      & $48 \%$                \\
-FF-iPSC\_19.7       & $49 \%$                \\
-H1+BMP4             & $49 \%$                \\
-FF-iPSC\_6.9        & $50 \%$                \\
-IMR90-iPSC          & $50 \%$                \\
-H9                  & $51 \%$                \\
-FF-iPSC\_19.11+BMP4 & $52 \%$                \\
-FF                  & $53 \%$                \\
-IMR90\_r2           & $57 \%$                \\
-IMR90\_r1           & $58 \%$                \\
-H1\_r2              & $59 \%$                \\
-H1\_r1              & $62 \%$                \\
-HSF1                & $72 \%$                \\ \bottomrule
-\end{tabular}
-\end{table}
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{../figures/percentage-reads-without-CpGs.pdf}
+\caption[Percentage of reads without CpGs]{The percentage of reads that do not contain any CpGs for each sample in the \emph{Lister} dataset. Paired-end (PE) reads are counted as a single unit. Therefore, samples sequenced with paired-end reads have a lower percentage of reads without CpGs than do samples sequenced with single-end (SE) reads. See Chapter \ref{chap:datasets} for a description of the \emph{Lister} dataset.}
+\label{fig:reads_without_cpgs}
+\end{figure}
 
 Several assays have been developed to perform targeted high-throughput bisulfite-sequencing. The targeted nature of these assays are their obvious advantage and disadvantage; only a subset of the genome needs be sequenced but you only obtain information about methylation for that subset. Depending on the experiment, this tradeoff may be worthwhile, and these assays have been successfully used in a number of studies such as the BLUEPRINT Epigenome project ([http://www.blueprint-epigenome.eu](http://www.blueprint-epigenome.eu)) and the NIH Roadmap Epigenomics Mapping Consortium ([http://www.roadmapepigenomics.org](http://www.roadmapepigenomics.org))
 
@@ -386,12 +365,12 @@ TAB-seq takes the opposite approach to oxBS-seq by specifically measuring 5hmC. 
 
 There is also potential confounding of 5C, 5mC and 5hmC with 5fC and 5caC, although this has received less attention since 5fC and 5caC are believed to exist at far lower quantities than 5mC and 5hmC. Nonetheless, sequencing assays of 5fC and 5caC exist based on the idea of treating the DNA with a chemical and performing 'signal subtraction' with traditional bisulfite-sequencing or another assay \citep{Wu:2014jj}.
 
-Another disadvantage of bisulfite-conversion assays is that they require knowledge of the underlying DNA sequence in order to infer the methylation states of cytosines. This requires either a parallel experiment to sequence the target region(s) or reliance on a reference genome. When relying on a reference genome, the inference of the methylation state can be confounded by the DNA sequence of the sample \citep{Liu:2012ge}. Figure \ref{fig:bisulfite_CT_SNP.pdf} illustrates such an example.
+Another disadvantage of bisulfite-conversion assays is that they require knowledge of the underlying DNA sequence in order to infer the methylation states of cytosines. This requires either a parallel experiment to sequence the target region(s) or reliance on a reference genome. When relying on a reference genome, the inference of the methylation state can be confounded by the DNA sequence of the sample \citep{Liu:2012ge}. Figure \ref{fig:bisulfite_CT_SNP} illustrates such an example.
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/bisulfite_CT_SNP.pdf}
 \caption[Sequence variation confounds methylation calling]{Sequence variation between the reference genome and the sample's genome can result in incorrect inference about the methylation state of the sample's genome. The locus in orange is a cytosine in the reference genome but a thymine in the sample's genome. Because the read is compared against the reference genome, it may incorrectly inferred to be an unmethylated cytosine. The locus in purple is a thymine in the reference genome but an unmethylated cytosine in the sample's genome. Because the read is compared against the reference genome, it may incorrectly inferred to be a thymine.}
-\label{fig:bisulfite_CT_SNP.pdf}
+\label{fig:bisulfite_CT_SNP}
 \end{figure}
 
 The bisulfite-treatment of DNA can introduce biases and other problems. Three examples are _PCR-bias_, _incomplete bisulfite conversion_ and _DNA degradation_. PCR-bias is the difference in amplification efficiency of methylated and unmethylated versions of the same DNA sequence \citep{Warnecke:1997eh}. Incomplete bisulfite-conversion leads to cytosines being incorrectly inferred as 5mC since they cytosines were not converted to uracils by the bisulfite-treatment. DNA degredation occurs because sodium bisulfite damages DNA, resulting in the fragmentation of long molecules. This limits the size of the fragments that can be studied using bisulfite-conversion assays to approximately $500$ bp \citep{Ecker:2010et}

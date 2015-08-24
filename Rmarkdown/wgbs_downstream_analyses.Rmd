@@ -313,14 +313,14 @@ Shown in Table \ref{tab:methpat_sparsity} is the size of the `MethPat` objects i
 \centering
 \caption[Size of \texttt{MethPat} objects for the \emph{EPISCOPE} data]{Size of \texttt{MethPat} objects for the \emph{EPISCOPE} data ($N_{samples} = 12$). All m-tuples are stranded. The `size' of the \texttt{MethPat} object, reported in gigabytes (GB), is computed using the \texttt{pryr::object\_size()} function (\url{http://cran.r-project.org/web/packages/pryr/index.html}). The `number of rows' corresponds to the number of m-tuples in the object. The `number of assays' is $2^{\text{m}}$, where m is the size of the m-tuples. The final column is a measure of how sparse the data are: a $0$ value means that particular methylation pattern was not observed in that particular sample and an \texttt{NA} value means that that m-tuple was not observed in that particular sample.}
 \label{tab:methpat_sparsity}
-\begin{tabulary}{\textwidth}{LLLLL}
+\begin{tabulary}{\textwidth}{LRRRR}
 \toprule
 & Size (GB) & Number of rows & Number of assays & Percentage of $0$ and \texttt{NA} values \\ \midrule
-1-tuples                                 & $5.9$                        & $56,348,522$    & $2$              & $28\%$                                     \\
-2-tuples                                 & $20.1$                       & $100,586,237$   & $4$              & $80\%$                                     \\
-2-tuples (\texttt{{-}{-}all-combinations}) & $60.0$                          & $299,814,999$   & $4$              & $78\%$                                     \\
-3-tuples                                 & $43.3$                       & $109,376,348$   & $8$              & $93\%$                                     \\
-4-tuples                                 & $80.5$                       & $102,625,758$   & $16$             & $97\%$                                       \\ \bottomrule
+1-tuples                                 & $5.9$                        & $56,348,522$  & $2$              & $28\%$                                     \\
+2-tuples                                 & $20.1$                       & $100,586,237$ & $4$              & $80\%$                                     \\
+2-tuples (\texttt{{-}{-}all-combinations}) & $60.0$                          & $299,814,999$  & $4$              & $78\%$                                     \\
+3-tuples                                 & $43.3$                       & $109,376,348$ & $8$              & $93\%$                                     \\
+4-tuples                                 & $80.5$                       & $102,625,758$ & $16$             & $97\%$                                       \\ \bottomrule
 \end{tabulary}
 \end{table}
 

@@ -424,10 +424,6 @@ The output format of `methtuple` is tab-delimited plain text, optionally compres
 
 I have used `methtuple` to perform methylation calling at CpG m-tuples, $m = 1, \ldots, 8$, for more than $40$ whole-genome bisulfite-sequencing samples. Figure \ref{fig:methtuple_runtime} shows the distribution of running times and Figure \ref{fig:methtuple_memory} the maximum memory usage across all the samples from the EPISCOPE, Lister and Ziller datasets. For each sample, each chromosome was processed using a single core on one of the shared-use servers in the Bioinformatics Division (see Table \ref{tab:unices} in the Appendix for details of these machines).
 
-The running time of `methtuple` is proportional to the number of reads mapped to the chromosome, which is proportional to the length of the chromosome and its copy number. The running time is largely independent of the tuple size (`-m`). The variation in running times within a chromosome is due to the number of reads generated per sample and the length of the reads, where the length of a paired-end read is defined as the sum of the mates' lengths. Samples with more reads take longer to process and samples sequenced with longer reads take longer because these contain more m-tuples.
-
-The maximum memory usage is not strictly proportional to chromosome length. It is instead driven by the number and density of CpGs on the chromosome.  For example, chromosome 19, which has the highest CpG density of all the autosomes in the human genome, requires far more memory than chromosome 18, which has less than half the CpG density of chromosome 19 (see Table \ref{tab:cpg_density_hg19}). The relationship between the maximum memory usage and the tuple size (`-m`) is complex; more data have to be retained as `-m` increases, thus increasing the memory usage, but fewer reads contain tuples of that size and so there aren't as many m-tuples or observations on these to count and retain. Memory usage is therefore relatively constant across values of `-m` for a given chromosome. The obvious exception is for the results labelled `2ac`, which used the `--all-combinations` flag in conjunction with `-m 2`. This means that all 2-tuples with $NIL \geq 0$ were extracted and there are many, many more CpG 2-tuples with $NIL \geq 0$ than there are with $NIL = 0$, hence the increase in memory usage.
-
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_runtime.pdf}
@@ -442,17 +438,18 @@ The maximum memory usage is not strictly proportional to chromosome length. It i
 \label{fig:methtuple_memory}
 \end{figure}
 
-\FloatBarrier
+The running time of `methtuple` is proportional to the number of reads mapped to the chromosome, which is proportional to the length of the chromosome and its copy number. The running time is largely independent of the tuple size (`-m`). The variation in running times within a chromosome is due to the number of reads generated per sample and the length of the reads, where the length of a paired-end read is defined as the sum of the mates' lengths. Samples with more reads take longer to process and samples sequenced with longer reads take longer because these contain more m-tuples.
 
-```{r autosomal_cpg_density_hg19, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
-library(xtable)
-x <- read.table("../data/wgbs_bioinformatics_analysis/CpG_density_hg19.txt",
-                header = TRUE, stringsAsFactors = FALSE)
-xt <- xtable(x, caption = c("Percentage of dinucleotides that are CpGs for each chromosome in the human reference genome (hg19).", "CpG percentage per chromosome in hg19"), label = "tab:cpg_density_hg19")
-align(xt) <- rep("c", ncol(x) + 1)
-digits(xt) <- 2
-print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, include.rownames = FALSE, caption.placement = "top")
-```
+The maximum memory usage is not strictly proportional to chromosome length. It is instead driven by the number and density of CpGs on the chromosome.  For example, chromosome 19, which has the highest CpG density of all the autosomes in the human genome, requires far more memory than chromosome 18, which has less than half the CpG density of chromosome 19 (see Figure \ref{fig:cpg_density_hg19}). The relationship between the maximum memory usage and the tuple size (`-m`) is complex; more data have to be retained as `-m` increases, thus increasing the memory usage, but fewer reads contain tuples of that size and so there aren't as many m-tuples or observations on these to count and retain. Memory usage is therefore relatively constant across values of `-m` for a given chromosome. The obvious exception is for the results labelled `2ac`, which used the `--all-combinations` flag in conjunction with `-m 2`. This means that all 2-tuples with $NIL \geq 0$ were extracted and there are many, many more CpG 2-tuples with $NIL \geq 0$ than there are with $NIL = 0$, hence the increase in memory usage.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/CpG_density_hg19.pdf}
+\caption[CpG percentage per chromosome in hg19]{Percentage of dinucleotides that are CpGs for each chromosome in the human reference genome (hg19).}
+\label{fig:cpg_density_hg19}
+\end{figure}
+
+\FloatBarrier
 
 \subsection{Availability}
 

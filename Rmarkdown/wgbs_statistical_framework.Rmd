@@ -307,49 +307,49 @@ The explanation for the somatic cell lines is less clear. Notably, all of the 12
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_plotBetaDensity.pdf}
-\caption[\emph{EPISCOPE} $\beta$-value kernel density]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{EPISCOPE} data. Densities are normalised so that the maximum value for each sample is 1. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
+\caption[\emph{EPISCOPE}: $\beta$-value kernel density]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{EPISCOPE} data. Densities are normalised so that the maximum value for each sample is 1. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:EPISCOPE_plotBetaDensity}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Lister_plotBetaDensity.pdf}
-\caption[\emph{Lister} $\beta$-value kernel density]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Lister} data. Densities are normalised so that the maximum value for each sample is 1. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
+\caption[\emph{Lister}: $\beta$-value kernel density]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Lister} data. Densities are normalised so that the maximum value for each sample is 1. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:Lister_plotBetaDensity}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Seisenberger_plotBetaDensity.pdf}
-\caption[\emph{Seisenberger} $\beta$-value kernel density]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Seisenberger} data. Densities are normalised so that the maximum value for each sample is 1. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
+\caption[\emph{Seisenberger}: $\beta$-value kernel density]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Seisenberger} data. Densities are normalised so that the maximum value for each sample is 1. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:Seisenberger_plotBetaDensity}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_plotBetaDensity.pdf}
-\caption[\emph{Ziller} $\beta$-value kernel density]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Ziller} data. Densities are normalised so that the maximum value for each sample is 1. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
+\caption[\emph{Ziller}: $\beta$-value kernel density]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Ziller} data. Densities are normalised so that the maximum value for each sample is 1. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:Ziller_merged_plotBetaDensity}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_plotBetaFreqPoly.pdf}
-\caption[\emph{EPISCOPE} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{EPISCOPE} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
+\caption[\emph{EPISCOPE}: $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{EPISCOPE} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
 \label{fig:EPISCOPE_plotBetaFreqPoly}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Lister_plotBetaFreqPoly.pdf}
-\caption[\emph{Lister} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Lister} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
+\caption[\emph{Lister}: $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Lister} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
 \label{fig:Lister_plotBetaFreqPoly}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Seisenberger_plotBetaFreqPoly.pdf}
-\caption[\emph{Seisenberger} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Seisenberger} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
+\caption[\emph{Seisenberger}: $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Seisenberger} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
 \label{fig:Seisenberger_plotBetaFreqPoly}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_plotBetaFreqPoly.pdf}
-\caption[\emph{Ziller} $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Ziller} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
+\caption[\emph{Ziller}: $\beta$-value frequency polygon]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Ziller} data. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Observations have been combined across strands and only CpGs with at least $10 \times$ sequencing coverage are included.}
 \label{fig:Ziller_plotBetaFreqPoly}
 \end{figure}
 
@@ -363,49 +363,49 @@ Because these densities are normalised, these plots don't show the proportion of
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_plotBetaDensity_CGI.pdf}
-\caption[\emph{EPISCOPE} $\beta$-value kernel density stratified by CpG islands]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{EPISCOPE} data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
+\caption[\emph{EPISCOPE}: $\beta$-value kernel density stratified by CpG islands]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{EPISCOPE} data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:EPISCOPE_plotBetaDensity_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Lister_plotBetaDensity_CGI.pdf}
-\caption[\emph{Lister} $\beta$-value kernel density stratified by CpG islands]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Lister} data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
+\caption[\emph{Lister}: $\beta$-value kernel density stratified by CpG islands]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Lister} data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:Lister_plotBetaDensity_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Seisenberger_plotBetaDensity_CGI.pdf}
-\caption[\emph{Seisenberger} $\beta$-value kernel density stratified by CpG islands]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Seisenberger} data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
+\caption[\emph{Seisenberger}: $\beta$-value kernel density stratified by CpG islands]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Seisenberger} data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:Seisenberger_plotBetaDensity_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_plotBetaDensity_CGI.pdf}
-\caption[\emph{Ziller} $\beta$-value kernel density stratified by CpG islands]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Ziller} data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
+\caption[\emph{Ziller}: $\beta$-value kernel density stratified by CpG islands]{Kernel density estimates of the genome-wide distribution of CpG $\beta$-values for the \emph{Ziller} data, stratified by whether the CpG is in a CpG island. Only CpGs with at least $10 \times$ sequencing coverage are included. `Spikes' in the density estimate are due to the discreteness of $\beta$-values.}
 \label{fig:Ziller_merged_plotBetaDensity_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/EPISCOPE_plotBetaFreqPoly_CGI.pdf}
-\caption[\emph{EPISCOPE} $\beta$-value frequency polygon stratified by CpG islands]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{EPISCOPE} data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10 \times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
+\caption[\emph{EPISCOPE}: $\beta$-value frequency polygon stratified by CpG islands]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{EPISCOPE} data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10 \times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
 \label{fig:EPISCOPE_plotBetaFreqPoly_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Lister_plotBetaFreqPoly_CGI.pdf}
-\caption[\emph{Lister} $\beta$-value frequency polygon stratified by CpG islands]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Lister} data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10 \times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
+\caption[\emph{Lister}: $\beta$-value frequency polygon stratified by CpG islands]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Lister} data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10 \times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
 \label{fig:Lister_plotBetaFreqPoly_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Seisenberger_plotBetaFreqPoly_CGI.pdf}
-\caption[\emph{Seisenberger} $\beta$-value frequency polygon stratified by CpG islands]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Seisenberger} data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10 \times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
+\caption[\emph{Seisenberger}: $\beta$-value frequency polygon stratified by CpG islands]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Seisenberger} data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10 \times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
 \label{fig:Seisenberger_plotBetaFreqPoly_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \includegraphics[width=\textwidth]{../figures/Ziller_merged_plotBetaFreqPoly_CGI.pdf}
-\caption[\emph{Ziller} $\beta$-value frequency polygon stratified by CpG islands]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Ziller} data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10 \times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
+\caption[\emph{Ziller}: $\beta$-value frequency polygon stratified by CpG islands]{Frequency polygon of the genome-wide distribution of CpG $\beta$-values for the \emph{Ziller} data, stratified by whether the CpG is in a CpG island. $\beta$-values are grouped into $0.01$-width bins and the percentage of CpGs in each bin is plotted on the y-axis. Only CpGs with at least $10 \times$ sequencing coverage are included. Percentages are with respect to all CpGs with at least $10 \times$ sequencing coverage, unstratified by CpG island status.}
 \label{fig:Ziller_merged_plotBetaFreqPoly_CGI}
 \end{figure}
 
@@ -413,52 +413,35 @@ Because these densities are normalised, these plots don't show the proportion of
 
 \subsubsection{Strand-specific $\beta$-values}
 
-CpG $\beta$-values are often computed by aggregating the $m$ and $u$ counts across the forward and reverse strands. On average, this doubles the sequencing coverage of each CpG but presupposes that the two strands are indeed symmetrically methylated. To investigate the validity of this assumption we can compute the correlation of strand-specific $\beta$-values. Tables \ref{tab:EPISCOPE_strand_correlations}, \ref{tab:Lister_strand_correlations}, \ref{tab:Seisenberger_strand_correlations} and \ref{tab:Ziller_merged_strand_correlations} report the Pearson correlation of these strand-specific $\beta$-values for varying sequencing coverage cutoffs.
+CpG $\beta$-values are often computed by aggregating the $m$ and $u$ counts across the forward and reverse strands. On average, this doubles the sequencing coverage of each CpG but presupposes that the two strands are indeed symmetrically methylated. To investigate the validity of this assumption we can compute the correlation of strand-specific $\beta$-values. Figures \ref{fig:EPISCOPE_strand_correlations}, \ref{fig:Lister_strand_correlations}, \ref{fig:Seisenberger_strand_correlations} and \ref{fig:Ziller_merged_strand_correlations} report the Pearson correlation of these strand-specific $\beta$-values for varying sequencing coverage cutoffs.
 
-```{r EPISCOPE_strand_correlations, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
-library(xtable)
-x <- read.table("../data/strand_correlation/EPISCOPE_strand_correlations.txt",
-stringsAsFactors = FALSE)
-colnames(x) <- 1:10
-x <- x[, 1:5]
-xt <- xtable(x, caption = c("Correlations of $\\beta$-values across strands for the \\emph{EPISCOPE} dataset. Each row is a sample and each column is a minimum coverage cutoff.", "\\emph{EPISCOPE}: Correlations of $\\beta$-values across strands"), label = "tab:EPISCOPE_strand_correlations")
-align(xt) <- c("r", rep("c", ncol(x)))
-digits(xt) <- 2
-print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, caption.placement = "top")
-```
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_strand_correlations.pdf}
+\caption[\emph{EPISCOPE}: Correlations of $\beta$-values across strands]{Correlations of $\beta$-values across strands for the \emph{EPISCOPE} dataset using different minimum sequencing coverage cutoffs.}
+\label{fig:EPISCOPE_strand_correlations}
+\end{figure}
 
-```{r Lister_strand_correlations, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
-x <- read.table("../data/strand_correlation/Lister_strand_correlations.txt",
-stringsAsFactors = FALSE)
-colnames(x) <- 1:10
-x <- x[, 1:5]
-xt <- xtable(x, caption = c("Correlations of $\\beta$-values across strands for the \\emph{Lister} dataset. Each row is a sample and each column is a minimum coverage cutoff.", "\\emph{Lister}: Correlations of $\\beta$-values across strands"), label = "tab:Lister_strand_correlations")
-align(xt) <- c("r", rep("c", ncol(x)))
-digits(xt) <- 2
-print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, caption.placement = 'top')
-```
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Lister_strand_correlations.pdf}
+\caption[\emph{Lister}: Correlations of $\beta$-values across strands]{Correlations of $\beta$-values across strands for the \emph{Lister} dataset using different minimum sequencing coverage cutoffs.}
+\label{fig:Lister_strand_correlations}
+\end{figure}
 
-```{r Seisenberger_strand_correlations, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
-x <- read.table("../data/strand_correlation/Seisenberger_strand_correlations.txt",
-stringsAsFactors = FALSE)
-colnames(x) <- 1:10
-x <- x[, 1:5]
-xt <- xtable(x, caption = c("Correlations of $\\beta$-values across strands for the \\emph{Seisenberger} dataset. Each row is a sample and each column is a minimum coverage cutoff.", "\\emph{Seisenberger}: Correlations of $\\beta$-values across strands"), label = "tab:Seisenberger_strand_correlations")
-align(xt) <- c("r", rep("c", ncol(x)))
-digits(xt) <- 2
-print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, caption.placement = 'top')
-```
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Seisenberger_strand_correlations.pdf}
+\caption[\emph{Seisenberger}: Correlations of $\beta$-values across strands]{Correlations of $\beta$-values across strands for the \emph{Seisenberger} dataset using different minimum sequencing coverage cutoffs.}
+\label{fig:Seisenberger_strand_correlations}
+\end{figure}
 
-```{r Ziller_merged_strand_correlations, echo = FALSE, eval = TRUE, message = FALSE, results = "asis"}
-x <- read.table("../data/strand_correlation/Ziller_merged_strand_correlations.txt",
-stringsAsFactors = FALSE)
-colnames(x) <- 1:10
-x <- x[, 1:5]
-xt <- xtable(x, caption = c("Correlations of $\\beta$-values across strands for the \\emph{Ziller} dataset. Each row is a sample and each column is a minimum coverage cutoff.", "\\emph{Ziller}: Correlations of $\\beta$-values across strands"), label = "tab:Ziller_merged_strand_correlations")
-align(xt) <- c("r", rep("c", ncol(x)))
-digits(xt) <- 2
-print(xt, booktabs = TRUE, comment = FALSE, tabular.environment = "longtable", floating = FALSE, caption.placement = 'top')
-```
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_strand_correlations.pdf}
+\caption[\emph{Ziller: Correlations of $\beta$-values across strands}]{Correlations of $\beta$-values across strands for the \emph{Ziller} dataset using different minimum sequencing coverage cutoffs.}
+\label{fig:Ziller_merged_strand_correlations}
+\end{figure}
 
 There is a considerable amount of noise in the estimates of $\beta$-values when using low sequencing coverage, as can be seen from the smaller strand-correlations at these lower cutoffs. Once we require a minimum sequencing coverage of $5\times$, we see that most samples have a very high correlation of $\beta$-values across strands, $r = 0.8$ to $0.9$, with some notable exceptions.
 

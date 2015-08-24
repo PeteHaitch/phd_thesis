@@ -39,7 +39,7 @@ The methylC-seq libraries from the \cite{Lister:2009hy} paper were the first pub
 \label{tab:Lister_dataset_pt1}
 \begin{tabulary}{\textwidth}{LLLLL}
 \toprule
-Sample              & Tissue type             & Sequencing & Read length & Ave. coverage \\
+Sample              & Tissue type             & Sequencing & Read length & Ave. coverage \\ \midrule
 IMR90\_r1           & Lung fibroblasts        & SE         & $87$ bp    & $14\times$ \\
 IMR90\_r2           & Lung fibroblasts        & SE         & $87$ bp    & $15\times$ \\
 H1\_r1              & ESC                     & SE         & $85$ bp    & $15\times$ \\
@@ -56,7 +56,7 @@ The methylC-seq libraries from the \cite{Lister:2011kg} include some created by 
 \label{tab:Lister_dataset_pt2}
 \begin{tabulary}{\textwidth}{LLLLL}
 \toprule
-Sample              & Tissue type             & Sequencing & Read length & Ave. coverage \\
+Sample              & Tissue type             & Sequencing & Read length & Ave. coverage \\ \midrule
 ADS                 & Adipose                 & PE         & $75$ bp    & $23\times$ \\
 ADS-adipose         & Adipocytes from ADS     & PE         & $75$ bp    & $24\times$ \\
 ADS-iPSC            & iPSC from ADS           & PE         & $75$ bp    & $26\times$ \\
@@ -107,23 +107,23 @@ The data are summarised in Table \ref{tab:EPISCOPE_dataset}.
 
 \begin{table}[!htb]
 \centering
-\caption[Description of \emph{EPISCOPE} dataset]{Samples in \emph{EPISCOPE} dataset. The reported read lengths are prior to any trimming of the reads.}
+\caption[Description of \emph{EPISCOPE} dataset]{Samples in \emph{EPISCOPE} dataset. The reported read lengths are prior to any trimming of the reads. Abbreviations: \emph{PE} = paired-end sequencing; \emph{BUF} = buffy coat; \emph{SA} = subcutaneous adipose; \emph{VA} = visceral adipocytes; \emph{VAT} = visceral adipose tissue.}
 \label{tab:EPISCOPE_dataset}
-\begin{tabulary}{\textwidth}{LLLL}
+\begin{tabulary}{\textwidth}{LLLLL}
 \toprule
-Sample & Sequencing & Read length & Ave. coverage \\ \midrule
-E13BUF & PE         & $101$ bp    & $8\times$     \\
-E13SA  & PE         & $101$ bp    & $28\times$    \\
-E13VA  & PE         & $150$ bp    & $27\times$    \\
-E13VAT & PE         & $101$ bp    & $25\times$    \\
-E18BUF & PE         & $101$ bp    & $21\times$    \\
-E18SA  & PE         & $101$ bp    & $25\times$    \\
-E18VA  & PE         & $150$ bp    & $36\times$    \\
-E18VAT & PE         & $101$ bp    & $26\times$    \\
-E23BUF & PE         & $101$ bp    & $12\times$    \\
-E23SA  & PE         & $101$ bp    & $29\times$    \\
-E23VA  & PE         & $101$ bp    & $32\times$    \\
-E23VAT & PE         & $101$ bp    & $31\times$    \\ \bottomrule
+Sample & Tissue & Sequencing & Read length & Ave. coverage \\ \midrule
+E13BUF & BUF & PE         & $101$ bp    & $8\times$     \\
+E13SA  & SA  & PE         & $101$ bp    & $28\times$    \\
+E13VA  & VA  & PE         & $150$ bp    & $27\times$    \\
+E13VAT & VAT & PE         & $101$ bp    & $25\times$    \\
+E18BUF & BUF & PE         & $101$ bp    & $21\times$    \\
+E18SA  & SA  & PE         & $101$ bp    & $25\times$    \\
+E18VA  & VA  & PE         & $150$ bp    & $36\times$    \\
+E18VAT & VAT & PE         & $101$ bp    & $26\times$    \\
+E23BUF & BUF & PE         & $101$ bp    & $12\times$    \\
+E23SA  & SA  & PE         & $101$ bp    & $29\times$    \\
+E23VA  & VA  & PE         & $101$ bp    & $32\times$    \\
+E23VAT & VAT & PE         & $101$ bp    & $31\times$    \\ \bottomrule
 \end{tabulary}
 \end{table}
 
@@ -143,7 +143,7 @@ I believe that the samples I received labelled _J1\_1_ and _E16.5\_male\_1_  in 
 
 \begin{table}[!htb]
 \centering
-\caption[Description of \emph{Seisenberger} dataset]{Samples in \emph{Seisenberger} dataset. The reported read lengths are prior to any trimming of the reads. All samples were first published in \citet{Seisenberger:2012ko}.}
+\caption[Description of \emph{Seisenberger} dataset]{Samples in \emph{Seisenberger} dataset. The reported read lengths are prior to any trimming of the reads. All samples were first published in \citet{Seisenberger:2012ko}. Abbreviations: \emph{PE} = paired-end sequencing}
 \label{tab:Seisenberger_dataset}
 \begin{tabulary}{\textwidth}{LLLLL}
 \toprule
@@ -172,7 +172,7 @@ Table \ref{tab:Ziller_dataset_sequencing_runs} summarises the data for the 19 in
 
 \begin{table}[!htb]
 \centering
-\caption[Description of \emph{Ziller} dataset]{Sequencing runs in \emph{Ziller} dataset. The reported read lengths are prior to any trimming of the reads. All samples were first published in \citet{Ziller:2013fs}.}
+\caption[Description of \emph{Ziller} dataset]{Sequencing runs in \emph{Ziller} dataset. The reported read lengths are prior to any trimming of the reads. All samples were first published in \citet{Ziller:2013fs}. Abbreviations: \emph{PE} = paired-end sequencing}
 \label{tab:Ziller_dataset_sequencing_runs}
 \begin{tabulary}{\textwidth}{LLLLL}
 \toprule
