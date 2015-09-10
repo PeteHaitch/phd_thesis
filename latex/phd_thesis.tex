@@ -49,7 +49,6 @@
 % Typesetting C++ (http://tex.stackexchange.com/a/4304)
 \def\CC{{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\tiny\bf ++}}}
 
-
 % pandoc
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
@@ -94,6 +93,9 @@
 \newcommand{\RegionMarkerTok}[1]{{#1}}
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
 \newcommand{\NormalTok}[1]{{#1}}
+% fix for pandoc 1.14
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 \settocname{Table of Contents}
 
