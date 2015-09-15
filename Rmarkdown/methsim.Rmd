@@ -30,7 +30,7 @@ Simulation methods may also be used to learn about the plausibility of hypothesi
 
 There are a few key criteria when designing a simulation method:
 
-1. Realism: The simulated data must be 'similar' to the real data. While this is obvious, it is also often hard to pin down or agree upon what constitutes 'similar enough'.
+1. Realism: The simulated data must be 'similar' to the real data. While this is obvious, it is also often hard to clearly define or agree upon what constitutes 'similar enough'.
 2. Cost: It should be fast and cheap to simulate data. The most common use of simulation models in applied statistics is to repeatedly generate datasets under a range of parameter settings. This requires that each simulation is fast and computationally cheap, otherwise it will be prohibitive to explore the full space of scenarios. An exception to this rule may occur when the simulation model is used to test a proposed mechanistic or stochastic model of a phenomenon, such as in studies of molecular dynamics. Even then, however, the cost of a simulation should be less than the cost of performing the equivalent experiments, otherwise the simulation is generally not worth the effort.
 3. Usability: There __must__ be a software implementation. Simulation models exist to be simulated from; a simulation model without an implementation is next to useless. The implementation should give the user easy access to the key  parameters and have sensible default settings. The output of the software should be in a standard format or readily convertible to a simple, manipulable format.
 
@@ -319,7 +319,7 @@ There are many ways to simulate values of $\mathbf{B}$ and $\bm{\theta} = \log{\
 Furthermore, we will consider simulations where:
 
 \begin{description}
-  \item[\emph{I}] The sample is 'pure' and all haplotypes have the same parameters.
+  \item[\emph{I}] The sample is `pure' and all haplotypes have the same parameters.
   \item[\emph{II}] The sample is a mixture of subpopulations with different parameters. We will consider a sample with four subpopulations with relative frequencies equal to $(0.6, 0.25, 0.1, 0.05)$.
 \end{description}
 

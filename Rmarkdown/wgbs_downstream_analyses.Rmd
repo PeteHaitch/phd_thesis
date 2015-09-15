@@ -52,7 +52,7 @@ Regardless of the statistical test used, all attempts to identify DMCs from whol
 
 \begin{table}[h]
 \centering
-\caption[Proposed multiple hypothesis testing procedures]{Methods proposed for adjusting for the multiple hypothesis testing performed in an analysis of DMCs. Several papers use describe their analysing as performing a ``false discovery rate adjustment'' or ``false discovery rate correction'' without explicitly stating what they are doing or citing a reference. One paper uses an ultra-conservative Bonferonni correction.}
+\caption[Proposed multiple hypothesis testing procedures]{Methods proposed for adjusting for the multiple hypothesis testing performed in an analysis of DMCs. Several papers use describe their analysing as performing a ``false discovery rate adjustment'' or ``false discovery rate correction'' without explicitly stating what they are doing or citing a reference. One paper uses the Bonferonni correction, leading to a very conservative analysis since this correction aims to control the family-wise error rate.}
 \label{tab:multiple_testing}
 \begin{tabulary}{\textwidth}{LL}
 \toprule

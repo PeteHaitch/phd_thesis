@@ -249,7 +249,7 @@ The readers of DNA methylation recognise methylated DNA. These readers can recru
 
 The removal or erasure of DNA methylation, called _demethylation_, may be characterised as _passive_ loss or _active_ removal. Passive loss occurs when the maintenance methyltransferases do not efficiently perform their role of restoring DNA methylation following cell division. This leads to a gradual, stochastic, and genome-wide loss of DNA methylation after multiple cell divisions. This form of passive demethylation, sometimes called replication-dependent demethylation, cannot explain observations of local tissue-specific differences in DNA methylation \citep{Irizarry:2009ky} nor the two stages of rapid global demethylation that occur during development \citep{Wu:2014gw}.
 
-Active demethylation is currently a hot topic in epigenetics research. Multiple mechanisms have been proposed, and it is indeed likely that there are multiple ways to achieve active demethylation. These mechanisms were recently reviewed by \citet{Wu:2014gw}, which I briefly summarise:
+Active demethylation is currently an active area in epigenetics research. Multiple mechanisms have been proposed, and it is indeed likely that there are multiple ways to achieve active demethylation. These mechanisms were recently reviewed by \citet{Wu:2014gw}, which I briefly summarise:
 
 1. The direct removal of the methyl group from 5mC is considered unlikely due to the strong carbon-carbon bond between the methyl group and the cytosine.
 2. There is evidence that the DNA repair machinery can be co-opted to remove a methylated base or the surrounding region. The excised base or region is then repaired with unmethylated cytosines replacing 5mCs.

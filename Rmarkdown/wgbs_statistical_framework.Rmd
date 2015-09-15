@@ -271,7 +271,7 @@ An attractive feature of the beta-binomial distribution is that it can be motiva
 
 Smoothing is particularly powerful for loci with low sequencing coverage, where the denominator $m_{i, j} + u_{i, j}$ is small and the corresponding standard error of $\beta_{i, j}$ is large. The smoothed $\beta$-values, rather than the raw $\beta$-values, are then generally used in all downstream analyses.
 
-Both `bsseq` and `BiSeq` use a binomial local likelihood smoother. In each case this smoother is chosen because `BSmooth` and `BiSeq` model the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample by $M_{i, j} | d_{i, j} \eqd Binomial(d_{i, j}, B_{i, j})$. The smoothing is 'local' to exploit co-methylation, which is considered a local phenomenon.
+Both `bsseq` and `BiSeq` use a binomial local likelihood smoother. In each case this smoother is chosen because `BSmooth` and `BiSeq` model the number of methylated reads at the $i^{th}$ locus in the $j^{th}$ sample by $M_{i, j} | d_{i, j} \eqd Binomial(d_{i, j}, B_{i, j})$. The smoothing is 'local' to leverage co-methylation, which is considered a local phenomenon.
 
 In both `bsseq` and `BiSeq` the raw $\beta$-values are weighted according to the binomial likelihood and a kernel function. The binomial likelihood weights $\beta_{i}$ inversely to their standard error, $se(\beta_{i})$, and the kernel gives greater weight to those $\beta_{i}$ near the centre of the window. \citet{Lacey:2013iy} note that loci with very high sequencing coverage will strongly influence the smoother, potentially biasing estimates at neighbouring loci with lower coverage.
 
@@ -447,7 +447,7 @@ There is a considerable amount of noise in the estimates of $\beta$-values when 
 
 Some of the embryonic stem cell samples (_H1\_r1_, _H1\_r2_ and _HSF1_ from the _Lister_ dataset) have less correlated strand-specific $\beta$-values, $r = 0.5$ to $0.7$. The other embryonic stem cell samples have higher correlations of $\beta$-values across strands, although the estimates are quite different between the two replicates of the same cell line (_H9_: $r = 0.77$, _H9\_Laurent_: $r = 0.92$). This suggests that caution may be warranted in combining CpG methylation levels across strands for embryonic stem cell samples.
 
-All three _Seisenberger_ samples have noticeably less correlated strand-specific $\beta$-values, including the embryonic stem cell, _J1\_1_. However, since these data are from pooled DNA, the source of this reduced correlation is difficult to pin down.
+All three _Seisenberger_ samples have noticeably less correlated strand-specific $\beta$-values, including the embryonic stem cell, _J1\_1_. However, since these data are from pooled DNA, the source of this reduced correlation is difficult to identify.
 
 Overall, with the exception of embryonic stem cells, it seems that most samples have highly correlated strand-specific CpG $\beta$-values, which means that these data can safely be combined across strands. However, it remains a good idea to first check this assumption prior to combining data across strands.
 
