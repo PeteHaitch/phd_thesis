@@ -1,7 +1,4 @@
 # TODO: Standalone pdfs are missing references.
-# TODO: Appendix
-# TODO: Conclusion
-# TODO: Fix missing figures
 
 phd_thesis.pdf: introduction.tex biology_background.tex wgbs_bioinformatics_analysis.tex wgbs_statistical_framework.tex datasets.tex wgbs_downstream_analyses.tex comethylation_review.tex comethylation.tex methsim.tex concluding_remarks.tex appendix.tex
 	mkdir -p pdf
@@ -16,6 +13,7 @@ introduction.tex: introduction.md
 	pandoc -o latex/introduction.tex markdown/introduction.md
 
 introduction.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/introduction.Rmd', 'markdown/introduction.md')"
 
 introduction.pdf:
@@ -23,6 +21,7 @@ introduction.pdf:
 	Rscript -e "rmarkdown::render('Rmarkdown/introduction.Rmd', output_format = 'pdf_document', output_file = '../introduction.pdf', output_dir = '../pdf')"
 
 biology_background.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/biology_background.Rmd', 'markdown/biology_background.md')"
 
 biology_background.tex: biology_background.md
@@ -34,6 +33,7 @@ biology_background.pdf:
 	Rscript -e "rmarkdown::render('Rmarkdown/biology_background.Rmd', output_format = 'pdf_document', output_file = '../biology_background.pdf', output_dir = '../pdf')"
 
 wgbs_bioinformatics_analysis.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/wgbs_bioinformatics_analysis.Rmd', 'markdown/wgbs_bioinformatics_analysis.md')"
 
 wgbs_bioinformatics_analysis.tex: wgbs_bioinformatics_analysis.md
@@ -45,6 +45,7 @@ wgbs_bioinformatics_analysis.pdf:
 	Rscript -e "rmarkdown::render('Rmarkdown/wgbs_bioinformatics_analysis.Rmd', output_format = 'pdf_document', output_file = '../wgbs_bioinformatics_analysis.pdf', output_dir = '../pdf')"
 
 wgbs_statistical_framework.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/wgbs_statistical_framework.Rmd', 'markdown/wgbs_statistical_framework.md')"
 
 wgbs_statistical_framework.tex: wgbs_statistical_framework.md
@@ -56,6 +57,7 @@ wgbs_statistical_framework.pdf:
 	Rscript -e "rmarkdown::render('Rmarkdown/wgbs_statistical_framework.Rmd', output_format = 'pdf_document', output_file = '../wgbs_statistical_framework.pdf', output_dir = '../pdf')"
 
 wgbs_downstream_analyses.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/wgbs_downstream_analyses.Rmd', 'markdown/wgbs_downstream_analyses.md')"
 
 wgbs_downstream_analyses.tex: wgbs_downstream_analyses.md
@@ -67,6 +69,7 @@ wgbs_downstream_analyses.pdf:
 	Rscript -e "rmarkdown::render('Rmarkdown/wgbs_downstream_analyses.Rmd', output_format = 'pdf_document', output_file = '../wgbs_downstream_analyses.pdf', output_dir = '../pdf')"
 
 datasets.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/datasets.Rmd', 'markdown/datasets.md')"
 
 datasets.tex: datasets.md
@@ -77,6 +80,7 @@ datasets.pdf:
 	Rscript -e "rmarkdown::render('Rmarkdown/datasets.Rmd', output_format = 'pdf_document', output_file = '../datasets.pdf', output_dir = '../pdf')"
 
 Avy_epialleles.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/Avy_epialleles.Rmd', 'markdown/Avy_epialleles.md')"
 
 Avy_epialleles.tex:
@@ -88,6 +92,7 @@ Avy_epialleles.pdf:
 	Rscript -e "rmarkdown::render('Rmarkdown/Avy_epialleles.Rmd', output_format = 'pdf_document', output_file = '../Avy_epialleles.pdf', output_dir = '../pdf')"
 
 comethylation_review.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/comethylation_review.Rmd', 'markdown/comethylation_review.md')"
 
 comethylation_review.tex: comethylation_review.md
@@ -99,6 +104,7 @@ comethylation_review.pdf:
 	Rscript -e "rmarkdown::render('Rmarkdown/comethylation_review.Rmd', output_format = 'pdf_document', output_file = '../comethylation_review.pdf', output_dir = '../pdf')"
 
 comethylation.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/comethylation.Rmd', 'markdown/comethylation.md')"
 
 comethylation.tex: comethylation.md
@@ -110,6 +116,7 @@ comethylation.pdf:
 	Rscript -e "rmarkdown::render('Rmarkdown/comethylation.Rmd', output_format = 'pdf_document', output_file = '../comethylation.pdf', output_dir = '../pdf')"
 
 methsim.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/methsim.Rmd', 'markdown/methsim.md')"
 
 methsim.tex: methsim.md
@@ -121,6 +128,7 @@ methsim.pdf:
 	Rscript -e "rmarkdown::render('Rmarkdown/methsim.Rmd', output_format = 'pdf_document', output_file = '../methsim.pdf', output_dir = '../pdf')"
 
 concluding_remarks.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/concluding_remarks.Rmd', 'markdown/concluding_remarks.md')"
 
 concluding_remarks.tex: concluding_remarks.md
@@ -132,6 +140,7 @@ concluding_remarks.pdf:
 	Rscript -e "rmarkdown::render('Rmarkdown/concluding_remarks.Rmd', output_format = 'pdf_document', output_file = '../methsim.pdf', output_dir = '../pdf')"
 
 appendix.md:
+	mkdir -p markdown
 	Rscript -e "knitr::knit('Rmarkdown/appendix.Rmd', 'markdown/appendix.md')"
 
 appendix.tex: appendix.md
