@@ -401,14 +401,14 @@ To begin, we explore the effect of the marginal probabilities, $\pi_{2 +}$ and $
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Simulation_1.pdf}
+\includegraphics[width=\textwidth]{../figures/Simulation_1-1.pdf}
 \caption[Simulation 1a]{Results of simulation 1a ($K = 100$). Estimating the log odds ratio, $\theta = 0$ (shown by the black line), from a $2 \times 2 \times 100$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_1a}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Simulation_2.pdf}
+\includegraphics[width=\textwidth]{../figures/Simulation_2-1.pdf}
 \caption[Simulation 1b]{Results of simulation 1b ($K = 1000$). Estimating the log odds ratio, $\theta = 0$ (shown by the black line), from a $2 \times 2 \times 1000$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_1b}
 \end{figure}
@@ -417,7 +417,7 @@ The bias can be eliminated only by having ultra-deep sequencing coverage, such a
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Simulation_2d.pdf}
+\includegraphics[width=\textwidth]{../figures/Simulation_2d-1.pdf}
 \caption[Simulation 1c]{Results of simulation 1c ($K = 1000$). Estimating the log odds ratio, $\theta = 0$ (shown by the black line), from a $2 \times 2 \times 1000$ contingency table when the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are equal. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $10,000$.}
 \label{fig:Simulation_1c}
 \end{figure}
@@ -428,7 +428,7 @@ Next, we explore what happens when we allow the marginal probabilities, $\pi_{2 
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Simulation_3.pdf}
+\includegraphics[width=\textwidth]{../figures/Simulation_3-1.pdf}
 \caption[Simulation 2]{Results of simulation 2 ($K = 100$). Estimating the log odds ratio, $\theta$ (shown by the black line, $-4, -3, \ldots, 3, 4$ across the panels), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Uniform(0, 1)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_2}
 \end{figure}
@@ -437,7 +437,7 @@ In a sense, the $\pi_{2 +}, \pi_{+ 2} \eqd Uniform(0, 1)$ assumption in Simulati
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/beta_marginals.pdf}
+\includegraphics[width=\textwidth]{../figures/beta_marginals-1.pdf}
 \caption[Histogram of $Beta(0.3, 0.2)$ random variables]{Histogram of 1000 points simulated from a $Beta(0.3, 0.2)$ distribution.}
 \label{fig:beta_marginals}
 \end{figure}
@@ -446,7 +446,7 @@ The results of this simulation (Simulation 3, Figure \ref{fig:Simulation_3}) are
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Simulation_4.pdf}
+\includegraphics[width=\textwidth]{../figures/Simulation_4-1.pdf}
 \caption[Simulation 3]{Results of simulation 3 ($K = 100$). Estimating the log odds ratio, $\theta$ (shown by the black line, $-4, -3, \ldots, 3, 4$ across the panels), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_3}
 \end{figure}
@@ -465,21 +465,21 @@ Simulations 4a, 4b and 5 (Figures \ref{fig:Simulation_4a}, \ref{fig:Simulation_4
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Simulation_5.pdf}
+\includegraphics[width=\textwidth]{../figures/Simulation_5-1.pdf}
 \caption[Simulation 4a]{Results of simulation 4a ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Gaussian(\theta_{0}, 1)$ (density shown by the black curve), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_4a}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Simulation_6.pdf}
+\includegraphics[width=\textwidth]{../figures/Simulation_6-1.pdf}
 \caption[Simulation 4b]{Results of simulation 4b ($K = 1000$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Gaussian(\theta_{0}, 1)$ (density shown by the black curve), from a $2 \times 2 \times 1000$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_4b}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Simulation_7.pdf}
+\includegraphics[width=\textwidth]{../figures/Simulation_7-1.pdf}
 \caption[Simulation 5]{Results of simulation 5 ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = Skewed\text{-}Gaussian(\theta_{0}, 1, -10)$ (density shown by the black curve), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_5}
 \end{figure}
@@ -488,7 +488,7 @@ To take this heterogeneity even further, Simulation 6 (Figure \ref{fig:Simulatio
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Simulation_8.pdf}
+\includegraphics[width=\textwidth]{../figures/Simulation_8-1.pdf}
 \caption[Simulation 6]{Results of simulation 5 ($K = 100$). Estimating a heterogeneous log odds ratio, $\theta_{k} = 0.5 \times Gaussian(- \theta_{0}, 1) + 0.5 \times Gaussian(\theta_{0}, 1)$ (density shown by the black curve), from a $2 \times 2 \times 100$ contingency table where the marginal probabilities, $\pi_{2+}$ and $\pi_{+2}$, are distributed as $Beta(0.3, 0.2)$ random variables. The results of three estimators of $\theta$ are shown: $\widehat{\theta}_{0.5}$ (histogram); the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{U}$ (coloured orange); and the point estimate (inner line) and $95 \%$ confidence interval (outer lines) of $\widehat{\theta}_{MH}$ (coloured blue). The average sample size (sequencing-coverage) of each $2 \times 2$ table is $30$.}
 \label{fig:Simulation_6}
 \end{figure}
@@ -568,28 +568,28 @@ Figure \ref{fig:EPISCOPE_MH_by_seqnames}, \ref{fig:Lister_MH_by_seqnames}, \ref{
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_MH_by_seqnames.pdf}
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_MH_by_seqnames-1.pdf}
 \caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL = 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads.}
 \label{fig:EPISCOPE_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Lister_MH_by_seqnames.pdf}
+\includegraphics[width=\textwidth]{../figures/Lister_MH_by_seqnames-1.pdf}
 \caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL = 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. Only the \emph{ADS}, \emph{ADS-adipose}, \emph{ADS-iPSC} and \emph{H9\_Laurent} samples were sequenced with paired-end reads.}
 \label{fig:Lister_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_MH_by_seqnames.pdf}
+\includegraphics[width=\textwidth]{../figures/Seisenberger_MH_by_seqnames-1.pdf}
 \caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL = 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads.}
 \label{fig:Seisenberger_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_MH_by_seqnames.pdf}
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_MH_by_seqnames-1.pdf}
 \caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL = 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads.}
 \label{fig:Ziller_MH_by_seqnames}
 \end{figure}
@@ -607,28 +607,28 @@ The equivalent plots for the $NIL \geq 0$ pairs paint a similar picture, as show
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_ac_MH_by_seqnames.pdf}
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_ac_MH_by_seqnames-1.pdf}
 \caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads. There is no Y chromosome or mtDNA data for \emph{E18BUF} due to a coding error that meant these chromosomes weren't processed by \texttt{methtuple} for \texttt{2ac} tuples. This omission does not affect the other results.}
 \label{fig:EPISCOPE_ac_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Lister_ac_MH_by_seqnames.pdf}
+\includegraphics[width=\textwidth]{../figures/Lister_ac_MH_by_seqnames-1.pdf}
 \caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL \geq 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. Only the \emph{ADS}, \emph{ADS-adipose}, \emph{ADS-iPSC} and \emph{H9\_Laurent} samples were sequenced with paired-end reads.}
 \label{fig:Lister_ac_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_ac_MH_by_seqnames.pdf}
+\includegraphics[width=\textwidth]{../figures/Seisenberger_ac_MH_by_seqnames-1.pdf}
 \caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL \geq 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads.}
 \label{fig:Seisenberger_ac_MH_by_seqnames}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_ac_MH_by_seqnames.pdf}
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_ac_MH_by_seqnames-1.pdf}
 \caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. All samples were sequenced with paired-end reads.}
 \label{fig:Ziller_ac_MH_by_seqnames}
 \end{figure}
@@ -643,21 +643,21 @@ Figures \ref{fig:EPISCOPE_ac_MH_by_seqnames_chr21} (_EPISCOPE_), \ref{fig:Lister
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_ac_MH_by_seqnames_chr21.pdf}
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_ac_MH_by_seqnames_chr21-1.pdf}
 \caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs with chr21 highlighted]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. The chromosome 21 data are shown by the black line. All samples were sequenced with paired-end reads. There is no Y chromosome or mtDNA data for \emph{E18BUF} due to a coding error that meant these chromosomes weren't processed by \texttt{methtuple} for \texttt{2ac} tuples. This omission does not affect the other results.}
 \label{fig:EPISCOPE_ac_MH_by_seqnames_chr21}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Lister_ac_MH_by_seqnames_chr21.pdf}
+\includegraphics[width=\textwidth]{../figures/Lister_ac_MH_by_seqnames_chr21-1.pdf}
 \caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs with chr21 highlighted]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL \geq 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. The chromosome 21 data are shown by the black line. Only the \emph{ADS}, \emph{ADS-adipose}, \emph{ADS-iPSC} and \emph{H9\_Laurent} samples were sequenced with paired-end reads.}
 \label{fig:Lister_ac_MH_by_seqnames_chr21}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_ac_MH_by_seqnames_chr21.pdf}
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_ac_MH_by_seqnames_chr21-1.pdf}
 \caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs with chr21 highlighted]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ pairs. The genome-level estimates are shown by the blue line while the chromosome-level estimates are plotted as points coloured by whether the chromosome is an autosome, X chromosome, Y chromosome or mtDNA. The chromosome 21 data are shown by the black line. All samples were sequenced with paired-end reads.}
 \label{fig:Ziller_ac_MH_by_seqnames_chr21}
 \end{figure}
@@ -673,28 +673,28 @@ When we analyse pairs with $NIL = 0$, we are only estimating the 'first-order' w
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_MH_by_CGI.pdf}
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_MH_by_CGI-1.pdf}
 \caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL = 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:EPISCOPE_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Lister_MH_by_CGI.pdf}
+\includegraphics[width=\textwidth]{../figures/Lister_MH_by_CGI-1.pdf}
 \caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL = 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). Only the \emph{ADS}, \emph{ADS-adipose}, \emph{ADS-iPSC} and \emph{H9\_Laurent} samples were sequenced with paired-end reads.}
 \label{fig:Lister_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_MH_by_CGI.pdf}
+\includegraphics[width=\textwidth]{../figures/Seisenberger_MH_by_CGI-1.pdf}
 \caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL = 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:Seisenberger_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_MH_by_CGI.pdf}
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_MH_by_CGI-1.pdf}
 \caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL = 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL = 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:Ziller_MH_by_CGI}
 \end{figure}
@@ -709,28 +709,28 @@ Taken together, these results suggests that within-fragment co-methylation in Cp
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/EPISCOPE_ac_MH_by_CGI.pdf}
+\includegraphics[width=\textwidth]{../figures/EPISCOPE_ac_MH_by_CGI-1.pdf}
 \caption[\emph{EPISCOPE}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{EPISCOPE} dataset using $NIL \geq 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:EPISCOPE_ac_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Lister_ac_MH_by_CGI.pdf}
+\includegraphics[width=\textwidth]{../figures/Lister_ac_MH_by_CGI-1.pdf}
 \caption[\emph{Lister}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Lister} dataset using $NIL \geq 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). Only the \emph{ADS}, \emph{ADS-adipose}, \emph{ADS-iPSC} and \emph{H9\_Laurent} samples were sequenced with paired-end reads.}
 \label{fig:Lister_ac_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Seisenberger_ac_MH_by_CGI.pdf}
+\includegraphics[width=\textwidth]{../figures/Seisenberger_ac_MH_by_CGI-1.pdf}
 \caption[\emph{Seisenberger}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Seisenberger} dataset using $NIL \geq 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:Seisenberger_ac_MH_by_CGI}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{../figures/Ziller_merged_ac_MH_by_CGI.pdf}
+\includegraphics[width=\textwidth]{../figures/Ziller_merged_ac_MH_by_CGI-1.pdf}
 \caption[\emph{Ziller}: $\widehat{\theta}_{MH}$ for $NIL \geq 0$ CpG pairs stratified by CpG islands]{The Mantel-Haenszel estimate of the log odds ratio, $\widehat{\theta}_{MH}$, is plotted as a function of $IPD$ for the \emph{Ziller} dataset using $NIL \geq 0$ pairs. Only the genome-level estimates are shown, stratified by whether the pair is inside a CpG island (CGI). All samples were sequenced with paired-end reads.}
 \label{fig:Ziller_ac_MH_by_CGI}
 \end{figure}
