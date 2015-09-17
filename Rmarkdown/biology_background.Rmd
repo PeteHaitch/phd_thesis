@@ -89,11 +89,11 @@ Variation between individual's genomes, be it at single base[^snvs_snps] or acro
 
 [^indels]: An example of a larger genetic variant is an _indel_, which is a short insertion or deletion of sequence in an organism's DNA, usually with respect to a reference genome.
 
-Environmental variation has clear influence on certain phenotypes. However, it often can be difficult to determine whether phenotypic variation is driven by genetic varation or environment variation, particularly in humans where genetically similar individuals typically also grow up in similar environments.
+Environmental variation has clear influence on certain phenotypes. However, it often can be difficult to determine whether phenotypic variation is driven by genetic variation or environment variation, particularly in humans where genetically similar individuals typically also grow up in similar environments.
 
-The above discussion has been about phenotypic variation in a population. But there is also phenotypic variation within the individual. If that sounds strange, consider the fact that in your body a neuron, a leukocyte (a white blood cell) and a cone cell (a photoreceptor in the retina) all have identical genomes. In fact, all cells in an organism, excluding the gametes, have an identical genome[^somatic_mutations] yet play very different biological roles. This is due to different genes being active in different cells.
+The above discussion has been about phenotypic variation in a population. But there is also phenotypic variation within the individual. If that sounds strange, consider the fact that in your body a neuron, a leukocyte (a white blood cell), and a cone cell (a photoreceptor in the retina) all have identical genomes. In fact, all cells in an organism, excluding the gametes, have an identical genome[^somatic_mutations], yet play very different biological roles. This is due to different genes being active in different cells.
 
-[^somatic_mutations]: This ignores somatic mutations.
+[^somatic_mutations]: Even this is a simplification. For example, it ignores somatic mutations (the occurrence of a mutation in the somatic tissue of an organism, resulting in a genetically mosaic individual) and V(D)J recombination (which occurs in lymphocytes and is vital for antibody diversity).
 
 _Epigenetics_, which I describe in the next section, plays a role in determining the between-individual phenotypic variation, as well as the within-individual phenotypic variation. DNA methylation, the focus of my thesis, is the prototypical and most well-studied epigenetic modification.
 
@@ -101,7 +101,7 @@ _Epigenetics_, which I describe in the next section, plays a role in determining
 
 Interest in epigenetics has grown remarkably in recent years. However, _epigenetics_ is also a real Humpty Dumpty phrase; each author seems to believe that, "When I use [the] word, \dots it means just what I choose it to mean --- neither more nor less" \citep{carroll1897through}. As noted by \citet{Deans:2015kt}, "the unfortunate fact is that the increased use of the term _epigenetics_ is likely due more to inconsistencies in its definition than to a consensus of interest among scientists".
 
-Conrad Waddington coined the phrase in 1942 as a portmanteau of the words 'epigenesis' and 'genetics' \citep{Waddington:2012bu}. Waddington meant epigenetics as the study of how "processes involved in the mechanism by which the genes of the genotype bring about phenotypic effects" \citep{Waddington:2012bu}.
+Conrad Waddington coined the phrase in 1942 as a portmanteau of the words 'epigenesis' and 'genetics' \citep{Waddington2012-bq}. Waddington meant epigenetics as the study of how "processes involved in the mechanism by which the genes of the genotype bring about phenotypic effects" \citep{Waddington2012-bq}.
 
 A popular contemporary definition of epigenetics is attributed to the epigeneticist Arthur Riggs --- epigenetics is "the study of mitotically and/or meiotically heritable changes in gene function that cannot be explained by changes in DNA sequence[^mitotic_meiotic]" \citep[pp. 1]{russo1996epigenetic}. The _epi_ prefix, derived from the Greek word for 'upon', 'near to', or 'in addition', emphasises the idea that epigenetics encodes information 'on top of' the DNA sequence. However, it is quite different to Waddington's original definition.
 
@@ -123,7 +123,7 @@ One mark that most authors agree is an epigenetic mark is DNA methylation, which
 
 DNA methylation is a chemical modification of DNA that can impart information on top of the DNA sequence. It is heritable during mitotic cell division, which means that it is faithfully copied across to the daughter cell during cell division[^dnam_copying]. It therefore fits into Arthur Riggs' aforementioned definition of an epigenetic modification. DNA methylation is found in bacteria, fungi, plants and animals.
 
-[^dnam_copying]: In practice this copying is not as faithful as, say, the copying of DNA from the parent to the daughter strand. Furthermore, the faithfulness of this copying will be different in different conditions, such as in a healthy liver cell compared to a cancerous liver cell. Nevertheless, the copying of DNA methylation is faithful enough for most biologists to consider it as a mitotically heritable mark, most of the time.
+[^dnam_copying]: In practice this copying is not as faithful as, say, the copying of DNA from the parent to the daughter strand. Furthermore, the faithfulness of this copying will be different in different conditions, such as in a healthy liver cell compared to a cancerous liver cell. Nevertheless, the copying of DNA methylation is faithful enough for most biologists to consider it as a mitotically heritable mark, most of the time. The enzymes responsible the replication of DNA methylation, the DNA methyltransferases, are discussed in Section \ref{sec:writers_reads_and_erasers}.
 
 A major reason that DNA methylation is studied is that it is essential for normal development in mammals \citep{Li:1992bp}. It is also involved in many key biological processes related to human development and health, such as the regulation of gene expression \citep{Razin:1991vj}, silencing of transposable elements \citep{Jones:2001eg}, X chromosome inactivation \citep{Mohandas:1981uf} and tumorigenesis \citep{Ehrlich:2002kz}.
 
@@ -231,7 +231,7 @@ One genome-wide study of 5hmC found that less than $1\%$ of all assayed cytosine
 
 \citet{Kriaucionis:2009bm} and \citet{Tahiliani:2009kl} discovered that the TET enzymes can convert 5mC to 5hmC, 5hmC to 5fC and 5fC to hcaC. This suggests a role for 5hmC, 5fC and 5caC in the process of removing 5mC marks.
 
-\subsection{Writers, readers and erasers}\label{sec:writers_reads_and_erasers}
+\subsection{Writers, readers, and erasers}\label{sec:writers_reads_and_erasers}
 
 A frequently used analogy when describing epigentic marks refers to 'writers', 'readers' and 'erasers' \citep[e.g.,][]{Moore:2013in}. In the case of DNA methylation, writers catalyse the methyl group onto the DNA, readers recognise methylated DNA, and erasers remove the methyl group from the DNA.
 
@@ -369,17 +369,21 @@ Another disadvantage of bisulfite-conversion assays is that they require knowled
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{../figures/bisulfite_CT_SNP.pdf}
-\caption[Sequence variation confounds methylation calling]{Sequence variation between the reference genome and the sample's genome can result in incorrect inference about the methylation state of the sample's genome. The locus in orange is a cytosine in the reference genome but a thymine in the sample's genome. Because the read is compared against the reference genome, it may incorrectly inferred to be an unmethylated cytosine. The locus in purple is a thymine in the reference genome but an unmethylated cytosine in the sample's genome. Because the read is compared against the reference genome, it may incorrectly inferred to be a thymine.}
+\caption[Sequence variation confounds methylation calling]{Sequence variation between the reference genome and the sample's genome can result in incorrect inference about the methylation state of the sample's genome. The locus in orange is a cytosine in the reference genome but a thymine in the sample's genome. Because the read is compared against the reference genome, it may be incorrectly inferred to be an unmethylated cytosine. The locus in purple is a thymine in the reference genome but an unmethylated cytosine in the sample's genome. Because the read is compared against the reference genome, it may be incorrectly inferred to be a thymine.}
 \label{fig:bisulfite_CT_SNP}
 \end{figure}
 
-The bisulfite-treatment of DNA can introduce biases and other problems. Three examples are _PCR-bias_, _incomplete bisulfite conversion_ and _DNA degradation_. PCR-bias is the difference in amplification efficiency of methylated and unmethylated versions of the same DNA sequence \citep{Warnecke:1997eh}. Incomplete bisulfite-conversion leads to cytosines being incorrectly inferred as 5mC since they cytosines were not converted to uracils by the bisulfite-treatment. DNA degredation occurs because sodium bisulfite damages DNA, resulting in the fragmentation of long molecules. This limits the size of the fragments that can be studied using bisulfite-conversion assays to approximately $500$ bp \citep{Ecker:2010et}
+The bisulfite-treatment of DNA can introduce biases and other problems \citep{Warnecke2002-zl}. Four examples are _PCR-bias_, _incomplete bisulfite-conversion_, _bisulfite over-conversion_, and _DNA degradation_. PCR-bias is the difference in amplification efficiency of methylated and unmethylated versions of the same DNA sequence \citep{Warnecke:1997eh}. Incomplete bisulfite-conversion leads to cytosines being incorrectly inferred as 5mC since they cytosines were not converted to uracils by the bisulfite-treatment. Conversely, bisulfite over-conversion results in a methylated cytosine incorrectly being inferred to be an unmethylated cytosine, although this is uncommon than incomplete bisulfite-conversion \citep{Warnecke2002-zl}. DNA degredation occurs because sodium bisulfite damages DNA, resulting in the fragmentation of long molecules. This limits the size of the fragments that can be studied using bisulfite-conversion assays to approximately $500$ bp \citep{Ecker:2010et}. The influence of these biases can depend on the experimental setup and their potential effects should be born in mind when interpreting results.
 
 \subsection{DNA kinetics assays}\label{sec:dna_kinetics_assays}
 
 Ideally, an assay of DNA methylation could simply 'read' methylated cytosines as a distinct signal from unmethylated cytosines. This idea forms the basis of assays using the kinetics of DNA to infer the presence of DNA methylation and other DNA modifications. While very exciting, these assays do not yet scale to studying genome-wide DNA methylation levels in mammalian-sized genomes.
 
-The only commercially available assay in this class is the Pacific Biosciences SMRT technology \citep{Flusberg:2010hra}. It infers the presence of DNA modifications by comparing the time it takes to 'read' the modified form of a base, such as 5mC, to the time it takes to read its unmodified form.
+The only commercially available assay in this class is the Pacific Biosciences SMRT technology \citep{Flusberg:2010hra}. It infers the presence of DNA modifications by comparing the time it takes to 'read' the modified form of a base, such as 5mC, to the time it takes to read its unmodified form. This does not require that the DNA is bisulfite-converted prior to sequencing. Because the DNA does not undergo bisulfite-conversion (nor the attendant short fragmentation of the DNA), it is in theory possible to analyse DNA methylation from individual, long DNA molecules using Pacific Biosciences SMRT technology[^pacbio]. However, due to the error rate and cost of SMRT sequencing, it is currently all but unfeasible to study genome-wide DNA methylation in mammalian-sized genomes.
+
+[^pacbio]: While bisulfite-treated DNA could be sequenced using SMRT sequencing, this would eliminate the real advantage of the technology, namely, the long reads generated by this sequencer.
+
+The error rate of Pacific Biosciences SMRT sequencing is currently higher than that of Illumina sequencing. This means it is more difficult to make reliable inferences on DNA methylation from individual reads. Given sufficient sequencing coverage, it would be possible to reliably estimate the average level of methylation at a given cytosine, however, the cost of SMRT sequencing all but prohibits high-coverage sequencing of mammalian-sized genomes.
 
 \section{Summary}
 

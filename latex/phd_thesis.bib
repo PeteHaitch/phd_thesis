@@ -759,7 +759,7 @@ Let M = {\#} methylated reads and U = {\#} of unmethylated reads (N = M + U = co
 p_naive = M/N
 Instead, use local likelihood estimation (Ref. C Loader "Local regression and likelihood") to give greater weight to CpGs with larger N. Assumed that p(L), where L = location, was a smooth function of L, meaning proximal CpGs had similar methylation levels.
 
-Developed two methods: 
+Developed two methods:
 (1) Using low frequency smoothing for blocks
 (2) High frequency smoothing for small DMRs
 
@@ -780,7 +780,7 @@ This test is extremely sensitive to outliers (Wikipedia)
 Alternatives, includes Levene's, Bartlett's test and Brown-Forsythe test
 
 Fairly substantial filter of read-bases based on position in read prior to calling methylation "evidence".
-All evidence that passed the filter was added to a CpG summary table (includes nucleotide, mappability, GC, etc. information) 
+All evidence that passed the filter was added to a CpG summary table (includes nucleotide, mappability, GC, etc. information)
 
 Bisulfite conversion rate estimated from lambda-phage control (spike in) genome
 
@@ -1584,10 +1584,10 @@ annote = {Only perform tests at local maxima of the smoothed signal. The main re
 The proposed inference is not pointwise but topological.
 
 "Our general proposed algorithm consists of the following steps:
-1. Kernel smoothing, to increase SNR 
-2. Candidate peaks: find local maxima of the smoothed sequence. 
+1. Kernel smoothing, to increase SNR
+2. Candidate peaks: find local maxima of the smoothed sequence.
 3. P-values, computed at each local maximum under the complete null
-hypothesis of no signal anywhere. 
+hypothesis of no signal anywhere.
 4. Multiple testing: use a multiple testing procedure to find a global threshold and declare significant all peaks exceeding that threshold."
 
 Because tests are performed at local maxima, the number of tests is itself a RV. This is in contrast to the standard multiple-testing literature that assumes the number of tests is fixed.
@@ -2343,12 +2343,18 @@ number = {3},
 pages = {491--507}
 }
 
-@book{Waddington:2012bu,
-author = {Waddington, C H},
-title = {{The epigenotype. 1942.}},
-year = {2012},
-volume = {41},
-month = feb
+@article{Waddington2012-bq,
+  title   = "The Epigenotype",
+  author  = "Waddington, C H",
+  journal = "International journal of epidemiology",
+  volume  =  41,
+  number  =  1,
+  pages   = "10--13",
+  month   =  "20~" # feb,
+  year    =  2012,
+  url     = "http://www.ije.oxfordjournals.org/lookup/doi/10.1093/ije/dyr184",
+  issn    = "0300-5771, 1464-3685",
+  doi     = "10.1093/ije/dyr184"
 }
 
 @article{Maunakea:2010fi,
@@ -2697,7 +2703,7 @@ Reads containing more than 3 non-CpG Cs were discarded (due to likely poor bisul
 The method to identify methylated cytosines is quite different to in Hansen et al. Can't quite make sense of it.
 "In this way, we established the minimum threshold number of Cs sequenced at each reference C position at which the position could be called as methylated" - this seems to be  a binary classification of methylated or unmethylated for every C in the reference genome.
 
-They do some correction for the fact that the sequenced samples have their own genotypes (i.e. they differ from the reference sequence). But this is only to assess whether a mC is from a CpG or not. 
+They do some correction for the fact that the sequenced samples have their own genotypes (i.e. they differ from the reference sequence). But this is only to assess whether a mC is from a CpG or not.
 
 Identification of differentially methylated cytosines
 Positions with "similar coverage" are defined as those with a coverage ratio of 0.8-1.2 between H1 and...}
@@ -2958,3 +2964,22 @@ pages = {477--481},
 month = aug
 }
 
+
+@article{Warnecke2002-zl,
+  title       = "Identification and resolution of artifacts in bisulfite
+                 sequencing",
+  author      = "Warnecke, Peter M and Stirzaker, Clare and Song, Jenny and
+                 Grunau, Christoph and Melki, John R and Clark, Susan J",
+  affiliation = "Sydney Cancer Centre, Kanematsu Laboratories, Royal Prince
+                 Alfred Hospital, Missenden Road, Camperdown, New South Wales
+                 2050, Australia.",
+  journal     = "Methods",
+  volume      =  27,
+  number      =  2,
+  pages       = "101--107",
+  month       =  jun,
+  year        =  2002,
+  url         = "http://www.ncbi.nlm.nih.gov/pubmed/12095266",
+  issn        = "1046-2023",
+  pmid        = "12095266"
+}
