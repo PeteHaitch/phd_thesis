@@ -161,11 +161,13 @@ The plot of genome-wide correlations (panel (a) in Figure \ref{fig:Li6}) contain
 \label{fig:Li7}
 \end{figure}
 
+\FloatBarrier
+
 \subsection{\cite{Lyko:2010dr}}\label{sec:lyko}
 
-In their study of differential methylation in queen and worker honey bees (_Apis mellifera_), \citet{Lyko:2010dr} perform an autocorrelation analysis of CpG methylation. They report that the "correlation of methylation status of neighbouring CpGs increases sharply between 1 bp and 20 bp, then drops rapidly between 40 bp and 100 bp, and then slowly fades away". This analysis, however, is fundamentally flawed.
+In their study of differential methylation in queen and worker honey bees (_Apis mellifera_), \citet{Lyko:2010dr} perform an autocorrelation analysis of CpG methylation. They report that the "correlation of methylation status of neighbouring CpGs increases sharply between 1 bp and 20 bp, then drops rapidly between 40 bp and 100 bp, and then slowly fades away". This analysis, however, is potentially flawed.
 
-Figure \ref{fig:Lyko} reproduces the results for the co-methylation analysis. Note that the maximum value of the "CpG autocorrelation" is less than $0.015$ (panel (A) of Figure \ref{fig:Lyko}). I strongly suspect that the autocorrelation has been incorrectly computed. Specifically, what I believe has been computed is the autocorrelation of all positions in the genome, not just CpGs, where non-CpGs have been artificially assigned a $\beta$-value of zero. It does not make sense to include non-CpG positions, particularly non-cytosines that can never be methylated, in an analysis of CpG co-methylation. I do not have the data used in \citet{Lyko:2010dr}, but the following example supports my conclusion. This example uses the chromosome 22 data from the _FF_ sample in the _Lister_ dataset (see Section \ref{sec:Lister_dataset} for full details of this sample).
+Figure \ref{fig:Lyko} reproduces the results for the co-methylation analysis. Note that the maximum value of the "CpG autocorrelation" is less than $0.015$ (panel (A) of Figure \ref{fig:Lyko}). I suspect that the autocorrelation has been incorrectly computed. Specifically, what I believe has been computed is the autocorrelation of all positions in the genome, not just CpGs, where non-CpGs have been artificially assigned a $\beta$-value of zero. It does not make sense to include non-CpG positions, particularly non-cytosines that can never be methylated, in an analysis of CpG co-methylation.
 
 \begin{figure}[!htb]
 \centering
@@ -173,6 +175,8 @@ Figure \ref{fig:Lyko} reproduces the results for the co-methylation analysis. No
 \caption[Co-methylation figure from \citet{Lyko:2010dr}]{Periodicity of methylation patterns. (A) Autocorrelation of CpG methylation status over 1 kb. (B) Autocorrelation over 100 bp. Figures A and B show that the correlation of methylation status of neighboring CpGs increases sharply between 1 bp and 20 bp, then drops rapidly between 40 bp and 100 bp, and then slowly fades away. CpGs within a neighborhood of 2 bp to 100 bp are thus more likely to share the same methylation status than more distant CpGs. (C) Fourrier [sic] transform of autocorrelation showing a clear periodicity peak at 33 cycles per 100 bp (every 3 bp). (D) Distribution of codon position of mCs, and distribution of methylation level depending on the position. These two panels indicate that the distance between methylated CpGs is often a multiple of three and that the methylated cytosine corresponds most frequently to the first nucleotide of an arginine codon. A reproduction of Supplementary Figure 7 from \citet{Lyko:2010dr} under the Creative Common Attribution (CCBY) licence.}
 \label{fig:Lyko}
 \end{figure}
+
+I do not have the data used in \citet{Lyko:2010dr}, but the following example supports my belief. This example uses the chromosome 22 data from the _FF_ sample in the _Lister_ dataset (see Section \ref{sec:Lister_dataset} for full details of this sample).
 
 Let $\bm{\beta^{\ast}}$ be the augmented vector of $\beta$-values, where:
 
@@ -185,7 +189,7 @@ Let $\bm{\beta^{\ast}}$ be the augmented vector of $\beta$-values, where:
   \right.
 \end{equation*}
 
-Figure \ref{fig:FF_chr21_acf_beta_star} is a plot of the autocorrelation of the augmented vector, $\bm{\beta^{\ast}}$ for the chromosome 22 data from the _FF_ sample. We see that it is remarkably similar to that of panel (a) in Figure \ref{fig:Lyko}; the correlation first increases then decreases and the maximum correlation is very small, close to zero.
+Figure \ref{fig:FF_chr21_acf_beta_star} is a plot of the autocorrelation of the augmented vector, $\bm{\beta^{\ast}}$ for the chromosome 22 data from the _FF_ sample. We see that it is remarkably similar to that of panel (A) in Figure \ref{fig:Lyko}; the correlation first increases then decreases and the maximum autocorrelation is very small, close to zero.
 
 \begin{figure}[!htb]
 \centering
@@ -194,16 +198,9 @@ Figure \ref{fig:FF_chr21_acf_beta_star} is a plot of the autocorrelation of the 
 \label{fig:FF_chr21_acf_beta_star}
 \end{figure}
 
-Furthermore, if we compute the Fourier transform of this autocorrelation we find a period of approximately 3 bp, identical to that reported by \citet{Lyko:2010dr} for honey bees (compare panel (c) of Figure \ref{fig:Lyko} and Figure \ref{fig:FF_chr21_acf_beta_star_fourier}). Like my earlier criticism of the co-methylation results of \citet{Lister:2009hy}, I believe the apparent $3$ bp period is more likely due to the spacing of CpGs in the genome than anything to do with their methylation state.
+On the one hand, this suggests that this may be the cause of the negligible autocorrelations in Figure S7 of \citet{Lyko:2010dr}. On the other hand, supposing that the maximum autocorrelation of the $\beta$-values is truly less than $0.015$, then this suggests that co-methylation itself is negligible in honeybees, in contrast to results from other organisms.
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.8\textwidth]{../figures/FF_chr21_acf_beta_star_fourier.pdf}
-\caption[Fourier analysis of incorrectly defined $\beta$-values]{Fourier transformation of the autocorrelation of $\bm{\beta^{\ast}}$ for the chromosome 21 data of the \textit{FF} sample. Fourier transformation computed and plotted using the \texttt{spectrum} function in R. The period is defined as 1 / frequency. The maximum frequency is approximately $0.33$, which corresponds to a period of approximately $3$ bp.}
-\label{fig:FF_chr21_acf_beta_star_fourier}
-\end{figure}
-
-All of this casts serious doubt on the validity and interpretation of the co-methylation results in \citet{Lyko:2010dr}.
+The effort required to process the Lyko dataset, and the insufficient detail in the paper to facilitate the reproducibility of the analysis, mean that I decided not to invest further effort into exploring potential interpretations of the co-methylation analysis of \citet{Lyko:2010dr}.
 
 \FloatBarrier
 
