@@ -86,7 +86,7 @@ A popular choice of parametric model in this framework is the beta-binomial mode
 
 I do not think this a useful or necessary step, and it may even be counterproductive. While in truth the set of methylation loci do vary between samples due to genetic variation, it is a reasonable approximation to consider the positions of these loci as fixed. If sequence variation is required then it is easily accommodated by sampling from the set of methylation loci in the reference genome. Furthermore, the aim of the simulation model is to realistically simulate methylation _levels_, not the _locations_ of these loci.
 
-Almost all downstream analyses are reference-based (see Section \ref{sec:methylated_or_unmethylated}), so it is desirable to know how these methods perform with respect to the relevant reference genome, not a simulated genome in which the location of methylation loci vary from simulation to simulation.
+Almost all downstream analyses are reference-based (see Section \ref{sec:methylation_calling}), so it is desirable to know how these methods perform with respect to the relevant reference genome, not a simulated genome in which the location of methylation loci vary from simulation to simulation.
 
 \subsubsection{Simulating $B_{i, j}$}
 

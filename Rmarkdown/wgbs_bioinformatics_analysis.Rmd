@@ -213,11 +213,15 @@ Most bisulfite-sequencing alignment software either performs methylation calling
 
 [^bismark_methylation_extractor]: `Bismark` also includes a program called `bismark_methylation_extractor`, which, as the name suggests, extracts the methylation calls from the `SAM/BAM` file. So while `Bismark` annotates each base as methylated or unmethylated during the alignment, a secondary step using `bismark_methylation_extractor` is required to make the methylation calls.
 
-\subsection{Methylated or unmethylated?}\label{sec:methylated_or_unmethylated}
-
 All bisulfite-sequencing assays use _reference-based_ methylation calling. This means that they require the specification of a reference DNA sequence that the aligned bisulfite-sequencing data are compared against to infer the methylation state of each sequenced locus. Care must be taken to correctly handle the orientation and strand of the alignment.
 
 When using reference-based methylation calling, the position of the methylation locus is with respect to the reference genome, since then all samples will use a common set of co-ordinates. Some methylation loci cannot be typed using a reference-based approach. For example, unless the genome of the sample is fully known, methylation loci in insertions cannot be distinguished from genetic variation since there is no reference sequence to compare them against.
+
+\subsection{Considerations}
+
+There are several issues that must be carefully considered when performing methylation calling, including filtering of reads and biases, choosing and refining the reference sequence, and determining the context or methylation type of the cytosine.
+
+\subsubsection{Filtering of reads and bases}
 
 Prior to methylation calling, each read should be filtered to remove low-quality reads and low quality bases. When using a set of filters, at each step a read either 'survives', and is subjected to the proceeding filter, or 'dies', and is excluded from methylation calling[^read_filters]. Strictly speaking, each sequenced bases is assigned a weight in the filtering process, however, in practice, filters are normally first applied to reads and then to all bases within 'surviving' reads. In my own work analysing whole-genome bisulfite-sequencing data, I routinely use the following filters.
 
@@ -235,17 +239,19 @@ A sequenced base survives if:
 
 [^read_filters]: A read that is not used to estimate $M$ and $U$ may still be used in other analyses, such as estimating copy number variation.
 
+Although incomplete bisulfite-conversion is a well-recognised issue, most analysis pipelines don't attempt to account for this during methylation calling[^incomplete-conversion]. An exception is `Bis-SNP` \citep{Liu:2012ge} which has an algorithm to exclude bases suspected of suffering from incomplete bisulfite-conversion at the 5' end of Illumina-generated reads.
+
+[^incomplete-conversion]: Instead, incomplete bisulfite-conversion is usually incorporated into calculations to estimate the methylation level at a given cytosine (see Section \ref{sec:beta-value_interpretation}). The bisulfite-conversion rate may be estimated by analysing cytosines that are expected to be unmethylated, such as those in the chloroplast genome \citep{Lister:2008bh} or a spike-in control of lambda phage DNA \citep{Lister:2009hy}.
+
+\subsubsection{Choosing and refining the reference sequence}
+
 The reference sequence is typically the reference genome used in the alignment step, in spite of the obvious differences between the sample's genome and the reference genome. This reference-based approach may be refined to incorporate genetic differences between the sample and the reference genome. This can be done in several ways:
 
-- Whole-genome sequencing or genotyping of the sample
-- Calling genetic variations directly from the bisulfite-sequencing data
-- Excluding sites of known genetic variation
-
-\subsubsection{Whole-genome sequencing or genotyping of the sample}\label{sec:wgs_or_genotyping}
+1. Whole-genome sequencing or genotyping of the sample
+2. Calling genetic variations directly from the bisulfite-sequencing data
+3. Excluding sites of known genetic variation
 
 The gold-standard is to perform whole-genome DNA sequencing of each sample. This data is then used to form a set of sample-specific methylation loci. This approach, however, is also very expensive due to the extra sequencing requirements. A cheaper alternative is to genotype the sample on a genome-wide SNP microarray. This will give very accurate, very cheap genotypes at a large number of loci ($500,000$ to $5,000,000$). However, it obviously cannot identify genetic differences that aren't on the array, such as novel sample-specific genetic variants.
-
-\subsubsection{Calling genetic variations directly from the bisulfite-sequencing data}\label{sec:wgbs_variant_calling}
 
 The next best approach is that implemented in `Bis-SNP` \citep{Liu:2012ge}, which is to call genetic variation from the bisulfite-sequence data itself and to then define a set of sample-specific methylation loci at which to call methylation events. `Bis-SNP` is designed for _directional_ bisulfite-sequencing libraries such as the widely used Illumina whole-genome bisulfite-sequencing protocol.
 
@@ -267,8 +273,6 @@ To emphasise, `Bis-SNP` provides three important pieces of information that make
 
 Genotype calls made using `Bis-SNP` are less accurate than those from whole-genome DNA sequencing because of the reduced complexity of bisulfite-converted DNA. However, we essentially get to measure DNA variation 'for free' by using `Bis-SNP`, which makes it my preferred approach for incoporating genetic variation into methylation calling. The genetic variant calls made by `Bis-SNP` can also be used to _post-hoc_ filter methylation calls made by other software. I use this approach to filter methylation calls made with `methtuple`.
 
-\subsubsection{Excluding sites of known genetic variation}\label{sec:known_genetic_variation}
-
 The third approach, and arguably the bare minimum, is to call methylation events using the reference genome and to _post-hoc_ exclude any loci that overlap sites of known genetic variation in the population. For example, we might exclude all cytosines in the reference genome that are also SNPs in dbSNP \citep{Sherry:2001gh}.
 
 This is a conservative approach, as it will remove loci regardless of whether the sample has a genetic variant at that position or not, but it may be a good enough method in some cases. It also obviously requires a database of known variation for the organism being studied, which is the case for commonly studied organisms such as humans and mice.
@@ -277,7 +281,7 @@ This approach can obviously only exclude sites of known variation from considera
 
 [^ad_hoc_bissnp]: This is like an _ad hoc_ and limited version of `Bis-SNP`.
 
-\subsection{Determining the context or methylation type}\label{sec:methylation_context}
+\subsubsection{Determining the context or methylation type}
 
 In addition to determining whether a cytosine is methylated or unmethylated, we also want to determine the _context_ of the cytosine, also known as the _methylation type_. That is, we want to determine whether the cytosine is a CG, CHG or a CHH.
 
@@ -405,7 +409,9 @@ With current sequencing technology we are limited to extracting m-tuples that sp
 
 \subsection{Implementation}\label{sec:methtuple_methods}
 
-`methtuple` performs methylation calling for a single `BAM` file generated by `Bismark`. The user is required to specify the size of the tuples (`--m`), and the methylation type (`--methylationType`) for each run of the program. There are many useful options to filter reads and read-positions. Apart from the standard quality filters, `methtuple` is careful when processing paired-end reads to only count the base from one of the reads in any overlapping paired-end reads to avoid double-counting the bases in the overlapping region. `methtuple` also allows the user to filter out specific read-positions rather than wholesale filtering of the ends of reads. This is particularly useful for samples where there is a 'spike' in the M-bias plot, such as that shown in Figure \ref{fig:E18VA_M-bias}. Such a spike can be filtered out without also being forced to also filter out additional upstream read-positions that are not affected by M-bias.
+`methtuple` performs methylation calling for a single `BAM` file generated by `Bismark`. The user is required to specify the size of the tuples (`--m`), and the methylation type (`--methylationType`) for each run of the program. There are many useful options to filter reads and read-positions. Apart from the standard quality filters, `methtuple` is careful when processing paired-end reads to only count the base from one of the reads in any overlapping paired-end reads to avoid double-counting the bases in the overlapping region[^overlapping-mates]. `methtuple` also allows the user to filter out specific read-positions rather than wholesale filtering of the ends of reads. This is particularly useful for samples where there is a 'spike' in the M-bias plot, such as that shown in Figure \ref{fig:E18VA_M-bias}. Such a spike can be filtered out without also being forced to also filter out additional upstream read-positions that are not affected by M-bias.
+
+[^overlapping-mates]: `methtuple` has several options for handling overlapping mates of paired-end reads via the `--overlap-filter` flag. The default method is to ignore any read-positions in the overlapping region where the methylation calls disagree.
 
 `methtuple` is written in Python and uses the `pysam` ([https://github.com/pysam-developers/pysam/](https://github.com/pysam-developers/pysam/)) module to parse the `BAM` file. It is compatible with both Python2 and Python3. To improve performance, I provide a helper script to split the sample by chromosome and process each chromosome in parallel ([https://github.com/PeteHaitch/methtuple/blob/master/helper_scripts/run_methtuple.sh](https://github.com/PeteHaitch/methtuple/blob/master/helper_scripts/run_methtuple.sh)). This helper script makes extensive use of `GNU parallel` \citep{Tange:2011ty}. While Python-level parallel processing is desirable, this `GNU parallel`-based approach was simpler to implement and sufficient for my purposes.
 
@@ -422,25 +428,34 @@ The output format of `methtuple` is tab-delimited plain text, optionally compres
 
 \subsection{Performance}
 
-I have used `methtuple` to perform methylation calling at CpG m-tuples, $m = 1, \ldots, 8$, for more than $40$ whole-genome bisulfite-sequencing samples. Figure \ref{fig:methtuple_runtime} shows the distribution of running times and Figure \ref{fig:methtuple_memory} the maximum memory usage across all the samples from the EPISCOPE, Lister and Ziller datasets. For each sample, each chromosome was processed using a single core on one of the shared-use servers in the Bioinformatics Division (see Table \ref{tab:unices} in the Appendix for details of these machines).
+I have used `methtuple` to perform methylation calling at CpG m-tuples, $m = 1, \ldots, 8$, for more than $40$ whole-genome bisulfite-sequencing samples. Figure \ref{fig:methtuple_runtime} shows the distribution of running times, Figure \ref{fig:methtuple_memory} the maximum memory usage across, and Figure \ref{fig:methtuple_file_sizes} the output file sizes, for all the samples from the EPISCOPE, Lister, and Ziller datasets. For each sample, each chromosome was processed using a single core on one of the shared-use servers in the Bioinformatics Division (see Table \ref{tab:unices} in the Appendix for details of these machines).
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_runtime.pdf}
-\caption[\texttt{methtuple} running time]{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{{-}{-}all-combinations} was set. Note that the total number of samples is $49$ because each of the Ziller sequencing runs is separetely counted (see Chapter \ref{chap:datasets} for details).}
+\caption[\texttt{methtuple} running time]{The running times are the `User time' reported by \texttt{GNU time} converted from seconds to minutes. The suffix `ac' on the tuple size means that the option \texttt{{-}{-}all-combinations} was set. Note that the total number of samples is $48$ because each of the Ziller sequencing runs is separately counted (see Chapter \ref{chap:datasets} for details).}
 \label{fig:methtuple_runtime}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{../figures/methtuple_memory.pdf}
-\caption[\texttt{methtuple} memory usage]{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{{-}{-}all-combinations} was set. Note that the total number of samples is $49$ because each of the Ziller sequencing runs is separetely counted (see Chapter \ref{chap:datasets} for details).}
+\caption[\texttt{methtuple} memory usage]{The maximum memory usage is the `Maximum resident set size' reported by \texttt{GNU time} converted from kilobytes to gigabytes. These values are divided by four to fix bug in how \texttt{GNU time} reports the maximum memory usage (\url{https://bugzilla.redhat.com/show_bug.cgi?id=703865}). The suffix `ac' means that the option \texttt{{-}{-}all-combinations} was set. Note that the total number of samples is $48$ because each of the Ziller sequencing runs is separetely counted (see Chapter \ref{chap:datasets} for details).}
 \label{fig:methtuple_memory}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{../figures/methtuple_file_sizes.pdf}
+\caption[\texttt{methtuple} file sizes]{The sizes of the output file when compressed with gzip. The suffix `ac' on the tuple size means that the option \texttt{{-}{-}all-combinations} was set. Note that the total number of samples is $48$ because each of the Ziller sequencing runs is separately counted (see Chapter \ref{chap:datasets} for details).}
+\label{fig:methtuple_file_sizes}
 \end{figure}
 
 The running time of `methtuple` is proportional to the number of reads mapped to the chromosome, which is proportional to the length of the chromosome and its copy number. The running time is largely independent of the tuple size (`-m`). The variation in running times within a chromosome is due to the number of reads generated per sample and the length of the reads, where the length of a paired-end read is defined as the sum of the mates' lengths. Samples with more reads take longer to process and samples sequenced with longer reads take longer because these contain more m-tuples.
 
 The maximum memory usage is not strictly proportional to chromosome length. It is instead driven by the number and density of CpGs on the chromosome.  For example, chromosome 19, which has the highest CpG density of all the autosomes in the human genome, requires far more memory than chromosome 18, which has less than half the CpG density of chromosome 19 (see Figure \ref{fig:cpg_density_hg19}). The relationship between the maximum memory usage and the tuple size (`-m`) is complex; more data have to be retained as `-m` increases, thus increasing the memory usage, but fewer reads contain tuples of that size and so there aren't as many m-tuples or observations on these to count and retain. Memory usage is therefore relatively constant across values of `-m` for a given chromosome. The obvious exception is for the results labelled `2ac`, which used the `--all-combinations` flag in conjunction with `-m 2`. This means that all 2-tuples with $NIL \geq 0$ were extracted and there are many, many more CpG 2-tuples with $NIL \geq 0$ than there are with $NIL = 0$, hence the increase in memory usage.
+
+The regular structure of the output file means that these are particularly compressible. The size of the output file is almost always less than 1 GB when compressed with `gzip`.
 
 \begin{figure}[!htb]
 \centering
