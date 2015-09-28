@@ -74,7 +74,7 @@ Before computing correlations and trying to interpret these, it is a good idea t
 
 Firstly, the bimodality of the distribution of $\beta$-values means that the points concentrate in the corners of the plot: $(0, 0), (0, 1), (1, 0)$ and $(1, 1)$. A correlation coefficient is not well suited to summarising these distributions of points. Secondly, when using the $NIL = 0$ strategy, as the $IPD$ increases, the number of points in each scatterplot decreases and so the correlations are very unstable.
 
-In summary, the correlations of pairs of $\beta$-values should be cautiously interpreted, bearing in mind that these are somewhat crude summaries that hide many details of the underyling scatterplots.
+In summary, the correlations of pairs of $\beta$-values should be cautiously interpreted, bearing in mind that these are somewhat crude summaries that hide many details of the underlying scatterplots.
 
 \begin{figure}[!htb]
 \centering
@@ -84,13 +84,15 @@ In summary, the correlations of pairs of $\beta$-values should be cautiously int
 \end{figure}
 
 \FloatBarrier
-\subsection{Results}
+\subsection{Results}\label{sec:results-correlation-of-methylation-levels}
 
 For all 40 samples in the _EPISCOPE_, _Lister_, _Seisenberger_ and _Ziller_ datasets, I compute the Pearson and Spearman correlations using both the $NIL = 0$ and $NIL \geq 0$ strategies. I compute these genome-wide and after stratifying CpG pairs by whether they are in a CpG island. These analyses are performed separately for each strand and also for strand-collapsed $\beta$-values. The plots of these analyses show the raw estimates as semi-transparent points and are overlaid with a loess fit to these points.
 
-\subsubsection{Can we collapse by strand?}
+\subsubsection{The effect of strand}
 
-Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_5}, \ref{fig:Lister_spearman_beta_cors_min_cov_5}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_5} and \ref{fig:Ziller_spearman_beta_cors_min_cov_5} show the Spearman correlations of $\beta$-values for $NIL = 0$ pairs of CpGs stratified by strand. Since the trend in the correlations are very similar for the two strands, I decided to use the strand-collapsed $\beta$-values in all that follows.
+We have seen that the CpG $\beta$-values are very highly correlated across strands for most samples when the minimum sequencing coverage is at least $5\times$ ($r = 0.8$ to $0.9$, Section \ref{sec:empirical-distributions-of-beta-values}). While there are some notable exceptions (the embryo-derived and embryonic stem cell samples), I have opted to collapse by strand in most of the analyses in Section \ref{sec:results-correlation-of-methylation-levels} in order to simplify the plots.
+
+Figures \ref{fig:EPISCOPE_spearman_beta_cors_min_cov_5}, \ref{fig:Lister_spearman_beta_cors_min_cov_5}, \ref{fig:Seisenberger_spearman_beta_cors_min_cov_5} and \ref{fig:Ziller_spearman_beta_cors_min_cov_5} are the only plots to stratify by strand and show the Spearman correlations of $\beta$-values for $NIL = 0$ pairs of CpGs. These correlations are very similar across strands, even for those embyro-derived and embryonic stem cell samples.
 
 \begin{figure}[!htb]
 \centering

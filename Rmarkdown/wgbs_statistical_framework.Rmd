@@ -291,7 +291,7 @@ Another 'parameter' choice when smoothing is the choice of kernel, although this
 
 Under the (conditional) binomial model, $M_{i, j} | d_{i, j} \eqd Binomial(d_{i, j}, B_{i, j})$, $\beta_{i, j} = \frac{m_{i, j}}{d_{i, j}}$ is an unbiased estimator of $B_{i, j}$ with standard error $se(\beta_{i, j}) = \sqrt{\frac{\beta_{i, j}(1 - \beta_{i, j})}{d_{i, j}}}$ \citep{Hansen:2012gr}. The natural interpretation of $\beta_{i, j}$ is then as an estimator of the average level of methylation at the $i^{th}$ locus in the $j^{th}$ sample. In this section I discuss this interpretation and statistical properties of this estimator.
 
-\subsection{Empirical distributions of $\beta$-values}
+\subsection{Empirical distributions of $\beta$-values}\label{sec:empirical-distributions-of-beta-values}
 
 In a study involving multiple samples, the set of $\beta$-values can be summarised as a matrix where each row is a locus and each column is a sample. Some values will be missing, either because there was insufficient sequencing coverage to estimate a $\beta$-value or because that locus is not a cytosine for the sample in question. This matrix might be visualised to learn about the distribution of methylation levels, either row-wise (to learn about the variability across samples) or column-wise (to learn about the variability within samples).
 
