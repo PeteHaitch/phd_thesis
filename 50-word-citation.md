@@ -1,0 +1,1 @@
+who developed statistical methods and software for analysing high-throughput assays for studying DNA methylation. His research focused on co-methylation, the dependence of DNA methylation at different positions in the genome, and will be useful in developing methods for analysing the role of DNA methylation in regulating gene expression.
