@@ -1,0 +1,239 @@
+---
+title: "Response to examiners"
+author: "Peter Hickey"
+date: "28 September 2015"
+output: pdf_document
+---
+
+Dear Chair of Examiners,
+
+Attached are my responses to the examiners' comments on my PhD thesis. The reviewer's comment is in __bold__ and followed by my response, broken down by reviewer and section.
+
+Regards,
+
+
+
+Peter Hickey
+
+\newpage
+
+## Reviewer #1
+
+### Chapter 1
+
+__p6, section 1.1.4, 3rd paragraph: "varation" should be "variation"__
+
+Typo fixed.
+
+__p6, section 1.1.4, 4th paragraph: it is stated that all cells in an organism have identical genomes. Since this thesis focuses on mammalian genomes and most of the datasets were produced in a biomedical context, it should be noted that this is not true for lymphocytes, which undergo [somatic recombination](https://en.wikipedia.org/wiki/V(D)J_recombination).__
+
+Noted in footnote importance of somatic recombination in lymphocytes and that 'all cells in a body have identical genome' is a (useful) simplification. Thank you.
+
+__p7, section 1.2, 2nd paragraph: it is surprising to find a reference to Waddington, 2012 since Waddington died in 1975. Further in this section, the difficulty of defining epigenetics is discussed. If the candidate is interested in reading more about this controversial topic, I would recommend to have a look at the minimalist approach of Mark Ptashne, for instance, [Mark Ptashne, 7101-7103, doi:10.1073/pnas/1305399110](https://paperpile.com/shared/rFMo5e)__
+
+The reference to Waddington (2012) is correct, it refers to a re-print of an article published in 1942 (that is no longer available or difficult to obtain). Thank you for the recommended paper.
+
+__p8, section 1.3, 1st paragraph: it is stated that DNA methylation is heritable, but the mechanisms (maintenance DNMT) are not mentioned until 1.3.6. It would be useful to add a reference to that section here.__
+
+Reference added.
+
+__p27, Figure 1.7: "It may incorrectly inferred" should be "it may be incorrectly inferred".__
+
+Typo fixed.
+
+__p27, last paragraph discusses the various issues associated with bisulfite conversion. One rarely discussed issue that is also ignored here is over-conversion. It would be informative to have a sentence or two saying why this was not considered in this thesis. Also, an important reference that was omitted form this section is [Warnecke, Peter M, Clare Stirzaker, Jenny Song, Christoph Grunau, John R Melki, and Susan J Clark. 2002. “Identification and Resolution of Artifacts in Bisulfite Sequencing.” Methods  27 (2): 101–7.](https://paperpile.com/shared/69shJW)__
+
+Thank you for the excellent reference. I included a sentence describing bisulfite over-conversion and referenced Warnecke et al. (2002) in support that this is less common than incomplete bisulfite-conversion, hence why I have not considered this in my thesis.
+
+__p28, section 1.4.4: here and in a few other section (for instance p33) in this thesis, DNA kinetic assays are presented as an alternative to bisulfite sequencing. I think it would have been important to mention the important limitations of this technique:__
+  - __A reliable assessment of the methylation status of a base requires a fairly high coverage (at least 50x from what I hear from the PacBio reps themselves, so probably even more in practice). As a consequence, this would only allow to estimate $\beta$, but not within fragment co-methylation.__
+  - __If bisulfite conversion was followed by SMRT sequencing, the fragment size would be limited by the bisulfite treatment itself to a few hundred base pairs__
+
+I have expanded upon the limitations of using PacBio to study DNA methylation in mammalian-sized genomes.
+
+__Finally, although this is admittedly not the focus of the thesis, it would have been useful to mention some of the functions of DNA methylation, at least superficially at the molecular level: inhibition of transcription factor binding in CpG islands around promoters, transposon repression, control of alternative splicing, etc.__
+
+There is an (albeit brief) paragraph on p9 discussing reasons people study DNA methylation (i.e., its biological roles). This includes references to some key papers. I have opted not to expand this section, since, as the examiner notes, this is not the focus of the thesis.
+
+### Chapter 2
+
+__Section 2.2.2: The M-bias is well explained, and a strategy to avoid this problem is presented. However, it would be useful to examine the effect of filtering by quality or neighbour quality standard (NQS) on this bias. I have observed some datasets where doing methylation calls based on NQS virtually remove the M-bias without having to systematically eliminate some positions. Looking at this in detail is obviously a big task, but it might be worth investigating in the future.__
+
+This is an interesting strategy of which I was unaware. As noted by the examiner, this is a considerable undertaking. Furthermore, the largest dataset available to me, the _Lister_ dataset, does not have base-quality scores. For these reasons I have opted not to pursue this avenue in my thesis. I agree that it will be important to consider this in a more focused analysis of M-bias, such as a paper addressing this issue.
+
+__Section 2.3.1: "Methylated or unmethylated" is not a good title as this section is more about which positions and which reads to use__
+
+ Re-named this section "Considerations" and merged with Section 2.3.2 "Determining the context or methylation type".
+
+__Section 2.4.4: In addition to the memory usage and running time it would be useful to know how big is the output of the program, especially with and without the `--all-combination` option.__
+
+Added a plot of output file sizes.
+
+__This chapter could have been improved by a discussion of how to handle overlapping reads, which is not presented until chapter 4, section 4.1.2.__
+
+Added a brief description of how overlapping mates of paired-reads are handled by `methtuple`.
+
+__Also, since this chapter is in great part a review of how to handle whole genome bisulfite sequencing data, it would be useful to discuss how to estimate and deal with incomplete conversion.__
+
+Added a paragraph to section 2.3.1 on how incomplete bisulfite-conversion is handled in practice.
+
+### Chapter 3
+
+__Page 64, 1st line, "There are a four" should be "There are four".__
+
+Fixed.
+
+### Chapter 4
+
+__p76, point 2: it is said that one must use read 1 or read 2 in the region where they overlap. Ideally, one would actually check that they agree, and if not, either use the call with the highest quality, or ignore these reads at that position.__
+
+I have clarified this point and noted how `methtuple` handles such overlapping mates.
+
+__p76, last equation, missing a "|" at the end.__
+
+Fixed, thank you.
+
+__p83, last paragraph: "2000kb" should be "2000bp"__
+
+Fixed, thank you.
+
+__Section 4.4.1: The beta-values have a bimodal distribution in most samples, with a peak around 1 and a peak around 0. It is unclear to me whether the peak at 0 represents a true biological phenomenon, or if this is simply the effect of not taking incomplete bisulfite conversion into account.__
+
+I believe this is a true biological phenomenon. All figures in this section require use a minimum sequencing coverage of 10x. We can compute the probability of observing 10 Cs from 10 reads under the assumption that all Cs are due to incomplete conversion. Let X = the number of Cs, p = the incomplete bisulfite-conversion rate = 0.01 (conversion rates are typically > 99%). We are interested in Pr(X = 10 ) = 0.01^10 = 10^-20. This makes it unlikely these peaks are 0 are simply due to incomplete bisulfite-conversion.
+
+__p108: it is stated that "it does not make sense to refer to individual cytosines as methylated". I think that it can actually be useful to filter out positions that are not methylated and where the signal is driven by incomplete conversion, the question then becomes to identify methylated [PH: cytosines] that are never methylated, which is really the same thing as defining methylated [PH: cytosines] that are methylated (at least in some cell subpopulation of the sample).__
+
+While I understand this line of reasoning, as I argue in my thesis, I believe this terminology can be an unnecessary source of confusion.
+
+### Chapter 5
+
+__If the _MethylationTuples_ R package has any visualisation capabilities, it would be nice to demonstrate them here.__
+
+At the time of submitting my PhD thesis, _MethylationTuples_ did not have any substantial visualisation capabilities. These will be added in due course.
+
+### Chapter 6
+
+__This chapter raises some very important points on the study of correlation in bisulfite sequencing datasets. This includes some fundamental issues with the interpretation of the signal that might come from the underlying sequencing composition rather than the actual methylation pattern. It also raises important issues regarding availability of software implementation. I would encourage the candidate not to give up but to be persistent when requesting software or data from authors, as lack of response or an incomplete answer is more often caused by shortage of time rather than unwillingness to help.__
+
+Noted in agreement.
+
+### Chapter 7
+
+__p163, section 7.1.1. A bs-SNP corrected reference was used. It would be useful to know the impact of not doing this correction. If it turns out that it has little effect, similar studies in the future could be more streamlined.__
+
+I have not attempted to quantify the effect of using a `Bis-SNP`-corrected genome. CpG-SNPs are a well-documented source of bias when estimating methylation levels, as discussed in the Section 2.3.1. Since it is not difficult to address this bias, I do not see great benefit in ignoring it in favour of a more streamlined analysis.
+
+__Section 7.1.2, "Can we collapse the strands". In figure 7.3, 7.4, 7.5 and 7.6, the trend is similar for the two strands, but this does not necessarily mean that at a given locus the two strands have a similar value for $\beta$. Consider for the following example: +strand, pos1: 1M/10U, pos2: 10M/100U; -strand, pos1: 50M/100U, pos2: 5M/10U. Here $\beta$ at the two positions is identical if each strand is taken independently, which would result in a high correlation. However, if the two strands are merged, we would get: pos1: 51M/110U, pos2: 15M/110U, and thus correlation would be low. I might be missing something but it seems to me that scatter plot of + and - strands for $\beta$ would have been more appropriate here.__
+
+Yes, you are correct. I had erroneously conflated two concepts: (1) the consistency of beta-values on opposing strands at a given cytosine (2) the consistency of the correlations-against-IPD trend for beta-values on each strand. It is (1) that we really care about when addressing the question of "can we collapse by strand". Since I addressed in Section 4.4.1 I have re-written this section (re-titled "The effect of strand") to distinguish the two concepts and fix my mistake.
+
+__In this chapter, the genomic features that is used to aggregate to data are: chromosome, and CpG islands vs the rest of the genome. Since the function of DNA methylation seems to be context specific, it would be very informative to look at other types of genomic features. For instance, transposon methylation has a silencing effect, while gene body methylation is often associated with gene expression (see for instance [Ball, Madeleine P, Jin Billy Li, Yuan Gao, Je-Hyuk Lee, Emily M LeProust, In-Hyun Park, Bin Xie, George Q Daley, and George M Church. 2009. “Targeted and Genome-Scale Strategies Reveal Gene-Body Methylation Signatures in Human Cells.” Nature Biotechnology 27 (4). Nature Publishing Group: 361–68.](https://paperpile.com/shared/54En5d). Also, exonic methylation sometimes plays a role in alternative splicing. It would be very interesting to look at these different genomic features in more detail in a future study.__
+
+In some preliminary work (data not shown) I did in fact look at stratifying these analyses by other genomic features. By far the strongest signal I found was for CpG islands vs. the rest of the genome, hence my focus. Now that I have software for automating much of this work, I will likely revisit the effect of other genomic features in a larger dataset in a paper that I am writing.
+
+### Chapter 8
+
+__Even though the software presented in this section is said to be in a "very experimental" state, it looks promising and could be a very important contribution for future rigorous assessment of methods aimed at identifying differential methylation, once the issues associated with the overly high correlations are resolved.__
+
+Thank you.
+
+\newpage
+
+## Reviewer #2
+
+### Figures 4.11-4.17
+
+__It is not clear why are we being shown so many of these.__
+
+I want to show the genome-wide level of methylation for all samples used in my thesis. Also, I visualise these genome-wide methylation levels in two different ways, leading to twice as many figures. This does result in a lot of plots, which are in fact quite similar, but I thought it necessary to show the complete data and believe that the two visualisations show different facets of the data:
+
+- (A) Figures 4.10-4.13 are to show that CpGs in CGIs are typically lowly methylated and those in non-CGIs are typically more highly methylated in these samples. These scale the curves so that the maximum is 1 for each of the CpG island (CGI) and non-CGI data. Without this scaling the CGI data dominate (as seen in Figures 4.14-4.17).
+-  (B) Figures 4.14-4.17 figures are to show that because most CpGs are not in CGIs that this means that most CpGs are highly methylated in these samples. These figures do not use scaling of CGI vs. non-CGI.
+
+__using a density estimator here is not appropriate when the distributions are so discrete. The peaks and valleys are artificial.__
+
+I agree that the peaks and valleys are artificial in the kernel density plots. However, I wish to use the kernel density estimator for the reasons listed above.
+
+__since you are using a density estimator, what does %CpGs mean in the y-axis__
+
+This is a misunderstanding. In the figures with %CpGs on the on y-axis (Figures 4.14-4.17) I am not using a density estimator but rather a frequency polygon. The beta-values are binned into 0.01-width bins and so the height of the line corresponds to the percentage of CpGs in that bin, hence the %CpGs genome-wide with that methylation level.
+
+__the orange line in fig 4.17 seems to be 0__
+
+Yes, this is due to the issue of not scaling in this figure to account for the ratio of CpGs in CGIs vs. non-CGIs.
+
+__Summary:__ For the reasons listed above, I believe it is necessary to have all these figures. Different plots, (A) vs. (B), show different features of the data that I believe are important.
+
+### Consider changing the large tables to figures
+
+Thank you, this is a useful suggestion. I have changed the following figures into tables: 1.1, 2.4, 4.1, 4.2, 4.3, 4.4. Other tables were not suitable for turning into figures (e.g., because they contained non-numerical data).
+
+### Figure 6.3
+
+__legend does not specify what colors represent.__
+
+Figure 6.3 is a reproduction of Supplementary Figure 6 of Li Y, Zhu J, Tian G, Li N, Li Q, Ye M, et al. The DNA methylome of human peripheral blood mononuclear cells. _PLoS Biol_. Public Library of Science; 2010;8: e1000533. doi:10.1371/journal.pbio.1000533. There is no figure legend in the original publication, nor are the colours explained in the caption. I am therefore unable to specify what these colours represent.
+
+### Figure 6.5a
+
+__This is not a Fourier transform but a periodogram or spectogram. The Fourier transform is used to obtain power.__
+
+__NB:__ I believe that this comment properly refers to Figure 6.7 rather than Figure 6.5a.
+
+Figure 6.7 is indeed a periodogram and not a Fourier transform. This was due to my misunderstanding of the relationships between the autocovariance/autocorrelation function, the Fourier transform, the power spectrum, and the periodogram/spectogram.
+
+However, in revisiting the code used to generate Figure 6.7, I found more fundamental problems with my analysis than a simple misuse of terminology. I had mistakenly computed the periodogram of the autocorrelation function (Figure 6.7) rather than of the raw data. Once I computed the periodogram of the raw data I found no evidence to support my original hunch about the (strange to me) results of Figure S7 in _Lyko et al._.
+
+To recall, Figures S7a of _Lyko et al._ is a plot of the autocorrelation of beta-values in one of their samples, and Figure S7c is the "Fourier Transform of Autocorrelation". I had two concerns with these figures:
+
+1. I was surprised to see that the maximum value of this autocorrelation was less than 0.015 (i.e., almost zero).
+2. I suspected that the 3 bp periodicity of the autocorrelation might be driven by the spacing of CpGs in the genome rather than their methylation levels _per se_.
+
+While the data of _Lyko et al._ are publicly available, it would require significant processing in order to investigate this hypothesis. Instead, I attempted to use existing, processed data to investigate this hunch (specifically, the chr22 data from the _FF_ sample of the _Lister_ dataset. The _FF_ sample is of human DNA, and is obviously very different to the honeybee data of _Lyko et al._, but I thought it might be sufficient to shed light on the matter). Unfortunately there is insufficient information in the paper to reproduce the analysis and no code is available.
+
+#### Figure 6.6 (addressing Figure S7a of _Lyko et al._)
+
+Since the maximum of the autocorrelation was very small, I suspected that there may have been an error in the computations underlying Figure S7a that resulting in an unusual scaling of the autocorrelation function.
+
+I hypothesised that the autocorrelation had been computed using a "padded" vector of beta-values, where non-CpGs had their beta-value (artificially) set to zero. Figure 6.6 shows the autocorrelation of this "padded" vector of beta-values for the chr22 _FF_ data; it is visually very similar to Figure S7a in _Lyko et al._.
+
+#### Figure 6.7 (addressing Figure S7c of _Lyko et al._)
+
+Figure S7c of _Lyko et al._ plots "Power" vs. "Cycles per 100bp" and is titled "Fourier Transform of Autocorrelation". However, it is difficult to know exactly what has been plotted in this figure (it is not, for example, the periodogram returned by the `spectrum()` function in R).
+
+My earlier, incorrect Figure 6.7 (which computed the periodogram of the autocorrelation rather than of the raw data using the `spectrum()` function in R) supported point (2). However, I no longer have evidence to support this interpretation and am less sure of what exactly is plotted in Figure S7c of _Lyko et al._. Since I cannot determine how exactly Figure S7c was created, and therefore cannot apply the method to the chr21 _FF_ data, I have opted to remove claims about the source of periodicity in the _Lyko et al._ data.
+
+#### Summary
+
+My original analysis was flawed due to a computational error and misunderstandings about spectral analysis. In revising this section I have opted to remove claim (2), which I no longer have evidence to support. I do still believe, however, that Figure 6.6 supports my initial concerns about Figure S7a of _Lyko et al._. I have therefore rephrased my concerns with Figure S7 of _Lyko et al._ and removed the inaccurate Figure 6.7.
+
+### Inconsistent fonts in figures
+
+__Fonts across figures is inconsistent. Sometimes they are very small.__
+
+I have checked to ensure that I use a consistent theme for my plots where possible (this is sometimes not possible due to different software being used to generate various plots). Small font sizes have been enlarged.
+
+### Standard errors
+
+__Add standard error bars to trend estimate in correlation versus distance plots (e.g., Figures 7.3). Also, be consistent with colors, and style.__
+
+I understand the reviewer's desire for a standard error on these plots. I did investigate this and found the loess fit to be very narrow for most samples across the IPD = 0-1500. Unfortunately it is difficult to see these at the resolution afforded to a printed page, particularly when considering multiple samples per plot. At this resolution it is difficult to show all of (1) the raw data, (2) the loess fit, and (3) the loess fit's standard error. This is illustrated in the attached figures (using one of the samples with the widest standard error). With that in mind, I opted to prioritise showing (1) + (2) over (2) + (3).
+
+![response-to-reviewer2-1](https://cloud.githubusercontent.com/assets/1049741/10115833/3d4ce8c8-645b-11e5-88b3-9e0b1e399d3a.png)
+![response-to-reviewer2-2](https://cloud.githubusercontent.com/assets/1049741/10115832/3d4793f0-645b-11e5-99e2-11daa744bcc4.png)
+
+The differences in colours between plots are in fact important since they signify that a different variable is being stratified upon. For example, Figure 7.3 (red + blue) stratifies by strand whereas Figure 7.7 (green + purple) stratifies by correlation estimator.
+
+### Minor comments
+
+__Avoid colloquialisms such as "hot topic" and hard to interpret relative turns such as "ultra"__
+
+Replaced "hot topic" with "active area". Also replaced some other colloquialisms. Removed some instances of "ultra" and other relative terms that were not qualified by some numerical support (left those instances alone when I felt the term was suitably qualified).
+
+__Figure 6.1 is fuzzy__
+
+Yes, I am aware of this. Unfortunately that is the highest quality freely image available from the publisher. Nature Publishing Group wishes to charge by $223.29 AUD to use a high-resolution version of this figure, which I consider exorbitant and unnecessary.
+
+__change "exploiting" to "leveraging"__
+
+Thank you, I agree this is a better term. Changed.
