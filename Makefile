@@ -7,6 +7,17 @@ phd_thesis.pdf: introduction.tex biology_background.tex wgbs_bioinformatics_anal
 	pdflatex phd_thesis; \
 	pdflatex phd_thesis; \
 	mv phd_thesis.pdf ../pdf/
+# Annoyingly the printers can't seem to print the pdf! So this version replaces
+# all pdf figures with high-quality pngs.
+png_phd_thesis.pdf: introduction.tex biology_background.tex wgbs_bioinformatics_analysis.tex wgbs_statistical_framework.tex datasets.tex wgbs_downstream_analyses.tex comethylation_review.tex comethylation.tex methsim.tex concluding_remarks.tex appendix.tex
+		mogrify -trim -density 300 -format png figures/*.pdf
+		sed -i "" "s/pdf}/png}/g" latex/*.tex
+		mkdir -p pdf
+		cd latex; pdflatex phd_thesis; \
+		bibtex phd_thesis; \
+		pdflatex phd_thesis; \
+		pdflatex phd_thesis; \
+		mv phd_thesis.pdf ../pdf/peter-hickey-phd-thesis-png.pdf
 
 introduction.tex: introduction.md
 	mkdir -p latex
