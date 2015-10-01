@@ -121,7 +121,7 @@ For example, \citet{Hansen:2011gu} start by testing all CpGs for differential me
 
 It is challenging to perform valid statistical inference of differential methylation at these data-driven regions. We must be careful when 'double-dipping' into the data, whereby the same data are being used to define the regions as are being used to test their significance. These regions have been _selected_ because loci in these region display a difference and therefore tests of whether the region has a difference are biased towards rejecting the null hypothesis.
 
-The challenges of valid statistical inference at such data-driven regions are not unique to the problem of testing for DMRs. Similar problems arise in the analysis of chromatin immunoprecipitation sequencing (ChIP-seq) experiments \citep{Schwartzman:2011to, Lun:2014gn} and in the field of signal processing \citep{Schwartzman:2011vg}.
+The challenges of valid statistical inference at such data-driven regions are not unique to the problem of testing for DMRs. Similar problems arise in the analysis of chromatin immunoprecipitation sequencing (ChIP-seq) experiments \citep{Schwartzman2013-eo, Lun:2014gn} and in the field of signal processing \citep{Schwartzman:2011vg}.
 
 One way to avoid this issue, and I would argue the best, is to test these regions using a separate dataset, which completely avoids the issue of statistical 'double-dipping'. Of course, this requires that such a dataset is available or that resources exist to create it, which is frustratingly rare.
 
